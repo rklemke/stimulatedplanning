@@ -49,17 +49,42 @@ public class DataTrackerServlet extends HttpServlet {
 		
 		User user = (User)session.getAttribute("user");
 		if (user == null) {
-			user = new User(userName, userid);
-			session.setAttribute("user", user);
+			try {
+				user = PersistentStore.getUser(userid);
+			} catch (Exception e) {
+				e.printStackTrace();
+				user = null;
+			}
+			if (user == null) {
+				user = new User(userName, userid);
+				session.setAttribute("user", user);
+				try {
+					PersistentStore.writeUser(user);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		} else {
-			user.setId(userid);
-			user.setName(userName);
+			if ((userid != null && !userid.equals(user.getId())) || (userName != null && !userName.equals(user.getName()))) {
+				user.setId(userid);
+				user.setName(userName);
+				session.setAttribute("user", user);
+				try {
+					PersistentStore.writeUser(user);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		// TODO: store retrieved parameters in DB
-		
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(request.getParameterMap());
+		try {
+			PersistentStore.writeLog(request.getParameterMap());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		String callback = request.getParameter("callback");
 		if (callback != null && !"".equals(callback)) {
 			jsonObject = callback + "(" + jsonObject + ");";
