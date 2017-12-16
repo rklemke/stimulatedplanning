@@ -1,9 +1,10 @@
 package stimulatedplanning;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class UserPlan {
+public class UserPlan implements Serializable {
 	protected User user;
 	protected GoalDescriptor goal;
 	protected HashMap<String, PlanItem> planItems;
