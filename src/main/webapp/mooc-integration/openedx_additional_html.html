@@ -55,6 +55,10 @@ Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 	$(document).ready(function() {
 	  // run the first time; all subsequent calls will take care of themselves
 	  setTimeout(tickerRequest, 2000);
+	  
+	  if ( $( "#stimulatedPlanningFrame" ).length ) {
+		    $( "#stimulatedPlanningFrame" ).attr("src", "https://stimulatedplanning.appspot.com/GoalSetting.jsp");
+		}	  
 	});
 
 </script>
