@@ -1,0 +1,97 @@
+<!-- 
+Moodle additional HTML content
+Login to Moodle as administrator
+Dashboard -> Site administration -> Appearance -> Additional HTML
+
+Paste in appropriate sections (adapt URL to DataTrackerServlet below):
+-->
+
+<!--
+=====================================================================================
+Within HEAD
+=====================================================================================
+-->
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+	var timeoutInterval = 30000;
+	var userNameDefault = "Guest";
+	var pageUrl = window.location.href;
+
+	function getUserName() {
+	  var tmpName = $('.usertext').html();
+	  if (tmpName == null) {
+	    tmpName = userNameDefault;
+	  }
+	  return tmpName;
+	}
+
+	function getUserId() {
+	  var tmp = $( "a[data-title='profile,moodle']" );
+	  if (tmp != null) {
+	    var url = tmp.attr("href");
+	    var i = url.indexOf("id=");
+	    var id = url.substring(i+3);
+            if (id) {
+	      return id;
+	    }
+	  }
+
+	  return "unkown";
+	}
+
+	function tickerRequest() {
+	  var userName = getUserName();
+	  var userId = getUserId(); 
+	  $.ajax({
+	    dataType: 'jsonp',
+	    url: 'http://localhost:8080/DataTrackerServlet',
+	    method: 'POST',
+	    data: {
+		userName: userName,
+		userid: userId,
+		page: pageUrl
+	    }, 
+	    success: function(data) {
+//		  var datatxt = "";
+//		  $.each(data,function(key,val){
+//		     datatxt += key + ": " + val + " <BR> ";
+//		  });
+		  $( '#ajaxresult' ).html("Tracker: OK");
+	    },
+	    complete: function() {
+	      // Schedule the next request when the current one's complete
+	      setTimeout(tickerRequest, timeoutInterval);
+	    }
+	  });
+	}
+
+	$(document).ready(function() {
+	  // run the first time; all subsequent calls will take care of themselves
+	  setTimeout(tickerRequest, 2000);
+	});
+
+</script>
+
+
+<!--
+=====================================================================================
+When BODY is opened 
+=====================================================================================
+-->
+
+
+<!--
+=====================================================================================
+Before BODY is closed 
+=====================================================================================
+-->
+
+   <div id="ajaxresult">This should be replaced soon</div>
+
+
+
+
+
+
+

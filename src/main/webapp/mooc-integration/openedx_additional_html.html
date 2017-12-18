@@ -1,0 +1,70 @@
+<!-- 
+Open EdX additional HTML content
+Login to Open EdX as author
+
+On each content page: add a Raw HTML content block and paste the text below.
+
+Paste in appropriate sections (adapt URL to DataTrackerServlet below):
+-->
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+	var timeoutInterval = 30000;
+	var userNameDefault = "Guest";
+	var pageUrl = window.location.href;
+
+	function getUserName() {
+	  var tmpName = $('.label-username').html();
+	  if (tmpName == null) {
+	    tmpName = userNameDefault;
+	  }
+	  return tmpName;
+	}
+
+	function getUserId() {
+	  return getUserName();
+	}
+
+	function tickerRequest() {
+	  var userName = getUserName();
+	  var userId = getUserId(); 
+	  $.ajax({
+	    dataType: 'jsonp',
+	    url: 'https://stimulatedplanning.appspot.com/DataTrackerServlet',
+	    method: 'POST',
+	    data: {
+		userName: userName,
+		userid: userId,
+		page: pageUrl
+	    }, 
+	    success: function(data) {
+		  var datatxt = "Tracker: OK";
+		  $.each(data,function(key,val){
+		     datatxt += " <BR> " + key + ": " + val;
+		  });
+		  $( '#ajaxresult' ).html(datatxt);
+	    },
+	    complete: function() {
+	      // Schedule the next request when the current one's complete
+	      setTimeout(tickerRequest, timeoutInterval);
+	    }
+	  });
+	}
+
+	$(document).ready(function() {
+	  // run the first time; all subsequent calls will take care of themselves
+	  setTimeout(tickerRequest, 2000);
+	});
+
+</script>
+
+
+<div id="ajaxresult">This should be replaced soon</div>
+
+
+
+
+
+
+
