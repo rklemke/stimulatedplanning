@@ -98,9 +98,13 @@ public class StimulatedPlanningServlet extends HttpServlet {
 			}
 		}
 
-		System.out.println("o: "+o.toString());
-		System.out.println("o.class: "+o.getClass().getName()+", o[0].class"+((ArrayList)o).get(0).getClass().getName());
-		System.out.println("o[0].id"+((Map)((ArrayList)o).get(0)).get("id"));
+		if (o != null) {
+			System.out.println("o: "+o.toString());
+			System.out.println("o.class: "+o.getClass().getName()+", o[0].class"+((ArrayList)o).get(0).getClass().getName());
+			System.out.println("o[0].id"+((Map)((ArrayList)o).get(0)).get("id"));
+		} else {
+			System.out.println("o: null");
+		}
 		
 		String nextJSP = "/StimulatedPlanning.jsp";
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);

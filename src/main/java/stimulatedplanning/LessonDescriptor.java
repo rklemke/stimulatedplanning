@@ -12,6 +12,17 @@ public class LessonDescriptor extends GenericDescriptor {
 	public void setLessonDuration(Duration lessonDuration) {
 		this.lessonDuration = lessonDuration;
 	}
+	
+	public String getLessonDurationString() {
+		long minutes = lessonDuration.toMinutes();
+		long hours = 0;
+		while (minutes > 60) {
+			hours++;
+			minutes -= 60;
+		}
+		String formatted = String.format("%02d", hours) + ":" + String.format("%02d", minutes);
+		return formatted;
+	}
 
 	public LessonDescriptor() {
 		super();

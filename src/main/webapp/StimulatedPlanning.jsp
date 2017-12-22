@@ -95,6 +95,7 @@
 				title: $.trim($(this).text()), // use the element's text as the event title
 				stick: true, // maintain when user navigates (see docs on the renderEvent method)
 				id: ($(this).attr('id')),
+				url: ($(this).attr('data-url')),
 				className: plan
 			});
 
@@ -115,9 +116,19 @@
 			header: {
 				left: 'prev,next today',
 				center: 'title',
-				right: 'month,agendaWeek,agendaDay'
+				right: 'month,agendaWeek,agendaDay,listMonth'
     		},
+			id: ($(this).attr('id')),
+			eventOverlap: false,
+			allDaySlot: false,
     		height: 500,
+    		firstDay: 1,
+    		defaultView: 'agendaWeek',
+    		defaultDate: $.fullCalendar.moment('2018-02-01'),
+    	    validRange: {
+    	        start: '2018-02-01',
+    	        end: '2018-03-01'
+    	    },
 			editable: true,
 			droppable: true, // this allows things to be dropped onto the calendar
 			drop: function() {
@@ -187,6 +198,7 @@
 	#accordion {
 		float: left;
 		width: 250px;
+		height: 360px;
 		padding: 0 10px;
 		border: 1px solid #ccc;
 		background: #eee;
@@ -229,7 +241,7 @@
 		width: 900px;
 	}
 	
-	#confirm {
+	.confirm {
 		float: right;
 	}
 	
@@ -263,8 +275,8 @@
 <div id="wrap">
 
 <div id="leftbar">
-<h4>Selected Goal Profile: <%= selectedGoalProfile %></h4>
-<p>Plan your recommended modules</p>
+<h4>Your Intention: <%= selectedGoalProfile %></h4>
+<p>Plan your recommended activities by dragging them from the list below to the calendar.</p>
 <div id="accordion">
 <%
 	while(modIterator.hasNext()) {
@@ -279,7 +291,12 @@
 		LessonDescriptor lesson = lessonIterator.next();
 		if (!userPlan.hasPlanItem(lesson.getId())) {
 %>
-			<div class="fc-event ui-draggable ui-draggable-handle plan-a" id="<%= lesson.getId() %>"><%= lesson.getTitle() %></div>
+			<div 
+				class="fc-event ui-draggable ui-draggable-handle plan-a" 
+				id="<%= lesson.getId() %>" 
+				data-duration="<%= lesson.getLessonDurationString() %>"
+				data-url="https://www.google.de" 
+			><%= lesson.getTitle() %></div>
 <%
 		}
 	}
@@ -296,14 +313,6 @@
 		<label for="drop-remove">remove after drop</label>
 	</p>
 </div>
-<div id="confirm">
-	<form id="planningForm" method="POST" action="StimulatedPlanningServlet">
-		<input type="hidden" name="calenderItems" id="calenderItems" value="">
-		<input type="button" id="cancel" value="Cancel"></input>
-		<!-- <input type="button" id="ok" value="OK" onclick="window.location='./SP-1-goalsetting.html';"></input> -->
-		<input type="submit" id="ok" value="OK" onclick="retrieveAllEvents();"></input>
-	</form>
-</div>
 </div>
 
 
@@ -311,14 +320,20 @@
 		<div id="calendar"></div>
 		<div style="clear:both"></div>
 		
-		<div id="feedbackMessage">
+<!-- 		<div id="feedbackMessage">
 			Dear Lousie Learner,
 			<ul>
 			<li>You are running late for your plan and did not complete lesson 1.4 in time</li>
 			<li>You also did not yet plan lesson 1.5 onwards.</li>
 			<li>Please replan your activities accordingly!</li>
 			</ul>
-		</div>
+		</div>   -->
+<div class="confirm">
+	<form id="planningForm" method="POST" action="StimulatedPlanningServlet">
+		<input type="hidden" name="calenderItems" id="calenderItems" value="">
+		<input type="submit" id="ok" value="OK" onclick="retrieveAllEvents();"></input>
+	</form>
+</div>
 
 
 </div>
