@@ -4,6 +4,26 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+  <%
+  CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
+  if (course == null) {
+	  course = CourseDescriptor.generateTestCourse();
+	  session.setAttribute("course", course);
+  }
+  
+  GoalDescriptor userGoal = (GoalDescriptor)session.getAttribute("userGoal");
+  String userScheduleIntention = (String)session.getAttribute("selectedSchedule");
+
+  String intentionStep = (String)session.getAttribute("intentionStep");
+  if (intentionStep == null || "".equals(intentionStep)) {
+	  intentionStep = PlanningSteps.intentionSteps[0];
+	  session.setAttribute("intentionStep", intentionStep);
+  }
+
+  ListIterator<GoalDescriptor> iterator = course.getGoals();
+  int m=0;
+  
+  %>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>Stimulated Planning - Goal selection and setting</title>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -15,10 +35,10 @@
 
     $( "#tabs" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
     $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-    $( "#tabs2" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
-    $( "#tabs2 li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+//    $( "#tabs2" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+//    $( "#tabs2 li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
     $( "input" ).checkboxradio({
-      icon: false,
+      icon: true,
       classes: {
       	"ui-checkboxradio-checked": "ui-checkboxradio-checked-orange"
       }
@@ -41,14 +61,37 @@
   .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
   .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
   .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
-  .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 36em;}
+  .ui-tabs-vertical .ui-tabs-panel { padding: .2em; float: right; width: 36em;}
   
   .ui-checkboxradio-checked-orange .ui-state-active { background: #ff9800; }
   .ui-checkboxradio-checked-orange { background: #ff9800; }
+  .ui-checkboxradio-checked-green .ui-state-active { background: #008800; }
+  .ui-checkboxradio-checked-green { background: #008800; }
   .ui-state-active { background: #ff9800; }
   .goalselect { float: right; }
+  .goalselectToggle { float: right; }
+  .alessandra { background: #dadada; padding: 1px; border: 1px solid black;}
 
-	#confirm {
+  <%
+  iterator = course.getGoals();
+  m=0;
+  while(iterator.hasNext()) {
+	  GoalDescriptor goal = iterator.next();
+	  String grey = Integer.toHexString(14-m);
+	  grey = grey + grey + grey + grey + grey + grey;
+	  String blue = Integer.toHexString(11-m);
+	  blue = "00" + blue + "fff";
+  %>	
+  	#li-<%= goal.getId() %> {background-image: none; background-color: #<%= grey %>; }
+  	#li-<%= goal.getId() %>.ui-tabs-active {background-image : none; background-color : #<%= blue %>; font-weight : bolder;}
+  	#p-<%= goal.getId() %> {padding: 3px; background-image : none; color: white; background-color : #<%= blue %>; font-weight : bolder;}
+  <%
+  	m++;
+  }
+  %>
+
+
+	.confirm {
 		float: right;
 	}
 
@@ -59,35 +102,23 @@
 </head>
 <body>
 
-  <%
-  CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
-  if (course == null) {
-	  course = CourseDescriptor.generateTestCourse();
-	  session.setAttribute("course", course);
-  }
-  
-  GoalDescriptor userGoal = (GoalDescriptor)session.getAttribute("userGoal");
-  String userScheduleIntention = (String)session.getAttribute("selectedSchedule");
-  
-  ListIterator<GoalDescriptor> iterator = course.getGoals();
-  int m=0;
-  
-  %>
 
  
 <form id="goalSelectForm" method="POST" action="GoalSettingServlet">
 <h2>Your intentions with this course</h2>
-<p>Please indicate your intentions with respect to this course's content offer (first selection) and the estimated time you intent to spend on this course's activities (second selection).</p>
+<% if("intention.topic".equals(intentionStep)) { %>
+<p>Please indicate your intentions with respect to this course's content offer.</p>
 <div id="tabs">
   <ul>
   <%
+  iterator = course.getGoals();
+  m=0;
   while(iterator.hasNext()) {
 	  GoalDescriptor goal = iterator.next();
   %>
-    <li>
-	    <label class="goalselect" for="<%= goal.getId() %>">Set Goal</label>
-    	<input class="goalselectToggle" type="radio" name="goalSelectRadio" id="<%= goal.getId() %>" value="<%= goal.getId() %>" <% if (userGoal != null && userGoal.getId().equals(goal.getId())) { %>checked <% } %> >
+    <li class="tabs-<%= goal.getId() %>" id="li-<%= goal.getId() %>">
     	<a href="#tabs-<%= goal.getId() %>"><%= goal.getTitle() %></a>
+    	<input class="goalselectToggle" type="checkbox" name="goalSelectRadio" id="<%= goal.getId() %>" value="<%= goal.getId() %>" <% if (userGoal != null && userGoal.getId().equals(goal.getId())) { %>checked <% } %> >
     </li>
   <%
   	m++;
@@ -101,7 +132,7 @@
 	  GoalDescriptor goal = iterator.next();
   %>
   <div id="tabs-<%= goal.getId() %>">
-    <h2><%= goal.getTitle() %></h2>
+    <p id="p-<%= goal.getId() %>"><b><%= goal.getTitle() %></b></p>
     <p><%= goal.getDescription() %></p>
     <p>Recommended Modules: (total estimated learning time: <%= goal.getGoalDuration().toHours() %> hours)
     </p>
@@ -111,86 +142,62 @@
   while(iterator2.hasNext()) {
 	  ModuleDescriptor module = iterator2.next();
   %>
-        <li><%= module.getDescription() %></li>
+        <li><input class="moduleselectToggle" type="checkbox" name="moduleSelectCB" id="<%= module.getId() %>" value="<%= module.getId() %>" <% if (userGoal != null && userGoal.getId().equals(goal.getId())) { %>checked <% } %> >
+        <%= module.getDescription() %></li>
   <%
   }
   %>
     </ul>
+    <div class="confirm">
+ 			<input type="button" id="ok_<%= goal.getId() %>" name="ok_<%= goal.getId() %>" value="OK"></input>
+    </div>
   </div>
   <%
   	m++;
   }
   %>
 </div>
-<div id="tabs2">
+
+<% } else if("intention.schedule".equals(intentionStep)) { %>
+
+<p>Please indicate your intentions with respect to the estimated time you intent to spend on this course's activities.</p>
+<div>
   <ul>
     <li>
-	    <label class="goalselect" for="tabs2-1">Set Schedule</label>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-1" value="1" <% if (userScheduleIntention != null && userScheduleIntention.equals("1")) { %>checked <% } %> >
-    	<a href="#tabs2-tabs2-1">One hour per week</a>
+    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-1" value="1" <% if (userScheduleIntention != null && userScheduleIntention.equals("1")) { %>checked <% } %> ><label for="tabs2-1">I intend to spend about <b>one hour</b> per week on this course</label>
     </li>
     <li>
-	    <label class="goalselect" for="tabs2-2">Set Schedule</label>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-2" value="2" <% if (userScheduleIntention != null && userScheduleIntention.equals("2")) { %>checked <% } %> >
-    	<a href="#tabs2-tabs2-2">Two hours per week</a>
+    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-2" value="2" <% if (userScheduleIntention != null && userScheduleIntention.equals("2")) { %>checked <% } %> ><label for="tabs2-2">I intend to spend about <b>two hours</b> per week on this course</label>
     </li>
     <li>
-	    <label class="goalselect" for="tabs2-3">Set Schedule</label>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-3" value="3" <% if (userScheduleIntention != null && userScheduleIntention.equals("3")) { %>checked <% } %> >
-    	<a href="#tabs2-tabs2-3">Three hours per week</a>
+    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-3" value="3" <% if (userScheduleIntention != null && userScheduleIntention.equals("3")) { %>checked <% } %> ><label for="tabs2-3">I intend to spend about <b>three hours</b> per week on this course</label>
     </li>
     <li>
-	    <label class="goalselect" for="tabs2-4">Set Schedule</label>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-4" value="4" <% if (userScheduleIntention != null && userScheduleIntention.equals("4")) { %>checked <% } %> >
-    	<a href="#tabs2-tabs2-4">Four hours per week</a>
+    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-4" value="4" <% if (userScheduleIntention != null && userScheduleIntention.equals("4")) { %>checked <% } %> ><label for="tabs2-4">I intend to spend about <b>four hours</b> per week on this course</label>
     </li>
     <li>
-	    <label class="goalselect" for="tabs2-5">Set Schedule</label>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-5" value="5" <% if (userScheduleIntention != null && userScheduleIntention.equals("5")) { %>checked <% } %> >
-    	<a href="#tabs2-tabs2-5">Five hours per week</a>
+    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-5" value="5" <% if (userScheduleIntention != null && userScheduleIntention.equals("5")) { %>checked <% } %> ><label for="tabs2-5">I intend to spend about <b>five hours</b> per week on this course</label>
     </li>
   </ul>
-  <div id="tabs2-tabs2-1">
-    <h2>One hour per week</h2>
-    <p>I intend to spend one hour or less per week on this course</p>
-  </div>
-  <div id="tabs2-tabs2-2">
-    <h2>Two hours per week</h2>
-    <p>I intend to spend two hours per week on this course</p>
-  </div>
-  <div id="tabs2-tabs2-3">
-    <h2>Three hours per week</h2>
-    <p>I intend to spend three hours per week on this course</p>
-  </div>
-  <div id="tabs2-tabs2-4">
-    <h2>Four hours per week</h2>
-    <p>I intend to spend four hours per week on this course</p>
-  </div>
-  <div id="tabs2-tabs2-5">
-    <h2>Five hours per week</h2>
-    <p>I intend to spend five hours or more per week on this course</p>
-  </div>
-</div>
   <div id="selectedGoals"></div>
- 		<div id="confirm">
-			<input type="button" id="cancel" value="Cancel"></input>
-			<input type="submit" id="ok" name="submit" value="Save"></input>
-		<% 
-		if (userGoal != null) {
-		%>
-			<input type="submit" id="continue" name="submit" value="Continue"></input>
-		<%
-		}
-		%>	
-		</div>
+</div>
+
+<% } else if("intention.feedback".equals(intentionStep)) { %>
+
 		<div id="selectedGoal">
 		<% 
 		if (userGoal != null) {
 		%>
-		<p>Your selected intention: <%= userGoal.getTitle() %></p>
-		<p>Your estimated learning time: <%= userGoal.getGoalDuration().toHours() %> hours.</p>
-		<p>Your estimated time per week: <%= userGoal.getPlannedTimePerWeekAsInt() %> hours.</p>
-		<p>Your estimated time to goal achievement: <%= (int)Math.ceil((double)userGoal.getGoalDuration().toHours()/userGoal.getPlannedTimePerWeekAsInt()) %> weeks</p>
+		<p>Your selection:</p>
+		<ul>
+		<li>Your intention: <%= userGoal.getTitle() %></li>
+		<li>Your estimated time per week: <%= userGoal.getPlannedTimePerWeekAsInt() %> hours.</li>
+		</ul>
+		<p>Our learning effort estimation for you:</p>
+		<ul>
+		<li>To complete your intention you need a total learning time of: <%= userGoal.getGoalDuration().toHours() %> hours.</li>
+		<li>Your estimated time to goal achievement: <%= (int)Math.ceil((double)userGoal.getGoalDuration().toHours()/userGoal.getPlannedTimePerWeekAsInt()) %> weeks</li>
+		</ul>
 		<%
 		} else {
 		%>
@@ -199,6 +206,28 @@
 		}
 		%>	
 		</div>
+<% } %>
+ 		<div class="confirm">
+		<!-- <input type="button" id="cancel" value="Cancel"></input>  -->
+		<% 
+		if (!PlanningSteps.intentionSteps[0].equals(intentionStep)) {
+		%>
+			<input type="submit" id="ok" name="submit" value="Previous"></input>
+		<%
+		}
+		if (!PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
+		%>
+			<input type="submit" id="ok" name="submit" value="Next"></input>
+		<%
+		}
+		if (userGoal != null && PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
+		%>
+			<input type="submit" id="continue" name="submit" value="Continue"></input>
+		<%
+		}
+		%>	
+		</div>
+
 </form>
  
 

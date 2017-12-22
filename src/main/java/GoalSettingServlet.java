@@ -20,7 +20,7 @@ import stimulatedplanning.*;
 public class GoalSettingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
+	/**
      * @see HttpServlet#HttpServlet()
      */
     public GoalSettingServlet() {
@@ -38,9 +38,12 @@ public class GoalSettingServlet extends HttpServlet {
 			course = CourseDescriptor.generateTestCourse();
 			session.setAttribute("course", course);
 		}
-		  
+		
+		String intentionStep = (String)session.getAttribute("intentionStep");
+
 		String selectedGoalId = request.getParameter("goalSelectRadio");
-		GoalDescriptor selectedGoal = null;
+
+		GoalDescriptor selectedGoal = (GoalDescriptor)session.getAttribute("userGoal");
 		
 		if (selectedGoalId != null && !"".equals(selectedGoalId)) {
 			ListIterator<GoalDescriptor> iterator = course.getGoals();
@@ -58,6 +61,7 @@ public class GoalSettingServlet extends HttpServlet {
 		String selectedSchedule = request.getParameter("scheduleSelectRadio");
 		
 		if (selectedSchedule != null) {
+			System.out.println("selectedSchedule: "+selectedSchedule);
 			session.setAttribute("selectedSchedule", selectedSchedule);
 			if (selectedGoal != null) {
 				selectedGoal.setPlannedTimePerWeek(selectedSchedule);
@@ -66,6 +70,35 @@ public class GoalSettingServlet extends HttpServlet {
 		
 		String submit = request.getParameter("submit");
 		String nextJSP = "/GoalSetting.jsp";
+		
+		if (submit != null && submit.equals("Next")) {
+			if (PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
+				nextJSP = "/StimulatedPlanning.jsp";
+			} else {
+				for (int i=0; i<PlanningSteps.intentionSteps.length-1; i++) {
+					if ((intentionStep == null || PlanningSteps.intentionSteps[i].equals(intentionStep)) && i < PlanningSteps.intentionSteps.length-1) {
+						intentionStep = PlanningSteps.intentionSteps[i+1];
+						session.setAttribute("intentionStep", intentionStep);
+						break;
+					}
+				}
+			}
+		}
+		
+		if (submit != null && submit.equals("Previous")) {
+			if (PlanningSteps.intentionSteps[0].equals(intentionStep) || intentionStep == null) {
+				intentionStep = PlanningSteps.intentionSteps[0];
+				session.setAttribute("intentionStep", intentionStep);
+			} else {
+				for (int i=1; i<PlanningSteps.intentionSteps.length; i++) {
+					if ((PlanningSteps.intentionSteps[i].equals(intentionStep)) && i > 0) {
+						intentionStep = PlanningSteps.intentionSteps[i-1];
+						session.setAttribute("intentionStep", intentionStep);
+						break;
+					}
+				}
+			}
+		}
 		
 		if (submit != null && submit.equals("Continue")) {
 			nextJSP = "/StimulatedPlanning.jsp";

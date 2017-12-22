@@ -15,12 +15,12 @@ public class LessonDescriptor extends GenericDescriptor {
 
 	public LessonDescriptor() {
 		super();
-		lessonDuration = Duration.ofHours(1); // default lesson duration is assumed to be one hour
+		lessonDuration = Duration.ofMinutes(20); // default lesson duration is assumed to be twenty minutes
 	}
 
 	public LessonDescriptor(String id, String title, String description, String url) {
 		super(id, title, description, url);
-		lessonDuration = Duration.ofHours(1); // default lesson duration is assumed to be one hour
+		lessonDuration = Duration.ofMinutes(20); // default lesson duration is assumed to be twenty minutes
 	}
 
 }
