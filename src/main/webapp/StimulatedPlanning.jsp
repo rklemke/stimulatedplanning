@@ -295,7 +295,6 @@
 				class="fc-event ui-draggable ui-draggable-handle plan-a" 
 				id="<%= lesson.getId() %>" 
 				data-duration="<%= lesson.getLessonDurationString() %>"
-				data-url="https://www.google.de" 
 			><%= lesson.getTitle() %></div>
 <%
 		}

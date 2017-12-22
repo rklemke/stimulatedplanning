@@ -64,7 +64,7 @@ public class CourseDescriptor extends GenericDescriptor {
 			ModuleDescriptor module = new ModuleDescriptor("c01_m0"+i, "Module 1."+i, "Module 1."+i+" Description", "");
 			course.addModule(module);
 			for (int j=1; j<6; j++) {
-				LessonDescriptor lesson = new LessonDescriptor("c01_m0"+i+".l0"+j,"Lesson 1."+i+"."+j,"Lesson 1."+i+"."+j+" Description","");
+				LessonDescriptor lesson = new LessonDescriptor("c01_m0"+i+"_l0"+j,"Lesson 1."+i+"."+j,"Lesson 1."+i+"."+j+" Description","");
 				module.addLesson(lesson);
 			}
 		}
