@@ -32,13 +32,12 @@ public class GoalSettingServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
+		HttpSession session = StimulatedPlanningFactory.initializeSession(request, response);
+
+		User user = (User)session.getAttribute("user");
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
-		if (course == null) {
-			course = CourseDescriptor.generateTestCourse();
-			session.setAttribute("course", course);
-		}
-		
+		UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
+
 		String intentionStep = (String)session.getAttribute("intentionStep");
 
 		String selectedGoalId = request.getParameter("goalSelectRadio");

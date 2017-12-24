@@ -57,49 +57,5 @@ public class CourseDescriptor extends GenericDescriptor {
 		}
 		return duration;
 	}
-	
-	public static CourseDescriptor generateTestCourse() {
-		CourseDescriptor course = new CourseDescriptor("c01", "Course 1", "Test Course 1 Description", "");
-		for (int i=1; i<6; i++) {
-			ModuleDescriptor module = new ModuleDescriptor("c01_m0"+i, "Module 1."+i, "Module 1."+i+" Description", "");
-			course.addModule(module);
-			for (int j=1; j<6; j++) {
-				LessonDescriptor lesson = new LessonDescriptor("c01_m0"+i+"_l0"+j,"Lesson 1."+i+"."+j,"Lesson 1."+i+"."+j+" Description","");
-				module.addLesson(lesson);
-			}
-		}
-	
-		GoalDescriptor goal1 = new GoalDescriptor("c01_g01", "Browsing the Course", "Browsing the Course Description", "");
-		goal1.addModule(course.modules.get(0));
-		goal1.addModule(course.modules.get(1));
-		goal1.addModule(course.modules.get(2));
-		goal1.addModule(course.modules.get(3));
-		goal1.addModule(course.modules.get(4));
-		course.addGoal(goal1);
-		GoalDescriptor goal2 = new GoalDescriptor("c01_g02", "Internet Security", "Internet Security Description", "");
-		goal2.addModule(course.modules.get(0));
-		goal2.addModule(course.modules.get(1));
-		goal2.addModule(course.modules.get(2));
-		course.addGoal(goal2);
-		GoalDescriptor goal3 = new GoalDescriptor("c01_g03", "Computer Security", "Computer Security Description", "");
-		goal3.addModule(course.modules.get(0));
-		goal3.addModule(course.modules.get(3));
-		goal3.addModule(course.modules.get(4));
-		course.addGoal(goal3);
-		GoalDescriptor goal4 = new GoalDescriptor("c01_g04", "Safe behaviour on the Internet", "Safe behaviour on the Internet Description", "");
-		goal4.addModule(course.modules.get(0));
-		goal4.addModule(course.modules.get(1));
-		goal4.addModule(course.modules.get(3));
-		course.addGoal(goal4);
-		GoalDescriptor goal5 = new GoalDescriptor("c01_g05", "Complete the Course", "I intend to complete the course Description", "");
-		goal5.addModule(course.modules.get(0));
-		goal5.addModule(course.modules.get(1));
-		goal5.addModule(course.modules.get(2));
-		goal5.addModule(course.modules.get(3));
-		goal5.addModule(course.modules.get(4));
-		course.addGoal(goal5);
-		
-		return course;
-	}
 
 }

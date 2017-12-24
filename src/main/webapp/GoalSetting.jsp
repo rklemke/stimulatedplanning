@@ -1,16 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="stimulatedplanning.*, java.util.ListIterator" %>
+<%@ page import="stimulatedplanning.*, java.util.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
   <%
+  session = StimulatedPlanningFactory.initializeSession(request, response);
+
+  User user = (User)session.getAttribute("user");
   CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
-  if (course == null) {
-	  course = CourseDescriptor.generateTestCourse();
-	  session.setAttribute("course", course);
-  }
-  
+  UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
+
   GoalDescriptor userGoal = (GoalDescriptor)session.getAttribute("userGoal");
   String userScheduleIntention = (String)session.getAttribute("selectedSchedule");
 
@@ -53,6 +53,11 @@
   	cbModule4: ""
   }
   
+  function toggleGoalSelectCB(id, t) {
+	  $( '#tabs' ).tabs( 'option', 'active', t);
+	  var x = $('.goal_'+id);
+	  $(':checkbox.goal_'+id).prop('checked', $('#gsc-'+id).prop('checked'));    		  
+  }
     
   </script>
   <style>
@@ -70,8 +75,9 @@
   .ui-state-active { background: #ff9800; }
   .goalselect { float: right; }
   .goalselectToggle { float: right; }
-  .alessandra { background: #dadada; padding: 1px; border: 1px solid black;}
-
+  .ul-goals { list-style-type: none; }
+  .a-tab { width: 85%}
+ 
   <%
   iterator = course.getGoals();
   m=0;
@@ -79,7 +85,7 @@
 	  GoalDescriptor goal = iterator.next();
 	  String grey = Integer.toHexString(14-m);
 	  grey = grey + grey + grey + grey + grey + grey;
-	  String blue = Integer.toHexString(11-m);
+	  String blue = Integer.toHexString(13-2*m);
 	  blue = "00" + blue + "fff";
   %>	
   	#li-<%= goal.getId() %> {background-image: none; background-color: #<%= grey %>; }
@@ -117,8 +123,8 @@
 	  GoalDescriptor goal = iterator.next();
   %>
     <li class="tabs-<%= goal.getId() %>" id="li-<%= goal.getId() %>">
-    	<a href="#tabs-<%= goal.getId() %>"><%= goal.getTitle() %></a>
-    	<input class="goalselectToggle" type="checkbox" name="goalSelectRadio" id="<%= goal.getId() %>" value="<%= goal.getId() %>" <% if (userGoal != null && userGoal.getId().equals(goal.getId())) { %>checked <% } %> >
+    	<a class="a-tab" href="#tabs-<%= goal.getId() %>"><%= goal.getTitle() %></a>
+    	<input class="goalselectToggle" type="checkbox" name="goalSelectRadio" id="gsc-<%= goal.getId() %>" value="<%= goal.getId() %>" onClick="toggleGoalSelectCB('<%= goal.getId() %>', <%= m %>);" <% if (userGoal != null && userGoal.getId().equals(goal.getId())) { %>checked <% } %> >
     </li>
   <%
   	m++;
@@ -134,16 +140,34 @@
   <div id="tabs-<%= goal.getId() %>">
     <p id="p-<%= goal.getId() %>"><b><%= goal.getTitle() %></b></p>
     <p><%= goal.getDescription() %></p>
-    <p>Recommended Modules: (total estimated learning time: <%= goal.getGoalDuration().toHours() %> hours)
-    </p>
-    <ul>
   <%
-  ListIterator<ModuleDescriptor> iterator2 = goal.getModules();
-  while(iterator2.hasNext()) {
-	  ModuleDescriptor module = iterator2.next();
+  ListIterator<LessonDescriptor> iterator2 = goal.getLessons();
+  if(iterator2.hasNext()) {
   %>
-        <li><input class="moduleselectToggle" type="checkbox" name="moduleSelectCB" id="<%= module.getId() %>" value="<%= module.getId() %>" <% if (userGoal != null && userGoal.getId().equals(goal.getId())) { %>checked <% } %> >
-        <%= module.getDescription() %></li>
+    <p>Recommended Lessons: (total estimated learning time: <%= goal.getGoalDuration().toHours() %> hours)
+    </p>
+  <%
+  }
+  %>
+    <ul class="ul-goals">
+  <%
+  while(iterator2.hasNext()) {
+	  LessonDescriptor lesson = iterator2.next();
+  %>
+        <li><input class="goal_<%= goal.getId() %> moduleselectToggle" type="checkbox" name="moduleSelectCB" id="lesson<%= lesson.getId() %>" value="<%= lesson.getId() %>" <% if (userGoal != null && userGoal.getId().equals(goal.getId())) { %>checked <% } %> >
+        <label for="lesson<%= lesson.getId() %>"><%= lesson.getTitle() %></label></li>
+  <%
+  }
+  %>
+  <%
+  Set<String> set = goal.getCompletionGoalKeys();
+  Iterator<String> iterator3 = set.iterator();
+  while(iterator3.hasNext()) {
+	  String key = iterator3.next();
+	  String desc = goal.getCompletionGoal(key);
+  %>
+        <li><input class="moduleselectToggle" type="radio" name="completionSelectRB" id="completion<%= key %>" value="<%= key %>" <% if (userGoal != null && userGoal.getId().equals(goal.getId())) { %>checked <% } %> >
+        <label for="completion<%= key %>"><%= desc %></label></li>
   <%
   }
   %>

@@ -3,6 +3,7 @@ package stimulatedplanning;
 import java.io.Serializable;
 
 public class GenericDescriptor implements Serializable {
+	
 	protected String id;
 	protected String title;
 	protected String description;

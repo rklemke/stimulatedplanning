@@ -2,19 +2,35 @@ package stimulatedplanning;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ListIterator;
+import java.util.Set;
 
 public class GoalDescriptor extends GenericDescriptor {
 
-	protected ArrayList<ModuleDescriptor> modules;
+	protected ArrayList<LessonDescriptor> lessons;
+	protected HashMap<String, String> completionGoals;
 	protected String plannedTimePerWeek;
 	
-	public void addModule(ModuleDescriptor module) {
-		this.modules.add(module);
+	public void addLesson(LessonDescriptor lesson) {
+		this.lessons.add(lesson);
 	}
 	
-	public ListIterator<ModuleDescriptor> getModules() {
-		return modules.listIterator();
+	public ListIterator<LessonDescriptor> getLessons() {
+		return lessons.listIterator();
+	}
+	
+	public void addCompletionGoal(String percentage, String description) {
+		completionGoals.put(percentage, description);
+		completionGoals.keySet();
+	}
+	
+	public Set<String> getCompletionGoalKeys() {
+		return completionGoals.keySet();
+	}
+	
+	public String getCompletionGoal(String key) {
+		return completionGoals.get(key);
 	}
 	
 	public String getPlannedTimePerWeek() {
@@ -35,21 +51,23 @@ public class GoalDescriptor extends GenericDescriptor {
 
 	public Duration getGoalDuration() {
 		Duration duration = Duration.ZERO;
-		for (ModuleDescriptor module : modules) {
-			duration = duration.plus(module.getModuleDuration());
+		for (LessonDescriptor lesson : lessons) {
+			duration = duration.plus(lesson.getLessonDuration());
 		}
 		return duration;
 	}
 	
 	public GoalDescriptor() {
 		super();
-		modules = new ArrayList<ModuleDescriptor>();
+		lessons = new ArrayList<LessonDescriptor>();
+		completionGoals = new HashMap<String, String>();
 		// TODO Auto-generated constructor stub
 	}
 
 	public GoalDescriptor(String id, String title, String description, String url) {
 		super(id, title, description, url);
-		modules = new ArrayList<ModuleDescriptor>();
+		lessons = new ArrayList<LessonDescriptor>();
+		completionGoals = new HashMap<String, String>();
 		// TODO Auto-generated constructor stub
 	}
 

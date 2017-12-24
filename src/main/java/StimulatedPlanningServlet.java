@@ -36,39 +36,11 @@ public class StimulatedPlanningServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-//		String user = (String)session.getAttribute("user");
-		String userName = request.getParameter("userName");
-		session.setAttribute("userName", userName);
-		String userid = request.getParameter("userid");
-		session.setAttribute("userid", userid);
+		HttpSession session = StimulatedPlanningFactory.initializeSession(request, response);
 		
 		User user = (User)session.getAttribute("user");
-		if (user == null) {
-			user = new User(userName, userid);
-			session.setAttribute("user", user);
-		} else {
-			user.setId(userid);
-			user.setName(userName);
-		}
-		
-		
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
-		if (course == null) {
-			course = CourseDescriptor.generateTestCourse();
-			session.setAttribute("course", course);
-		}
-		
-		GoalDescriptor userGoal = (GoalDescriptor)session.getAttribute("userGoal");
-		
 		UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
-		if (userPlan == null) {
-			userPlan = new UserPlan(user);
-			if (userGoal != null) {
-				userPlan.setGoal(userGoal);
-			}
-			session.setAttribute("userPlan", userPlan);
-		}
 
 		String calenderItems = request.getParameter("calenderItems");
 		System.out.println("calenderItems: "+calenderItems);

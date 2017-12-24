@@ -1,27 +1,29 @@
 package stimulatedplanning;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.ListIterator;
 
-public class UserPlan implements Serializable {
-	protected User user;
-	protected GoalDescriptor goal;
+public class UserPlan extends GenericUserObject {
+	protected CourseDescriptor course;
+	protected ArrayList<UserGoal> goals;
 	protected HashMap<String, PlanItem> planItems;
 
 	
-	public User getUser() {
-		return user;
+	public CourseDescriptor getCourse() {
+		return course;
 	}
-	public void setUser(User user) {
-		this.user = user;
+	public void setCourse(CourseDescriptor course) {
+		this.course = course;
 	}
-	
-	public GoalDescriptor getGoal() {
-		return goal;
+
+	public ListIterator<UserGoal> getGoals() {
+		return goals.listIterator();
 	}
-	public void setGoal(GoalDescriptor goal) {
-		this.goal = goal;
+	public void addGoal(UserGoal goal) {
+		this.goals.add(goal);
 	}
 	
 	public void addPlanItem(PlanItem planItem) {
@@ -39,10 +41,10 @@ public class UserPlan implements Serializable {
 	}
 
 	
-	public UserPlan(User user) {
-		super();
-		this.user = user;
+	public UserPlan(String id, User user) {
+		super(id, user);
 		this.planItems = new HashMap<String, PlanItem>();
+		this.goals = new ArrayList<UserGoal>();
 	}
 	
 }

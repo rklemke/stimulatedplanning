@@ -33,49 +33,14 @@ public class DataTrackerServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
-		if (course == null) {
-			course = CourseDescriptor.generateTestCourse();
-			session.setAttribute("course", course);
-		}
-		  
-		response.setContentType("text/javascript");
-		
-		String userName = request.getParameter("userName");
-		session.setAttribute("userName", userName);
-		String userid = request.getParameter("userid");
-		session.setAttribute("userid", userid);
+		HttpSession session = StimulatedPlanningFactory.initializeSession(request, response);
 		
 		User user = (User)session.getAttribute("user");
-		if (user == null) {
-			try {
-				user = PersistentStore.getUser(userid);
-			} catch (Exception e) {
-				e.printStackTrace();
-				user = null;
-			}
-			if (user == null) {
-				user = new User(userName, userid);
-				session.setAttribute("user", user);
-				try {
-					PersistentStore.writeUser(user);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		} else {
-			if ((userid != null && !userid.equals(user.getId())) || (userName != null && !userName.equals(user.getName()))) {
-				user.setId(userid);
-				user.setName(userName);
-				session.setAttribute("user", user);
-				try {
-					PersistentStore.writeUser(user);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
+		UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
+
+		response.setContentType("text/javascript");
+		
 		
 		// TODO: store retrieved parameters in DB
 		Gson gson = new Gson();

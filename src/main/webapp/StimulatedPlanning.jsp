@@ -24,50 +24,22 @@
 </script>
 <%
 
-  String userName = (String)session.getAttribute("userName");
-  if (userName == null) {
-	  userName = "Guest";
-  }
-  session.setAttribute("userName", userName);
+  session = StimulatedPlanningFactory.initializeSession(request, response);
 
-  String userid = request.getParameter("userid");
-  session.setAttribute("userid", userid);
-  
   User user = (User)session.getAttribute("user");
-  if (user == null) {
-	user = new User(userName, userid);
-	session.setAttribute("user", user);
-  } else {
-	user.setId(userid);
-	user.setName(userName);
-  }
-  
   CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
-  if (course == null) {
-	  course = CourseDescriptor.generateTestCourse();
-	  session.setAttribute("course", course);
-  }
-  
-  GoalDescriptor userGoal = (GoalDescriptor)session.getAttribute("userGoal");
+  UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
+
   String selectedGoalProfile = "";
   ListIterator<ModuleDescriptor> modIterator;
-  if (userGoal != null) {
-	  modIterator = userGoal.getModules();
-	  selectedGoalProfile = userGoal.getTitle();
-  } else {
+  //if (userGoal != null) {
+//	  modIterator = userGoal.getModules();
+//	  selectedGoalProfile = userGoal.getTitle();
+ // } else {
 	  modIterator = course.getModules();
       selectedGoalProfile = "Course: "+course.getTitle();
-  }
+//  }
   
-  UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
-  if (userPlan == null) {
-	  userPlan = new UserPlan(user);
-	  if (userGoal != null) {
-		  userPlan.setGoal(userGoal);
-	  }
-	  session.setAttribute("userPlan", userPlan);
-  }
-    
   int m=0;
   
 %>
