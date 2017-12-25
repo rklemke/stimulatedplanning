@@ -202,6 +202,23 @@ public class PersistentStore {
 		return entity;
 	}
 
+	private static Entity createGenericUserEntity(GenericUserObject generic) {
+		Entity entity = null;
+
+		try {
+			entity = createGenericEntity(generic);
+
+			entity.setProperty("userid", generic.getUser().getId());
+			
+		} catch (Exception e1) {
+			System.out.println("FATAL: Writing generic user entity failed.");
+			e1.printStackTrace();
+
+		}
+
+		return entity;
+	}
+
 	private static GenericDescriptor readDescriptor(String type, String id) throws Exception {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -266,6 +283,54 @@ public class PersistentStore {
 						(String) genericEntity.getProperty("title"), (String) genericEntity.getProperty("description"),
 						(String) genericEntity.getProperty("url"));
 				return content;
+			} else if (UserPlan.class.getName().equals(type)) {
+				User user = getUser((String) genericEntity.getProperty("userid"));
+				UserPlan plan = new UserPlan((String) genericEntity.getProperty("uid"), user);
+				plan.setPlannedTimePerWeek((String) genericEntity.getProperty("plannedTimePerWeek"));
+				relationList = readToManyRelation(plan, "goals", UserGoal.class.getName(), true);
+				for (GenericDescriptor generic : relationList) {
+					plan.addGoal((UserGoal)generic);
+				}
+				relationList = readToManyRelation(plan, "planItems", PlanItem.class.getName(), true);
+				for (GenericDescriptor generic : relationList) {
+					plan.addPlanItem((PlanItem)generic);
+				}
+				return plan;
+			} else if (UserGoal.class.getName().equals(type)) {
+				User user = getUser((String) genericEntity.getProperty("userid"));
+				GoalDescriptor goal = (GoalDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("goal"));				
+				UserGoal userGoal = new UserGoal((String) genericEntity.getProperty("uid"), user, goal);
+				relationList = readToManyRelation(userGoal, "lessons", UserLesson.class.getName(), true);
+				for (GenericDescriptor generic : relationList) {
+					userGoal.addLesson((UserLesson)generic);
+				}
+				return userGoal;
+			} else if (UserLesson.class.getName().equals(type)) {
+				User user = getUser((String) genericEntity.getProperty("userid"));
+				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("lesson"));				
+				UserLesson userLesson = new UserLesson((String) genericEntity.getProperty("uid"), user, lesson);
+				LessonStatus status = (LessonStatus)genericEntity.getProperty("status");
+				userLesson.setStatus(status);
+				relationList = readToManyRelation(userLesson, "contents", UserContent.class.getName(), true);
+				for (GenericDescriptor generic : relationList) {
+					userLesson.addContent((UserContent)generic);
+				}
+				return userLesson;
+			} else if (UserContent.class.getName().equals(type)) {
+				User user = getUser((String) genericEntity.getProperty("userid"));
+				ContentDescriptor content = (ContentDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("content"));				
+				UserContent userContent = new UserContent((String) genericEntity.getProperty("uid"), user, content);
+				LessonStatus status = (LessonStatus)genericEntity.getProperty("status");
+				userContent.setStatus(status);
+				return userContent;
+			} else if (PlanItem.class.getName().equals(type)) {
+				User user = getUser((String) genericEntity.getProperty("userid"));
+				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("userid"));
+				String jsonPlanItem = (String) genericEntity.getProperty("jsonPlanItem");
+				PlanItem planItem = new PlanItem((String) genericEntity.getProperty("uid"), user, lesson, jsonPlanItem);
+				LessonStatus status = (LessonStatus)genericEntity.getProperty("status");
+				planItem.setStatus(status);
+				return planItem;
 			}
 		}
 
@@ -385,6 +450,108 @@ public class PersistentStore {
 		}
 
 	}
+	
+	public static void writeDescriptor(UserPlan userPlan) throws Exception {
+		System.out.println("writeDescriptor (UserPlan): "+userPlan.getUser().getName()+", "+userPlan.getClass().getName()+", "+userPlan.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity planEntity = createGenericUserEntity(userPlan);
+			planEntity.setProperty("course", userPlan.getCourse().getId());
+			planEntity.setProperty("plannedTimePerWeek", userPlan.getPlannedTimePerWeek());
+
+			writeToManyRelation(userPlan, userPlan.getGoals(), "userGoals", userPlan.goals.size(), true);
+			writeToManyRelation(userPlan, userPlan.getPlanItems(), "planItems", userPlan.planItems.size(), true);
+			
+			datastore.put(planEntity);
+		} catch (Exception e1) {
+			System.out.println("FATAL: Writing goal failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+
+	public static void writeDescriptor(UserGoal userGoal) throws Exception {
+		System.out.println("writeDescriptor (UserGoal): "+userGoal.getUser().getName()+", "+userGoal.getClass().getName()+", "+userGoal.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity goalEntity = createGenericUserEntity(userGoal);
+			goalEntity.setProperty("goal", userGoal.getGoalDescriptor().getId());
+
+			writeToManyRelation(userGoal, userGoal.getLessons(), "lessons", userGoal.lessons.size(), true);
+			
+			datastore.put(goalEntity);
+		} catch (Exception e1) {
+			System.out.println("FATAL: Writing goal failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+
+
+	public static void writeDescriptor(UserLesson userLesson) throws Exception {
+		System.out.println("writeDescriptor (UserLesson): "+userLesson.getUser().getName()+", "+userLesson.getClass().getName()+", "+userLesson.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity lessonEntity = createGenericUserEntity(userLesson);
+			lessonEntity.setProperty("lesson", userLesson.getLesson().getId());
+			lessonEntity.setProperty("status", userLesson.getStatus());
+
+			writeToManyRelation(userLesson, userLesson.getContents(), "contents", userLesson.contents.size(), true);
+			
+			datastore.put(lessonEntity);
+		} catch (Exception e1) {
+			System.out.println("FATAL: Writing goal failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+
+	public static void writeDescriptor(UserContent userContent) throws Exception {
+		System.out.println("writeDescriptor (UserContent): "+userContent.getUser().getName()+", "+userContent.getClass().getName()+", "+userContent.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity lessonEntity = createGenericUserEntity(userContent);
+			lessonEntity.setProperty("content", userContent.getContent().getId());
+			lessonEntity.setProperty("status", userContent.getStatus());
+
+			datastore.put(lessonEntity);
+		} catch (Exception e1) {
+			System.out.println("FATAL: Writing goal failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+
+
+	public static void writeDescriptor(PlanItem planItem) throws Exception {
+		System.out.println("writeDescriptor (GoalDescriptor): "+planItem.getUser().getName()+", "+planItem.getClass().getName()+", "+planItem.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity planItemEntity = createGenericUserEntity(planItem);
+			planItemEntity.setProperty("lesson", planItem.getLesson().getId());
+			planItemEntity.setProperty("status", planItem.getStatus());
+			planItemEntity.setProperty("jsonPlanItem", planItem.getJsonPlanItem());
+
+			datastore.put(planItemEntity);
+		} catch (Exception e1) {
+			System.out.println("FATAL: Writing goal failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+
+
+	
 	
 	public static CourseDescriptor readCourse(String id) {
 		CourseDescriptor course = null;

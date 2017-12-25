@@ -4,9 +4,11 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+import stimulatedplanning.util.HashArrayList;
+
 public class LessonDescriptor extends GenericDescriptor {
 	Duration lessonDuration;
-	protected ArrayList<ContentDescriptor> contents;
+	protected HashArrayList<ContentDescriptor> contents;
 
 	public Duration getLessonDuration() {
 		return lessonDuration;
@@ -38,13 +40,13 @@ public class LessonDescriptor extends GenericDescriptor {
 	public LessonDescriptor() {
 		super();
 		lessonDuration = Duration.ofMinutes(20); // default lesson duration is assumed to be twenty minutes
-		contents = new ArrayList<ContentDescriptor>();
+		contents = new HashArrayList<ContentDescriptor>();
 	}
 
 	public LessonDescriptor(String id, String title, String description, String url) {
 		super(id, title, description, url);
 		lessonDuration = Duration.ofMinutes(20); // default lesson duration is assumed to be twenty minutes
-		contents = new ArrayList<ContentDescriptor>();
+		contents = new HashArrayList<ContentDescriptor>();
 	}
 
 }

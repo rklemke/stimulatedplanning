@@ -60,7 +60,7 @@ public class StimulatedPlanningServlet extends HttpServlet {
 					if (id != null && !"".equals(id)) {
 						LessonDescriptor lesson = course.retrieveLessonById(id);
 						if (lesson != null) {
-							PlanItem item = new PlanItem(id, lesson, builder.create().toJson(evt));
+							PlanItem item = new PlanItem(id, user, lesson, builder.create().toJson(evt));
 							userPlan.addPlanItem(item);
 						}
 					}

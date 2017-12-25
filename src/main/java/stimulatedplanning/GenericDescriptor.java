@@ -44,6 +44,10 @@ public class GenericDescriptor implements Serializable {
 		this.title = title;
 		this.description = description;
 		this.url = url;
+		
+		if (!(this instanceof GenericUserObject)) {
+			StimulatedPlanningFactory.addObject(this);
+		}
 	}
 	
 	

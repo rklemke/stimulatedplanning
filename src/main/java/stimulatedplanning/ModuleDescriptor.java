@@ -4,19 +4,21 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+import stimulatedplanning.util.HashArrayList;
+
 public class ModuleDescriptor extends GenericDescriptor {
 	
-	protected ArrayList<LessonDescriptor> lessons;
+	protected HashArrayList<LessonDescriptor> lessons;
 
 	public ModuleDescriptor() {
 		super();
-		lessons = new ArrayList<LessonDescriptor>();
+		lessons = new HashArrayList<LessonDescriptor>();
 		// TODO Auto-generated constructor stub
 	}
 
 	public ModuleDescriptor(String id, String title, String description, String url) {
 		super(id, title, description, url);
-		lessons = new ArrayList<LessonDescriptor>();
+		lessons = new HashArrayList<LessonDescriptor>();
 		// TODO Auto-generated constructor stub
 	}
 	

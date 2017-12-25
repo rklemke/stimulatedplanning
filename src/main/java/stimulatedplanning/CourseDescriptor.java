@@ -4,22 +4,24 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+import stimulatedplanning.util.HashArrayList;
+
 public class CourseDescriptor extends GenericDescriptor {
 
-	protected ArrayList<ModuleDescriptor> modules;
-	protected ArrayList<GoalDescriptor> goals;
+	protected HashArrayList<ModuleDescriptor> modules;
+	protected HashArrayList<GoalDescriptor> goals;
 
 	public CourseDescriptor() {
 		super();
-		modules = new ArrayList<ModuleDescriptor>();
-		goals = new ArrayList<GoalDescriptor>();
+		modules = new HashArrayList<ModuleDescriptor>();
+		goals = new HashArrayList<GoalDescriptor>();
 		// TODO Auto-generated constructor stub
 	}
 
 	public CourseDescriptor(String id, String title, String description, String url) {
 		super(id, title, description, url);
-		modules = new ArrayList<ModuleDescriptor>();
-		goals = new ArrayList<GoalDescriptor>();
+		modules = new HashArrayList<ModuleDescriptor>();
+		goals = new HashArrayList<GoalDescriptor>();
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -37,6 +39,10 @@ public class CourseDescriptor extends GenericDescriptor {
 	
 	public ListIterator<GoalDescriptor> getGoals() {
 		return goals.listIterator();
+	}
+	
+	public GoalDescriptor getGoal(String id) {
+		return goals.get(id);
 	}
 	
 	public LessonDescriptor retrieveLessonById(String id) {

@@ -3,10 +3,12 @@ package stimulatedplanning;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
+import stimulatedplanning.util.HashArrayList;
+
 public class UserLesson extends GenericUserObject {
 	LessonDescriptor lesson;
 	LessonStatus status;
-	ArrayList<UserContent> contents;
+	HashArrayList<UserContent> contents;
 
 	public LessonDescriptor getLesson() {
 		return lesson;
@@ -34,7 +36,7 @@ public class UserLesson extends GenericUserObject {
 		super(id, user);
 		this.lesson = lesson;
 		this.status = LessonStatus.INITIAL;
-		// TODO Auto-generated constructor stub
+		this.contents = new HashArrayList<UserContent>();
 	}
 
 }

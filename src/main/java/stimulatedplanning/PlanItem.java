@@ -1,17 +1,10 @@
 package stimulatedplanning;
 
-public class PlanItem {
+public class PlanItem extends GenericUserObject {
 	LessonDescriptor lesson;
 	String jsonPlanItem;
-	String id;
 	LessonStatus status;
 
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
 	public LessonDescriptor getLesson() {
 		return lesson;
 	}
@@ -33,9 +26,8 @@ public class PlanItem {
 		this.status = status;
 	}
 	
-	public PlanItem(String id, LessonDescriptor lesson, String jsonPlanItem) {
-		super();
-		this.id = id;
+	public PlanItem(String id, User user, LessonDescriptor lesson, String jsonPlanItem) {
+		super(id, user);
 		this.lesson = lesson;
 		this.jsonPlanItem = jsonPlanItem;
 		this.status = LessonStatus.INITIAL;

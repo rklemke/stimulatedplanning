@@ -6,11 +6,12 @@ import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Set;
 
+import stimulatedplanning.util.HashArrayList;
+
 public class GoalDescriptor extends GenericDescriptor {
 
-	protected ArrayList<LessonDescriptor> lessons;
+	protected HashArrayList<LessonDescriptor> lessons;
 	protected HashMap<String, String> completionGoals;
-	protected String plannedTimePerWeek;
 	
 	public void addLesson(LessonDescriptor lesson) {
 		this.lessons.add(lesson);
@@ -33,20 +34,6 @@ public class GoalDescriptor extends GenericDescriptor {
 		return completionGoals.get(key);
 	}
 	
-	public String getPlannedTimePerWeek() {
-		return plannedTimePerWeek;
-	}
-	public void setPlannedTimePerWeek(String plannedTimePerWeek) {
-		this.plannedTimePerWeek = plannedTimePerWeek;
-	}
-	public int getPlannedTimePerWeekAsInt() {
-		try {
-			return Integer.valueOf(plannedTimePerWeek);
-		} catch (Exception e) {
-			
-		}
-		return 1;
-	}
 
 
 	public Duration getGoalDuration() {
@@ -59,14 +46,14 @@ public class GoalDescriptor extends GenericDescriptor {
 	
 	public GoalDescriptor() {
 		super();
-		lessons = new ArrayList<LessonDescriptor>();
+		lessons = new HashArrayList<LessonDescriptor>();
 		completionGoals = new HashMap<String, String>();
 		// TODO Auto-generated constructor stub
 	}
 
 	public GoalDescriptor(String id, String title, String description, String url) {
 		super(id, title, description, url);
-		lessons = new ArrayList<LessonDescriptor>();
+		lessons = new HashArrayList<LessonDescriptor>();
 		completionGoals = new HashMap<String, String>();
 		// TODO Auto-generated constructor stub
 	}

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import stimulatedplanning.*;
+import stimulatedplanning.util.HashArrayList;
 
 /**
  * Servlet implementation class GoalSettingServlet
@@ -40,21 +41,22 @@ public class GoalSettingServlet extends HttpServlet {
 
 		String intentionStep = (String)session.getAttribute("intentionStep");
 
-		String selectedGoalId = request.getParameter("goalSelectRadio");
+		//String selectedGoalId = request.getParameter("goalSelectRadio");
+		String[] selectedGoalIds = request.getParameterValues("goalSelectRadio");
 
-		GoalDescriptor selectedGoal = (GoalDescriptor)session.getAttribute("userGoal");
+		//GoalDescriptor selectedGoal = (GoalDescriptor)session.getAttribute("userGoal");
+		HashArrayList<GoalDescriptor> selectedGoals = (HashArrayList<GoalDescriptor>)session.getAttribute("userGoals");
 		
-		if (selectedGoalId != null && !"".equals(selectedGoalId)) {
+		if (selectedGoalIds != null && selectedGoalIds.length > 0) {
 			ListIterator<GoalDescriptor> iterator = course.getGoals();
-			while(selectedGoal == null && iterator.hasNext()) {
-				GoalDescriptor goal = iterator.next();
-				if (goal.getId().equals(selectedGoalId)) {
-					selectedGoal = goal;
+			selectedGoals = new HashArrayList<GoalDescriptor>();
+			for (String goalId : selectedGoalIds) {
+				GoalDescriptor goal = course.getGoal(goalId);
+				if (goal != null) {
+					selectedGoals.add(goal);
 				}
 			}
-			if (selectedGoal != null) {
-				session.setAttribute("userGoal", selectedGoal);
-			}
+			session.setAttribute("selectedGoals", selectedGoals);
 		}
 
 		String selectedSchedule = request.getParameter("scheduleSelectRadio");
@@ -62,9 +64,7 @@ public class GoalSettingServlet extends HttpServlet {
 		if (selectedSchedule != null) {
 			System.out.println("selectedSchedule: "+selectedSchedule);
 			session.setAttribute("selectedSchedule", selectedSchedule);
-			if (selectedGoal != null) {
-				selectedGoal.setPlannedTimePerWeek(selectedSchedule);
-			}
+			userPlan.setPlannedTimePerWeek(selectedSchedule);
 		}
 		
 		String submit = request.getParameter("submit");

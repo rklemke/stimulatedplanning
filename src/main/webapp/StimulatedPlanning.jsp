@@ -112,12 +112,13 @@
 			},
 			events: [
 <%
-	Collection<PlanItem> planCollection = userPlan.getPlanItems();
+	ListIterator<PlanItem> planIterator = userPlan.getPlanItems();
 	int i=0;
-	for(PlanItem item : planCollection) {
+	while(planIterator.hasNext()) {
+		PlanItem item = planIterator.next();
 %>
 <%= item.getJsonPlanItem() %>
-<%= (i<planCollection.size()-1 ? "," : "") %>
+<%= (planIterator.hasNext() ? "," : "") %>
 <%
 	}
 %>

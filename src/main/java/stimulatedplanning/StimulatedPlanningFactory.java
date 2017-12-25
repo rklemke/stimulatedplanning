@@ -1,5 +1,6 @@
 package stimulatedplanning;
 
+import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ public class StimulatedPlanningFactory {
 	
 	private CourseDescriptor testCourse;
 	private String testCourseId = "ICS18";
+	private HashMap<String, GenericDescriptor> courseObjects = new HashMap<>();
 	
 	private CourseDescriptor retrievTestCourse() {
 		if (instance.testCourse != null) {
@@ -40,11 +42,35 @@ public class StimulatedPlanningFactory {
 		
 	}
 	
+	public static boolean hasObject(String id) {
+		return instance.courseObjects.containsKey(id);
+	}
+	
+	public static void addObject(GenericDescriptor object) {
+		if (!(object instanceof GenericUserObject)) {
+			instance.courseObjects.put(object.getId(), object);
+		} else {
+			System.out.println("trying to add GenericUserObject to courseObjects: "+object.getClass().getName()+", "+object.getId());
+		}
+	}
+	
+	public static GenericDescriptor getObject(String id) {
+		if (!instance.courseObjects.containsKey(id)) {
+			System.out.println("Warning: trying to retrieve object not in Map: "+id);
+			return null;
+		}
+		return instance.courseObjects.get(id);
+	}
+	
 	public static String getUUID() {
 		UUID uuid = UUID.randomUUID();
         return uuid.toString();
 	}
 
+	/**
+	 * generate the structure for the course to be used according to ICS18 structure.
+	 * @return
+	 */
 	public static CourseDescriptor generateTestCourse() {
 		CourseDescriptor course = instance.retrievTestCourse();
 		if (course == null) {
@@ -178,6 +204,29 @@ public class StimulatedPlanningFactory {
 	}
 	
 	
+	public static User getUser(String userid, String userName) {
+		User user = null;
+		try {
+			user = PersistentStore.getUser(userid);
+		} catch (Exception e) {
+			//e.printStackTrace();
+			user = null;
+		}
+		if (user == null) {
+			user = new User(userName, userid);
+			if (!"Guest".equals(user.getName()) && !"unkown".equals(userid)) {
+				try {
+					PersistentStore.writeUser(user);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return user;
+		
+	}
+	
+	
 	public static UserPlan createUserPlan(User user, CourseDescriptor course) {
 		UserPlan userPlan = new UserPlan(getUUID(), user);
 		userPlan.setCourse(course);
@@ -208,32 +257,19 @@ public class StimulatedPlanningFactory {
 	public static HttpSession initializeSession(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
 		String userName = request.getParameter("userName");
-		if (userName == null) {
+		String userid = request.getParameter("userid");
+
+		if (userName == null || userid == null) {
 			userName = "Guest";
-			session.setAttribute("userName", userName);
+			userid = "unkown";
 		}
 
-		String userid = request.getParameter("userid");
+		session.setAttribute("userName", userName);
 		session.setAttribute("userid", userid);
-		
+
 		User user = (User)session.getAttribute("user");
 		if (user == null || ((userid != null && !userid.equals(user.getId())) || (userName != null && !userName.equals(user.getName())))) {
-			try {
-				user = PersistentStore.getUser(userid);
-			} catch (Exception e) {
-				e.printStackTrace();
-				user = null;
-			}
-			if (user == null) {
-				user = new User(userName, userid);
-				if (!"Guest".equals(user.getName())) {
-					try {
-						PersistentStore.writeUser(user);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
+			user = getUser(userid, userName);
 			session.setAttribute("user", user);
 		}
 		

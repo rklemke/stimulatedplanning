@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="stimulatedplanning.*, java.util.*" %>
+<%@ page import="stimulatedplanning.*, stimulatedplanning.util.*, java.util.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -11,7 +11,8 @@
   CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
   UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
 
-  GoalDescriptor userGoal = (GoalDescriptor)session.getAttribute("userGoal");
+  //GoalDescriptor userGoal = (GoalDescriptor)session.getAttribute("userGoal");
+  HashArrayList<GoalDescriptor> selectedGoals = (HashArrayList<GoalDescriptor>)session.getAttribute("selectedGoals");
   String userScheduleIntention = (String)session.getAttribute("selectedSchedule");
 
   String intentionStep = (String)session.getAttribute("intentionStep");
@@ -124,7 +125,7 @@
   %>
     <li class="tabs-<%= goal.getId() %>" id="li-<%= goal.getId() %>">
     	<a class="a-tab" href="#tabs-<%= goal.getId() %>"><%= goal.getTitle() %></a>
-    	<input class="goalselectToggle" type="checkbox" name="goalSelectRadio" id="gsc-<%= goal.getId() %>" value="<%= goal.getId() %>" onClick="toggleGoalSelectCB('<%= goal.getId() %>', <%= m %>);" <% if (userGoal != null && userGoal.getId().equals(goal.getId())) { %>checked <% } %> >
+    	<input class="goalselectToggle" type="checkbox" name="goalSelectRadio" id="gsc-<%= goal.getId() %>" value="<%= goal.getId() %>" onClick="toggleGoalSelectCB('<%= goal.getId() %>', <%= m %>);" <% if (selectedGoals != null && selectedGoals.containsKey(goal.getId())) { %>checked <% } %> >
     </li>
   <%
   	m++;
@@ -154,7 +155,7 @@
   while(iterator2.hasNext()) {
 	  LessonDescriptor lesson = iterator2.next();
   %>
-        <li><input class="goal_<%= goal.getId() %> moduleselectToggle" type="checkbox" name="moduleSelectCB" id="lesson<%= lesson.getId() %>" value="<%= lesson.getId() %>" <% if (userGoal != null && userGoal.getId().equals(goal.getId())) { %>checked <% } %> >
+        <li><input class="goal_<%= goal.getId() %> moduleselectToggle" type="checkbox" name="moduleSelectCB" id="lesson<%= lesson.getId() %>" value="<%= lesson.getId() %>" <% if (selectedGoals != null && selectedGoals.containsKey(goal.getId())) { %>checked <% } %> >
         <label for="lesson<%= lesson.getId() %>"><%= lesson.getTitle() %></label></li>
   <%
   }
@@ -166,7 +167,7 @@
 	  String key = iterator3.next();
 	  String desc = goal.getCompletionGoal(key);
   %>
-        <li><input class="moduleselectToggle" type="radio" name="completionSelectRB" id="completion<%= key %>" value="<%= key %>" <% if (userGoal != null && userGoal.getId().equals(goal.getId())) { %>checked <% } %> >
+        <li><input class="moduleselectToggle" type="radio" name="completionSelectRB" id="completion<%= key %>" value="<%= key %>" <% if (selectedGoals != null && selectedGoals.containsKey(goal.getId())) { %>checked <% } %> >
         <label for="completion<%= key %>"><%= desc %></label></li>
   <%
   }
@@ -210,17 +211,21 @@
 
 		<div id="selectedGoal">
 		<% 
-		if (userGoal != null) {
+		if (selectedGoals != null) {
+			int duration = 0;
 		%>
 		<p>Your selection:</p>
 		<ul>
-		<li>Your intention: <%= userGoal.getTitle() %></li>
-		<li>Your estimated time per week: <%= userGoal.getPlannedTimePerWeekAsInt() %> hours.</li>
+		<li>Your intentions: <% for (GoalDescriptor userGoal : selectedGoals) {
+			duration += userGoal.getGoalDuration().toHours();
+			%><%= userGoal.getTitle() %>, <% 
+		} %></li>
+		<li>Your estimated time per week: <%= userPlan.getPlannedTimePerWeekAsInt() %> hours.</li>
 		</ul>
 		<p>Our learning effort estimation for you:</p>
 		<ul>
-		<li>To complete your intention you need a total learning time of: <%= userGoal.getGoalDuration().toHours() %> hours.</li>
-		<li>Your estimated time to goal achievement: <%= (int)Math.ceil((double)userGoal.getGoalDuration().toHours()/userGoal.getPlannedTimePerWeekAsInt()) %> weeks</li>
+		<li>To complete your intention you need a total learning time of: <%= duration %> hours.</li>
+		<li>Your estimated time to goal achievement: <%= (int)Math.ceil((double)duration/userPlan.getPlannedTimePerWeekAsInt()) %> weeks</li>
 		</ul>
 		<%
 		} else {
@@ -244,7 +249,7 @@
 			<input type="submit" id="ok" name="submit" value="Next"></input>
 		<%
 		}
-		if (userGoal != null && PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
+		if (selectedGoals != null && PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
 		%>
 			<input type="submit" id="continue" name="submit" value="Continue"></input>
 		<%
