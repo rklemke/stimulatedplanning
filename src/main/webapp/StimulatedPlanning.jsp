@@ -32,11 +32,13 @@
 
   String selectedGoalProfile = "";
   ListIterator<ModuleDescriptor> modIterator;
+  ListIterator<UserGoal> goalIterator;
   //if (userGoal != null) {
 //	  modIterator = userGoal.getModules();
 //	  selectedGoalProfile = userGoal.getTitle();
  // } else {
-	  modIterator = course.getModules();
+	  //modIterator = course.getModules();
+	  goalIterator = userPlan.getGoals();
       selectedGoalProfile = "Course: "+course.getTitle();
 //  }
   
@@ -80,6 +82,14 @@
 
 		});
 
+		$('.plan-b').each(function() {
+			
+
+			// make the event draggable using jQuery UI
+			$(this).draggable('disable');
+
+		});
+
 
 		/* initialize the calendar
 		-----------------------------------------------------------------*/
@@ -88,7 +98,7 @@
 			header: {
 				left: 'prev,next today',
 				center: 'title',
-				right: 'month,agendaWeek,agendaDay,listMonth'
+				right: 'agendaWeek,agendaDay,listMonth'
     		},
 			id: ($(this).attr('id')),
 			eventOverlap: false,
@@ -107,7 +117,10 @@
 				// is the "remove after drop" checkbox checked?
 				if ($('#drop-remove').is(':checked')) {
 					// if so, remove the element from the "Draggable Events" list
-					$(this).remove();
+					$(this).removeClass('plan-a');
+					$(this).addClass('plan-b');
+					$(this).draggable('disable');
+					//$(this).remove();
 				}
 			},
 			events: [
@@ -227,7 +240,7 @@
 	}
 	
 	.plan-b {
-	    background-color: #9c27b0;
+	    background-color: #afafaf;
 	}
 
 	#feedbackMessage {
@@ -252,30 +265,41 @@
 <p>Plan your recommended activities by dragging them from the list below to the calendar.</p>
 <div id="accordion">
 <%
-	while(modIterator.hasNext()) {
-		ModuleDescriptor module = modIterator.next();
-		ListIterator<LessonDescriptor> lessonIterator = module.getLessons();
+	while(goalIterator.hasNext()) {
+		UserGoal goal = goalIterator.next();
+		ListIterator<UserLesson> lessonIterator = goal.getLessons();
+		if (lessonIterator.hasNext()) {
 %>
-  <h3><%= module.getTitle() %></h3>
-  <div>
-		<div class="external-events">
-<%
-	while(lessonIterator.hasNext()) {
-		LessonDescriptor lesson = lessonIterator.next();
-		if (!userPlan.hasPlanItem(lesson.getId())) {
+		  <h3><%= goal.getGoalDescriptor().getTitle() %></h3>
+		  <div>
+				<div class="external-events">
+		<%
+			while(lessonIterator.hasNext()) {
+				UserLesson userLesson = lessonIterator.next();
+				LessonDescriptor lesson = userLesson.getLesson();
+				if (!userPlan.hasPlanItem(lesson.getId())) {
+		%>
+					<div 
+						class="fc-event plan-a ui-draggable ui-draggable-handle" 
+						id="<%= lesson.getId() %>" 
+						data-duration="<%= lesson.getLessonDurationString() %>"
+					><%= lesson.getTitle() %></div>
+		<%
+				} else {
 %>
 			<div 
-				class="fc-event ui-draggable ui-draggable-handle plan-a" 
+				class="fc-event plan-b ui-draggable ui-draggable-handle" 
 				id="<%= lesson.getId() %>" 
 				data-duration="<%= lesson.getLessonDurationString() %>"
 			><%= lesson.getTitle() %></div>
 <%
-		}
-	}
-%>
-		</div>
-  </div>
+				}
+			}
+		%>
+				</div>
+		  </div>
 <%
+		}
 	}
 %>
  </div>

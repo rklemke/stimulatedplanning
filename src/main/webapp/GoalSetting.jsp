@@ -13,7 +13,9 @@
 
   //GoalDescriptor userGoal = (GoalDescriptor)session.getAttribute("userGoal");
   HashArrayList<GoalDescriptor> selectedGoals = (HashArrayList<GoalDescriptor>)session.getAttribute("selectedGoals");
+  HashArrayList<LessonDescriptor> selectedLessons = (HashArrayList<LessonDescriptor>)session.getAttribute("selectedLessons");
   String userScheduleIntention = (String)session.getAttribute("selectedSchedule");
+  String completionSelectRB = (String)session.getAttribute("completionSelectRB");
 
   String intentionStep = (String)session.getAttribute("intentionStep");
   if (intentionStep == null || "".equals(intentionStep)) {
@@ -155,7 +157,7 @@
   while(iterator2.hasNext()) {
 	  LessonDescriptor lesson = iterator2.next();
   %>
-        <li><input class="goal_<%= goal.getId() %> moduleselectToggle" type="checkbox" name="moduleSelectCB" id="lesson<%= lesson.getId() %>" value="<%= lesson.getId() %>" <% if (selectedGoals != null && selectedGoals.containsKey(goal.getId())) { %>checked <% } %> >
+        <li><input class="goal_<%= goal.getId() %> moduleselectToggle" type="checkbox" name="goal<%= goal.getId() %>" id="lesson<%= lesson.getId() %>" value="<%= lesson.getId() %>" <% if (selectedLessons != null && selectedLessons.containsKey(lesson.getId())) { %>checked <% } %> >
         <label for="lesson<%= lesson.getId() %>"><%= lesson.getTitle() %></label></li>
   <%
   }
@@ -167,7 +169,7 @@
 	  String key = iterator3.next();
 	  String desc = goal.getCompletionGoal(key);
   %>
-        <li><input class="moduleselectToggle" type="radio" name="completionSelectRB" id="completion<%= key %>" value="<%= key %>" <% if (selectedGoals != null && selectedGoals.containsKey(goal.getId())) { %>checked <% } %> >
+        <li><input class="moduleselectToggle" type="radio" name="completionSelectRB" id="completion<%= key %>" value="<%= key %>" <% if (key.equals(completionSelectRB)) { %>checked <% } %> >
         <label for="completion<%= key %>"><%= desc %></label></li>
   <%
   }

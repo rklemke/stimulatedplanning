@@ -9,6 +9,7 @@ public class UserGoal extends GenericUserObject {
 	
 	GoalDescriptor goalDescriptor;
 	HashArrayList<UserLesson> lessons;
+	String completionGoal = "";
 
 	public GoalDescriptor getGoalDescriptor() {
 		return goalDescriptor;
@@ -26,6 +27,14 @@ public class UserGoal extends GenericUserObject {
 	}
 	
 	
+	public String getCompletionGoal() {
+		return completionGoal;
+	}
+
+	public void setCompletionGoal(String completionGoal) {
+		this.completionGoal = completionGoal;
+	}
+
 	public UserGoal(String id, User user, GoalDescriptor goalDescriptor) {
 		super(id, user);
 		this.goalDescriptor = goalDescriptor;

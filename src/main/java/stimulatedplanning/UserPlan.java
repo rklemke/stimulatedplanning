@@ -70,6 +70,10 @@ public class UserPlan extends GenericUserObject {
 		}
 		return false;
 	}
+	
+	public void resetGoals() {
+		goals = new HashArrayList<UserGoal>();
+	}
 
 	
 	public UserPlan(String id, User user) {

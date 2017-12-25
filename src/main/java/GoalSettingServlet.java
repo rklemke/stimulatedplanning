@@ -41,22 +41,46 @@ public class GoalSettingServlet extends HttpServlet {
 
 		String intentionStep = (String)session.getAttribute("intentionStep");
 
-		//String selectedGoalId = request.getParameter("goalSelectRadio");
+		String completionSelectRB = request.getParameter("completionSelectRB");
+		if (completionSelectRB != null) {
+			session.setAttribute("completionSelectRB", completionSelectRB);
+		}
+		
 		String[] selectedGoalIds = request.getParameterValues("goalSelectRadio");
 
 		//GoalDescriptor selectedGoal = (GoalDescriptor)session.getAttribute("userGoal");
-		HashArrayList<GoalDescriptor> selectedGoals = (HashArrayList<GoalDescriptor>)session.getAttribute("userGoals");
+		HashArrayList<GoalDescriptor> selectedGoals = (HashArrayList<GoalDescriptor>)session.getAttribute("selectedGoals");
+		HashArrayList<LessonDescriptor> selectedLessons = (HashArrayList<LessonDescriptor>)session.getAttribute("selectedLessons");
 		
 		if (selectedGoalIds != null && selectedGoalIds.length > 0) {
 			ListIterator<GoalDescriptor> iterator = course.getGoals();
+			userPlan.resetGoals();
 			selectedGoals = new HashArrayList<GoalDescriptor>();
+			selectedLessons = new HashArrayList<LessonDescriptor>();
 			for (String goalId : selectedGoalIds) {
 				GoalDescriptor goal = course.getGoal(goalId);
 				if (goal != null) {
 					selectedGoals.add(goal);
+					UserGoal userGoal = StimulatedPlanningFactory.creatUserGoal(userPlan, goal);
+					userPlan.addGoal(userGoal);
+					String[] selectedLessonIds = request.getParameterValues("goal" + goal.getId());
+					if (selectedLessonIds != null) {
+						for (String lessonId : selectedLessonIds) {
+							LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(lessonId);
+							if (lesson != null) {
+								selectedLessons.add(lesson);
+								UserLesson userLesson = StimulatedPlanningFactory.creatUserLesson(userGoal, lesson);
+								userGoal.addLesson(userLesson);
+							}
+						}
+					}
+					if (goal.getCompletionGoalKeys().size() > 0 && goal.getCompletionGoal(completionSelectRB) != null) {
+						userGoal.setCompletionGoal(completionSelectRB);
+					}
 				}
 			}
 			session.setAttribute("selectedGoals", selectedGoals);
+			session.setAttribute("selectedLessons", selectedLessons);
 		}
 
 		String selectedSchedule = request.getParameter("scheduleSelectRadio");

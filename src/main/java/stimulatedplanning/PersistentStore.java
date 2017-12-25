@@ -300,6 +300,7 @@ public class PersistentStore {
 				User user = getUser((String) genericEntity.getProperty("userid"));
 				GoalDescriptor goal = (GoalDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("goal"));				
 				UserGoal userGoal = new UserGoal((String) genericEntity.getProperty("uid"), user, goal);
+				userGoal.setCompletionGoal((String) genericEntity.getProperty("completionGoal"));
 				relationList = readToManyRelation(userGoal, "lessons", UserLesson.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
 					userGoal.addLesson((UserLesson)generic);
@@ -479,6 +480,7 @@ public class PersistentStore {
 		try {
 			Entity goalEntity = createGenericUserEntity(userGoal);
 			goalEntity.setProperty("goal", userGoal.getGoalDescriptor().getId());
+			goalEntity.setProperty("completionGoal", userGoal.getCompletionGoal());
 
 			writeToManyRelation(userGoal, userGoal.getLessons(), "lessons", userGoal.lessons.size(), true);
 			
