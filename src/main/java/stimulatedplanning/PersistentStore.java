@@ -8,6 +8,14 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.KeyRange;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.CompositeFilter;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+
 //import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 //import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import java.util.ArrayList;
@@ -26,7 +34,7 @@ public class PersistentStore {
 		try {
 			userEntity = datastore.get(KeyFactory.createKey(user.getClass().getName(), user.getId()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("User "+user.getId()+" does not exist yet. Creating it.");
 			userEntity = null;
 		}
 		if (userEntity == null) {
@@ -45,7 +53,7 @@ public class PersistentStore {
 
 		Entity userEntity = datastore.get(KeyFactory.createKey(User.class.getName(), userId));
 		if (userEntity != null) {
-			User user = new User((String) userEntity.getProperty("name"), (String) userEntity.getProperty("name"));
+			User user = new User((String) userEntity.getProperty("name"), userId);
 			return user;
 		}
 
@@ -106,6 +114,11 @@ public class PersistentStore {
 				else if (target instanceof GoalDescriptor) writeDescriptor((GoalDescriptor)target);
 				else if (target instanceof LessonDescriptor) writeDescriptor((LessonDescriptor)target);
 				else if (target instanceof ContentDescriptor) writeDescriptor((ContentDescriptor)target);
+				else if (target instanceof UserPlan) writeDescriptor((UserPlan)target);
+				else if (target instanceof UserGoal) writeDescriptor((UserGoal)target);
+				else if (target instanceof UserLesson) writeDescriptor((UserLesson)target);
+				else if (target instanceof UserContent) writeDescriptor((UserContent)target);
+				else if (target instanceof PlanItem) writeDescriptor((PlanItem)target);
 				else writeDescriptor(target);
 			}
 
@@ -139,6 +152,7 @@ public class PersistentStore {
 	}
 
 	private static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget) throws Exception {
+		System.out.println("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity entity = null;
 		
@@ -203,6 +217,7 @@ public class PersistentStore {
 	}
 
 	private static Entity createGenericUserEntity(GenericUserObject generic) {
+		System.out.println("createGenericUserEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 		Entity entity = null;
 
 		try {
@@ -220,6 +235,7 @@ public class PersistentStore {
 	}
 
 	private static GenericDescriptor readDescriptor(String type, String id) throws Exception {
+		System.out.println("readDescriptor: "+type+", "+id);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		Entity genericEntity = null;
@@ -285,9 +301,11 @@ public class PersistentStore {
 				return content;
 			} else if (UserPlan.class.getName().equals(type)) {
 				User user = getUser((String) genericEntity.getProperty("userid"));
+				CourseDescriptor course = (CourseDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("course"));				
 				UserPlan plan = new UserPlan((String) genericEntity.getProperty("uid"), user);
+				plan.setCourse(course);
 				plan.setPlannedTimePerWeek((String) genericEntity.getProperty("plannedTimePerWeek"));
-				relationList = readToManyRelation(plan, "goals", UserGoal.class.getName(), true);
+				relationList = readToManyRelation(plan, "userGoals", UserGoal.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
 					plan.addGoal((UserGoal)generic);
 				}
@@ -310,7 +328,7 @@ public class PersistentStore {
 				User user = getUser((String) genericEntity.getProperty("userid"));
 				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("lesson"));				
 				UserLesson userLesson = new UserLesson((String) genericEntity.getProperty("uid"), user, lesson);
-				LessonStatus status = (LessonStatus)genericEntity.getProperty("status");
+				LessonStatus status = LessonStatus.valueOf((String)genericEntity.getProperty("status"));
 				userLesson.setStatus(status);
 				relationList = readToManyRelation(userLesson, "contents", UserContent.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
@@ -321,15 +339,15 @@ public class PersistentStore {
 				User user = getUser((String) genericEntity.getProperty("userid"));
 				ContentDescriptor content = (ContentDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("content"));				
 				UserContent userContent = new UserContent((String) genericEntity.getProperty("uid"), user, content);
-				LessonStatus status = (LessonStatus)genericEntity.getProperty("status");
+				LessonStatus status = LessonStatus.valueOf((String)genericEntity.getProperty("status"));
 				userContent.setStatus(status);
 				return userContent;
 			} else if (PlanItem.class.getName().equals(type)) {
 				User user = getUser((String) genericEntity.getProperty("userid"));
-				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("userid"));
+				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("lesson"));
 				String jsonPlanItem = (String) genericEntity.getProperty("jsonPlanItem");
 				PlanItem planItem = new PlanItem((String) genericEntity.getProperty("uid"), user, lesson, jsonPlanItem);
-				LessonStatus status = (LessonStatus)genericEntity.getProperty("status");
+				LessonStatus status = LessonStatus.valueOf((String)genericEntity.getProperty("status"));
 				planItem.setStatus(status);
 				return planItem;
 			}
@@ -458,7 +476,8 @@ public class PersistentStore {
 
 		try {
 			Entity planEntity = createGenericUserEntity(userPlan);
-			planEntity.setProperty("course", userPlan.getCourse().getId());
+			String courseId = userPlan.getCourse().getId();
+			planEntity.setProperty("course", courseId);
 			planEntity.setProperty("plannedTimePerWeek", userPlan.getPlannedTimePerWeek());
 
 			writeToManyRelation(userPlan, userPlan.getGoals(), "userGoals", userPlan.goals.size(), true);
@@ -466,7 +485,7 @@ public class PersistentStore {
 			
 			datastore.put(planEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing goal failed.");
+			System.out.println("FATAL: Writing UserPlan failed.");
 			e1.printStackTrace();
 
 		}
@@ -501,7 +520,7 @@ public class PersistentStore {
 		try {
 			Entity lessonEntity = createGenericUserEntity(userLesson);
 			lessonEntity.setProperty("lesson", userLesson.getLesson().getId());
-			lessonEntity.setProperty("status", userLesson.getStatus());
+			lessonEntity.setProperty("status", userLesson.getStatus().toString());
 
 			writeToManyRelation(userLesson, userLesson.getContents(), "contents", userLesson.contents.size(), true);
 			
@@ -521,7 +540,7 @@ public class PersistentStore {
 		try {
 			Entity lessonEntity = createGenericUserEntity(userContent);
 			lessonEntity.setProperty("content", userContent.getContent().getId());
-			lessonEntity.setProperty("status", userContent.getStatus());
+			lessonEntity.setProperty("status", userContent.getStatus().toString());
 
 			datastore.put(lessonEntity);
 		} catch (Exception e1) {
@@ -534,13 +553,13 @@ public class PersistentStore {
 
 
 	public static void writeDescriptor(PlanItem planItem) throws Exception {
-		System.out.println("writeDescriptor (GoalDescriptor): "+planItem.getUser().getName()+", "+planItem.getClass().getName()+", "+planItem.getId());
+		System.out.println("writeDescriptor (PlanItem): "+planItem.getUser().getName()+", "+planItem.getClass().getName()+", "+planItem.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
 			Entity planItemEntity = createGenericUserEntity(planItem);
 			planItemEntity.setProperty("lesson", planItem.getLesson().getId());
-			planItemEntity.setProperty("status", planItem.getStatus());
+			planItemEntity.setProperty("status", planItem.getStatus().toString());
 			planItemEntity.setProperty("jsonPlanItem", planItem.getJsonPlanItem());
 
 			datastore.put(planItemEntity);
@@ -565,5 +584,108 @@ public class PersistentStore {
 		}
 		return course;
 	}
+
+
+
+	public static UserPlan readUserPlan(User user, CourseDescriptor course) {
+		UserPlan plan = null;
+		try {
+			System.out.println("read userPlan for "+user.getName());
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			Filter userFilter = new FilterPredicate("userid", FilterOperator.EQUAL, user.getId());
+			Filter courseFilter = new FilterPredicate("course", FilterOperator.EQUAL, course.getId());
+			CompositeFilter userCourseFilter = CompositeFilterOperator.and(userFilter, courseFilter);
+			Query q = new Query(UserPlan.class.getName()).setFilter(userCourseFilter);
+			
+			PreparedQuery pq = datastore.prepare(q);
+
+			for (Entity result : pq.asIterable()) {
+				String id = (String) result.getProperty("uid");
+				System.out.println("read userPlan for "+user.getName()+", "+id);
+				plan = (UserPlan)readDescriptor(UserPlan.class.getName(), id);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return plan;
+	}
+	
+	
+	public static void deleteGenericEntity(GenericDescriptor generic) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		System.out.println("deleteGenericEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		
+		if (generic instanceof UserPlan) {
+			for(UserGoal goal : ((UserPlan)generic).goals) {
+				deleteGenericEntity(goal);
+			}
+			deleteToManyRelation(generic, "userGoals", UserGoal.class.getName());
+			for(PlanItem item : ((UserPlan)generic).planItems) {
+				deleteGenericEntity(item);
+			}
+			deleteToManyRelation(generic, "planItems", PlanItem.class.getName());
+		} else if (generic instanceof UserGoal) {
+			for(UserLesson lesson : ((UserGoal)generic).lessons) {
+				deleteGenericEntity(lesson);
+			}
+			deleteToManyRelation(generic, "lessons", UserLesson.class.getName());
+		} else if (generic instanceof UserLesson) {
+			for(UserContent content : ((UserLesson)generic).contents) {
+				deleteGenericEntity(content);
+			}
+			deleteToManyRelation(generic, "contents", UserContent.class.getName());
+		} 
+
+		try {
+			Key entityKey = KeyFactory.createKey(generic.getClass().getName(), generic.getId());
+			datastore.delete(entityKey);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+
+	public static void deleteToManyRelation(GenericDescriptor source, String relation, String targetClass) {
+		System.out.println("deleteToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		
+		if (source == null || relation == null) {
+			return;
+		}
+
+		Entity entity = null;
+		long l = 0;
+		long size = 1; // a relation must have at least one element, otherwise wouldn't have been written. If the first element is not found, an empty array will be returned
+		
+		while (l < size) {
+			String key = source.getClass().getName() + "_" + relation + "_" + targetClass;
+			String id = source.getId() + "_" + relation + "_" + l;
+			
+			Key relationKey = KeyFactory.createKey(key, id);
+
+			try {
+				entity = datastore.get(relationKey);
+			} catch (Exception e) {
+				//e.printStackTrace();
+				entity = null;
+			}
+			if (entity != null) {
+				long sizen = (long)entity.getProperty("size");
+				
+				if (size < sizen) {
+					size = sizen;
+				}
+				
+				datastore.delete(relationKey);
+				
+			}
+			l++;		
+		}
+	}
+
 
 }

@@ -38,6 +38,7 @@ public class GoalSettingServlet extends HttpServlet {
 		User user = (User)session.getAttribute("user");
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
 		UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
+		boolean userPlanDirty = false;
 
 		String intentionStep = (String)session.getAttribute("intentionStep");
 
@@ -51,8 +52,35 @@ public class GoalSettingServlet extends HttpServlet {
 		//GoalDescriptor selectedGoal = (GoalDescriptor)session.getAttribute("userGoal");
 		HashArrayList<GoalDescriptor> selectedGoals = (HashArrayList<GoalDescriptor>)session.getAttribute("selectedGoals");
 		HashArrayList<LessonDescriptor> selectedLessons = (HashArrayList<LessonDescriptor>)session.getAttribute("selectedLessons");
-		
+
+		boolean updateGoals = false;
 		if (selectedGoalIds != null && selectedGoalIds.length > 0) {
+			if (selectedGoalIds.length != selectedGoals.size()) {
+				updateGoals = true;
+			} else {
+				for (String goalId : selectedGoalIds) {
+					if (!selectedGoals.containsKey(goalId)) {
+						updateGoals = true;
+					} else {
+						String[] selectedLessonIds = request.getParameterValues("goal" + goalId);
+						if (selectedLessonIds != null && selectedLessonIds.length > 0) {
+							for (String lessonId : selectedLessonIds) {
+								if (!selectedLessons.containsKey(lessonId)) {
+									updateGoals = true;
+								}
+							}
+						}
+						GoalDescriptor goal = selectedGoals.get(goalId);
+						if (goal.getCompletionGoalKeys().size() > 0 && goal.getCompletionGoal(completionSelectRB) != null) {
+							updateGoals = true;
+						}
+					}
+				}
+			}
+		}
+		
+		if (updateGoals) {
+			userPlanDirty = true;
 			ListIterator<GoalDescriptor> iterator = course.getGoals();
 			userPlan.resetGoals();
 			selectedGoals = new HashArrayList<GoalDescriptor>();
@@ -61,7 +89,7 @@ public class GoalSettingServlet extends HttpServlet {
 				GoalDescriptor goal = course.getGoal(goalId);
 				if (goal != null) {
 					selectedGoals.add(goal);
-					UserGoal userGoal = StimulatedPlanningFactory.creatUserGoal(userPlan, goal);
+					UserGoal userGoal = StimulatedPlanningFactory.createUserGoal(userPlan, goal);
 					userPlan.addGoal(userGoal);
 					String[] selectedLessonIds = request.getParameterValues("goal" + goal.getId());
 					if (selectedLessonIds != null) {
@@ -69,7 +97,7 @@ public class GoalSettingServlet extends HttpServlet {
 							LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(lessonId);
 							if (lesson != null) {
 								selectedLessons.add(lesson);
-								UserLesson userLesson = StimulatedPlanningFactory.creatUserLesson(userGoal, lesson);
+								UserLesson userLesson = StimulatedPlanningFactory.createUserLesson(userGoal, lesson);
 								userGoal.addLesson(userLesson);
 							}
 						}
@@ -86,9 +114,19 @@ public class GoalSettingServlet extends HttpServlet {
 		String selectedSchedule = request.getParameter("scheduleSelectRadio");
 		
 		if (selectedSchedule != null) {
+			userPlanDirty = true;
 			System.out.println("selectedSchedule: "+selectedSchedule);
-			session.setAttribute("selectedSchedule", selectedSchedule);
+			//session.setAttribute("selectedSchedule", selectedSchedule);
 			userPlan.setPlannedTimePerWeek(selectedSchedule);
+		}
+		
+		if (userPlanDirty) {
+			System.out.println("writing user plan for " + user.getName() + ", " + course.getId() + ", " + userPlan.getId());
+			try {
+				PersistentStore.writeDescriptor(userPlan);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		String submit = request.getParameter("submit");

@@ -1,5 +1,6 @@
 package stimulatedplanning;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.UUID;
@@ -7,6 +8,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import stimulatedplanning.util.HashArrayList;
 
 public class StimulatedPlanningFactory {
 	public static final StimulatedPlanningFactory instance = new StimulatedPlanningFactory();
@@ -16,7 +19,10 @@ public class StimulatedPlanningFactory {
 	}
 	
 	private CourseDescriptor testCourse;
-	private String testCourseId = "ICS18";
+	private static final String testCourseId = "ICS18";
+	public static final String userUnknown = "unknown";
+	public static final String userGuest = "Guest";
+	
 	private HashMap<String, GenericDescriptor> courseObjects = new HashMap<>();
 	
 	private CourseDescriptor retrievTestCourse() {
@@ -57,6 +63,7 @@ public class StimulatedPlanningFactory {
 	public static GenericDescriptor getObject(String id) {
 		if (!instance.courseObjects.containsKey(id)) {
 			System.out.println("Warning: trying to retrieve object not in Map: "+id);
+			new Exception().printStackTrace();
 			return null;
 		}
 		return instance.courseObjects.get(id);
@@ -214,7 +221,7 @@ public class StimulatedPlanningFactory {
 		}
 		if (user == null) {
 			user = new User(userName, userid);
-			if (!"Guest".equals(user.getName()) && !"unkown".equals(userid)) {
+			if (!userGuest.equals(user.getName()) && !userUnknown.equals(userid)) {
 				try {
 					PersistentStore.writeUser(user);
 				} catch (Exception e) {
@@ -227,20 +234,30 @@ public class StimulatedPlanningFactory {
 	}
 	
 	
+	public static UserPlan getUserPlan(User user, CourseDescriptor course) {
+		UserPlan userPlan = PersistentStore.readUserPlan(user, course);
+		if (userPlan == null) {
+			userPlan = createUserPlan(user, course);
+		}
+		return userPlan;
+	}
+	
+	
 	public static UserPlan createUserPlan(User user, CourseDescriptor course) {
+		System.out.println("create userPlan for "+user.getName());
 		UserPlan userPlan = new UserPlan(getUUID(), user);
 		userPlan.setCourse(course);
 		
 		return userPlan;
 	}
 	
-	public static UserGoal creatUserGoal(UserPlan userPlan, GoalDescriptor goal) {
+	public static UserGoal createUserGoal(UserPlan userPlan, GoalDescriptor goal) {
 		UserGoal userGoal = new UserGoal(getUUID(), userPlan.getUser(), goal);
 		
 		return userGoal;
 	}
 	
-	public static UserLesson creatUserLesson(UserGoal goal, LessonDescriptor lesson) {
+	public static UserLesson createUserLesson(UserGoal goal, LessonDescriptor lesson) {
 		UserLesson userLesson = new UserLesson(getUUID(), goal.getUser(), lesson);
 		
 		return userLesson;
@@ -256,23 +273,48 @@ public class StimulatedPlanningFactory {
 	
 	public static HttpSession initializeSession(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
-		String userName = request.getParameter("userName");
-		String userid = request.getParameter("userid");
+		String userNameR = request.getParameter("userName");
+		String useridR = request.getParameter("userid");
 
-		if (userName == null || userid == null) {
-			userName = "Guest";
-			userid = "unkown";
+		if (userNameR == null || useridR == null) {
+			userNameR = userGuest;
+			useridR = userUnknown;
+		}
+		
+//		System.out.println("userNameR: "+userNameR+", useridR: "+useridR);
+		
+		String userName = (String)session.getAttribute("userName");
+		String userid = (String)session.getAttribute("userid");
+		
+//		System.out.println("userName: "+userName+", userid: "+userid);
+
+		if (userName == null || userid == null 
+				|| (!userName.equals(userNameR) && !userNameR.equals(userGuest)) 
+				|| (!userid.equals(useridR) && !useridR.equals(userUnknown))) {
+			userName = userNameR;
+			userid = useridR;
+			session.setAttribute("userName", userName);
+			session.setAttribute("userid", userid);
 		}
 
-		session.setAttribute("userName", userName);
-		session.setAttribute("userid", userid);
+//		System.out.println("userName(2): "+userName+", userid(2): "+userid);
 
 		User user = (User)session.getAttribute("user");
-		if (user == null || ((userid != null && !userid.equals(user.getId())) || (userName != null && !userName.equals(user.getName())))) {
+//		if (user != null) {
+//			System.out.println("user.name(1): "+user.getName()+", user.id(1): "+user.getId());
+//		} else {
+//			System.out.println("user.name(1): null, user.id(1): null");
+//		}
+		
+		if (user == null 
+				|| ((userid != null && !userid.equals(user.getId()) && !userid.equals(userUnknown)) 
+				|| (userName != null && !userName.equals(user.getName()) && !userName.equals(userGuest)))) {
 			user = getUser(userid, userName);
 			session.setAttribute("user", user);
 		}
 		
+		System.out.println("user.name: "+user.getName()+", user.id: "+user.getId());
+
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
 		if (course == null) {
 			course = StimulatedPlanningFactory.generateTestCourse();
@@ -280,13 +322,41 @@ public class StimulatedPlanningFactory {
 		}
 		
 		UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
-		if (userPlan == null) {
-			userPlan = StimulatedPlanningFactory.createUserPlan(user, course);
+		if (userPlan == null || userPlan.getUser() != user) {
+			userPlan = StimulatedPlanningFactory.getUserPlan(user, course);
 			session.setAttribute("userPlan", userPlan);
 		}
 		
-		return session;
+		HashArrayList<GoalDescriptor> selectedGoals = new HashArrayList<GoalDescriptor>();
+		HashArrayList<LessonDescriptor> selectedLessons = new HashArrayList<LessonDescriptor>();
 
+		for (UserGoal ugoal : userPlan.goals) {
+			selectedGoals.add(ugoal.getGoalDescriptor());
+			for (UserLesson ulesson : ugoal.lessons) {
+				selectedLessons.add(ulesson.getLesson());
+			}
+		}
+		
+		System.out.println("userGoals: "+userPlan.goals.size()+", planItems: "+userPlan.planItems.size());
+		System.out.println("selectedGoals: "+selectedGoals.size()+", selectedLessons: "+selectedLessons.size());
+		
+		session.setAttribute("selectedGoals", selectedGoals);
+		session.setAttribute("selectedLessons", selectedLessons);
+
+		return session;
+	}
+
+	public static HttpSession clearSession(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		
+		Enumeration<String> attributes = session.getAttributeNames();
+		
+		while (attributes.hasMoreElements()) {
+			String attribute = attributes.nextElement();
+			session.removeAttribute(attribute);
+		}
+		
+		return session;
 	}
 
 }

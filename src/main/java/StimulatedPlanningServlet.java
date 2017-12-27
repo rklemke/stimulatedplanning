@@ -41,6 +41,7 @@ public class StimulatedPlanningServlet extends HttpServlet {
 		User user = (User)session.getAttribute("user");
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
 		UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
+		boolean userPlanDirty = false;
 
 		String calenderItems = request.getParameter("calenderItems");
 		System.out.println("calenderItems: "+calenderItems);
@@ -60,8 +61,16 @@ public class StimulatedPlanningServlet extends HttpServlet {
 					if (id != null && !"".equals(id)) {
 						LessonDescriptor lesson = course.retrieveLessonById(id);
 						if (lesson != null) {
-							PlanItem item = new PlanItem(id, user, lesson, builder.create().toJson(evt));
-							userPlan.addPlanItem(item);
+							userPlanDirty = true;
+							PlanItem item = null;
+							if (userPlan.hasPlanItemForLesson(lesson)) { // event exists in calendar: update
+								item = userPlan.getPlanItemForLesson(lesson);
+								item.setUser(user);
+								item.setJsonPlanItem(builder.create().toJson(evt));
+							} else { // event doesn't exist in calendar: create
+								item = new PlanItem(id, user, lesson, builder.create().toJson(evt));
+								userPlan.addPlanItem(item);
+							}
 						}
 					}
 					
@@ -76,6 +85,15 @@ public class StimulatedPlanningServlet extends HttpServlet {
 			System.out.println("o[0].id"+((Map)((ArrayList)o).get(0)).get("id"));
 		} else {
 			System.out.println("o: null");
+		}
+		
+		if (userPlanDirty) {
+			System.out.println("writing user plan for " + user.getName() + ", " + course.getId() + ", " + userPlan.getId());
+			try {
+				PersistentStore.writeDescriptor(userPlan);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		String nextJSP = "/StimulatedPlanning.jsp";

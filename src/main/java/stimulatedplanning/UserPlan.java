@@ -47,6 +47,24 @@ public class UserPlan extends GenericUserObject {
 		return planItems.containsKey(id);
 	}
 	
+	public boolean hasPlanItemForLesson(LessonDescriptor lesson) {
+		for (PlanItem item : planItems) {
+			if (item.getLesson().getId().equals(lesson.getId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public PlanItem getPlanItemForLesson(LessonDescriptor lesson) {
+		for (PlanItem item : planItems) {
+			if (item.getLesson().getId().equals(lesson.getId())) {
+				return item;
+			}
+		}
+		return null;
+	}
+	
 	public String getPlannedTimePerWeek() {
 		return plannedTimePerWeek;
 	}
@@ -72,6 +90,10 @@ public class UserPlan extends GenericUserObject {
 	}
 	
 	public void resetGoals() {
+		for (UserGoal goal : goals) {
+			PersistentStore.deleteGenericEntity(goal);
+		}
+		PersistentStore.deleteToManyRelation(this, "userGoals", UserGoal.class.getName());
 		goals = new HashArrayList<UserGoal>();
 	}
 

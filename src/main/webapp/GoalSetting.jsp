@@ -14,7 +14,8 @@
   //GoalDescriptor userGoal = (GoalDescriptor)session.getAttribute("userGoal");
   HashArrayList<GoalDescriptor> selectedGoals = (HashArrayList<GoalDescriptor>)session.getAttribute("selectedGoals");
   HashArrayList<LessonDescriptor> selectedLessons = (HashArrayList<LessonDescriptor>)session.getAttribute("selectedLessons");
-  String userScheduleIntention = (String)session.getAttribute("selectedSchedule");
+  //String userScheduleIntention = (String)session.getAttribute("selectedSchedule");
+  String userScheduleIntention = userPlan.getPlannedTimePerWeek();
   String completionSelectRB = (String)session.getAttribute("completionSelectRB");
 
   String intentionStep = (String)session.getAttribute("intentionStep");
