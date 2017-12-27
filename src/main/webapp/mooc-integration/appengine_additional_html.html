@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Learning Test</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script type="text/javascript">
+	var timeoutInterval = 30000;
+	var userNameDefault = "Guest";
+	var userIdDefault = "unknown";
+	var pageUrl = window.location.href;
+
+	function getUserName() {
+		var tmpName = $('#userName').val();
+		if (tmpName == null) {
+		  tmpName = userNameDefault;
+		}
+		return tmpName;
+	}
+
+	function getUserId() {
+		var tmpId = $('#userid').val();
+		if (tmpId == null) {
+		  tmpId = userIdDefault;
+		}
+		return tmpName;
+	}
+
+	function tickerRequest() {
+	  var userName = getUserName();
+	  var userId = getUserId(); 
+	  $.ajax({
+	    dataType: 'jsonp',
+	    url: '/DataTrackerServlet',
+	    method: 'POST',
+	    data: {
+		userName: userName,
+		userid: userId,
+		page: pageUrl
+	    }, 
+	    success: function(data) {
+		  var datatxt = "Tracker: OK";
+		  $.each(data,function(key,val){
+		     datatxt += " <BR> " + key + ": " + val;
+		  });
+		  $( '#ajaxresult' ).html(datatxt);
+	    },
+	    complete: function() {
+	      // Schedule the next request when the current one's complete
+	      setTimeout(tickerRequest, timeoutInterval);
+	    }
+	  });
+	}
+
+	$(document).ready(function() {
+	  // run the first time; all subsequent calls will take care of themselves
+	  setTimeout(tickerRequest, 2000);
+	  
+	  if ( $( "#stimulatedPlanningFrame" ).length ) {
+		    $( "#stimulatedPlanningFrame" ).attr("src", "/GoalSetting.jsp");
+		}	  
+	}
+
+</script>
+</head>
+<body>
+
+<div id="ajaxresult">This will one day probably be replaced. Who knows.</div>
+
+</body>
+</html>
+
+
+
+
+
+

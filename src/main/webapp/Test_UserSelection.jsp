@@ -31,7 +31,7 @@
 </head>
 <body>
 <H2>Select a user to test with.</H2>
-<form id="goalSelectForm" method="POST" action="GoalSettingServlet">
+<form id="goalSelectForm" method="POST" action="Test_UserSelectionServlet">
 <label for="userSelect">Select a user:</label>
 <select name="userSelect" id="userSelect">
   <option value="unknown">Guest</option>
@@ -52,7 +52,9 @@
 </select>
 <input type="hidden" value="unknown" id="userid" name="userid">
 <input type="hidden" value="Guest" id="userName" name="userName">
-<input type="submit" id="submit" name="submit" value="OK"></input>
+<input type="submit" id="submitIntention" name="submitIntention" value="Intention"></input>
+<input type="submit" id="submitPlanning" name="submitPlanning" value="Planning"></input>
+<input type="submit" id="submitLearning" name="submitLearning" value="Learning"></input>
 </form>
 </body>
 </html>
