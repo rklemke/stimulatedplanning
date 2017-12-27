@@ -15,6 +15,7 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Text;
 
 //import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 //import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -65,7 +66,7 @@ public class PersistentStore {
 
 		Entity logEntity = null;
 		try {
-			String id = parameters.get("userid")[0] + "_" + parameters.get("_")[0];
+			String id = StimulatedPlanningFactory.getUUID();
 			Key logKey = KeyFactory.createKey("logEntity", id);
 			try {
 				logEntity = datastore.get(logKey);
@@ -79,8 +80,15 @@ public class PersistentStore {
 			}
 
 			for (String property : parameters.keySet()) {
-				String value = parameters.get(property)[0];
-				logEntity.setProperty(property, value);
+				String[] values = parameters.get(property);
+				if (values != null && values.length>0) {
+					String value = parameters.get(property)[0];
+					if (value != null && value.getBytes().length > 1500) {
+						logEntity.setProperty(property, new Text(value));
+					} else {
+						logEntity.setProperty(property, value);
+					}
+				}
 			}
 
 			datastore.put(logEntity);
@@ -685,6 +693,21 @@ public class PersistentStore {
 			}
 			l++;		
 		}
+	}
+	
+	
+	public static void clearLog() {
+		System.out.println("clearLog");
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		
+		Query q = new Query("logEntity");
+		
+		PreparedQuery pq = datastore.prepare(q);
+		
+		for (Entity result : pq.asIterable()) {
+			datastore.delete(result.getKey());
+		}
+		
 	}
 
 

@@ -165,6 +165,13 @@ public class GoalSettingServlet extends HttpServlet {
 			nextJSP = "/StimulatedPlanning.jsp";
 		}
 		
+		try {
+			StimulatedPlanningFactory.trackAndLogEvent(request, response, "intention");
+			//PersistentStore.writeLog(request.getParameterMap());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 		dispatcher.forward(request,response);
 	}

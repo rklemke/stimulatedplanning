@@ -46,7 +46,8 @@ public class DataTrackerServlet extends HttpServlet {
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(request.getParameterMap());
 		try {
-			PersistentStore.writeLog(request.getParameterMap());
+			StimulatedPlanningFactory.trackAndLogEvent(request, response, "track");
+			//PersistentStore.writeLog(request.getParameterMap());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

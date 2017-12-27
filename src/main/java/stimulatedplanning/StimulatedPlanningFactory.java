@@ -1,13 +1,17 @@
 package stimulatedplanning;
 
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.google.gson.Gson;
 
 import stimulatedplanning.util.HashArrayList;
 
@@ -269,6 +273,33 @@ public class StimulatedPlanningFactory {
 		return userContent;
 	}
 	
+	
+	public static void trackAndLogEvent(HttpServletRequest request, HttpServletResponse response, String logType) {
+		HttpSession session = request.getSession();
+		User user = (User)session.getAttribute("user");
+		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
+		UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
+		
+		HashMap<String, String[]> logParameters = new HashMap<>();
+		logParameters.put("user", new String[] {user.getId()});
+		logParameters.put("course", new String[] {course.getId()});
+		logParameters.put("userPlan", new String[] {userPlan.getId()});
+		logParameters.put("logType", new String[] {logType});
+		logParameters.put("timestamp", new String[] {(new Date()).toString()});
+		
+		logParameters.putAll(request.getParameterMap());
+		
+		Gson gson = new Gson();
+		String jsonObject = gson.toJson(logParameters);
+
+		System.out.println("[LOG] " + jsonObject + " [/LOG]");
+		try {
+			PersistentStore.writeLog(logParameters);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	
 	public static HttpSession initializeSession(HttpServletRequest request, HttpServletResponse response) {
@@ -355,6 +386,9 @@ public class StimulatedPlanningFactory {
 			String attribute = attributes.nextElement();
 			session.removeAttribute(attribute);
 		}
+		
+		// TODO remove again!
+		// PersistentStore.clearLog();
 		
 		return session;
 	}

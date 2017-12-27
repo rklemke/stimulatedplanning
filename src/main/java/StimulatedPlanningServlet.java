@@ -95,6 +95,13 @@ public class StimulatedPlanningServlet extends HttpServlet {
 			}
 		}
 		
+		try {
+			StimulatedPlanningFactory.trackAndLogEvent(request, response, "planning");
+			//PersistentStore.writeLog(request.getParameterMap());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		String nextJSP = "/StimulatedPlanning.jsp";
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
 		dispatcher.forward(request,response);
