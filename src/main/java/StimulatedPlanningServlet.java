@@ -81,8 +81,7 @@ public class StimulatedPlanningServlet extends HttpServlet {
 
 		if (o != null) {
 			System.out.println("o: "+o.toString());
-			System.out.println("o.class: "+o.getClass().getName()+", o[0].class"+((ArrayList)o).get(0).getClass().getName());
-			System.out.println("o[0].id"+((Map)((ArrayList)o).get(0)).get("id"));
+			System.out.println("o.class: "+o.getClass().getName());
 		} else {
 			System.out.println("o: null");
 		}
