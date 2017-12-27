@@ -1,5 +1,6 @@
 package stimulatedplanning;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -381,9 +382,14 @@ public class StimulatedPlanningFactory {
 		HttpSession session = request.getSession();
 		
 		Enumeration<String> attributes = session.getAttributeNames();
+		ArrayList<String> attributesToRemove = new ArrayList<>();
 		
 		while (attributes.hasMoreElements()) {
 			String attribute = attributes.nextElement();
+			attributesToRemove.add(attribute);
+		}
+		
+		for (String attribute : attributesToRemove) {
 			session.removeAttribute(attribute);
 		}
 		
