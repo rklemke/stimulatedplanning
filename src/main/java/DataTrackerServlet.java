@@ -33,6 +33,7 @@ public class DataTrackerServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("DataTrackerServlet called.");
 		HttpSession session = StimulatedPlanningFactory.initializeSession(request, response);
 		
 		User user = (User)session.getAttribute("user");

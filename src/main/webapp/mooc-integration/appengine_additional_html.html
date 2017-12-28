@@ -7,14 +7,29 @@
   <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+</head>
+<body>
+
+<div id="ajaxresult">Do something at least! Replace me! Now! Or later. Finally?</div>
+
+<script type="text/javascript">
+
+//alert("hallo!");
+//	$('#trackerFrame').ready(function() {
+//		$( '#ajaxresult' ).html("Really?");
+//		$( '#learningContent', window.parent.document).html("Really!");
+//	});
+
+</script>
+
 <script type="text/javascript">
 	var timeoutInterval = 30000;
 	var userNameDefault = "Guest";
 	var userIdDefault = "unknown";
-	var pageUrl = window.location.href;
+	var pageUrlDefault = window.location.href;
 
 	function getUserName() {
-		var tmpName = $('#userName').val();
+		var tmpName = $('#userName', window.parent.document).val();
 		if (tmpName == null) {
 		  tmpName = userNameDefault;
 		}
@@ -22,16 +37,25 @@
 	}
 
 	function getUserId() {
-		var tmpId = $('#userid').val();
+		var tmpId = $('#userid', window.parent.document).val();
 		if (tmpId == null) {
 		  tmpId = userIdDefault;
 		}
-		return tmpName;
+		return tmpId;
+	}
+
+	function getPageUrl() {
+		var tmpId = $('#pageurl', window.parent.document).val();
+		if (tmpId == null) {
+		  tmpId = pageUrlDefault;
+		}
+		return tmpId;
 	}
 
 	function tickerRequest() {
 	  var userName = getUserName();
 	  var userId = getUserId(); 
+	  var pageUrl = getPageUrl(); 
 	  $.ajax({
 	    dataType: 'jsonp',
 	    url: '/DataTrackerServlet',
@@ -55,20 +79,16 @@
 	  });
 	}
 
-	$(document).ready(function() {
+	$('#trackerFrame').ready(function() {
 	  // run the first time; all subsequent calls will take care of themselves
 	  setTimeout(tickerRequest, 2000);
 	  
-	  if ( $( "#stimulatedPlanningFrame" ).length ) {
-		    $( "#stimulatedPlanningFrame" ).attr("src", "/GoalSetting.jsp");
-		}	  
-	}
+//	  if ( $( "#stimulatedPlanningFrame" ).length ) {
+//		    $( "#stimulatedPlanningFrame" ).attr("src", "/GoalSetting.jsp");
+//		}	  
+	});
 
 </script>
-</head>
-<body>
-
-<div id="ajaxresult">This will one day probably be replaced. Who knows.</div>
 
 </body>
 </html>

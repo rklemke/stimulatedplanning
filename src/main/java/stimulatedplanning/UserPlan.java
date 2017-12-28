@@ -29,6 +29,17 @@ public class UserPlan extends GenericUserObject {
 		this.goals.add(goal);
 	}
 	
+	public boolean hasPlannableGoals() {
+		boolean hasPlannableGoals = false;
+		for (UserGoal goal : goals) {
+			if (goal.lessons.size()>0) {
+				hasPlannableGoals = true;
+				break;
+			}
+		}
+		return hasPlannableGoals;
+	}
+	
 	public void addPlanItem(PlanItem planItem) {
 		if (planItem != null && planItem.getId() != null && planItem.getLesson() != null) {
 			planItems.add(planItem);
@@ -78,6 +89,18 @@ public class UserPlan extends GenericUserObject {
 			
 		}
 		return 1;
+	}
+	
+	public boolean trackLearningProgress(String contentUrl, String activityType) {
+		boolean updated = false;
+
+		for (UserGoal goal: goals) {
+			if (goal.trackLearningProgress(this, contentUrl, activityType)) {
+				updated = true;
+			}
+		}
+		
+		return updated;
 	}
 
 	public boolean containsGoal(GoalDescriptor goal) {

@@ -12,6 +12,7 @@ public class GoalDescriptor extends GenericDescriptor {
 
 	protected HashArrayList<LessonDescriptor> lessons;
 	protected HashMap<String, String> completionGoals;
+	protected ArrayList<String> completionGoalKeys;
 	
 	public void addLesson(LessonDescriptor lesson) {
 		this.lessons.add(lesson);
@@ -23,11 +24,11 @@ public class GoalDescriptor extends GenericDescriptor {
 	
 	public void addCompletionGoal(String percentage, String description) {
 		completionGoals.put(percentage, description);
-		completionGoals.keySet();
+		completionGoalKeys.add(percentage);		
 	}
 	
-	public Set<String> getCompletionGoalKeys() {
-		return completionGoals.keySet();
+	public ArrayList<String> getCompletionGoalKeys() {
+		return completionGoalKeys;
 	}
 	
 	public String getCompletionGoal(String key) {
@@ -48,6 +49,7 @@ public class GoalDescriptor extends GenericDescriptor {
 		super();
 		lessons = new HashArrayList<LessonDescriptor>();
 		completionGoals = new HashMap<String, String>();
+		completionGoalKeys = new ArrayList<>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -55,6 +57,7 @@ public class GoalDescriptor extends GenericDescriptor {
 		super(id, title, description, url);
 		lessons = new HashArrayList<LessonDescriptor>();
 		completionGoals = new HashMap<String, String>();
+		completionGoalKeys = new ArrayList<>();
 		// TODO Auto-generated constructor stub
 	}
 

@@ -28,6 +28,9 @@ public class StimulatedPlanningFactory {
 	public static final String userUnknown = "unknown";
 	public static final String userGuest = "Guest";
 	
+	public static final String ACTIVITY_TYPE_ACCESS = "access";
+	public static final String ACTIVITY_TYPE_COMPLETE = "complete";
+	
 	private HashMap<String, GenericDescriptor> courseObjects = new HashMap<>();
 	
 	private CourseDescriptor retrievTestCourse() {
@@ -92,53 +95,58 @@ public class StimulatedPlanningFactory {
 
 			LessonDescriptor lesson11 = new LessonDescriptor(getUUID() ,"The fundamental concepts (C.I.A.)","The fundamental concepts (C.I.A.)","");
 			module1.addLesson(lesson11);	
-			ContentDescriptor content111 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content111 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/111");
 			lesson11.addContent(content111);
-			ContentDescriptor content112 = new ContentDescriptor(getUUID(), "Text", "Explanation Text", "https://ou.edia.nl/");
+			ContentDescriptor content112 = new ContentDescriptor(getUUID(), "Text", "Explanation Text", "https://ou.edia.nl/112");
 			lesson11.addContent(content112);
-			ContentDescriptor content113 = new ContentDescriptor(getUUID(), "Quiz", "Test your knowledge", "https://ou.edia.nl/");
+			ContentDescriptor content113 = new ContentDescriptor(getUUID(), "Quiz", "Test your knowledge", "https://ou.edia.nl/113");
 			lesson11.addContent(content113);
 			
 			LessonDescriptor lesson12 = new LessonDescriptor(getUUID() ,"Assurance, Authenticity, and Anonymity","Assurance, Authenticity, and Anonymity","");
 			module1.addLesson(lesson12);
-			ContentDescriptor content121 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content121 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/121");
 			lesson12.addContent(content121);
+			ContentDescriptor content122 = new ContentDescriptor(getUUID(), "Text", "Explanation Text", "https://ou.edia.nl/122");
+			lesson12.addContent(content122);
 
 			LessonDescriptor lesson13 = new LessonDescriptor(getUUID() ,"Security principles","Security principles","");
 			module1.addLesson(lesson13);
-			ContentDescriptor content131 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content131 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/131");
 			lesson13.addContent(content131);
+			ContentDescriptor content132 = new ContentDescriptor(getUUID(), "Quiz", "Test your knowledge", "https://ou.edia.nl/132");
+			lesson13.addContent(content132);
 
 			LessonDescriptor lesson14 = new LessonDescriptor(getUUID() ,"Cryptography contents","Cryptography contents","");
 			module1.addLesson(lesson14);
-			ContentDescriptor content141 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content141 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/141");
 			lesson14.addContent(content141);
 
 			LessonDescriptor lesson15 = new LessonDescriptor(getUUID() ,"Putting cryptography into use","Putting cryptography into use","");
 			module1.addLesson(lesson15);
-			ContentDescriptor content151 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content151 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/151");
 			lesson15.addContent(content151);
 
+			
 			ModuleDescriptor module2 = new ModuleDescriptor(getUUID(), "How to secure my computer", "How to secure my computer", "");
 			course.addModule(module2);
 			LessonDescriptor lesson21 = new LessonDescriptor(getUUID() ,"Treat and attacks","Treat and attacks","");
 			module2.addLesson(lesson21);	
-			ContentDescriptor content211 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content211 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/211");
 			lesson21.addContent(content211);
 
 			LessonDescriptor lesson22 = new LessonDescriptor(getUUID() ,"Basic concepts of malware","Basic concepts of malware","");
 			module2.addLesson(lesson22);
-			ContentDescriptor content221 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content221 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/221");
 			lesson22.addContent(content221);
 
 			LessonDescriptor lesson23 = new LessonDescriptor(getUUID() ,"Cryptography contents","Cryptography contents","");
 			module2.addLesson(lesson23);
-			ContentDescriptor content231 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content231 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/231");
 			lesson23.addContent(content231);
 
 			LessonDescriptor lesson24 = new LessonDescriptor(getUUID() ,"Putting cryptography into use","Putting cryptography into use","");
 			module2.addLesson(lesson24);
-			ContentDescriptor content241 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content241 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/241");
 			lesson24.addContent(content241);
 
 			
@@ -146,22 +154,22 @@ public class StimulatedPlanningFactory {
 			course.addModule(module3);
 			LessonDescriptor lesson31 = new LessonDescriptor(getUUID() ,"Firewall policies","Firewall policies","");
 			module3.addLesson(lesson31);	
-			ContentDescriptor content311 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content311 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/311");
 			lesson31.addContent(content311);
 
 			LessonDescriptor lesson32 = new LessonDescriptor(getUUID() ,"Tunneling","Tunneling","");
 			module3.addLesson(lesson32);
-			ContentDescriptor content321 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content321 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/321");
 			lesson32.addContent(content321);
 
 			LessonDescriptor lesson33 = new LessonDescriptor(getUUID() ,"Intrusion detection","Intrusion detection","");
 			module3.addLesson(lesson33);
-			ContentDescriptor content331 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content331 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/331");
 			lesson33.addContent(content331);
 
 			LessonDescriptor lesson34 = new LessonDescriptor(getUUID() ,"Wireless networking","Wireless networking","");
 			module3.addLesson(lesson34);
-			ContentDescriptor content341 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content341 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/341");
 			lesson34.addContent(content341);
 
 			
@@ -169,45 +177,49 @@ public class StimulatedPlanningFactory {
 			course.addModule(module4);
 			LessonDescriptor lesson41 = new LessonDescriptor(getUUID() ,"Risks for users","Risks for users (younger and adults) in the world wide web (contact)","");
 			module4.addLesson(lesson41);	
-			ContentDescriptor content411 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content411 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/411");
 			lesson41.addContent(content411);
 
 			LessonDescriptor lesson42 = new LessonDescriptor(getUUID() ,"To share or not to share? That is the question","Practical advice on how to avoid unfair behaviours on social networks (content)","");
 			module4.addLesson(lesson42);
-			ContentDescriptor content421 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/");
+			ContentDescriptor content421 = new ContentDescriptor(getUUID(), "Video", "Introduction Video", "https://ou.edia.nl/421");
 			lesson42.addContent(content421);
 
-
-			GoalDescriptor goal1 = new GoalDescriptor(getUUID(), "Browsing the Course", "I intend to browse around", "");
-			goal1.addCompletionGoal("100", "all materials (100%)");
-			goal1.addCompletionGoal("70", "most materials (70%)");
-			goal1.addCompletionGoal("40", "some materials (40%)");
-			goal1.addCompletionGoal("10", "less than 10%");
-			course.addGoal(goal1);
 			GoalDescriptor goal2 = new GoalDescriptor(getUUID(), module1.getTitle(), "I intend to participate in the course activities to learn about "+module1.getTitle(), "");
 			ListIterator<LessonDescriptor> iterator = module1.getLessons();
 			while (iterator.hasNext()) {
 				goal2.addLesson(iterator.next());
 			}
 			course.addGoal(goal2);
+			
 			GoalDescriptor goal3 = new GoalDescriptor(getUUID(), module2.getTitle(), "I intend to participate in the course activities to learn about "+module2.getTitle(), "");
 			iterator = module2.getLessons();
 			while (iterator.hasNext()) {
 				goal3.addLesson(iterator.next());
 			}
 			course.addGoal(goal3);
+			
 			GoalDescriptor goal4 = new GoalDescriptor(getUUID(), module3.getTitle(), "I intend to participate in the course activities to learn about "+module3.getTitle(), "");
 			iterator = module3.getLessons();
 			while (iterator.hasNext()) {
 				goal4.addLesson(iterator.next());
 			}
 			course.addGoal(goal4);
+			
 			GoalDescriptor goal5 = new GoalDescriptor(getUUID(), module4.getTitle(), "I intend to participate in the course activities to learn about "+module4.getTitle(), "");
 			iterator = module4.getLessons();
 			while (iterator.hasNext()) {
 				goal5.addLesson(iterator.next());
 			}
 			course.addGoal(goal5);
+
+			GoalDescriptor goal1 = new GoalDescriptor(getUUID(), "Browsing the Course", "I intend to browse around", "");
+			goal1.addCompletionGoal("100", "all materials (100%)");
+			goal1.addCompletionGoal("70", "most materials (70%)");
+			goal1.addCompletionGoal("40", "some materials (40%)");
+			goal1.addCompletionGoal("10", "less than 10%");
+			goal1.addCompletionGoal("0", "I have not decided yet");
+			course.addGoal(goal1);
 			
 			instance.storeTestCourse(course);
 		}
@@ -298,6 +310,25 @@ public class StimulatedPlanningFactory {
 			PersistentStore.writeLog(logParameters);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+		// TODO: update user plan based on event, if it is of logType "track"
+		if ("track".equals(logType)) {
+			String activityType = request.getParameter("activityType");
+			if (activityType == null) {
+				activityType = StimulatedPlanningFactory.ACTIVITY_TYPE_ACCESS;
+			}
+			String page = request.getParameter("page");
+			if (page != null) {
+				if (userPlan.trackLearningProgress(page, activityType)) {
+					try {
+						PersistentStore.writeDescriptor(userPlan);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
 		}
 	}
 	

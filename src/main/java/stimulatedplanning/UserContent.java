@@ -20,6 +20,20 @@ public class UserContent extends GenericUserObject {
 		this.status = status;
 	}
 
+	public boolean trackLearningProgress(UserPlan userPlan, String contentUrl, String activityType) {
+		boolean updated = false;
+		if (contentUrl != null && contentUrl.equals(this.getUrl())) {
+			if (StimulatedPlanningFactory.ACTIVITY_TYPE_ACCESS.equals(activityType) && status == LessonStatus.INITIAL) {
+				status = LessonStatus.STARTED;
+				updated = true;
+			} else if (StimulatedPlanningFactory.ACTIVITY_TYPE_COMPLETE.equals(activityType) && status == LessonStatus.STARTED) {
+				status = LessonStatus.COMPLETED;
+				updated = true;
+			}
+		}
+		return updated;
+	}
+
 	public UserContent(String id, User user, ContentDescriptor content) {
 		super(id, user);
 		this.content = content;

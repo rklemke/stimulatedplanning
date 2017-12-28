@@ -287,11 +287,14 @@ public class PersistentStore {
 					goal.addLesson((LessonDescriptor)generic);
 				}
 				EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionGoals");
-				if (ee != null) {
-				    for (String key : ee.getProperties().keySet()) {
+				String keys = (String)genericEntity.getProperty("completionGoalKeys");
+				ArrayList<String> keysList = new ArrayList<>(Arrays.asList(keys.replaceAll("[]", "")));
+				if (ee != null && keysList != null) {
+				    for (String key : keysList) {
 				        goal.addCompletionGoal(key, (String) ee.getProperty(key));
 				    }
 				}
+				
 				return goal;
 			} else if (LessonDescriptor.class.getName().equals(type)) {
 				LessonDescriptor lesson = new LessonDescriptor((String) genericEntity.getProperty("uid"),
@@ -434,6 +437,9 @@ public class PersistentStore {
 		    }
 
 		    goalEntity.setProperty("completionGoals", ee);
+
+		    ArrayList<String> keys = goal.completionGoalKeys;
+		    goalEntity.setProperty("completionGoalKeys", keys.toString());
 
 			datastore.put(goalEntity);
 		} catch (Exception e1) {

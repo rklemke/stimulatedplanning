@@ -58,9 +58,28 @@
   }
   
   function toggleGoalSelectCB(id, t) {
-	  $( '#tabs' ).tabs( 'option', 'active', t);
-	  var x = $('.goal_'+id);
-	  $(':checkbox.goal_'+id).prop('checked', $('#gsc-'+id).prop('checked'));    		  
+	  if (id != '0') {
+		  $( '#tabs' ).tabs( 'option', 'active', t);
+		  //var x = $('.goal_'+id);
+		  $(':checkbox.goal_'+id).prop('checked', $('#gsc-'+id).prop('checked'));    		  
+	  } else {
+		  $( '#tabs' ).tabs( 'option', 'active', t);
+		  <%
+		  iterator = course.getGoals();
+		  m=1;
+		  while(iterator.hasNext()) {
+			  GoalDescriptor goal = iterator.next();
+			  if (goal.getLessons().hasNext()) {
+		  %>
+		  $('#gsc-<%= goal.getId() %>').prop('checked', $('#gsc-0').prop('checked'));    		  
+		  $(':checkbox.goal_<%= goal.getId() %>').prop('checked', $('#gsc-<%= goal.getId() %>').prop('checked'));    		  
+		  <%
+		  
+			  }
+		  	  m++;
+		  }
+		  %>
+	  }
   }
     
   </script>
@@ -120,9 +139,13 @@
 <p>Please indicate your intentions with respect to this course's content offer.</p>
 <div id="tabs">
   <ul>
+    <li class="tabs-0" id="li-0">
+    	<a class="a-tab" href="#tabs-0">I am interested to complete the course</a>
+    	<input class="goalselectToggle" type="checkbox" name="goalSelectRadio" id="gsc-0" value="0" onClick="toggleGoalSelectCB('0', 0);"  >
+    </li>
   <%
   iterator = course.getGoals();
-  m=0;
+  m=1;
   while(iterator.hasNext()) {
 	  GoalDescriptor goal = iterator.next();
   %>
@@ -135,6 +158,13 @@
   }
   %>
   </ul>
+  <div id="tabs-0">
+    <p id="p-0"><b>I am interested to complete the course</b></p>
+    <p>We recommend you to take part in all course activities.</p>
+    <p>Select the check-box on the left to select the complete course with a single click.</p>
+    <p>Recommended Lessons: (total estimated learning time: <%= course.getCourseDuration().toHours() %> hours)
+    </p>
+  </div>
   <%
   iterator = course.getGoals();
   m = 0;
@@ -164,10 +194,8 @@
   }
   %>
   <%
-  Set<String> set = goal.getCompletionGoalKeys();
-  Iterator<String> iterator3 = set.iterator();
-  while(iterator3.hasNext()) {
-	  String key = iterator3.next();
+  ArrayList<String> list = goal.getCompletionGoalKeys();
+  for(String key : list) {
 	  String desc = goal.getCompletionGoal(key);
   %>
         <li><input class="moduleselectToggle" type="radio" name="completionSelectRB" id="completion<%= key %>" value="<%= key %>" <% if (key.equals(completionSelectRB)) { %>checked <% } %> >
@@ -176,9 +204,6 @@
   }
   %>
     </ul>
-    <div class="confirm">
- 			<input type="button" id="ok_<%= goal.getId() %>" name="ok_<%= goal.getId() %>" value="OK"></input>
-    </div>
   </div>
   <%
   	m++;
@@ -190,7 +215,7 @@
 
 <p>Please indicate your intentions with respect to the estimated time you intent to spend on this course's activities.</p>
 <div>
-  <ul>
+  <ul class="ul-goals">
     <li>
     	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-1" value="1" <% if (userScheduleIntention != null && userScheduleIntention.equals("1")) { %>checked <% } %> ><label for="tabs2-1">I intend to spend about <b>one hour</b> per week on this course</label>
     </li>
@@ -216,21 +241,25 @@
 		<% 
 		if (selectedGoals != null) {
 			int duration = 0;
+			String separator = "";
 		%>
 		<p>Your selection:</p>
 		<ul>
 		<li>Your intentions: <% for (GoalDescriptor userGoal : selectedGoals) {
 			duration += userGoal.getGoalDuration().toHours();
-			%><%= userGoal.getTitle() %>, <% 
+			%><%= separator+userGoal.getTitle() %><%
+					separator = ", ";
 		} %></li>
 		<li>Your estimated time per week: <%= userPlan.getPlannedTimePerWeekAsInt() %> hours.</li>
 		</ul>
+		<% if (duration > 0) { %>
 		<p>Our learning effort estimation for you:</p>
 		<ul>
 		<li>To complete your intention you need a total learning time of: <%= duration %> hours.</li>
 		<li>Your estimated time to goal achievement: <%= (int)Math.ceil((double)duration/userPlan.getPlannedTimePerWeekAsInt()) %> weeks</li>
 		</ul>
 		<%
+			}
 		} else {
 		%>
 		<p>No goal selected yet.</p>	
@@ -244,17 +273,17 @@
 		<% 
 		if (!PlanningSteps.intentionSteps[0].equals(intentionStep)) {
 		%>
-			<input type="submit" id="ok" name="submit" value="Previous"></input>
+			<button type="submit" id="prev" name="submit" value="Previous">Save and Previous</button>
 		<%
 		}
 		if (!PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
 		%>
-			<input type="submit" id="ok" name="submit" value="Next"></input>
+			<button type="submit" id="next" name="submit" value="Next">Save and Next</button>
 		<%
 		}
 		if (selectedGoals != null && PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
 		%>
-			<input type="submit" id="continue" name="submit" value="Continue"></input>
+			<button type="submit" id="continue" name="submit" value="Continue">Continue</button>
 		<%
 		}
 		%>	

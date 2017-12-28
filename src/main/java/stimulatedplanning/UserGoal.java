@@ -35,6 +35,43 @@ public class UserGoal extends GenericUserObject {
 		this.completionGoal = completionGoal;
 	}
 
+	public boolean trackLearningProgress(UserPlan userPlan, String contentUrl, String activityType) {
+		LessonStatus minStatus = LessonStatus.COMPLETED;
+		LessonStatus maxStatus = LessonStatus.INITIAL;
+		boolean updated = false;
+		
+		if (lessons.size()>0) {
+			for (UserLesson lesson : lessons) {
+				if (lesson.trackLearningProgress(userPlan, contentUrl, activityType)) {
+					updated = true;
+				}
+				
+				if (userPlan.hasPlanItemForLesson(lesson.getLesson())) {
+					PlanItem item = userPlan.getPlanItemForLesson(lesson.getLesson());
+					if (item.trackLearningProgress(userPlan, lesson, contentUrl, activityType)) {
+						updated = true;
+					}
+				}
+
+				if (lesson.getStatus().compareTo(maxStatus) > 0) {
+					maxStatus = lesson.getStatus();
+				}
+				if (lesson.getStatus().compareTo(minStatus) < 0) {
+					minStatus = lesson.getStatus();
+				}
+			}
+			
+//			if (minStatus == LessonStatus.COMPLETED && this.status == LessonStatus.STARTED) { // all contents are completed: the lesson is completed
+//				this.status = LessonStatus.COMPLETED;
+//			} else if ((maxStatus.compareTo(LessonStatus.INITIAL) > 0)  && this.status == LessonStatus.INITIAL) { // at least one content is started or completed: the lesson is started
+//				this.status = LessonStatus.STARTED;
+//			}
+		}
+		
+		return updated;
+		
+	}
+
 	public UserGoal(String id, User user, GoalDescriptor goalDescriptor) {
 		super(id, user);
 		this.goalDescriptor = goalDescriptor;

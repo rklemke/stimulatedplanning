@@ -26,6 +26,15 @@ public class PlanItem extends GenericUserObject {
 		this.status = status;
 	}
 	
+	public boolean trackLearningProgress(UserPlan userPlan, UserLesson userLesson, String contentUrl, String activityType) {
+		if (userLesson.getStatus().compareTo(this.getStatus()) > 0) {
+			this.setStatus(userLesson.getStatus());
+			// TODO: what else to keep track of: timing with respect to planned time? 
+			return true;
+		}
+		return false;
+	}
+
 	public PlanItem(String id, User user, LessonDescriptor lesson, String jsonPlanItem) {
 		super(id, user);
 		this.lesson = lesson;

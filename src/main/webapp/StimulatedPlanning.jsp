@@ -33,12 +33,15 @@
   String selectedGoalProfile = "";
   ListIterator<ModuleDescriptor> modIterator;
   ListIterator<UserGoal> goalIterator;
+  ListIterator<GoalDescriptor> courseGoalIterator;
+  boolean hasPlannableGoals = userPlan.hasPlannableGoals();
   //if (userGoal != null) {
 //	  modIterator = userGoal.getModules();
 //	  selectedGoalProfile = userGoal.getTitle();
  // } else {
 	  //modIterator = course.getModules();
 	  goalIterator = userPlan.getGoals();
+	  courseGoalIterator = course.getGoals();
       selectedGoalProfile = "Course: "+course.getTitle();
 //  }
   
@@ -265,19 +268,20 @@
 <p>Plan your recommended activities by dragging them from the list below to the calendar.</p>
 <div id="accordion">
 <%
-	while(goalIterator.hasNext()) {
-		UserGoal goal = goalIterator.next();
-		ListIterator<UserLesson> lessonIterator = goal.getLessons();
-		if (lessonIterator.hasNext()) {
+	if (hasPlannableGoals) {
+		while(goalIterator.hasNext()) {
+			UserGoal goal = goalIterator.next();
+			ListIterator<UserLesson> lessonIterator = goal.getLessons();
+			if (lessonIterator.hasNext()) {
 %>
 		  <h3><%= goal.getGoalDescriptor().getTitle() %></h3>
 		  <div>
 				<div class="external-events">
 		<%
-			while(lessonIterator.hasNext()) {
-				UserLesson userLesson = lessonIterator.next();
-				LessonDescriptor lesson = userLesson.getLesson();
-				if (!userPlan.hasPlanItem(lesson.getId())) {
+				while(lessonIterator.hasNext()) {
+					UserLesson userLesson = lessonIterator.next();
+					LessonDescriptor lesson = userLesson.getLesson();
+					if (!userPlan.hasPlanItem(lesson.getId())) {
 		%>
 					<div 
 						class="fc-event plan-a ui-draggable ui-draggable-handle" 
@@ -285,7 +289,7 @@
 						data-duration="<%= lesson.getLessonDurationString() %>"
 					><%= lesson.getTitle() %></div>
 		<%
-				} else {
+					} else {
 %>
 			<div 
 				class="fc-event plan-b ui-draggable ui-draggable-handle" 
@@ -293,12 +297,49 @@
 				data-duration="<%= lesson.getLessonDurationString() %>"
 			><%= lesson.getTitle() %></div>
 <%
+					}
 				}
-			}
 		%>
 				</div>
 		  </div>
 <%
+			}
+		}
+	} else {
+		while(courseGoalIterator.hasNext()) {
+			GoalDescriptor goal = courseGoalIterator.next();
+			ListIterator<LessonDescriptor> lessonIterator = goal.getLessons();
+			if (lessonIterator.hasNext()) {
+%>
+		  <h3><%= goal.getTitle() %></h3>
+		  <div>
+				<div class="external-events">
+		<%
+				while(lessonIterator.hasNext()) {
+					LessonDescriptor lesson = lessonIterator.next();
+					if (!userPlan.hasPlanItem(lesson.getId())) {
+		%>
+					<div 
+						class="fc-event plan-a ui-draggable ui-draggable-handle" 
+						id="<%= lesson.getId() %>" 
+						data-duration="<%= lesson.getLessonDurationString() %>"
+					><%= lesson.getTitle() %></div>
+		<%
+					} else {
+%>
+			<div 
+				class="fc-event plan-b ui-draggable ui-draggable-handle" 
+				id="<%= lesson.getId() %>" 
+				data-duration="<%= lesson.getLessonDurationString() %>"
+			><%= lesson.getTitle() %></div>
+<%
+					}
+				}
+		%>
+				</div>
+		  </div>
+<%
+			}
 		}
 	}
 %>
