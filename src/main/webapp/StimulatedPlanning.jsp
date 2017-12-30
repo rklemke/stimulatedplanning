@@ -109,7 +109,7 @@
     		height: 500,
     		firstDay: 1,
     		defaultView: 'agendaWeek',
-    		defaultDate: $.fullCalendar.moment('2018-12-25'),
+    		//defaultDate: $.fullCalendar.moment('2018-02-01'),
     	    validRange: {
     	        start: '2017-12-25',
     	        end: '2018-03-01'

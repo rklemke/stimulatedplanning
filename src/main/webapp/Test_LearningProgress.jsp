@@ -42,7 +42,7 @@
     	        	pageurl.val(data.item.value);
     	        	pagetitle.val($( "#contentSelect option:selected" ).text());
     	        	$( '#trackerFrame' ).attr("src", $('#trackerFrame').attr("src"));
-    	        	alert("change! "+data.item.value);
+    	        	//alert("change! "+data.item.value);
     	        }
     	      });
   } );
