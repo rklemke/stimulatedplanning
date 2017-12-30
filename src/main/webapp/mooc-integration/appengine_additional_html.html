@@ -5,8 +5,10 @@
 <title>Learning Test</title>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+  <link rel="stylesheet" href="../tablesorter/themes/blue/style.css">
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="../tablesorter/jquery.tablesorter.min.js"></script>
 </head>
 <body>
 
@@ -66,14 +68,33 @@
 		page: pageUrl
 	    }, 
 	    success: function(data) {
-		  var datatxt = "Tracker: OK";
+		  var datatxt = "<div width='48%' style='float:left;'>";
+	      datatxt += "<table id='feedbacktable' class='tablesorter'>";
+	      datatxt += "<thead><tr><th>Tracked attribute</th><th>Tracked value</th></tr></thead>";
 		  $.each(data,function(key,val){
-		     datatxt += " <BR> " + key + ": " + val;
+			  if (key.startsWith("calc")) {
+				  val += " %";
+				  datatxt += "<tr><td align='top'>" + key + "</td><td align='top'>" + val + "</td></tr>";
+			  }
 		  });
+	      datatxt += "</table>";
+	      datatxt += "</div><div width='48%' style='float:right;'>";
+	      datatxt += "<table id='feedbacktable2' class='tablesorter'>";
+	      datatxt += "<thead><tr><th>Raw attribute</th><th>Raw value</th></tr></thead>";
+		  $.each(data,function(key,val){
+			  if (!key.startsWith("calc")) {
+				  datatxt += "<tr><td>" + key + "</td><td>" + val + "</td></tr>";
+			  }
+		  });
+	      datatxt += "</table>";
+	      datatxt += "</div>";
 		  $( '#ajaxresult' ).html(datatxt);
+		  $( '#feedbacktable' ).tablesorter( {sortList: [[0,0], [1,0]]} );
+		  $( '#feedbacktable2' ).tablesorter( {sortList: [[0,0], [1,0]]} );
 	    },
 	    complete: function() {
 	      // Schedule the next request when the current one's complete
+	      timeoutInterval += timeoutInterval; // get slower, when user just stays on page.
 	      setTimeout(tickerRequest, timeoutInterval);
 	    }
 	  });

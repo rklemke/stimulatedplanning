@@ -79,6 +79,6 @@
 </form>
 <p id="learningContent">Here goes the learning content!</p>
 
-<iframe id="trackerFrame" src="./mooc-integration/appengine_additional_html.html"></iframe>
+<iframe width="800" height="550" id="trackerFrame" src="./mooc-integration/appengine_additional_html.html"></iframe>
 </body>
 </html>

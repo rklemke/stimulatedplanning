@@ -100,6 +100,7 @@
   .goalselectToggle { float: right; }
   .ul-goals { list-style-type: none; }
   .a-tab { width: 85%}
+  .ui-frame { width: 65em; }
  
   <%
   iterator = course.getGoals();
@@ -132,7 +133,7 @@
 <body>
 
 
- 
+<div class="ui-frame"> 
 <form id="goalSelectForm" method="POST" action="GoalSettingServlet">
 <h2>Your intentions with this course</h2>
 <% if("intention.topic".equals(intentionStep)) { %>
@@ -141,7 +142,7 @@
   <ul>
     <li class="tabs-0" id="li-0">
     	<a class="a-tab" href="#tabs-0">I am interested to complete the course</a>
-    	<input class="goalselectToggle" type="checkbox" name="goalSelectRadio" id="gsc-0" value="0" onClick="toggleGoalSelectCB('0', 0);"  >
+    	<input class="goalselectToggle" type="checkbox" name="goalSelectRadio" id="gsc-0" value="0" onClick="toggleGoalSelectCB('0', 0);"  <% if (userPlan.isAllCourseIntention()) { %>checked <% } %> >
     </li>
   <%
   iterator = course.getGoals();
@@ -160,9 +161,10 @@
   </ul>
   <div id="tabs-0">
     <p id="p-0"><b>I am interested to complete the course</b></p>
-    <p>We recommend you to take part in all course activities.</p>
+    <p>By selecting this check-box you chose to follow the complete course.</p>
     <p>Select the check-box on the left to select the complete course with a single click.</p>
-    <p>Recommended Lessons: (total estimated learning time: <%= course.getCourseDuration().toHours() %> hours)
+    <p>Please click on the Next button to plan further details.</p>
+    <p>(The estimated learning time for all course is a total of <%= course.getCourseDuration().toHours() %> hours)
     </p>
   </div>
   <%
@@ -212,9 +214,8 @@
 </div>
 
 <% } else if("intention.schedule".equals(intentionStep)) { %>
-
 <p>Please indicate your intentions with respect to the estimated time you intent to spend on this course's activities.</p>
-<div>
+<div class="ui-widget ui-widget-content">
   <ul class="ul-goals">
     <li>
     	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-1" value="1" <% if (userScheduleIntention != null && userScheduleIntention.equals("1")) { %>checked <% } %> ><label for="tabs2-1">I intend to spend about <b>one hour</b> per week on this course</label>
@@ -237,26 +238,32 @@
 
 <% } else if("intention.feedback".equals(intentionStep)) { %>
 
+<p>Please review your selection.</p>
+<div class="ui-widget ui-widget-content">
 		<div id="selectedGoal">
-		<% 
+			<%			
 		if (selectedGoals != null) {
-			int duration = 0;
 			String separator = "";
 		%>
 		<p>Your selection:</p>
 		<ul>
+		<% 
+		if (userPlan.isAllCourseIntention()) {
+			%>
+			<li>Your intention is to complete all the course.</li>
+			<% } else { %>
 		<li>Your intentions: <% for (GoalDescriptor userGoal : selectedGoals) {
-			duration += userGoal.getGoalDuration().toHours();
 			%><%= separator+userGoal.getTitle() %><%
 					separator = ", ";
+			}
 		} %></li>
 		<li>Your estimated time per week: <%= userPlan.getPlannedTimePerWeekAsInt() %> hours.</li>
 		</ul>
-		<% if (duration > 0) { %>
+		<% if (userPlan.getPlanDuration().toHours() > 0) { %>
 		<p>Our learning effort estimation for you:</p>
 		<ul>
-		<li>To complete your intention you need a total learning time of: <%= duration %> hours.</li>
-		<li>Your estimated time to goal achievement: <%= (int)Math.ceil((double)duration/userPlan.getPlannedTimePerWeekAsInt()) %> weeks</li>
+		<li>To complete your intention you need a total learning time of: <%= userPlan.getPlanDuration().toHours() %> hours.</li>
+		<li>Your estimated time to goal achievement: <%= (int)Math.ceil((double)(userPlan.getPlanDuration().toHours())/userPlan.getPlannedTimePerWeekAsInt()) %> weeks</li>
 		</ul>
 		<%
 			}
@@ -267,6 +274,7 @@
 		}
 		%>	
 		</div>
+</div>
 <% } %>
  		<div class="confirm">
 		<!-- <input type="button" id="cancel" value="Cancel"></input>  -->
@@ -290,7 +298,7 @@
 		</div>
 
 </form>
- 
+ </div>
 
 </body>
 </html>

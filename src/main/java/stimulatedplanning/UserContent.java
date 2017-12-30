@@ -22,9 +22,12 @@ public class UserContent extends GenericUserObject {
 
 	public boolean trackLearningProgress(UserPlan userPlan, String contentUrl, String activityType) {
 		boolean updated = false;
-		if (contentUrl != null && contentUrl.equals(this.getUrl())) {
+		if (contentUrl != null && contentUrl.equals(this.getContent().getUrl())) {
 			if (StimulatedPlanningFactory.ACTIVITY_TYPE_ACCESS.equals(activityType) && status == LessonStatus.INITIAL) {
 				status = LessonStatus.STARTED;
+				updated = true;
+			} else if (StimulatedPlanningFactory.ACTIVITY_TYPE_ACCESS.equals(activityType) && status == LessonStatus.STARTED) {
+				status = LessonStatus.COMPLETED;
 				updated = true;
 			} else if (StimulatedPlanningFactory.ACTIVITY_TYPE_COMPLETE.equals(activityType) && status == LessonStatus.STARTED) {
 				status = LessonStatus.COMPLETED;

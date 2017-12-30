@@ -58,6 +58,13 @@ public class UserLesson extends GenericUserObject {
 			this.status = LessonStatus.STARTED;
 			updated = true;
 		}
+
+		if (userPlan.hasPlanItemForLesson(getLesson())) {
+			PlanItem planItem = userPlan.getPlanItemForLesson(getLesson());
+			if (planItem.trackLearningProgress(userPlan, this, contentUrl, activityType)) {
+				updated = true;
+			}
+		}
 		
 		return updated;
 		

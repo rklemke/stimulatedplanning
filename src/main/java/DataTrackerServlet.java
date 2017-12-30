@@ -43,15 +43,14 @@ public class DataTrackerServlet extends HttpServlet {
 		response.setContentType("text/javascript");
 		
 		
-		// TODO: store retrieved parameters in DB
-		Gson gson = new Gson();
-		String jsonObject = gson.toJson(request.getParameterMap());
 		try {
 			StimulatedPlanningFactory.trackAndLogEvent(request, response, "track");
-			//PersistentStore.writeLog(request.getParameterMap());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Gson gson = new Gson();
+		String jsonObject = gson.toJson(userPlan.getCompletionStatusMap());
+
 		String callback = request.getParameter("callback");
 		if (callback != null && !"".equals(callback)) {
 			jsonObject = callback + "(" + jsonObject + ");";
@@ -61,8 +60,6 @@ public class DataTrackerServlet extends HttpServlet {
 		out.println(jsonObject);
 		out.flush();
 		System.out.println(jsonObject);
-		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**

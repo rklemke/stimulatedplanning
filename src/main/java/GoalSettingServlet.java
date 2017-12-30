@@ -59,7 +59,11 @@ public class GoalSettingServlet extends HttpServlet {
 				updateGoals = true;
 			} else {
 				for (String goalId : selectedGoalIds) {
-					if (!selectedGoals.containsKey(goalId)) {
+					if ("0".equals(goalId)) {
+						if (!userPlan.isAllCourseIntention()) {
+							updateGoals = true;
+						}
+					} else if (!selectedGoals.containsKey(goalId)) {
 						updateGoals = true;
 					} else {
 						String[] selectedLessonIds = request.getParameterValues("goal" + goalId);
@@ -86,24 +90,28 @@ public class GoalSettingServlet extends HttpServlet {
 			selectedGoals = new HashArrayList<GoalDescriptor>();
 			selectedLessons = new HashArrayList<LessonDescriptor>();
 			for (String goalId : selectedGoalIds) {
-				GoalDescriptor goal = course.getGoal(goalId);
-				if (goal != null) {
-					selectedGoals.add(goal);
-					UserGoal userGoal = StimulatedPlanningFactory.createUserGoal(userPlan, goal);
-					userPlan.addGoal(userGoal);
-					String[] selectedLessonIds = request.getParameterValues("goal" + goal.getId());
-					if (selectedLessonIds != null) {
-						for (String lessonId : selectedLessonIds) {
-							LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(lessonId);
-							if (lesson != null) {
-								selectedLessons.add(lesson);
-								UserLesson userLesson = StimulatedPlanningFactory.createUserLesson(userGoal, lesson);
-								userGoal.addLesson(userLesson);
+				if ("0".equals(goalId)) {
+					userPlan.setAllCourseIntention(true);
+				} else {
+					GoalDescriptor goal = course.getGoal(goalId);
+					if (goal != null) {
+						selectedGoals.add(goal);
+						UserGoal userGoal = StimulatedPlanningFactory.createUserGoal(userPlan, goal);
+						userPlan.addGoal(userGoal);
+						String[] selectedLessonIds = request.getParameterValues("goal" + goal.getId());
+						if (selectedLessonIds != null) {
+							for (String lessonId : selectedLessonIds) {
+								LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(lessonId);
+								if (lesson != null) {
+									selectedLessons.add(lesson);
+									UserLesson userLesson = StimulatedPlanningFactory.createUserLesson(userGoal, lesson);
+									userGoal.addLesson(userLesson);
+								}
 							}
 						}
-					}
-					if (goal.getCompletionGoalKeys().size() > 0 && goal.getCompletionGoal(completionSelectRB) != null) {
-						userGoal.setCompletionGoal(completionSelectRB);
+						if (goal.getCompletionGoalKeys().size() > 0 && goal.getCompletionGoal(completionSelectRB) != null) {
+							userGoal.setCompletionGoal(completionSelectRB);
+						}
 					}
 				}
 			}

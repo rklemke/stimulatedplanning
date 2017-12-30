@@ -1,5 +1,6 @@
 package stimulatedplanning;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
@@ -10,6 +11,7 @@ public class UserGoal extends GenericUserObject {
 	GoalDescriptor goalDescriptor;
 	HashArrayList<UserLesson> lessons;
 	String completionGoal = "";
+	LessonStatus status;
 
 	public GoalDescriptor getGoalDescriptor() {
 		return goalDescriptor;
@@ -33,6 +35,22 @@ public class UserGoal extends GenericUserObject {
 
 	public void setCompletionGoal(String completionGoal) {
 		this.completionGoal = completionGoal;
+	}
+
+	public LessonStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(LessonStatus status) {
+		this.status = status;
+	}
+
+	public Duration getGoalDuration() {
+		Duration duration = Duration.ZERO;
+		for (UserLesson lesson : lessons) {
+			duration = duration.plus(lesson.getLesson().getLessonDuration());
+		}
+		return duration;
 	}
 
 	public boolean trackLearningProgress(UserPlan userPlan, String contentUrl, String activityType) {
@@ -61,11 +79,13 @@ public class UserGoal extends GenericUserObject {
 				}
 			}
 			
-//			if (minStatus == LessonStatus.COMPLETED && this.status == LessonStatus.STARTED) { // all contents are completed: the lesson is completed
-//				this.status = LessonStatus.COMPLETED;
-//			} else if ((maxStatus.compareTo(LessonStatus.INITIAL) > 0)  && this.status == LessonStatus.INITIAL) { // at least one content is started or completed: the lesson is started
-//				this.status = LessonStatus.STARTED;
-//			}
+			if (minStatus == LessonStatus.COMPLETED && this.status == LessonStatus.STARTED) { // all contents are completed: the lesson is completed
+				this.status = LessonStatus.COMPLETED;
+				updated = true;
+			} else if ((maxStatus.compareTo(LessonStatus.INITIAL) > 0)  && this.status == LessonStatus.INITIAL) { // at least one content is started or completed: the lesson is started
+				this.status = LessonStatus.STARTED;
+				updated = true;
+			}
 		}
 		
 		return updated;
@@ -76,6 +96,7 @@ public class UserGoal extends GenericUserObject {
 		super(id, user);
 		this.goalDescriptor = goalDescriptor;
 		this.lessons = new HashArrayList<UserLesson>();
+		this.status = LessonStatus.INITIAL;
 		// TODO Auto-generated constructor stub
 	}
 

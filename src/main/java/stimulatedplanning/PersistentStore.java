@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 
 public class PersistentStore {
 
@@ -288,11 +289,18 @@ public class PersistentStore {
 				}
 				EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionGoals");
 				String keys = (String)genericEntity.getProperty("completionGoalKeys");
-				ArrayList<String> keysList = new ArrayList<>(Arrays.asList(keys.replaceAll("[]", "")));
-				if (ee != null && keysList != null) {
-				    for (String key : keysList) {
-				        goal.addCompletionGoal(key, (String) ee.getProperty(key));
-				    }
+				if (keys != null && keys.length()>0) {
+					keys = keys.replace("[", "").replace("]", "").replace(" ", "");
+					System.out.println("Reading completionGoals: " + keys);
+					if (keys.length()>0) {
+						ArrayList<String> keysList = new ArrayList<>(Arrays.asList(keys.split(",")));
+						if (ee != null && keysList != null && keysList.size() > 0) {
+						    for (String key : keysList) {
+						    	System.out.println("Key: "+key+", "+(String) ee.getProperty(key));
+						        goal.addCompletionGoal(key, (String) ee.getProperty(key));
+						    }
+						}
+					}
 				}
 				
 				return goal;
@@ -316,6 +324,11 @@ public class PersistentStore {
 				UserPlan plan = new UserPlan((String) genericEntity.getProperty("uid"), user);
 				plan.setCourse(course);
 				plan.setPlannedTimePerWeek((String) genericEntity.getProperty("plannedTimePerWeek"));
+				try {
+					plan.setAllCourseIntention((boolean) genericEntity.getProperty("isAllCourseIntention"));
+				} catch (Exception e) {
+					plan.setAllCourseIntention(false);
+				}
 				relationList = readToManyRelation(plan, "userGoals", UserGoal.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
 					plan.addGoal((UserGoal)generic);
@@ -324,12 +337,24 @@ public class PersistentStore {
 				for (GenericDescriptor generic : relationList) {
 					plan.addPlanItem((PlanItem)generic);
 				}
+				EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionStatusMap");
+				if (ee != null) {
+					Map<String, Object> map = ee.getProperties();
+					Set<String> keys = map.keySet();
+					for (String key : keys) {
+						Object val = map.get(key);
+						if (val != null && val instanceof Integer) {
+							plan.completionStatusMap.put(key, (Integer)val);
+						}
+					}
+				}
 				return plan;
 			} else if (UserGoal.class.getName().equals(type)) {
 				User user = getUser((String) genericEntity.getProperty("userid"));
 				GoalDescriptor goal = (GoalDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("goal"));				
 				UserGoal userGoal = new UserGoal((String) genericEntity.getProperty("uid"), user, goal);
 				userGoal.setCompletionGoal((String) genericEntity.getProperty("completionGoal"));
+				userGoal.setStatus(readStatus(genericEntity));
 				relationList = readToManyRelation(userGoal, "lessons", UserLesson.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
 					userGoal.addLesson((UserLesson)generic);
@@ -339,8 +364,7 @@ public class PersistentStore {
 				User user = getUser((String) genericEntity.getProperty("userid"));
 				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("lesson"));				
 				UserLesson userLesson = new UserLesson((String) genericEntity.getProperty("uid"), user, lesson);
-				LessonStatus status = LessonStatus.valueOf((String)genericEntity.getProperty("status"));
-				userLesson.setStatus(status);
+				userLesson.setStatus(readStatus(genericEntity));
 				relationList = readToManyRelation(userLesson, "contents", UserContent.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
 					userLesson.addContent((UserContent)generic);
@@ -350,16 +374,19 @@ public class PersistentStore {
 				User user = getUser((String) genericEntity.getProperty("userid"));
 				ContentDescriptor content = (ContentDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("content"));				
 				UserContent userContent = new UserContent((String) genericEntity.getProperty("uid"), user, content);
-				LessonStatus status = LessonStatus.valueOf((String)genericEntity.getProperty("status"));
-				userContent.setStatus(status);
+				userContent.setStatus(readStatus(genericEntity));
 				return userContent;
 			} else if (PlanItem.class.getName().equals(type)) {
 				User user = getUser((String) genericEntity.getProperty("userid"));
 				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("lesson"));
 				String jsonPlanItem = (String) genericEntity.getProperty("jsonPlanItem");
 				PlanItem planItem = new PlanItem((String) genericEntity.getProperty("uid"), user, lesson, jsonPlanItem);
-				LessonStatus status = LessonStatus.valueOf((String)genericEntity.getProperty("status"));
-				planItem.setStatus(status);
+				planItem.setStatus(readStatus(genericEntity));
+				planItem.setPlanStatus(readPlanStatus(genericEntity));
+				planItem.setPlanCompletionStatus(readPlanCompletionStatus(genericEntity));
+				if (planItem.trackPlanStatus()) {
+					writeDescriptor(planItem);
+				}
 				return planItem;
 			}
 		}
@@ -367,6 +394,36 @@ public class PersistentStore {
 		return null;
 	}
 
+	protected static LessonStatus readStatus(Entity genericEntity) {
+		if (genericEntity.hasProperty("status")) {
+			LessonStatus status = LessonStatus.valueOf((String)genericEntity.getProperty("status"));
+			return status;
+		} else {
+			return LessonStatus.INITIAL;
+		}
+		
+	}
+	
+	protected static PlanStatus readPlanStatus(Entity genericEntity) {
+		if (genericEntity.hasProperty("planStatus")) {
+			PlanStatus status = PlanStatus.valueOf((String)genericEntity.getProperty("planStatus"));
+			return status;
+		} else {
+			return PlanStatus.PLANNED;
+		}
+		
+	}
+	
+	protected static PlanCompletionStatus readPlanCompletionStatus(Entity genericEntity) {
+		if (genericEntity.hasProperty("planCompletionStatus")) {
+			PlanCompletionStatus status = PlanCompletionStatus.valueOf((String)genericEntity.getProperty("planCompletionStatus"));
+			return status;
+		} else {
+			return PlanCompletionStatus.OPEN;
+		}
+		
+	}
+	
 	public static void writeDescriptor(GenericDescriptor generic) throws Exception {
 		System.out.println("writeDescriptor (GenericDescriptor): "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -493,6 +550,17 @@ public class PersistentStore {
 			String courseId = userPlan.getCourse().getId();
 			planEntity.setProperty("course", courseId);
 			planEntity.setProperty("plannedTimePerWeek", userPlan.getPlannedTimePerWeek());
+			planEntity.setProperty("isAllCourseIntention", userPlan.isAllCourseIntention());
+
+			EmbeddedEntity ee = new EmbeddedEntity();
+		    Map<String, Integer> map = userPlan.completionStatusMap;
+
+		    for (String key : map.keySet()) { // TODO: maybe there is a more efficient way of solving this
+		        ee.setProperty(key, map.get(key));
+		    }
+
+		    planEntity.setProperty("completionStatusMap", ee);
+
 
 			writeToManyRelation(userPlan, userPlan.getGoals(), "userGoals", userPlan.goals.size(), true);
 			writeToManyRelation(userPlan, userPlan.getPlanItems(), "planItems", userPlan.planItems.size(), true);
@@ -514,6 +582,7 @@ public class PersistentStore {
 			Entity goalEntity = createGenericUserEntity(userGoal);
 			goalEntity.setProperty("goal", userGoal.getGoalDescriptor().getId());
 			goalEntity.setProperty("completionGoal", userGoal.getCompletionGoal());
+			goalEntity.setProperty("status", userGoal.getStatus().toString());
 
 			writeToManyRelation(userGoal, userGoal.getLessons(), "lessons", userGoal.lessons.size(), true);
 			
@@ -574,6 +643,8 @@ public class PersistentStore {
 			Entity planItemEntity = createGenericUserEntity(planItem);
 			planItemEntity.setProperty("lesson", planItem.getLesson().getId());
 			planItemEntity.setProperty("status", planItem.getStatus().toString());
+			planItemEntity.setProperty("planStatus", planItem.getPlanStatus().toString());
+			planItemEntity.setProperty("planCompletionStatus", planItem.getPlanCompletionStatus().toString());
 			planItemEntity.setProperty("jsonPlanItem", planItem.getJsonPlanItem());
 
 			datastore.put(planItemEntity);
