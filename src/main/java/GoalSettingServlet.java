@@ -128,21 +128,18 @@ public class GoalSettingServlet extends HttpServlet {
 			userPlan.setPlannedTimePerWeek(selectedSchedule);
 		}
 		
-		if (userPlanDirty) {
-			System.out.println("writing user plan for " + user.getName() + ", " + course.getId() + ", " + userPlan.getId());
-			try {
-				PersistentStore.writeDescriptor(userPlan);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
 		String submit = request.getParameter("submit");
 		String nextJSP = "/GoalSetting.jsp";
 		
 		if (submit != null && submit.equals("Next")) {
 			if (PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
-				nextJSP = "/StimulatedPlanning.jsp";
+				userPlan.setIntentionCompleted(true);
+				userPlanDirty = true;
+				if (user.isTreatmentGroup()) {
+					nextJSP = "/StimulatedPlanning.jsp";
+				} else {
+					nextJSP = "/ThankYou.jsp";
+				}
 			} else {
 				for (int i=0; i<PlanningSteps.intentionSteps.length-1; i++) {
 					if ((intentionStep == null || PlanningSteps.intentionSteps[i].equals(intentionStep)) && i < PlanningSteps.intentionSteps.length-1) {
@@ -170,7 +167,22 @@ public class GoalSettingServlet extends HttpServlet {
 		}
 		
 		if (submit != null && submit.equals("Continue")) {
-			nextJSP = "/StimulatedPlanning.jsp";
+			userPlan.setIntentionCompleted(true);
+			userPlanDirty = true;
+			if (user.isTreatmentGroup()) {
+				nextJSP = "/StimulatedPlanning.jsp";
+			} else {
+				nextJSP = "/ThankYou.jsp";
+			}
+		}
+		
+		if (userPlanDirty) {
+			System.out.println("writing user plan for " + user.getName() + ", " + course.getId() + ", " + userPlan.getId());
+			try {
+				PersistentStore.writeDescriptor(userPlan);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		try {

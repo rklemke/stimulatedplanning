@@ -54,6 +54,7 @@
 <input type="hidden" value="Guest" id="userName" name="userName">
 <input type="submit" id="submitIntention" name="submitIntention" value="Intention"></input>
 <input type="submit" id="submitPlanning" name="submitPlanning" value="Planning"></input>
+<input type="submit" id="submitPlanning" name="submitCoping" value="Coping Plan"></input>
 <input type="submit" id="submitLearning" name="submitLearning" value="Learning"></input>
 </form>
 </body>

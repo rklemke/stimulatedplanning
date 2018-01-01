@@ -32,9 +32,11 @@ public class Test_UserSelectionServlet extends HttpServlet {
 
 		String nextServlet = "/GoalSettingServlet";
 		if (request.getParameter("submitIntention") != null) {
-			nextServlet = "/GoalSettingServlet";
+			nextServlet = "/Test_Intention.jsp";
 		} else if (request.getParameter("submitPlanning") != null) {
 			nextServlet = "/StimulatedPlanningServlet";
+		} else if (request.getParameter("submitCoping") != null) {
+			nextServlet = "/CopingPlan.jsp";
 		} else if (request.getParameter("submitLearning") != null) {
 			nextServlet = "/Test_LearningProgress.jsp";
 		}

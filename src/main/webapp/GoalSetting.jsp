@@ -84,6 +84,7 @@
     
   </script>
   <style>
+  
   .ui-tabs-vertical { width: 65em; }
   .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 25em; }
   .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
@@ -98,9 +99,18 @@
   .ui-state-active { background: #ff9800; }
   .goalselect { float: right; }
   .goalselectToggle { float: right; }
+  .goalSelectLabel { width: 480px; text-align: left; }
   .ul-goals { list-style-type: none; }
   .a-tab { width: 85%}
   .ui-frame { width: 65em; }
+ 
+  .ui-wrapper { overflow: auto; width: 1048px;}
+
+	#wrap {
+		width: 1048px;
+		margin: 0 auto;
+	}
+		
  
   <%
   iterator = course.getGoals();
@@ -132,11 +142,12 @@
 </head>
 <body>
 
+<div id="wrap" class="ui-wrapper">
 
-<div class="ui-frame"> 
+<!--  <div class="ui-frame">  -->
 <form id="goalSelectForm" method="POST" action="GoalSettingServlet">
 <h2>Your intentions with this course</h2>
-<% if("intention.topic".equals(intentionStep)) { %>
+<% if(!userPlan.isIntentionCompleted() && "intention.topic".equals(intentionStep)) { %>
 <p>Please indicate your intentions with respect to this course's content offer.</p>
 <div id="tabs">
   <ul>
@@ -162,7 +173,6 @@
   <div id="tabs-0">
     <p id="p-0"><b>I am interested to complete the course</b></p>
     <p>By selecting this check-box you chose to follow the complete course.</p>
-    <p>Select the check-box on the left to select the complete course with a single click.</p>
     <p>Please click on the Next button to plan further details.</p>
     <p>(The estimated learning time for all course is a total of <%= course.getCourseDuration().toHours() %> hours)
     </p>
@@ -213,32 +223,33 @@
   %>
 </div>
 
-<% } else if("intention.schedule".equals(intentionStep)) { %>
+<% } else if(!userPlan.isIntentionCompleted() && "intention.schedule".equals(intentionStep)) { %>
+
 <p>Please indicate your intentions with respect to the estimated time you intent to spend on this course's activities.</p>
 <div class="ui-widget ui-widget-content">
   <ul class="ul-goals">
     <li>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-1" value="1" <% if (userScheduleIntention != null && userScheduleIntention.equals("1")) { %>checked <% } %> ><label for="tabs2-1">I intend to spend about <b>one hour</b> per week on this course</label>
+    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-1" value="1" <% if (userScheduleIntention != null && userScheduleIntention.equals("1")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-1">I intend to spend about <b>one hour</b> per week on this course</label>
     </li>
     <li>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-2" value="2" <% if (userScheduleIntention != null && userScheduleIntention.equals("2")) { %>checked <% } %> ><label for="tabs2-2">I intend to spend about <b>two hours</b> per week on this course</label>
+    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-2" value="2" <% if (userScheduleIntention != null && userScheduleIntention.equals("2")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-2">I intend to spend about <b>two hours</b> per week on this course</label>
     </li>
     <li>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-3" value="3" <% if (userScheduleIntention != null && userScheduleIntention.equals("3")) { %>checked <% } %> ><label for="tabs2-3">I intend to spend about <b>three hours</b> per week on this course</label>
+    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-3" value="3" <% if (userScheduleIntention != null && userScheduleIntention.equals("3")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-3">I intend to spend about <b>three hours</b> per week on this course</label>
     </li>
     <li>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-4" value="4" <% if (userScheduleIntention != null && userScheduleIntention.equals("4")) { %>checked <% } %> ><label for="tabs2-4">I intend to spend about <b>four hours</b> per week on this course</label>
+    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-4" value="4" <% if (userScheduleIntention != null && userScheduleIntention.equals("4")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-4">I intend to spend about <b>four hours</b> per week on this course</label>
     </li>
     <li>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-5" value="5" <% if (userScheduleIntention != null && userScheduleIntention.equals("5")) { %>checked <% } %> ><label for="tabs2-5">I intend to spend about <b>five hours</b> per week on this course</label>
+    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-5" value="5" <% if (userScheduleIntention != null && userScheduleIntention.equals("5")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-5">I intend to spend about <b>five hours</b> per week on this course</label>
     </li>
   </ul>
   <div id="selectedGoals"></div>
 </div>
 
-<% } else if("intention.feedback".equals(intentionStep)) { %>
+<% } else if(userPlan.isIntentionCompleted() || "intention.feedback".equals(intentionStep)) { %>
 
-<p>Please review your selection.</p>
+<p>Memo</p>
 <div class="ui-widget ui-widget-content">
 		<div id="selectedGoal">
 			<%			
@@ -251,13 +262,29 @@
 		if (userPlan.isAllCourseIntention()) {
 			%>
 			<li>Your intention is to complete all the course.</li>
-			<% } else { %>
-		<li>Your intentions: <% for (GoalDescriptor userGoal : selectedGoals) {
-			%><%= separator+userGoal.getTitle() %><%
-					separator = ", ";
-			}
-		} %></li>
-		<li>Your estimated time per week: <%= userPlan.getPlannedTimePerWeekAsInt() %> hours.</li>
+			<% } else if (selectedGoals != null && selectedGoals.size() > 0) { %>
+				<li>Your intentions:</li><ul> <% 
+					for (GoalDescriptor userGoal : selectedGoals) {
+					%><li><%= separator+userGoal.getTitle() %><%
+						//separator = ", ";
+						if (userGoal.getLessons().hasNext()) {
+							%> (<%
+							String separator2 = "";
+							ListIterator<LessonDescriptor> lessonIterator = userGoal.getLessons();
+							while (lessonIterator.hasNext()) {
+								LessonDescriptor lesson = lessonIterator.next();
+								%><%= separator2+lesson.getTitle() %><%
+								separator2 = ", ";
+							}
+							%>)</li><%
+							
+						}
+					} %></ul><%
+			} else {
+				%>
+				<li>You did not indicate any intention. <% if (!userPlan.isIntentionCompleted()) { %>You may consider to go back and select intentions.<% } %> </li>
+				<%				
+			} %><li>Your estimated time per week: <%= userPlan.getPlannedTimePerWeekAsInt() %> hours.</li>
 		</ul>
 		<% if (userPlan.getPlanDuration().toHours() > 0) { %>
 		<p>Our learning effort estimation for you:</p>
@@ -279,17 +306,17 @@
  		<div class="confirm">
 		<!-- <input type="button" id="cancel" value="Cancel"></input>  -->
 		<% 
-		if (!PlanningSteps.intentionSteps[0].equals(intentionStep)) {
+		if (!userPlan.isIntentionCompleted() && !PlanningSteps.intentionSteps[0].equals(intentionStep)) {
 		%>
 			<button type="submit" id="prev" name="submit" value="Previous">Save and Previous</button>
 		<%
 		}
-		if (!PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
+		if (!userPlan.isIntentionCompleted() && !PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
 		%>
 			<button type="submit" id="next" name="submit" value="Next">Save and Next</button>
 		<%
 		}
-		if (selectedGoals != null && PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
+		if (userPlan.isIntentionCompleted() || (selectedGoals != null && PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep))) {
 		%>
 			<button type="submit" id="continue" name="submit" value="Continue">Continue</button>
 		<%
@@ -298,7 +325,9 @@
 		</div>
 
 </form>
- </div>
+<!-- </div>  --> 
+
+</div>
 
 </body>
 </html>

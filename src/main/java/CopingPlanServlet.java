@@ -1,8 +1,6 @@
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,22 +10,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import stimulatedplanning.*;
+import stimulatedplanning.CourseDescriptor;
+import stimulatedplanning.PersistentStore;
+import stimulatedplanning.StimulatedPlanningFactory;
+import stimulatedplanning.User;
+import stimulatedplanning.UserPlan;
 
 /**
- * Servlet implementation class StimulatedPlanningServlet
+ * Servlet implementation class CopingPlanServlet
  */
-@WebServlet("/StimulatedPlanningServlet")
-public class StimulatedPlanningServlet extends HttpServlet {
+@WebServlet("/CopingPlanServlet")
+public class CopingPlanServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public StimulatedPlanningServlet() {
+    public CopingPlanServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -42,52 +41,19 @@ public class StimulatedPlanningServlet extends HttpServlet {
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
 		UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
 		boolean userPlanDirty = false;
-
-		String calenderItems = request.getParameter("calenderItems");
-		System.out.println("calenderItems: "+calenderItems);
 		
-		GsonBuilder builder = new GsonBuilder();
-		Object o = builder.create().fromJson(calenderItems, Object.class);
+		String obstacles = request.getParameter("obstacles");
+		String copingPlan = request.getParameter("copingPlan");
 		
-		if (o instanceof ArrayList) {
-			ArrayList list = (ArrayList)o;
-			for(Object e : list) {
-				if (e instanceof Map) {
-					Map evt = (Map)e;
-					evt.remove("_id");
-					evt.remove("source");
-					String id = (String)evt.get("id");
-					
-					if (id != null && !"".equals(id)) {
-						LessonDescriptor lesson = course.retrieveLessonById(id);
-						if (lesson != null) {
-							userPlanDirty = true;
-							PlanItem item = null;
-							if (userPlan.hasPlanItemForLesson(lesson)) { // event exists in calendar: update
-								item = userPlan.getPlanItemForLesson(lesson);
-								item.setUser(user);
-								item.setJsonPlanItem(builder.create().toJson(evt));
-								item.trackPlanStatus();
-							} else { // event doesn't exist in calendar: create
-								item = new PlanItem(id, user, lesson, builder.create().toJson(evt));
-								userPlan.addPlanItem(item);
-								item.trackPlanStatus();
-							}
-						}
-					}
-					
-					
-				}
-			}
+		if (obstacles != null && !obstacles.equals(userPlan.getObstacles())) {
+			userPlan.setObstacles(obstacles);
+			userPlanDirty = true;
+		}
+		if (copingPlan != null && !copingPlan.equals(userPlan.getCopingPlan())) {
+			userPlan.setCopingPlan(copingPlan);
+			userPlanDirty = true;
 		}
 
-		if (o != null) {
-			System.out.println("o: "+o.toString());
-			System.out.println("o.class: "+o.getClass().getName());
-		} else {
-			System.out.println("o: null");
-		}
-		
 		if (userPlanDirty) {
 			System.out.println("writing user plan for " + user.getName() + ", " + course.getId() + ", " + userPlan.getId());
 			try {
@@ -98,16 +64,17 @@ public class StimulatedPlanningServlet extends HttpServlet {
 		}
 		
 		try {
-			StimulatedPlanningFactory.trackAndLogEvent(request, response, "planning");
+			StimulatedPlanningFactory.trackAndLogEvent(request, response, "copingPlan");
 			//PersistentStore.writeLog(request.getParameterMap());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+
 		String submit = request.getParameter("submit");
-		String nextJSP = "/StimulatedPlanning.jsp";
+		String nextJSP = "/CopingPlan.jsp";
 		if (submit != null && submit.equals("Next")) {
-			nextJSP = "/CopingPlan.jsp";
+			nextJSP = "/ThankYou.jsp";
 		}
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);

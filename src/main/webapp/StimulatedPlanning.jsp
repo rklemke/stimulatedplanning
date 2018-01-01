@@ -35,15 +35,9 @@
   ListIterator<UserGoal> goalIterator;
   ListIterator<GoalDescriptor> courseGoalIterator;
   boolean hasPlannableGoals = userPlan.hasPlannableGoals();
-  //if (userGoal != null) {
-//	  modIterator = userGoal.getModules();
-//	  selectedGoalProfile = userGoal.getTitle();
- // } else {
-	  //modIterator = course.getModules();
-	  goalIterator = userPlan.getGoals();
-	  courseGoalIterator = course.getGoals();
-      selectedGoalProfile = "Course: "+course.getTitle();
-//  }
+  goalIterator = userPlan.getGoals();
+  courseGoalIterator = course.getGoals();
+  selectedGoalProfile = "Course: "+course.getTitle();
   
   int m=0;
   
@@ -101,7 +95,7 @@
 			header: {
 				left: 'prev,next today',
 				center: 'title',
-				right: 'agendaWeek,agendaDay,listMonth'
+				right: 'agendaWeek,agendaDay'
     		},
 			id: ($(this).attr('id')),
 			eventOverlap: false,
@@ -121,6 +115,7 @@
 				if ($('#drop-remove').is(':checked')) {
 					// if so, remove the element from the "Draggable Events" list
 					$(this).removeClass('plan-a');
+					$(this).removeClass('plan-ok');
 					$(this).addClass('plan-b');
 					$(this).draggable('disable');
 					//$(this).remove();
@@ -174,7 +169,7 @@
 	}
 		
 	#wrap {
-		width: 1200px;
+		width: 1040px;
 		margin: 0 auto;
 	}
 		
@@ -227,7 +222,7 @@
 
 	#calendar {
 		float: right;
-		width: 900px;
+		width: 740px;
 	}
 	
 	.confirm {
@@ -239,11 +234,22 @@
 	}
 	
 	.plan-a {
-	    background-color: #3a87ad;
 	}
 	
 	.plan-b {
 	    background-color: #afafaf;
+	}
+	
+	.plan-done {
+	    background-color: #afafaf;
+	}
+	
+	.plan-late {
+	    background-color: #cd0000;
+	}
+	
+	.plan-ok {
+	    background-color: #3a87ad;
 	}
 
 	#feedbackMessage {
@@ -255,13 +261,14 @@
 		border: 2px solid black;
 	}
 	
+  .ui-wrapper { overflow: auto; width: 1048px;}
 	
 
 </style>
 </head>
 <body>
 
-<div id="wrap">
+<div id="wrap" class="ui-wrapper">
 
 <div id="leftbar">
 <h4>Your Intention: <%= selectedGoalProfile %></h4>
@@ -284,7 +291,7 @@
 					if (!userPlan.hasPlanItem(lesson.getId())) {
 		%>
 					<div 
-						class="fc-event plan-a ui-draggable ui-draggable-handle" 
+						class="fc-event plan-a plan-ok ui-draggable ui-draggable-handle" 
 						id="<%= lesson.getId() %>" 
 						data-duration="<%= lesson.getLessonDurationString() %>"
 					><%= lesson.getTitle() %></div>
@@ -320,7 +327,7 @@
 					if (!userPlan.hasPlanItem(lesson.getId())) {
 		%>
 					<div 
-						class="fc-event plan-a ui-draggable ui-draggable-handle" 
+						class="fc-event plan-a plan-ok ui-draggable ui-draggable-handle" 
 						id="<%= lesson.getId() %>" 
 						data-duration="<%= lesson.getLessonDurationString() %>"
 					><%= lesson.getTitle() %></div>
@@ -368,7 +375,8 @@
 <div class="confirm">
 	<form id="planningForm" method="POST" action="StimulatedPlanningServlet">
 		<input type="hidden" name="calenderItems" id="calenderItems" value="">
-		<input type="submit" id="ok" value="OK" onclick="retrieveAllEvents();"></input>
+		<button type="submit" id="ok" name="submit" value="OK" onclick="retrieveAllEvents();">Save</button>
+		<button type="submit" id="next" name="submit" value="Next" onclick="retrieveAllEvents();">Save and Next</button>
 	</form>
 </div>
 

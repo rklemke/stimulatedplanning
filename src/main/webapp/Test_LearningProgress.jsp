@@ -50,7 +50,7 @@
   </script>
 </head>
 <body>
-<p>Welcome, <%= user.getName() %>.</p>
+<div class="label-username"><%= user.getName() %></div>
 <form>
 <input type=hidden id="userName" name="userName" value="<%= user.getName() %>">
 <input type=hidden id="userid" name="userid" value="<%= user.getId() %>">
@@ -79,6 +79,8 @@
 </form>
 <p id="learningContent">Here goes the learning content!</p>
 
-<iframe width="800" height="550" id="trackerFrame" src="./mooc-integration/appengine_additional_html.html"></iframe>
+<!-- <iframe width="800" height="550" id="trackerFrame" src="./mooc-integration/appengine_additional_html.html"></iframe> -->
+<iframe width="800" height="550" id="feedbackFrame" src="./FeedbackFrame.jsp"></iframe>
+<iframe width="800" height="50" id="trackerFrame" src="./OpenEdx_TickerFrame.jsp"></iframe>
 </body>
 </html>

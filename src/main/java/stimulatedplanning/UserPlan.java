@@ -16,6 +16,9 @@ public class UserPlan extends GenericUserObject {
 	protected String plannedTimePerWeek;
 	protected boolean allCourseIntention = false;
 	HashMap<String, Integer> completionStatusMap;
+	protected String obstacles;
+	protected String copingPlan;
+	protected boolean intentionCompleted = false;
 	
 	public CourseDescriptor getCourse() {
 		return course;
@@ -105,6 +108,24 @@ public class UserPlan extends GenericUserObject {
 	}
 	public void setCompletionStatusMap(HashMap<String, Integer> completionStatusMap) {
 		this.completionStatusMap = completionStatusMap;
+	}
+	public String getObstacles() {
+		return obstacles;
+	}
+	public void setObstacles(String obstacles) {
+		this.obstacles = obstacles;
+	}
+	public String getCopingPlan() {
+		return copingPlan;
+	}
+	public void setCopingPlan(String copingPlan) {
+		this.copingPlan = copingPlan;
+	}
+	public boolean isIntentionCompleted() {
+		return intentionCompleted;
+	}
+	public void setIntentionCompleted(boolean intentionCompleted) {
+		this.intentionCompleted = intentionCompleted;
 	}
 	public Duration getPlanDuration() {
 		Duration duration = Duration.ZERO;
@@ -318,6 +339,8 @@ public class UserPlan extends GenericUserObject {
 		this.planItems = new HashArrayList<PlanItem>();
 		this.goals = new HashArrayList<UserGoal>();
 		this.completionStatusMap = new HashMap<>();
+		this.obstacles = "";
+		this.copingPlan = "";
 	}
 	
 }

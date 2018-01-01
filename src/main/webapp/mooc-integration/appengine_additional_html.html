@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<div id="ajaxresult">Do something at least! Replace me! Now! Or later. Finally?</div>
+<div id="ajaxresult">Loading tracking data...</div>
 
 <script type="text/javascript">
 
@@ -78,7 +78,7 @@
 			  }
 		  });
 	      datatxt += "</table>";
-	      datatxt += "</div><div width='48%' style='float:right;'>";
+	      datatxt += "</div><div width='48%' style='float:left; margin-left: 20px;'>";
 	      datatxt += "<table id='feedbacktable2' class='tablesorter'>";
 	      datatxt += "<thead><tr><th>Raw attribute</th><th>Raw value</th></tr></thead>";
 		  $.each(data,function(key,val){
@@ -102,7 +102,7 @@
 
 	$('#trackerFrame').ready(function() {
 	  // run the first time; all subsequent calls will take care of themselves
-	  setTimeout(tickerRequest, 2000);
+	  setTimeout(tickerRequest, 20);
 	  
 //	  if ( $( "#stimulatedPlanningFrame" ).length ) {
 //		    $( "#stimulatedPlanningFrame" ).attr("src", "/GoalSetting.jsp");

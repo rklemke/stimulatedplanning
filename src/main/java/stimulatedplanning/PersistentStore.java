@@ -45,6 +45,7 @@ public class PersistentStore {
 
 		userEntity.setProperty("name", user.getName());
 		userEntity.setProperty("uid", user.getId());
+		userEntity.setProperty("treatmentGroup", user.isTreatmentGroup());
 
 		datastore.put(userEntity);
 
@@ -56,6 +57,10 @@ public class PersistentStore {
 		Entity userEntity = datastore.get(KeyFactory.createKey(User.class.getName(), userId));
 		if (userEntity != null) {
 			User user = new User((String) userEntity.getProperty("name"), userId);
+			user.setTreatmentGroup(readBooleanProperty(userEntity, "treatmentGroup", StimulatedPlanningFactory.random.nextBoolean()));
+			if (!userEntity.hasProperty("treatmentGroup")) {
+				writeUser(user);
+			}
 			return user;
 		}
 
@@ -258,9 +263,9 @@ public class PersistentStore {
 		ArrayList<GenericDescriptor> relationList = null;
 		if (genericEntity != null) {
 			if (CourseDescriptor.class.getName().equals(type)) {
-				CourseDescriptor course = new CourseDescriptor((String) genericEntity.getProperty("uid"),
-						(String) genericEntity.getProperty("title"), (String) genericEntity.getProperty("description"),
-						(String) genericEntity.getProperty("url"));
+				CourseDescriptor course = new CourseDescriptor(readStringProperty(genericEntity, "uid", null),
+						readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+						readStringProperty(genericEntity, "url", null));
 				relationList = readToManyRelation(course, "modules", ModuleDescriptor.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
 					course.addModule((ModuleDescriptor)generic);
@@ -271,24 +276,24 @@ public class PersistentStore {
 				}
 				return course;
 			} else if (ModuleDescriptor.class.getName().equals(type)) {
-				ModuleDescriptor module = new ModuleDescriptor((String) genericEntity.getProperty("uid"),
-						(String) genericEntity.getProperty("title"), (String) genericEntity.getProperty("description"),
-						(String) genericEntity.getProperty("url"));
+				ModuleDescriptor module = new ModuleDescriptor(readStringProperty(genericEntity,"uid", null),
+						readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+						readStringProperty(genericEntity, "url", null));
 				relationList = readToManyRelation(module, "lessons", LessonDescriptor.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
 					module.addLesson((LessonDescriptor)generic);
 				}
 				return module;
 			} else if (GoalDescriptor.class.getName().equals(type)) {
-				GoalDescriptor goal = new GoalDescriptor((String) genericEntity.getProperty("uid"),
-						(String) genericEntity.getProperty("title"), (String) genericEntity.getProperty("description"),
-						(String) genericEntity.getProperty("url"));
+				GoalDescriptor goal = new GoalDescriptor(readStringProperty(genericEntity, "uid", null),
+						readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+						readStringProperty(genericEntity, "url", null));
 				relationList = readToManyRelation(goal, "lessons", LessonDescriptor.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
 					goal.addLesson((LessonDescriptor)generic);
 				}
 				EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionGoals");
-				String keys = (String)genericEntity.getProperty("completionGoalKeys");
+				String keys = readStringProperty(genericEntity, "completionGoalKeys", null);
 				if (keys != null && keys.length()>0) {
 					keys = keys.replace("[", "").replace("]", "").replace(" ", "");
 					System.out.println("Reading completionGoals: " + keys);
@@ -305,30 +310,27 @@ public class PersistentStore {
 				
 				return goal;
 			} else if (LessonDescriptor.class.getName().equals(type)) {
-				LessonDescriptor lesson = new LessonDescriptor((String) genericEntity.getProperty("uid"),
-						(String) genericEntity.getProperty("title"), (String) genericEntity.getProperty("description"),
-						(String) genericEntity.getProperty("url"));
+				LessonDescriptor lesson = new LessonDescriptor(readStringProperty(genericEntity, "uid", null),
+						readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+						readStringProperty(genericEntity, "url", null));
 				relationList = readToManyRelation(lesson, "contents", ContentDescriptor.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
 					lesson.addContent((ContentDescriptor)generic);
 				}
 				return lesson;
 			} else if (ContentDescriptor.class.getName().equals(type)) {
-				ContentDescriptor content = new ContentDescriptor((String) genericEntity.getProperty("uid"),
-						(String) genericEntity.getProperty("title"), (String) genericEntity.getProperty("description"),
-						(String) genericEntity.getProperty("url"));
+				ContentDescriptor content = new ContentDescriptor(readStringProperty(genericEntity, "uid", null),
+						readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+						readStringProperty(genericEntity, "url", null));
 				return content;
 			} else if (UserPlan.class.getName().equals(type)) {
-				User user = getUser((String) genericEntity.getProperty("userid"));
-				CourseDescriptor course = (CourseDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("course"));				
-				UserPlan plan = new UserPlan((String) genericEntity.getProperty("uid"), user);
+				User user = getUser(readStringProperty(genericEntity, "userid", null));
+				CourseDescriptor course = (CourseDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "course", null));				
+				UserPlan plan = new UserPlan(readStringProperty(genericEntity, "uid", null), user);
 				plan.setCourse(course);
-				plan.setPlannedTimePerWeek((String) genericEntity.getProperty("plannedTimePerWeek"));
-				try {
-					plan.setAllCourseIntention((boolean) genericEntity.getProperty("isAllCourseIntention"));
-				} catch (Exception e) {
-					plan.setAllCourseIntention(false);
-				}
+				plan.setPlannedTimePerWeek(readStringProperty(genericEntity, "plannedTimePerWeek", null));
+				plan.setAllCourseIntention(readBooleanProperty(genericEntity, "isAllCourseIntention", false));
+				plan.setIntentionCompleted(readBooleanProperty(genericEntity, "intentionCompleted", false));
 				relationList = readToManyRelation(plan, "userGoals", UserGoal.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
 					plan.addGoal((UserGoal)generic);
@@ -350,10 +352,10 @@ public class PersistentStore {
 				}
 				return plan;
 			} else if (UserGoal.class.getName().equals(type)) {
-				User user = getUser((String) genericEntity.getProperty("userid"));
-				GoalDescriptor goal = (GoalDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("goal"));				
-				UserGoal userGoal = new UserGoal((String) genericEntity.getProperty("uid"), user, goal);
-				userGoal.setCompletionGoal((String) genericEntity.getProperty("completionGoal"));
+				User user = getUser(readStringProperty(genericEntity, "userid", null));
+				GoalDescriptor goal = (GoalDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "goal", null));				
+				UserGoal userGoal = new UserGoal(readStringProperty(genericEntity, "uid", null), user, goal);
+				userGoal.setCompletionGoal(readStringProperty(genericEntity, "completionGoal", null));
 				userGoal.setStatus(readStatus(genericEntity));
 				relationList = readToManyRelation(userGoal, "lessons", UserLesson.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
@@ -361,9 +363,9 @@ public class PersistentStore {
 				}
 				return userGoal;
 			} else if (UserLesson.class.getName().equals(type)) {
-				User user = getUser((String) genericEntity.getProperty("userid"));
-				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("lesson"));				
-				UserLesson userLesson = new UserLesson((String) genericEntity.getProperty("uid"), user, lesson);
+				User user = getUser(readStringProperty(genericEntity, "userid", null));
+				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));				
+				UserLesson userLesson = new UserLesson(readStringProperty(genericEntity, "uid", null), user, lesson);
 				userLesson.setStatus(readStatus(genericEntity));
 				relationList = readToManyRelation(userLesson, "contents", UserContent.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
@@ -371,34 +373,58 @@ public class PersistentStore {
 				}
 				return userLesson;
 			} else if (UserContent.class.getName().equals(type)) {
-				User user = getUser((String) genericEntity.getProperty("userid"));
-				ContentDescriptor content = (ContentDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("content"));				
-				UserContent userContent = new UserContent((String) genericEntity.getProperty("uid"), user, content);
+				User user = getUser(readStringProperty(genericEntity, "userid", null));
+				ContentDescriptor content = (ContentDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "content", null));				
+				UserContent userContent = new UserContent(readStringProperty(genericEntity, "uid", null), user, content);
 				userContent.setStatus(readStatus(genericEntity));
 				return userContent;
 			} else if (PlanItem.class.getName().equals(type)) {
-				User user = getUser((String) genericEntity.getProperty("userid"));
-				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject((String) genericEntity.getProperty("lesson"));
-				String jsonPlanItem = (String) genericEntity.getProperty("jsonPlanItem");
-				PlanItem planItem = new PlanItem((String) genericEntity.getProperty("uid"), user, lesson, jsonPlanItem);
+				User user = getUser(readStringProperty(genericEntity, "userid", null));
+				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));
+				String jsonPlanItem = readStringProperty(genericEntity, "jsonPlanItem", null);
+				PlanItem planItem = new PlanItem(readStringProperty(genericEntity, "uid", null), user, lesson, jsonPlanItem);
 				planItem.setStatus(readStatus(genericEntity));
 				planItem.setPlanStatus(readPlanStatus(genericEntity));
 				planItem.setPlanCompletionStatus(readPlanCompletionStatus(genericEntity));
-				if (planItem.trackPlanStatus()) {
-					writeDescriptor(planItem);
-				}
+				System.out.println("readDescriptor: planItem: pre trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
+				planItem.trackPlanStatus();
+				planItem.updateMapAndJson();
+				writeDescriptor(planItem);
+				System.out.println("readDescriptor: planItem: post trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
 				return planItem;
 			}
 		}
 
 		return null;
 	}
+	
+	protected static String readStringProperty(Entity genericEntity, String key, String defaultValue) {
+		String prop = (String)genericEntity.getProperty(key);
+		if (prop == null) {
+			prop = defaultValue;
+		}
+		return prop;
+	}
+
+	protected static boolean readBooleanProperty(Entity genericEntity, String key, boolean defaultValue) {
+		boolean prop;
+		try {
+			prop = (boolean) genericEntity.getProperty(key);
+		} catch (Exception e) {
+			prop = defaultValue;
+		}
+		return prop;
+	}
 
 	protected static LessonStatus readStatus(Entity genericEntity) {
+		System.out.println("readStatus 1: "+genericEntity.getProperties().toString());
 		if (genericEntity.hasProperty("status")) {
+			System.out.println("readStatus 2a: "+genericEntity.getProperty("status"));
 			LessonStatus status = LessonStatus.valueOf((String)genericEntity.getProperty("status"));
+			System.out.println("readStatus 2b: "+status);
 			return status;
 		} else {
+			System.out.println("readStatus 3: "+LessonStatus.INITIAL);
 			return LessonStatus.INITIAL;
 		}
 		
@@ -551,6 +577,10 @@ public class PersistentStore {
 			planEntity.setProperty("course", courseId);
 			planEntity.setProperty("plannedTimePerWeek", userPlan.getPlannedTimePerWeek());
 			planEntity.setProperty("isAllCourseIntention", userPlan.isAllCourseIntention());
+			planEntity.setProperty("obstacles", userPlan.getObstacles());
+			planEntity.setProperty("copingPlan", userPlan.getCopingPlan());
+			planEntity.setProperty("intentionCompleted", userPlan.isIntentionCompleted());
+			
 
 			EmbeddedEntity ee = new EmbeddedEntity();
 		    Map<String, Integer> map = userPlan.completionStatusMap;

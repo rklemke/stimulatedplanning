@@ -12,7 +12,8 @@ public class PlanItem extends GenericUserObject {
 	LessonStatus status;
 	PlanStatus planStatus;
 	PlanCompletionStatus planCompletionStatus;
-
+	
+	Map calendarItem;
 	LocalDate startDate;
 	LocalDate endDate;
 
@@ -30,7 +31,7 @@ public class PlanItem extends GenericUserObject {
 		this.jsonPlanItem = jsonPlanItem;
 
 		GsonBuilder builder = new GsonBuilder();
-		Map calendarItem = builder.create().fromJson(jsonPlanItem, Map.class);
+		calendarItem = builder.create().fromJson(jsonPlanItem, Map.class);
 		String startTime = (String)calendarItem.get("start");
 		String endTime = (String)calendarItem.get("end");
 		
@@ -74,7 +75,7 @@ public class PlanItem extends GenericUserObject {
 	
 	protected void initDates() {
 		GsonBuilder builder = new GsonBuilder();
-		Map calendarItem = builder.create().fromJson(jsonPlanItem, Map.class);
+		calendarItem = builder.create().fromJson(jsonPlanItem, Map.class);
 		String startTime = (String)calendarItem.get("start");
 		String endTime = (String)calendarItem.get("end");
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
@@ -92,7 +93,7 @@ public class PlanItem extends GenericUserObject {
 		return false;
 	}
 	
-	protected boolean trackPlanStatus() {
+	public boolean trackPlanStatus() {
 		boolean updated = false;
 		
 		LocalDate date = LocalDate.now();
@@ -100,7 +101,7 @@ public class PlanItem extends GenericUserObject {
 		switch (planCompletionStatus) {
 			case OPEN : 
 				if (date.isAfter(endDate)) {
-					if (status != LessonStatus.COMPLETED) {
+					if (!LessonStatus.COMPLETED.equals(status)) {
 						planCompletionStatus = PlanCompletionStatus.DELAYED;
 						updated = true;
 					} else {
@@ -108,31 +109,31 @@ public class PlanItem extends GenericUserObject {
 						updated = true;
 					}
 				} else if (date.isAfter(startDate)) {
-					if (status == LessonStatus.COMPLETED) {
+					if (LessonStatus.COMPLETED.equals(status)) {
 						planCompletionStatus = PlanCompletionStatus.COMPLETED_ON_TIME;
 						updated = true;
 					}
 				} else if (date.isBefore(startDate)) {
-					if (status == LessonStatus.COMPLETED) {
+					if (LessonStatus.COMPLETED.equals(status)) {
 						planCompletionStatus = PlanCompletionStatus.COMPLETED_EARLY;
 						updated = true;
 					}
 				}
 				break;
 			case DELAYED :
-				if (planStatus == PlanStatus.PLANNED) {
-					if (status == LessonStatus.COMPLETED) {
+				if (PlanStatus.PLANNED.equals(planStatus)) {
+					if (LessonStatus.COMPLETED.equals(status)) {
 						planCompletionStatus = PlanCompletionStatus.COMPLETED_DELAYED;
 						updated = true;
 					}
-				} else if (planStatus == PlanStatus.RE_PLANNED) {
+				} else if (PlanStatus.RE_PLANNED.equals(planStatus)) {
 					if (date.isAfter(endDate)) {
-						if (status == LessonStatus.COMPLETED) {
+						if (LessonStatus.COMPLETED.equals(status)) {
 							planCompletionStatus = PlanCompletionStatus.COMPLETED_DELAYED;
 							updated = true;
 						}
 					} else if (date.isAfter(startDate)) {
-						if (status == LessonStatus.COMPLETED) {
+						if (LessonStatus.COMPLETED.equals(status)) {
 							planCompletionStatus = PlanCompletionStatus.COMPLETED_ON_TIME;
 							updated = true;
 						} else {
@@ -140,7 +141,7 @@ public class PlanItem extends GenericUserObject {
 							updated = true;
 						}
 					} else if (date.isBefore(startDate)) {
-						if (status == LessonStatus.COMPLETED) {
+						if (LessonStatus.COMPLETED.equals(status)) {
 							planCompletionStatus = PlanCompletionStatus.COMPLETED_EARLY;
 							updated = true;
 						} else {
@@ -154,7 +155,27 @@ public class PlanItem extends GenericUserObject {
 				break;
 		}
 		
+		if (updated) {
+			updateMapAndJson();
+		}
+		
 		return updated;
+	}
+	
+	public void updateMapAndJson() {
+		if (status.equals(LessonStatus.COMPLETED)) {
+			calendarItem.put("class", new String[] {"plan-a", "plan-done"});
+			calendarItem.put("color", "#afafaf");
+		} else if (planCompletionStatus.equals(PlanCompletionStatus.DELAYED)) {
+			calendarItem.put("class", new String[] {"plan-a", "plan-late"});
+			calendarItem.put("color", "#cd0000");
+		} else {
+			calendarItem.put("class", new String[] {"plan-a", "plan-ok"});
+			calendarItem.put("color", "#3a87ad");
+		}
+		GsonBuilder builder = new GsonBuilder();
+		jsonPlanItem = builder.create().toJson(calendarItem);
+		System.out.println("Title: "+calendarItem.get("title")+", status: "+status+", planCompletionStatus: "+planCompletionStatus+", jsonPlanItem: "+jsonPlanItem);
 	}
 	
 
@@ -167,6 +188,7 @@ public class PlanItem extends GenericUserObject {
 		this.planCompletionStatus = PlanCompletionStatus.OPEN;
 		
 		initDates();
+//		trackPlanStatus();
 	}
 
 }

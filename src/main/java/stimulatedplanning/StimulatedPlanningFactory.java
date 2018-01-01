@@ -6,6 +6,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import stimulatedplanning.util.HashArrayList;
 
 public class StimulatedPlanningFactory {
 	public static final StimulatedPlanningFactory instance = new StimulatedPlanningFactory();
+	public static Random random = new Random();
 
 	private StimulatedPlanningFactory() {
 		// TODO Auto-generated constructor stub
@@ -239,6 +241,7 @@ public class StimulatedPlanningFactory {
 		}
 		if (user == null) {
 			user = new User(userName, userid);
+			user.setTreatmentGroup(random.nextBoolean());
 			if (!userGuest.equals(user.getName()) && !userUnknown.equals(userid)) {
 				try {
 					PersistentStore.writeUser(user);
@@ -404,7 +407,7 @@ public class StimulatedPlanningFactory {
 			userPlan = StimulatedPlanningFactory.getUserPlan(user, course);
 			session.setAttribute("userPlan", userPlan);
 		}
-		
+	
 		HashArrayList<GoalDescriptor> selectedGoals = new HashArrayList<GoalDescriptor>();
 		HashArrayList<LessonDescriptor> selectedLessons = new HashArrayList<LessonDescriptor>();
 

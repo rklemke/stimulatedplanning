@@ -9,10 +9,19 @@ Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 
 
 <!-- script src="https://code.jquery.com/jquery-1.12.4.js"></script /-->
+
+<!-- Pages with Planning Tool -->
+
+<iframe width="1100" height="550" id="feedbackFrame" src=""></iframe>
+<iframe width="1100" height="550" id="stimulatedPlanningFrame" src=""></iframe>
+<iframe width="1100" height="550" id="trackerFrame" src="/OpenEdx_TickerFrame.jsp"></iframe>
+
+
 <script type="text/javascript">
 	var timeoutInterval = 30000;
 	var userNameDefault = "Guest";
-	var pageUrl = window.location.href;
+	var userIdDefault = "unknown";
+	var pageUrlDefault = window.location.href;
 
 	function getUserName() {
 	  var tmpName = $('.label-username').html();
@@ -26,40 +35,68 @@ Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 	  return getUserName();
 	}
 
-	function tickerRequest() {
-	  var userName = getUserName();
-	  var userId = getUserId(); 
-	  $.ajax({
-	    dataType: 'jsonp',
-	    url: 'https://stimulatedplanning.appspot.com/DataTrackerServlet',
-	    method: 'POST',
-	    data: {
-		userName: userName,
-		userid: userId,
-		page: pageUrl
-	    }, 
-	    success: function(data) {
-		  var datatxt = "Tracker: OK";
-		  $.each(data,function(key,val){
-		     datatxt += " <BR> " + key + ": " + val;
-		  });
-		  $( '#ajaxresult' ).html(datatxt);
-	    },
-	    complete: function() {
-	      // Schedule the next request when the current one's complete
-	      setTimeout(tickerRequest, timeoutInterval);
-	    }
-	  });
+	function getPageUrl() {
+		var tmpId = $('#pageurl', window.parent.document).val();
+		if (tmpId == null) {
+		  tmpId = pageUrlDefault;
+		}
+		return tmpId;
 	}
+	
+	function tickerRequest() {
+		  var userName = getUserName();
+		  var userId = getUserId(); 
+		  var pageUrl = getPageUrl(); 
+		  $.ajax({
+		    dataType: 'jsonp',
+		    url: '/DataTrackerServlet',
+		    method: 'POST',
+		    data: {
+			userName: userName,
+			userid: userId,
+			page: pageUrl
+		    }, 
+		    success: function(data) {
+			  var datatxt = "<div width='48%' style='float:left;'>";
+		      datatxt += "<table id='feedbacktable' class='tablesorter'>";
+		      datatxt += "<thead><tr><th>Tracked attribute</th><th>Tracked value</th></tr></thead>";
+			  $.each(data,function(key,val){
+				  if (key.startsWith("calc")) {
+					  val += " %";
+					  datatxt += "<tr><td align='top'>" + key + "</td><td align='top'>" + val + "</td></tr>";
+				  }
+			  });
+		      datatxt += "</table>";
+		      datatxt += "</div><div width='48%' style='float:left; margin-left: 20px;'>";
+		      datatxt += "<table id='feedbacktable2' class='tablesorter'>";
+		      datatxt += "<thead><tr><th>Raw attribute</th><th>Raw value</th></tr></thead>";
+			  $.each(data,function(key,val){
+				  if (!key.startsWith("calc")) {
+					  datatxt += "<tr><td>" + key + "</td><td>" + val + "</td></tr>";
+				  }
+			  });
+		      datatxt += "</table>";
+		      datatxt += "</div>";
+			  $( '#ajaxresult' ).html(datatxt);
+			  $( '#feedbacktable' ).tablesorter( {sortList: [[0,0], [1,0]]} );
+			  $( '#feedbacktable2' ).tablesorter( {sortList: [[0,0], [1,0]]} );
+		    },
+		    complete: function() {
+		      // Schedule the next request when the current one's complete
+		      timeoutInterval += timeoutInterval; // get slower, when user just stays on page.
+		      setTimeout(tickerRequest, timeoutInterval);
+		    }
+		  });
+		}
 
-	$(document).ready(function() {
-	  // run the first time; all subsequent calls will take care of themselves
-	  setTimeout(tickerRequest, 2000);
-	  
-	  if ( $( "#stimulatedPlanningFrame" ).length ) {
-		    $( "#stimulatedPlanningFrame" ).attr("src", "https://stimulatedplanning.appspot.com/GoalSetting.jsp");
-		}	  
-	});
+		$('#trackerFrame').ready(function() {
+		  // run the first time; all subsequent calls will take care of themselves
+		  setTimeout(tickerRequest, 20);
+		  
+//		  if ( $( "#stimulatedPlanningFrame" ).length ) {
+//			    $( "#stimulatedPlanningFrame" ).attr("src", "/GoalSettingServlet");
+//			}	  
+		});
 
 </script>
 
