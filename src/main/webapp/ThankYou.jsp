@@ -56,13 +56,14 @@
 <form id="thankYouForm" method="POST" action="ThankYouServlet">
 	<h2>Thank you for your participation</h2>
 	<p>You are now well prepared to follow your course!</p>
+	<p>You can now use the main navigation of the course to start with your activities.</p>
 	<div class="ui-widget ui-widget-content ui-wrapper">
 		<p>Maybe a nice picture here?</p>
 	</div>
-	<div class="confirm">
+<!-- 	<div class="confirm">
 		<button type="submit" id="next" name="submit" value="Next" >Next</button>
 	</div>
-	
+ -->	
 </form>
 </div>
 

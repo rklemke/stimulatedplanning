@@ -18,8 +18,8 @@
 </head>
 <body>
 <div class="label-username"><%= user.getName() %></div>
-<iframe width="1100" height="600" id="stimulatedPlanningFrame" src=""></iframe>
-<iframe width="1100" height="50" id="trackerFrame" src="/OpenEdx_TickerFrame.jsp"></iframe>
+<iframe width="1100" height="600" id="stimulatedPlanningFrame" src="/GoalSettingServlet"></iframe>
+<a href="/Test_UserSelection.jsp">Home</a>
 
 </body>
 </html>

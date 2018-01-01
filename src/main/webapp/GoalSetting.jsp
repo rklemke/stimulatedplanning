@@ -262,17 +262,20 @@
 		if (userPlan.isAllCourseIntention()) {
 			%>
 			<li>Your intention is to complete all the course.</li>
-			<% } else if (selectedGoals != null && selectedGoals.size() > 0) { %>
+			<% } else if (selectedGoals != null && selectedGoals.size() > 0) { 
+					ListIterator<UserGoal> userGoalIterator = userPlan.getGoals(); 
+					%>
 				<li>Your intentions:</li><ul> <% 
-					for (GoalDescriptor userGoal : selectedGoals) {
-					%><li><%= separator+userGoal.getTitle() %><%
+					while (userGoalIterator.hasNext()) {
+						UserGoal userGoal = userGoalIterator.next();
+					%><li><%= separator+userGoal.getGoalDescriptor().getTitle() %><%
 						//separator = ", ";
 						if (userGoal.getLessons().hasNext()) {
 							%> (<%
 							String separator2 = "";
-							ListIterator<LessonDescriptor> lessonIterator = userGoal.getLessons();
+							ListIterator<UserLesson> lessonIterator = userGoal.getLessons();
 							while (lessonIterator.hasNext()) {
-								LessonDescriptor lesson = lessonIterator.next();
+								LessonDescriptor lesson = lessonIterator.next().getLesson();
 								%><%= separator2+lesson.getTitle() %><%
 								separator2 = ", ";
 							}

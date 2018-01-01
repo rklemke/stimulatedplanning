@@ -1,25 +1,3 @@
-<!-- 
-Open EdX additional HTML content
-Login to Open EdX as author
-
-On each content page: add a Raw HTML content block and paste the text below.
-
-Paste in appropriate sections (adapt URL to DataTrackerServlet below):
--->
-
-
-<!-- script src="https://code.jquery.com/jquery-1.12.4.js"></script /-->
-
-<!-- Pages with Planning Tool -->
-
-<iframe width="1100" height="600" id="feedbackFrame" src=""></iframe>
-
-<!-- Pages with Feedback -->
-
-<iframe width="1100" height="600" id="stimulatedPlanningFrame" src=""></iframe>
-
-<!-- Pages with Tracker -->
-
 <link rel="stylesheet" href="https://stimulatedplanning.appspot.com/tablesorter/themes/blue/style.css">
 <script src="https://stimulatedplanning.appspot.com/tablesorter/jquery.tablesorter.min.js"></script>
 
@@ -106,7 +84,7 @@ Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 		  });
 		}
 
-		$('#trackerFrame').ready(function() {
+		$('#ajaxresult').ready(function() {
 		  // run the first time; all subsequent calls will take care of themselves
 		  setTimeout(tickerRequest, 20);
 		  
@@ -119,18 +97,3 @@ Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 
 
 <div id="ajaxresult">Loading content.</div>
-
-
-
-
-<script type="text/javascript">
-	$('#loadTracker').ready(function() {
-		// run the first time; all subsequent calls will take care of themselves
-		$('#loadTracker').load( "https://stimulatedplanning.appspot.com/mooc-integration/openedx_tracker.html" );
-	});
-
-</script>
-<div id="loadTracker">Loading ...</div>
-
-
-
