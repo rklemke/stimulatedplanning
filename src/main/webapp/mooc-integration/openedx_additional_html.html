@@ -65,12 +65,13 @@ Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 		    success: function(data) {
 		    	if ($('#stimulatedPlanningFrame').length) {
 		    		$("#stimulatedPlanningFrame").attr("src", "https://stimulatedplanning.appspot.com/GoalSettingServlet");
-					$( '#ajaxresult' ).html('Connected.');
+					$( '#ajaxresult' ).html('Connected. '+userName);
 		    	} else if ($('#feedbackFrame').length) {
 		    		$("#feedbackFrame").attr("src", "https://stimulatedplanning.appspot.com/FeedbackFrame.jsp");
-					$( '#ajaxresult' ).html('Connected.');
+					$( '#ajaxresult' ).html('Connected. '+userName);
 		    	} else {
 					  var datatxt = "<div width='48%' style='float:left;'>";
+				      datatxt += userName;
 				      datatxt += "<table id='feedbacktable' class='tablesorter'>";
 				      datatxt += "<thead><tr><th>Tracked attribute</th><th>Tracked value</th></tr></thead>";
 					  $.each(data,function(key,val){

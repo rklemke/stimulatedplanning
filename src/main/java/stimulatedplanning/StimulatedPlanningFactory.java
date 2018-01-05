@@ -351,6 +351,9 @@ public class StimulatedPlanningFactory {
 	
 	public static HttpSession initializeSession(HttpServletRequest request, HttpServletResponse response) {
 		HttpSession session = request.getSession();
+		
+		String loginData = "";
+		
 		String userNameR = request.getParameter("userName");
 		String useridR = request.getParameter("userid");
 
@@ -360,11 +363,13 @@ public class StimulatedPlanningFactory {
 		}
 		
 //		System.out.println("userNameR: "+userNameR+", useridR: "+useridR);
+		loginData += " | userNameR: "+userNameR+", useridR: "+useridR;
 		
 		String userName = (String)session.getAttribute("userName");
 		String userid = (String)session.getAttribute("userid");
 		
 //		System.out.println("userName: "+userName+", userid: "+userid);
+		loginData += " | userName: "+userName+", userid: "+userid;
 
 		if (userName == null || userid == null 
 				|| (!userName.equals(userNameR) && !userNameR.equals(userGuest)) 
@@ -376,13 +381,16 @@ public class StimulatedPlanningFactory {
 		}
 
 //		System.out.println("userName(2): "+userName+", userid(2): "+userid);
+		loginData += " | userName(2): "+userName+", userid(2): "+userid;
 
 		User user = (User)session.getAttribute("user");
-//		if (user != null) {
+		if (user != null) {
 //			System.out.println("user.name(1): "+user.getName()+", user.id(1): "+user.getId());
-//		} else {
+			loginData += " | user.name(1): "+user.getName()+", user.id(1): "+user.getId();
+		} else {
 //			System.out.println("user.name(1): null, user.id(1): null");
-//		}
+			loginData += " | user.name(1): null, user.id(1): null";
+		}
 		
 		if (user == null 
 				|| ((userid != null && !userid.equals(user.getId()) && !userid.equals(userUnknown)) 
@@ -392,6 +400,7 @@ public class StimulatedPlanningFactory {
 		}
 		
 		System.out.println("user.name: "+user.getName()+", user.id: "+user.getId());
+		loginData += " | user.name: "+user.getName()+", user.id: "+user.getId();
 
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
 		if (course == null) {
@@ -420,6 +429,7 @@ public class StimulatedPlanningFactory {
 		
 		session.setAttribute("selectedGoals", selectedGoals);
 		session.setAttribute("selectedLessons", selectedLessons);
+		session.setAttribute("loginData", loginData);
 
 		return session;
 	}

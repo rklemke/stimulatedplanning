@@ -15,7 +15,7 @@ public class UserPlan extends GenericUserObject {
 	protected HashArrayList<PlanItem> planItems;
 	protected String plannedTimePerWeek;
 	protected boolean allCourseIntention = false;
-	HashMap<String, Integer> completionStatusMap;
+	HashMap<String, String> completionStatusMap;
 	protected String obstacles;
 	protected String copingPlan;
 	protected boolean intentionCompleted = false;
@@ -103,10 +103,10 @@ public class UserPlan extends GenericUserObject {
 		this.allCourseIntention = allCourseIntention;
 	}
 
-	public HashMap<String, Integer> getCompletionStatusMap() {
+	public HashMap<String, String> getCompletionStatusMap() {
 		return completionStatusMap;
 	}
-	public void setCompletionStatusMap(HashMap<String, Integer> completionStatusMap) {
+	public void setCompletionStatusMap(HashMap<String, String> completionStatusMap) {
 		this.completionStatusMap = completionStatusMap;
 	}
 	public String getObstacles() {
@@ -271,46 +271,54 @@ public class UserPlan extends GenericUserObject {
 		int userPlannedRate = (plannableItems > 0 ? (100 * planAchievementPlanned / plannableItems) : 0);
 		int userRePlannedRate = (plannableItems > 0 ? (100 * planAchievementRePlanned / plannableItems) : 0);
 		
-		completionStatusMap.put("raw.courseGoals", Integer.valueOf(courseGoals));
-		completionStatusMap.put("raw.courseLessons", Integer.valueOf(courseLessons));
-		completionStatusMap.put("raw.courseContents", Integer.valueOf(courseContents));
-		completionStatusMap.put("raw.userGoalTotal", Integer.valueOf(userGoalTotal));
-		completionStatusMap.put("raw.plannedItemsTotal", Integer.valueOf(plannedItemsTotal));
-		completionStatusMap.put("raw.plannableItems", Integer.valueOf(plannableItems));
-		completionStatusMap.put("raw.userContentItems", Integer.valueOf(userContentItems));
-		completionStatusMap.put("raw.achievedGoals", Integer.valueOf(achievedGoals));
-		completionStatusMap.put("raw.achievedLessons", Integer.valueOf(achievedLessons));
-		completionStatusMap.put("raw.achievedContents", Integer.valueOf(achievedContents));
-		completionStatusMap.put("raw.planAchievementInitial", Integer.valueOf(planAchievementInitial));
-		completionStatusMap.put("raw.planAchievementStarted", Integer.valueOf(planAchievementStarted));
-		completionStatusMap.put("raw.planAchievementCompleted", Integer.valueOf(planAchievementCompleted));
-		completionStatusMap.put("raw.planAchievementCompEarly", Integer.valueOf(planAchievementCompEarly));
-		completionStatusMap.put("raw.planAchievementCompOnTime", Integer.valueOf(planAchievementCompOnTime));
-		completionStatusMap.put("raw.planAchievementCompLate", Integer.valueOf(planAchievementCompLate));
-		completionStatusMap.put("raw.planAchievementOpen", Integer.valueOf(planAchievementOpen));
-		completionStatusMap.put("raw.planAchievementDelayed", Integer.valueOf(planAchievementDelayed));
-		completionStatusMap.put("raw.planAchievementPlanned", Integer.valueOf(planAchievementPlanned));
-		completionStatusMap.put("raw.planAchievementRePlanned", Integer.valueOf(planAchievementRePlanned));
+		completionStatusMap.put("raw.courseGoals", String.valueOf(courseGoals));
+		completionStatusMap.put("raw.courseLessons", String.valueOf(courseLessons));
+		completionStatusMap.put("raw.courseContents", String.valueOf(courseContents));
+		completionStatusMap.put("raw.userGoalTotal", String.valueOf(userGoalTotal));
 		
-		completionStatusMap.put("calc.overallGoalAchievementRate", Integer.valueOf(overallGoalAchievementRate));
-		completionStatusMap.put("calc.overallLessonAchievementRate", Integer.valueOf(overallLessonAchievementRate));
-		completionStatusMap.put("calc.overallContentAchievementRate", Integer.valueOf(overallContentAchievementRate));
+		if (getUser().isTreatmentGroup()) {
+			completionStatusMap.put("raw.plannedItemsTotal", String.valueOf(plannedItemsTotal));
+			completionStatusMap.put("raw.plannableItems", String.valueOf(plannableItems));
+		}
+		completionStatusMap.put("raw.userContentItems", String.valueOf(userContentItems));
+		completionStatusMap.put("raw.achievedGoals", String.valueOf(achievedGoals));
+		completionStatusMap.put("raw.achievedLessons", String.valueOf(achievedLessons));
+		completionStatusMap.put("raw.achievedContents", String.valueOf(achievedContents));
+		
+		if (getUser().isTreatmentGroup()) {
+			completionStatusMap.put("raw.planAchievementInitial", String.valueOf(planAchievementInitial));
+			completionStatusMap.put("raw.planAchievementStarted", String.valueOf(planAchievementStarted));
+			completionStatusMap.put("raw.planAchievementCompleted", String.valueOf(planAchievementCompleted));
+			completionStatusMap.put("raw.planAchievementCompEarly", String.valueOf(planAchievementCompEarly));
+			completionStatusMap.put("raw.planAchievementCompOnTime", String.valueOf(planAchievementCompOnTime));
+			completionStatusMap.put("raw.planAchievementCompLate", String.valueOf(planAchievementCompLate));
+			completionStatusMap.put("raw.planAchievementOpen", String.valueOf(planAchievementOpen));
+			completionStatusMap.put("raw.planAchievementDelayed", String.valueOf(planAchievementDelayed));
+			completionStatusMap.put("raw.planAchievementPlanned", String.valueOf(planAchievementPlanned));
+			completionStatusMap.put("raw.planAchievementRePlanned", String.valueOf(planAchievementRePlanned));
+		}
+		
+		completionStatusMap.put("calc.overallGoalAchievementRate", String.valueOf(overallGoalAchievementRate));
+		completionStatusMap.put("calc.overallLessonAchievementRate", String.valueOf(overallLessonAchievementRate));
+		completionStatusMap.put("calc.overallContentAchievementRate", String.valueOf(overallContentAchievementRate));
 
-		completionStatusMap.put("calc.userGoalAchievementRate", Integer.valueOf(userGoalAchievementRate));
-		completionStatusMap.put("calc.userLessonAchievementRate", Integer.valueOf(userLessonAchievementRate));
-		completionStatusMap.put("calc.userContentAchievementRate", Integer.valueOf(userContentAchievementRate));
+		completionStatusMap.put("calc.userGoalAchievementRate", String.valueOf(userGoalAchievementRate));
+		completionStatusMap.put("calc.userLessonAchievementRate", String.valueOf(userLessonAchievementRate));
+		completionStatusMap.put("calc.userContentAchievementRate", String.valueOf(userContentAchievementRate));
 
-		completionStatusMap.put("calc.userPlanAchievementRate", Integer.valueOf(userPlanAchievementRate));
-		completionStatusMap.put("calc.userPlanOpenRate", Integer.valueOf(userPlanOpenRate));
-		completionStatusMap.put("calc.userPlanDelayedRate", Integer.valueOf(userPlanDelayedRate));
-
-		completionStatusMap.put("calc.userPlanAchEarlyRate", Integer.valueOf(userPlanAchEarlyRate));
-		completionStatusMap.put("calc.userPlanAchOnTimeRate", Integer.valueOf(userPlanAchOnTimeRate));
-		completionStatusMap.put("calc.userPlanAchLateRate", Integer.valueOf(userPlanAchLateRate));
-
-		completionStatusMap.put("calc.userPlannedTotalRate", Integer.valueOf(userPlannedTotalRate));
-		completionStatusMap.put("calc.userPlannedRate", Integer.valueOf(userPlannedRate));
-		completionStatusMap.put("calc.userRePlannedRate", Integer.valueOf(userRePlannedRate));
+		if (getUser().isTreatmentGroup()) {
+			completionStatusMap.put("calc.userPlanAchievementRate", String.valueOf(userPlanAchievementRate));
+			completionStatusMap.put("calc.userPlanOpenRate", String.valueOf(userPlanOpenRate));
+			completionStatusMap.put("calc.userPlanDelayedRate", String.valueOf(userPlanDelayedRate));
+		
+			completionStatusMap.put("calc.userPlanAchEarlyRate", String.valueOf(userPlanAchEarlyRate));
+			completionStatusMap.put("calc.userPlanAchOnTimeRate", String.valueOf(userPlanAchOnTimeRate));
+			completionStatusMap.put("calc.userPlanAchLateRate", String.valueOf(userPlanAchLateRate));
+			
+			completionStatusMap.put("calc.userPlannedTotalRate", String.valueOf(userPlannedTotalRate));
+			completionStatusMap.put("calc.userPlannedRate", String.valueOf(userPlannedRate));
+			completionStatusMap.put("calc.userRePlannedRate", String.valueOf(userRePlannedRate));
+		}
 
 
 	}

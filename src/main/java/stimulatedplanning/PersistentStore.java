@@ -346,7 +346,7 @@ public class PersistentStore {
 					for (String key : keys) {
 						Object val = map.get(key);
 						if (val != null && val instanceof Integer) {
-							plan.completionStatusMap.put(key, (Integer)val);
+							plan.completionStatusMap.put(key, (String)val);
 						}
 					}
 				}
@@ -583,7 +583,7 @@ public class PersistentStore {
 			
 
 			EmbeddedEntity ee = new EmbeddedEntity();
-		    Map<String, Integer> map = userPlan.completionStatusMap;
+		    Map<String, String> map = userPlan.completionStatusMap;
 
 		    for (String key : map.keySet()) { // TODO: maybe there is a more efficient way of solving this
 		        ee.setProperty(key, map.get(key));

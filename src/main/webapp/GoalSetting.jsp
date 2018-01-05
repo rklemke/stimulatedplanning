@@ -146,7 +146,8 @@
 
 <!--  <div class="ui-frame">  -->
 <form id="goalSelectForm" method="POST" action="GoalSettingServlet">
-<h2>Your intentions with this course</h2>
+<h2>Your intentions with this course (<%= user.getName() %>)</h2>
+<p><%= session.getAttribute("loginData") %></p>
 <% if(!userPlan.isIntentionCompleted() && "intention.topic".equals(intentionStep)) { %>
 <p>Please indicate your intentions with respect to this course's content offer.</p>
 <div id="tabs">
