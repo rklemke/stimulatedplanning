@@ -1,99 +1,66 @@
 <link rel="stylesheet" href="https://stimulatedplanning.appspot.com/tablesorter/themes/blue/style.css">
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://stimulatedplanning.appspot.com/tablesorter/jquery.tablesorter.min.js"></script>
 
 <script type="text/javascript">
 	var timeoutInterval = 30000;
-	var userNameDefault = "Guest";
-	var userIdDefault = "unknown";
+	var userNameDefault = "Darth-1";
+	var userIdDefault = "r1";
 	var pageUrlDefault = window.location.href;
 
 	function getUserName() {
-	  var tmpName = $('.label-username').html();
-	  if (tmpName == null) {
-	    tmpName = userNameDefault;
-	  }
-	  return tmpName;
+		return userNameDefault;
 	}
 
 	function getUserId() {
-	  return getUserName();
+	  return userIdDefault;
 	}
 
 	function getPageUrl() {
-		var tmpId = $('#pageurl', window.parent.document).val();
-		if (tmpId == null) {
-		  tmpId = pageUrlDefault;
-		}
-		return tmpId;
+		return pageUrlDefault;
 	}
-	
+
 	function tickerRequest() {
 		  var userName = getUserName();
 		  var userId = getUserId(); 
 		  var pageUrl = getPageUrl(); 
 		  $.ajax({
 		    dataType: 'jsonp',
-		    url: 'https://stimulatedplanning.appspot.com/DataTrackerServlet',
+		    url: '/DataTrackerServlet',
 		    method: 'POST',
 		    data: {
-			userName: userName,
-			userid: userId,
-			page: pageUrl
+				userName: userName,
+				userid: userId,
+				page: pageUrl
 		    }, 
 		    success: function(data) {
-		    	if ($('#stimulatedPlanningFrame').length) {
-		    		$("#stimulatedPlanningFrame").attr("src", "https://stimulatedplanning.appspot.com/GoalSettingServlet");
-					$( '#ajaxresult' ).html('Connected.');
-		    	} else if ($('#feedbackFrame').length) {
-		    		$("#feedbackFrame").attr("src", "https://stimulatedplanning.appspot.com/FeedbackFrame.jsp");
-					$( '#ajaxresult' ).html('Connected.');
-		    	} else {
-					  var datatxt = "<div width='48%' style='float:left;'>";
-				      datatxt += "<table id='feedbacktable' class='tablesorter'>";
-				      datatxt += "<thead><tr><th>Tracked attribute</th><th>Tracked value</th></tr></thead>";
-					  $.each(data,function(key,val){
-						  if (key.startsWith("calc")) {
-							  val += " %";
-							  datatxt += "<tr><td align='top'>" + key + "</td><td align='top'>" + val + "</td></tr>";
-						  }
-					  });
-				      datatxt += "</table>";
-				      datatxt += "</div><div width='48%' style='float:left; margin-left: 20px;'>";
-				      datatxt += "<table id='feedbacktable2' class='tablesorter'>";
-				      datatxt += "<thead><tr><th>Raw attribute</th><th>Raw value</th></tr></thead>";
-					  $.each(data,function(key,val){
-						  if (!key.startsWith("calc")) {
-							  datatxt += "<tr><td>" + key + "</td><td>" + val + "</td></tr>";
-						  }
-					  });
-				      datatxt += "</table>";
-				      datatxt += "</div>";
-					  $( '#ajaxresult' ).html(datatxt);
-					  $( '#feedbacktable' ).tablesorter( {sortList: [[0,0], [1,0]]} );
-					  $( '#feedbacktable2' ).tablesorter( {sortList: [[0,0], [1,0]]} );
-		    	}
+//		    	alert("Success! "+data.feedbackFrame);
+				var datatxt = data.feedbackFrame;
+//			      datatxt += "<table id='feedbacktable2' class='tablesorter'>";
+//			      datatxt += "<thead><tr><th>Raw attribute</th><th>Raw value</th></tr></thead>";
+//				  $.each(data,function(key,val){
+//					  if (!key.startsWith("feedbackFrame")) {
+//						  datatxt += "<tr><td>" + key + "</td><td>" + val + "</td></tr>";
+//					  }
+//				  });
+//			      datatxt += "</table>";
+				$( '#ajaxresult' ).html(datatxt);
 		    },
 		    complete: function() {
-		      // Schedule the next request when the current one's complete
-		      
-		    	if (!$('#stimulatedPlanningFrame').length && !$('#feedbackFrame').length) {
-				      timeoutInterval += timeoutInterval; // get slower, when user just stays on page.
-				      setTimeout(tickerRequest, timeoutInterval);
-		    	}
+				setTimeout(tickerRequest, timeoutInterval);
 		    }
 		  });
 		}
 
-		$('#ajaxresult').ready(function() {
-		  // run the first time; all subsequent calls will take care of themselves
-		  setTimeout(tickerRequest, 20);
-		  
-//		  if ( $( "#stimulatedPlanningFrame" ).length ) {
-//			    $( "#stimulatedPlanningFrame" ).attr("src", "/GoalSettingServlet");
-//			}	  
+		$( document ).ready(function() {
+			setTimeout(tickerRequest, 20);
 		});
+	
+	
 
 </script>
 
 
-<div id="ajaxresult">Loading content.</div>
+<div id="ajaxresult">Loading content ...</div>

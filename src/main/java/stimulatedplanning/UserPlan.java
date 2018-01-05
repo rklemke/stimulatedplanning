@@ -271,6 +271,9 @@ public class UserPlan extends GenericUserObject {
 		int userPlannedRate = (plannableItems > 0 ? (100 * planAchievementPlanned / plannableItems) : 0);
 		int userRePlannedRate = (plannableItems > 0 ? (100 * planAchievementRePlanned / plannableItems) : 0);
 		
+		int userPlanNotPlanned = plannableItems - plannedItemsTotal;
+		int userPlanNotPlannedRate = (plannableItems > 0 ? 100 * userPlanNotPlanned / plannableItems : 0);
+		
 		completionStatusMap.put("raw.courseGoals", String.valueOf(courseGoals));
 		completionStatusMap.put("raw.courseLessons", String.valueOf(courseLessons));
 		completionStatusMap.put("raw.courseContents", String.valueOf(courseContents));
@@ -318,6 +321,9 @@ public class UserPlan extends GenericUserObject {
 			completionStatusMap.put("calc.userPlannedTotalRate", String.valueOf(userPlannedTotalRate));
 			completionStatusMap.put("calc.userPlannedRate", String.valueOf(userPlannedRate));
 			completionStatusMap.put("calc.userRePlannedRate", String.valueOf(userRePlannedRate));
+			
+			completionStatusMap.put("calc.userPlanNotPlanned", String.valueOf(userPlanNotPlanned));
+			completionStatusMap.put("calc.userPlanNotPlannedRate", String.valueOf(userPlanNotPlannedRate));
 		}
 
 

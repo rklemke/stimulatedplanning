@@ -2,12 +2,15 @@
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
@@ -48,8 +51,30 @@ public class DataTrackerServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+        HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(response) {
+            private final StringWriter sw = new StringWriter();
+
+            @Override
+            public PrintWriter getWriter() throws IOException {
+                return new PrintWriter(sw);
+            }
+
+            @Override
+            public String toString() {
+                return sw.toString();
+            }
+        };
+        
+        request.getRequestDispatcher("FeedbackFrame.jsp").include(request, responseWrapper);
+        String content = responseWrapper.toString();
+
+        HashMap<String, String> completionStatusMap = userPlan.getCompletionStatusMap();
+        completionStatusMap.put("feedbackFrame", content);
+        System.out.println("FeedbackFrame: "+content);
+		
 		Gson gson = new Gson();
-		String jsonObject = gson.toJson(userPlan.getCompletionStatusMap());
+		String jsonObject = gson.toJson(completionStatusMap);
 
 		String callback = request.getParameter("callback");
 		if (callback != null && !"".equals(callback)) {
