@@ -62,7 +62,7 @@
 		<tr> <!-- Calendar row -->
 			<td>
 				<a href="https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/courseware/c440e614880f44cab61666f5783994c3/9c1b1985a20e4289b02f5e95c61e4485/?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%409c1b1985a20e4289b02f5e95c61e4485">
-					<img src="/img/calendar.png" height="32">
+					<img src="https://stimulatedplanning.appspot.com/img/calendar.png" height="32">
 				</a>
 			</td>
 			<td width="100"><div id="progressbar1"><div class="progress-label"><%= completionStatusMap.get("calc.userPlannedTotalRate") %> %</div></div></td>
@@ -71,7 +71,7 @@
 		<tr> <!-- Items completed row -->
 			<td>
 				<a href="https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/courseware/c440e614880f44cab61666f5783994c3/9c1b1985a20e4289b02f5e95c61e4485/?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%409c1b1985a20e4289b02f5e95c61e4485">
-					<img src="/img/onTime_image.png" height="32">
+					<img src="https://stimulatedplanning.appspot.com/img/onTime_image.png" height="32">
 				</a>
 			</td>
 			<td><div id="progressbar2"><div class="progress-label"><%= completionStatusMap.get("calc.userPlanAchievementRate") %> %</div></div></td>
@@ -80,7 +80,7 @@
 		<tr> <!-- Items delayed row -->
 			<td>
 				<a href="https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/courseware/c440e614880f44cab61666f5783994c3/9c1b1985a20e4289b02f5e95c61e4485/?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%409c1b1985a20e4289b02f5e95c61e4485">
-					<img src="/img/DelayImage.png" height="32">
+					<img src="https://stimulatedplanning.appspot.com/img/DelayImage.png" height="32">
 				</a>
 			</td>
 			<td><div id="progressbar3"><div class="progress-label"><%= completionStatusMap.get("calc.userPlanDelayedRate") %> %</div></div></td>
@@ -89,7 +89,7 @@
 		<tr> <!-- Items delayed row -->
 			<td>
 				<a href="https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/courseware/c440e614880f44cab61666f5783994c3/9c1b1985a20e4289b02f5e95c61e4485/?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%409c1b1985a20e4289b02f5e95c61e4485">
-					<img src="/img/planAgainImage.png" height="32">
+					<img src="https://stimulatedplanning.appspot.com/img/planAgainImage.png" height="32">
 				</a>
 			</td>
 			<td><div id="progressbar4"><div class="progress-label"><%= completionStatusMap.get("calc.userPlanNotPlannedRate") %> %</div></div></td>
