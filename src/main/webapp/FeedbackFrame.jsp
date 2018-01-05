@@ -51,7 +51,7 @@
         value: <%= completionStatusMap.get("calc.userPlanDelayedRate") %>
       });
     $( "#progressbar4" ).progressbar({
-        value: <%= completionStatusMap.get("calc.userPlanDelayedRate") %>
+        value: <%= completionStatusMap.get("calc.userPlanNotPlannedRate") %>
       });
   } );
   </script>
@@ -66,7 +66,7 @@
 				</a>
 			</td>
 			<td width="100"><div id="progressbar1"><div class="progress-label"><%= completionStatusMap.get("calc.userPlannedTotalRate") %> %</div></div></td>
-			<td>You intend to complete <%= completionStatusMap.get("raw.plannableItems") %> activities of this course. You have planned <%= completionStatusMap.get("raw.plannedItemsTotal") %> of them.</td>
+			<td>You have planned <%= completionStatusMap.get("raw.plannedItemsTotal") %> of the <%= completionStatusMap.get("raw.plannableItems") %> activities you intended to complete in this course.</td>
 		</tr>
 		<tr> <!-- Items completed row -->
 			<td>
@@ -84,7 +84,7 @@
 				</a>
 			</td>
 			<td><div id="progressbar3"><div class="progress-label"><%= completionStatusMap.get("calc.userPlanDelayedRate") %> %</div></div></td>
-			<td>You have not yet completed <%= completionStatusMap.get("raw.planAchievementDelayed") %> of your <%= completionStatusMap.get("raw.plannedItemsTotal") %> planned activities at their planned time.</td>
+			<td>You are late on <%= completionStatusMap.get("raw.planAchievementDelayed") %> of your <%= completionStatusMap.get("raw.plannedItemsTotal") %> planned activities.</td>
 		</tr>
 		<tr> <!-- Items delayed row -->
 			<td>
@@ -93,7 +93,7 @@
 				</a>
 			</td>
 			<td><div id="progressbar4"><div class="progress-label"><%= completionStatusMap.get("calc.userPlanNotPlannedRate") %> %</div></div></td>
-			<td>You have not yet planned <%= completionStatusMap.get("calc.userPlanNotPlanned") %> of your <%= completionStatusMap.get("raw.plannableItems") %> intended activities at their planned time. You can re-plan to improve plan accuracy.</td>
+			<td>You have not yet planned <%= completionStatusMap.get("calc.userPlanNotPlanned") %> of your <%= completionStatusMap.get("raw.plannableItems") %> intended activities. You can re-plan to improve your plan accuracy (click the icon on the left to access the calendar).</td>
 		</tr>
 	</table>
 <% } %>

@@ -59,6 +59,10 @@ public class StimulatedPlanningServlet extends HttpServlet {
 					String id = (String)evt.get("id");
 					
 					if (id != null && !"".equals(id)) {
+						if (id.startsWith("late_")) {
+							id = id.substring(5);
+							evt.put("id", id);
+						}
 						LessonDescriptor lesson = course.retrieveLessonById(id);
 						if (lesson != null) {
 							userPlanDirty = true;

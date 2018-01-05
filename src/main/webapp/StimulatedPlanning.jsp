@@ -108,14 +108,23 @@
     	        start: '2017-12-25',
     	        end: '2018-03-01'
     	    },
-			editable: true,
+			eventStartEditable: true,
+			eventDurationEditable: false,
 			droppable: true, // this allows things to be dropped onto the calendar
-			drop: function() {
+    	    drop: function() {
+				var id_rem = $(this).attr('id');
+		    	console.log("event drop: "+id_rem);
+				if (id_rem.startsWith("late_")) {
+					$(this).attr('id', 'tempdragid');
+					$('#calendar').fullCalendar('removeEvents', id_rem.substring(5));
+					$(this).attr('id', id_rem);
+				}
 				// is the "remove after drop" checkbox checked?
 				if ($('#drop-remove').is(':checked')) {
 					// if so, remove the element from the "Draggable Events" list
 					$(this).removeClass('plan-a');
 					$(this).removeClass('plan-ok');
+					$(this).removeClass('plan-late');
 					$(this).addClass('plan-b');
 					$(this).draggable('disable');
 					//$(this).remove();
@@ -290,20 +299,31 @@
 					LessonDescriptor lesson = userLesson.getLesson();
 					if (!userPlan.hasPlanItem(lesson.getId())) {
 		%>
-					<div 
-						class="fc-event plan-a plan-ok ui-draggable ui-draggable-handle" 
-						id="<%= lesson.getId() %>" 
-						data-duration="<%= lesson.getLessonDurationString() %>"
-					><%= lesson.getTitle() %></div>
+						<div 
+							class="fc-event plan-a plan-ok ui-draggable ui-draggable-handle" 
+							id="<%= lesson.getId() %>" 
+							data-duration="<%= lesson.getLessonDurationString() %>"
+						><%= lesson.getTitle() %></div>
 		<%
 					} else {
+						PlanItem item = userPlan.getPlanItemForLesson(lesson);
+						if (!PlanCompletionStatus.DELAYED.equals(item.getPlanCompletionStatus())) {
 %>
-			<div 
-				class="fc-event plan-b ui-draggable ui-draggable-handle" 
-				id="<%= lesson.getId() %>" 
-				data-duration="<%= lesson.getLessonDurationString() %>"
-			><%= lesson.getTitle() %></div>
+							<div 
+								class="fc-event plan-b ui-draggable ui-draggable-handle" 
+								id="<%= lesson.getId() %>" 
+								data-duration="<%= lesson.getLessonDurationString() %>"
+							><%= lesson.getTitle() %></div>
 <%
+						} else {
+%>
+							<div 
+								class="fc-event plan-a plan-late ui-draggable ui-draggable-handle" 
+								id="<%= "late_"+lesson.getId() %>" 
+								data-duration="<%= lesson.getLessonDurationString() %>"
+							><%= lesson.getTitle() %></div>
+<%
+						}
 					}
 				}
 		%>
@@ -333,13 +353,24 @@
 					><%= lesson.getTitle() %></div>
 		<%
 					} else {
+						PlanItem item = userPlan.getPlanItemForLesson(lesson);
+						if (!PlanCompletionStatus.DELAYED.equals(item.getPlanCompletionStatus())) {
 %>
-			<div 
-				class="fc-event plan-b ui-draggable ui-draggable-handle" 
-				id="<%= lesson.getId() %>" 
-				data-duration="<%= lesson.getLessonDurationString() %>"
-			><%= lesson.getTitle() %></div>
+							<div 
+								class="fc-event plan-b ui-draggable ui-draggable-handle" 
+								id="<%= lesson.getId() %>" 
+								data-duration="<%= lesson.getLessonDurationString() %>"
+							><%= lesson.getTitle() %></div>
 <%
+						} else {
+%>
+							<div 
+								class="fc-event plan-a plan-late ui-draggable ui-draggable-handle" 
+								id="<%= "late_"+lesson.getId() %>" 
+								data-duration="<%= lesson.getLessonDurationString() %>"
+							><%= lesson.getTitle() %></div>
+<%
+						}
 					}
 				}
 		%>
