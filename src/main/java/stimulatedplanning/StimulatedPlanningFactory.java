@@ -36,7 +36,7 @@ public class StimulatedPlanningFactory {
 	
 	private HashMap<String, GenericDescriptor> courseObjects = new HashMap<>();
 	
-	private CourseDescriptor retrievTestCourse() {
+	private CourseDescriptor retrieveTestCourse() {
 		if (instance.testCourse != null) {
 			return instance.testCourse;
 		} else {
@@ -90,7 +90,7 @@ public class StimulatedPlanningFactory {
 	 * @return
 	 */
 	public static CourseDescriptor generateTestCourse() {
-		CourseDescriptor course = instance.retrievTestCourse();
+		CourseDescriptor course = instance.retrieveTestCourse();
 		if (course == null) {
 			course = new CourseDescriptor(instance.testCourseId, "Introduction to Computer Security", "Introduction to Computer Security", testCourseBaseURL+"info");
 			ModuleDescriptor module1 = new ModuleDescriptor(getUUID(), "Basic computer security principles", "Basic computer security principles", "");
@@ -291,6 +291,13 @@ public class StimulatedPlanningFactory {
 		UserContent userContent = new UserContent(getUUID(), lesson.getUser(), content);
 		
 		return userContent;
+	}
+	
+	
+	public static UserProfile createUserProfile(User user, String email) {
+		UserProfile userProfile = new UserProfile(getUUID(), user, email);
+		
+		return userProfile;
 	}
 	
 	

@@ -392,6 +392,10 @@ public class PersistentStore {
 				writeDescriptor(planItem);
 				System.out.println("readDescriptor: planItem: post trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
 				return planItem;
+			} else if (UserProfile.class.getName().equals(type)) {
+				User user = getUser(readStringProperty(genericEntity, "userid", null));
+				UserProfile userProfile = new UserProfile(readStringProperty(genericEntity, "uid", null), user, readStringProperty(genericEntity, "email", null));
+				return userProfile;
 			}
 		}
 
@@ -686,6 +690,26 @@ public class PersistentStore {
 
 	}
 
+	
+	public static void writeDescriptor(UserProfile userProfile) throws Exception {
+		System.out.println("writeDescriptor (UserProfile): "+userProfile.getUser().getName()+", "+userProfile.getClass().getName()+", "+userProfile.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity profileEntity = createGenericUserEntity(userProfile);
+			profileEntity.setProperty("email", userProfile.getEmail());
+
+			datastore.put(profileEntity);
+		} catch (Exception e1) {
+			System.out.println("FATAL: Writing goal failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+
+
+
 
 	
 	
@@ -726,6 +750,30 @@ public class PersistentStore {
 		}
 		return plan;
 	}
+	
+	
+	public static ArrayList<UserProfile> getUserProfiles() {
+		ArrayList<UserProfile> profiles = new ArrayList<UserProfile>();
+		UserProfile profile = null;
+		try {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			Query q = new Query(UserProfile.class.getName());
+			
+			PreparedQuery pq = datastore.prepare(q);
+
+			for (Entity result : pq.asIterable()) {
+				String id = (String) result.getProperty("uid");
+				profile = (UserProfile)readDescriptor(UserProfile.class.getName(), id);
+				profiles.add(profile);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return profiles;
+	}
+
 	
 	
 	public static void deleteGenericEntity(GenericDescriptor generic) {

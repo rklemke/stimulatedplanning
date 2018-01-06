@@ -1,6 +1,7 @@
 package stimulatedplanning;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
@@ -14,8 +15,8 @@ public class PlanItem extends GenericUserObject {
 	PlanCompletionStatus planCompletionStatus;
 	
 	Map calendarItem;
-	LocalDate startDate;
-	LocalDate endDate;
+	LocalDateTime startDate;
+	LocalDateTime endDate;
 
 	public LessonDescriptor getLesson() {
 		return lesson;
@@ -37,8 +38,8 @@ public class PlanItem extends GenericUserObject {
 		
 		if (startTime != null && endTime != null) {
 			DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-			LocalDate newStartDate = LocalDate.parse(startTime, formatter);
-			LocalDate newEndDate = LocalDate.parse(endTime, formatter);
+			LocalDateTime newStartDate = LocalDateTime.parse(startTime, formatter);
+			LocalDateTime newEndDate = LocalDateTime.parse(endTime, formatter);
 			
 			if (startDate != null && endDate != null && newStartDate != null && newEndDate != null) {
 				if (newStartDate.isAfter(startDate) || newEndDate.isAfter(endDate) || newStartDate.isBefore(startDate) || newEndDate.isBefore(endDate)) {
@@ -80,10 +81,16 @@ public class PlanItem extends GenericUserObject {
 		String endTime = (String)calendarItem.get("end");
 		DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
 		
-		startDate = LocalDate.parse(startTime, formatter);
-		endDate = LocalDate.parse(endTime, formatter);
+		startDate = LocalDateTime.parse(startTime, formatter);
+		endDate = LocalDateTime.parse(endTime, formatter);
 	}
 	
+	public LocalDateTime getStartDate() {
+		return startDate;
+	}
+	public LocalDateTime getEndDate() {
+		return endDate;
+	}
 	public boolean trackLearningProgress(UserPlan userPlan, UserLesson userLesson, String contentUrl, String activityType) {
 		if (userLesson.getStatus().compareTo(this.getStatus()) > 0) {
 			this.setStatus(userLesson.getStatus());
@@ -96,7 +103,7 @@ public class PlanItem extends GenericUserObject {
 	public boolean trackPlanStatus() {
 		boolean updated = false;
 		
-		LocalDate date = LocalDate.now();
+		LocalDateTime date = LocalDateTime.now();
 
 		switch (planCompletionStatus) {
 			case OPEN : 
