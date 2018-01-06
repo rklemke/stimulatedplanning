@@ -1,6 +1,7 @@
 
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,6 +23,7 @@ import stimulatedplanning.UserPlan;
 @WebServlet("/CopingPlanServlet")
 public class CopingPlanServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(CopingPlanServlet.class.getName());   
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -55,7 +57,7 @@ public class CopingPlanServlet extends HttpServlet {
 		}
 
 		if (userPlanDirty) {
-			System.out.println("writing user plan for " + user.getName() + ", " + course.getId() + ", " + userPlan.getId());
+			log.info("writing user plan for " + user.getName() + ", " + course.getId() + ", " + userPlan.getId());
 			try {
 				PersistentStore.writeDescriptor(userPlan);
 			} catch (Exception e) {

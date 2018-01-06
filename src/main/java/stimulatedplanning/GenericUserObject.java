@@ -1,8 +1,11 @@
 package stimulatedplanning;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 public class GenericUserObject extends GenericDescriptor {
+	private static final Logger log = Logger.getLogger(GenericUserObject.class.getName());   
+
 	User user;
 
 	public User getUser() {

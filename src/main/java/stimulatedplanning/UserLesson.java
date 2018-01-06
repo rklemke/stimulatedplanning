@@ -2,10 +2,12 @@ package stimulatedplanning;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.logging.Logger;
 
 import stimulatedplanning.util.HashArrayList;
 
 public class UserLesson extends GenericUserObject {
+	private static final Logger log = Logger.getLogger(UserLesson.class.getName());   
 	LessonDescriptor lesson;
 	LessonStatus status;
 	HashArrayList<UserContent> contents;

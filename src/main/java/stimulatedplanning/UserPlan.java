@@ -6,10 +6,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.ListIterator;
+import java.util.logging.Logger;
 
 import stimulatedplanning.util.HashArrayList;
 
 public class UserPlan extends GenericUserObject {
+	private static final Logger log = Logger.getLogger(UserPlan.class.getName());   
+
 	protected CourseDescriptor course;
 	protected HashArrayList<UserGoal> goals;
 	protected HashArrayList<PlanItem> planItems;
@@ -159,7 +162,7 @@ public class UserPlan extends GenericUserObject {
 	
 	
 	public void calculateAchievementRates() {
-		System.out.println("updating achievment rates.");
+		log.info("updating achievment rates.");
 		int userGoalTotal = goals.size();
 		int plannedItemsTotal = planItems.size();
 		

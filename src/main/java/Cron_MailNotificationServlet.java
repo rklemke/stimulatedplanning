@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Properties;
+import java.util.logging.Logger;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -45,6 +47,7 @@ import stimulatedplanning.*;
 @WebServlet("/Cron_MailNotificationServlet")
 public class Cron_MailNotificationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(Cron_MailNotificationServlet.class.getName());   
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -192,7 +195,7 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 	                       new InternetAddress(toMail, toMail));
 	      msg.setSubject(subject + " - ICS18 - Introduction to Computer Security - Open Universiteit");
 	      msg.setText(body + bodyFooter);
-	      System.out.println("sendMail: "+toMail+", "+subject+", "+body + bodyFooter);
+	      log.info("sendMail: "+toMail+", "+subject+", "+body + bodyFooter);
 	      Transport.send(msg);
 	    } catch (AddressException e) {
 	    	e.printStackTrace();

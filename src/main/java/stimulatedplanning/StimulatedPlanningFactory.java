@@ -8,6 +8,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,7 @@ import stimulatedplanning.util.HashArrayList;
 public class StimulatedPlanningFactory {
 	public static final StimulatedPlanningFactory instance = new StimulatedPlanningFactory();
 	public static Random random = new Random();
+	private static final Logger log = Logger.getLogger(StimulatedPlanningFactory.class.getName());   
 
 	private StimulatedPlanningFactory() {
 		// TODO Auto-generated constructor stub
@@ -67,13 +69,13 @@ public class StimulatedPlanningFactory {
 		if (!(object instanceof GenericUserObject)) {
 			instance.courseObjects.put(object.getId(), object);
 		} else {
-			System.out.println("trying to add GenericUserObject to courseObjects: "+object.getClass().getName()+", "+object.getId());
+			log.info("trying to add GenericUserObject to courseObjects: "+object.getClass().getName()+", "+object.getId());
 		}
 	}
 	
 	public static GenericDescriptor getObject(String id) {
 		if (!instance.courseObjects.containsKey(id)) {
-			System.out.println("Warning: trying to retrieve object not in Map: "+id);
+			log.info("Warning: trying to retrieve object not in Map: "+id);
 			new Exception().printStackTrace();
 			return null;
 		}
@@ -263,7 +265,7 @@ public class StimulatedPlanningFactory {
 	
 	
 	public static UserPlan createUserPlan(User user, CourseDescriptor course) {
-		System.out.println("create userPlan for "+user.getName());
+		log.info("create userPlan for "+user.getName());
 		UserPlan userPlan = new UserPlan(getUUID(), user);
 		userPlan.setCourse(course);
 		
@@ -319,7 +321,7 @@ public class StimulatedPlanningFactory {
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(logParameters);
 
-		System.out.println("[LOG] " + jsonObject + " [/LOG]");
+		log.info("[LOG] " + jsonObject + " [/LOG]");
 		if ("intention".equals(logType)) {
 			if (logParameters.containsKey("goalSelectRadio")) {
 				String[] goals = logParameters.get("goalSelectRadio");
@@ -369,13 +371,13 @@ public class StimulatedPlanningFactory {
 			useridR = userUnknown;
 		}
 		
-//		System.out.println("userNameR: "+userNameR+", useridR: "+useridR);
+//		log.info("userNameR: "+userNameR+", useridR: "+useridR);
 		loginData += " | userNameR: "+userNameR+", useridR: "+useridR;
 		
 		String userName = (String)session.getAttribute("userName");
 		String userid = (String)session.getAttribute("userid");
 		
-//		System.out.println("userName: "+userName+", userid: "+userid);
+//		log.info("userName: "+userName+", userid: "+userid);
 		loginData += " | userName: "+userName+", userid: "+userid;
 
 		if (userName == null || userid == null 
@@ -387,15 +389,15 @@ public class StimulatedPlanningFactory {
 			session.setAttribute("userid", userid);
 		}
 
-//		System.out.println("userName(2): "+userName+", userid(2): "+userid);
+//		log.info("userName(2): "+userName+", userid(2): "+userid);
 		loginData += " | userName(2): "+userName+", userid(2): "+userid;
 
 		User user = (User)session.getAttribute("user");
 		if (user != null) {
-//			System.out.println("user.name(1): "+user.getName()+", user.id(1): "+user.getId());
+//			log.info("user.name(1): "+user.getName()+", user.id(1): "+user.getId());
 			loginData += " | user.name(1): "+user.getName()+", user.id(1): "+user.getId();
 		} else {
-//			System.out.println("user.name(1): null, user.id(1): null");
+//			log.info("user.name(1): null, user.id(1): null");
 			loginData += " | user.name(1): null, user.id(1): null";
 		}
 		
@@ -406,7 +408,7 @@ public class StimulatedPlanningFactory {
 			session.setAttribute("user", user);
 		}
 		
-		System.out.println("user.name: "+user.getName()+", user.id: "+user.getId());
+		log.info("user.name: "+user.getName()+", user.id: "+user.getId());
 		loginData += " | user.name: "+user.getName()+", user.id: "+user.getId();
 
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
@@ -431,8 +433,8 @@ public class StimulatedPlanningFactory {
 			}
 		}
 		
-		System.out.println("userGoals: "+userPlan.goals.size()+", planItems: "+userPlan.planItems.size());
-		System.out.println("selectedGoals: "+selectedGoals.size()+", selectedLessons: "+selectedLessons.size());
+		log.info("userGoals: "+userPlan.goals.size()+", planItems: "+userPlan.planItems.size());
+		log.info("selectedGoals: "+selectedGoals.size()+", selectedLessons: "+selectedLessons.size());
 		
 		session.setAttribute("selectedGoals", selectedGoals);
 		session.setAttribute("selectedLessons", selectedLessons);

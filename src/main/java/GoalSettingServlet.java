@@ -2,6 +2,7 @@
 
 import java.io.IOException;
 import java.util.ListIterator;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -20,7 +21,7 @@ import stimulatedplanning.util.HashArrayList;
 @WebServlet("/GoalSettingServlet")
 public class GoalSettingServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+	private static final Logger log = Logger.getLogger(GoalSettingServlet.class.getName());   
 	/**
      * @see HttpServlet#HttpServlet()
      */
@@ -123,7 +124,7 @@ public class GoalSettingServlet extends HttpServlet {
 		
 		if (selectedSchedule != null) {
 			userPlanDirty = true;
-			System.out.println("selectedSchedule: "+selectedSchedule);
+			log.info("selectedSchedule: "+selectedSchedule);
 			//session.setAttribute("selectedSchedule", selectedSchedule);
 			userPlan.setPlannedTimePerWeek(selectedSchedule);
 		}
@@ -177,7 +178,7 @@ public class GoalSettingServlet extends HttpServlet {
 		}
 		
 		if (userPlanDirty) {
-			System.out.println("writing user plan for " + user.getName() + ", " + course.getId() + ", " + userPlan.getId());
+			log.info("writing user plan for " + user.getName() + ", " + course.getId() + ", " + userPlan.getId());
 			try {
 				PersistentStore.writeDescriptor(userPlan);
 			} catch (Exception e) {

@@ -1,6 +1,9 @@
 package stimulatedplanning;
 
+import java.util.logging.Logger;
+
 public class UserContent extends GenericUserObject {
+	private static final Logger log = Logger.getLogger(UserContent.class.getName());   
 	ContentDescriptor content;
 	LessonStatus status;
 
@@ -49,7 +52,7 @@ public class UserContent extends GenericUserObject {
 			}
 		}
 		if (updated) {
-			System.out.println("trackLearningProgress: "+user.getName()+", "+this.getContent().getTitle()+": TRACKED");
+			log.info("trackLearningProgress: "+user.getName()+", "+this.getContent().getTitle()+": TRACKED");
 		}
 		return updated;
 	}

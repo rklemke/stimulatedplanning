@@ -1,6 +1,7 @@
 
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/Test_UserSelectionServlet")
 public class Test_UserSelectionServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(Test_UserSelectionServlet.class.getName());   
        
     /**
      * @see HttpServlet#HttpServlet()

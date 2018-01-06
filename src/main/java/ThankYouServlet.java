@@ -1,6 +1,7 @@
 
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,6 +23,7 @@ import stimulatedplanning.UserPlan;
 @WebServlet("/ThankYouServlet")
 public class ThankYouServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(ThankYouServlet.class.getName());   
        
     /**
      * @see HttpServlet#HttpServlet()

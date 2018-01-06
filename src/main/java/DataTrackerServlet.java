@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +24,7 @@ import stimulatedplanning.*;
 @WebServlet("/DataTrackerServlet")
 public class DataTrackerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = Logger.getLogger(DataTrackerServlet.class.getName());   
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -36,7 +38,7 @@ public class DataTrackerServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("DataTrackerServlet called.");
+		log.info("DataTrackerServlet called.");
 		HttpSession session = StimulatedPlanningFactory.initializeSession(request, response);
 		
 		User user = (User)session.getAttribute("user");
@@ -71,7 +73,7 @@ public class DataTrackerServlet extends HttpServlet {
 
         HashMap<String, String> completionStatusMap = userPlan.getCompletionStatusMap();
         completionStatusMap.put("feedbackFrame", content);
-        System.out.println("FeedbackFrame: "+content);
+        log.info("FeedbackFrame: "+content);
 		
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(completionStatusMap);
@@ -84,7 +86,7 @@ public class DataTrackerServlet extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		out.println(jsonObject);
 		out.flush();
-		System.out.println(jsonObject);
+		log.info(jsonObject);
 	}
 
 	/**

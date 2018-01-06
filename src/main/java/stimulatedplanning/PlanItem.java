@@ -4,10 +4,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.google.gson.GsonBuilder;
 
 public class PlanItem extends GenericUserObject {
+	private static final Logger log = Logger.getLogger(PlanItem.class.getName());   
+
 	LessonDescriptor lesson;
 	String jsonPlanItem;
 	LessonStatus status;
@@ -182,7 +185,7 @@ public class PlanItem extends GenericUserObject {
 		}
 		GsonBuilder builder = new GsonBuilder();
 		jsonPlanItem = builder.create().toJson(calendarItem);
-		System.out.println("Title: "+calendarItem.get("title")+", status: "+status+", planCompletionStatus: "+planCompletionStatus+", jsonPlanItem: "+jsonPlanItem);
+		log.info("Title: "+calendarItem.get("title")+", status: "+status+", planCompletionStatus: "+planCompletionStatus+", jsonPlanItem: "+jsonPlanItem);
 	}
 	
 

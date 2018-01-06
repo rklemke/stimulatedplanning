@@ -26,8 +26,10 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public class PersistentStore {
+	private static final Logger log = Logger.getLogger(PersistentStore.class.getName());   
 
 	public static void writeUser(User user) throws Exception {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -36,7 +38,7 @@ public class PersistentStore {
 		try {
 			userEntity = datastore.get(KeyFactory.createKey(user.getClass().getName(), user.getId()));
 		} catch (Exception e) {
-			System.out.println("User "+user.getId()+" does not exist yet. Creating it.");
+			log.info("User "+user.getId()+" does not exist yet. Creating it.");
 			userEntity = null;
 		}
 		if (userEntity == null) {
@@ -99,7 +101,7 @@ public class PersistentStore {
 
 			datastore.put(logEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Logging failed.");
+			log.info("FATAL: Logging failed.");
 			e1.printStackTrace();
 
 		}
@@ -112,7 +114,7 @@ public class PersistentStore {
 		Entity entity = null;
 
 		if (source == null || targets == null || !targets.hasNext()) {
-			System.out.println("writeToManyRelation: nothing to write: "+relation);
+			log.info("writeToManyRelation: nothing to write: "+relation);
 			return;
 		}
 
@@ -139,7 +141,7 @@ public class PersistentStore {
 			String key = source.getClass().getName() + "_" + relation + "_" + target.getClass().getName();
 			String id = source.getId() + "_" + relation + "_" + l;
 			
-			System.out.println("writeToManyRelation: "+key+", "+id);
+			log.info("writeToManyRelation: "+key+", "+id);
 
 			try {
 				entity = datastore.get(KeyFactory.createKey(key, id));
@@ -166,7 +168,7 @@ public class PersistentStore {
 	}
 
 	private static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget) throws Exception {
-		System.out.println("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
+		log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity entity = null;
 		
@@ -209,7 +211,7 @@ public class PersistentStore {
 	private static Entity createGenericEntity(GenericDescriptor generic) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		System.out.println("createGenericEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		log.info("createGenericEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 
 		Entity entity = null;
 		try {
@@ -231,7 +233,7 @@ public class PersistentStore {
 	}
 
 	private static Entity createGenericUserEntity(GenericUserObject generic) {
-		System.out.println("createGenericUserEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		log.info("createGenericUserEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 		Entity entity = null;
 
 		try {
@@ -240,7 +242,7 @@ public class PersistentStore {
 			entity.setProperty("userid", generic.getUser().getId());
 			
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing generic user entity failed.");
+			log.info("FATAL: Writing generic user entity failed.");
 			e1.printStackTrace();
 
 		}
@@ -249,7 +251,7 @@ public class PersistentStore {
 	}
 
 	private static GenericDescriptor readDescriptor(String type, String id) throws Exception {
-		System.out.println("readDescriptor: "+type+", "+id);
+		log.info("readDescriptor: "+type+", "+id);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		Entity genericEntity = null;
@@ -296,12 +298,12 @@ public class PersistentStore {
 				String keys = readStringProperty(genericEntity, "completionGoalKeys", null);
 				if (keys != null && keys.length()>0) {
 					keys = keys.replace("[", "").replace("]", "").replace(" ", "");
-					System.out.println("Reading completionGoals: " + keys);
+					log.info("Reading completionGoals: " + keys);
 					if (keys.length()>0) {
 						ArrayList<String> keysList = new ArrayList<>(Arrays.asList(keys.split(",")));
 						if (ee != null && keysList != null && keysList.size() > 0) {
 						    for (String key : keysList) {
-						    	System.out.println("Key: "+key+", "+(String) ee.getProperty(key));
+						    	log.info("Key: "+key+", "+(String) ee.getProperty(key));
 						        goal.addCompletionGoal(key, (String) ee.getProperty(key));
 						    }
 						}
@@ -386,11 +388,11 @@ public class PersistentStore {
 				planItem.setStatus(readStatus(genericEntity));
 				planItem.setPlanStatus(readPlanStatus(genericEntity));
 				planItem.setPlanCompletionStatus(readPlanCompletionStatus(genericEntity));
-				System.out.println("readDescriptor: planItem: pre trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
+				log.info("readDescriptor: planItem: pre trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
 				planItem.trackPlanStatus();
 				planItem.updateMapAndJson();
 				writeDescriptor(planItem);
-				System.out.println("readDescriptor: planItem: post trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
+				log.info("readDescriptor: planItem: post trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
 				return planItem;
 			} else if (UserProfile.class.getName().equals(type)) {
 				User user = getUser(readStringProperty(genericEntity, "userid", null));
@@ -421,14 +423,14 @@ public class PersistentStore {
 	}
 
 	protected static LessonStatus readStatus(Entity genericEntity) {
-		System.out.println("readStatus 1: "+genericEntity.getProperties().toString());
+		log.info("readStatus 1: "+genericEntity.getProperties().toString());
 		if (genericEntity.hasProperty("status")) {
-			System.out.println("readStatus 2a: "+genericEntity.getProperty("status"));
+			log.info("readStatus 2a: "+genericEntity.getProperty("status"));
 			LessonStatus status = LessonStatus.valueOf((String)genericEntity.getProperty("status"));
-			System.out.println("readStatus 2b: "+status);
+			log.info("readStatus 2b: "+status);
 			return status;
 		} else {
-			System.out.println("readStatus 3: "+LessonStatus.INITIAL);
+			log.info("readStatus 3: "+LessonStatus.INITIAL);
 			return LessonStatus.INITIAL;
 		}
 		
@@ -455,7 +457,7 @@ public class PersistentStore {
 	}
 	
 	public static void writeDescriptor(GenericDescriptor generic) throws Exception {
-		System.out.println("writeDescriptor (GenericDescriptor): "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		log.info("writeDescriptor (GenericDescriptor): "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -463,7 +465,7 @@ public class PersistentStore {
 
 			datastore.put(entity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing generic entity failed.");
+			log.info("FATAL: Writing generic entity failed.");
 			e1.printStackTrace();
 
 		}
@@ -471,7 +473,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(CourseDescriptor course) throws Exception {
-		System.out.println("writeDescriptor (CourseDescriptor): "+course.getTitle()+", "+course.getClass().getName()+", "+course.getId());
+		log.info("writeDescriptor (CourseDescriptor): "+course.getTitle()+", "+course.getClass().getName()+", "+course.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -482,7 +484,7 @@ public class PersistentStore {
 
 			datastore.put(courseEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing course failed.");
+			log.info("FATAL: Writing course failed.");
 			e1.printStackTrace();
 
 		}
@@ -490,7 +492,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(ModuleDescriptor module) throws Exception {
-		System.out.println("writeDescriptor (ModuleDescriptor): "+module.getTitle()+", "+module.getClass().getName()+", "+module.getId());
+		log.info("writeDescriptor (ModuleDescriptor): "+module.getTitle()+", "+module.getClass().getName()+", "+module.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -500,7 +502,7 @@ public class PersistentStore {
 
 			datastore.put(moduleEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing module failed.");
+			log.info("FATAL: Writing module failed.");
 			e1.printStackTrace();
 
 		}
@@ -508,7 +510,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(GoalDescriptor goal) throws Exception {
-		System.out.println("writeDescriptor (GoalDescriptor): "+goal.getTitle()+", "+goal.getClass().getName()+", "+goal.getId());
+		log.info("writeDescriptor (GoalDescriptor): "+goal.getTitle()+", "+goal.getClass().getName()+", "+goal.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -530,7 +532,7 @@ public class PersistentStore {
 
 			datastore.put(goalEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing goal failed.");
+			log.info("FATAL: Writing goal failed.");
 			e1.printStackTrace();
 
 		}
@@ -538,7 +540,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(LessonDescriptor lesson) throws Exception {
-		System.out.println("writeDescriptor (LessonDescriptor): "+lesson.getTitle()+", "+lesson.getClass().getName()+", "+lesson.getId());
+		log.info("writeDescriptor (LessonDescriptor): "+lesson.getTitle()+", "+lesson.getClass().getName()+", "+lesson.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -548,7 +550,7 @@ public class PersistentStore {
 
 			datastore.put(lessonEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing lesson failed.");
+			log.info("FATAL: Writing lesson failed.");
 			e1.printStackTrace();
 
 		}
@@ -556,7 +558,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(ContentDescriptor content) throws Exception {
-		System.out.println("writeDescriptor (ContentDescriptor): "+content.getTitle()+", "+content.getClass().getName()+", "+content.getId());
+		log.info("writeDescriptor (ContentDescriptor): "+content.getTitle()+", "+content.getClass().getName()+", "+content.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -564,7 +566,7 @@ public class PersistentStore {
 
 			datastore.put(contentEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing content failed.");
+			log.info("FATAL: Writing content failed.");
 			e1.printStackTrace();
 
 		}
@@ -572,7 +574,7 @@ public class PersistentStore {
 	}
 	
 	public static void writeDescriptor(UserPlan userPlan) throws Exception {
-		System.out.println("writeDescriptor (UserPlan): "+userPlan.getUser().getName()+", "+userPlan.getClass().getName()+", "+userPlan.getId());
+		log.info("writeDescriptor (UserPlan): "+userPlan.getUser().getName()+", "+userPlan.getClass().getName()+", "+userPlan.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -601,7 +603,7 @@ public class PersistentStore {
 			
 			datastore.put(planEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing UserPlan failed.");
+			log.info("FATAL: Writing UserPlan failed.");
 			e1.printStackTrace();
 
 		}
@@ -609,7 +611,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(UserGoal userGoal) throws Exception {
-		System.out.println("writeDescriptor (UserGoal): "+userGoal.getUser().getName()+", "+userGoal.getClass().getName()+", "+userGoal.getId());
+		log.info("writeDescriptor (UserGoal): "+userGoal.getUser().getName()+", "+userGoal.getClass().getName()+", "+userGoal.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -622,7 +624,7 @@ public class PersistentStore {
 			
 			datastore.put(goalEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing goal failed.");
+			log.info("FATAL: Writing goal failed.");
 			e1.printStackTrace();
 
 		}
@@ -631,7 +633,7 @@ public class PersistentStore {
 
 
 	public static void writeDescriptor(UserLesson userLesson) throws Exception {
-		System.out.println("writeDescriptor (UserLesson): "+userLesson.getUser().getName()+", "+userLesson.getClass().getName()+", "+userLesson.getId());
+		log.info("writeDescriptor (UserLesson): "+userLesson.getUser().getName()+", "+userLesson.getClass().getName()+", "+userLesson.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -643,7 +645,7 @@ public class PersistentStore {
 			
 			datastore.put(lessonEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing goal failed.");
+			log.info("FATAL: Writing goal failed.");
 			e1.printStackTrace();
 
 		}
@@ -651,7 +653,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(UserContent userContent) throws Exception {
-		System.out.println("writeDescriptor (UserContent): "+userContent.getUser().getName()+", "+userContent.getClass().getName()+", "+userContent.getId());
+		log.info("writeDescriptor (UserContent): "+userContent.getUser().getName()+", "+userContent.getClass().getName()+", "+userContent.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -661,7 +663,7 @@ public class PersistentStore {
 
 			datastore.put(lessonEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing goal failed.");
+			log.info("FATAL: Writing goal failed.");
 			e1.printStackTrace();
 
 		}
@@ -670,7 +672,7 @@ public class PersistentStore {
 
 
 	public static void writeDescriptor(PlanItem planItem) throws Exception {
-		System.out.println("writeDescriptor (PlanItem): "+planItem.getUser().getName()+", "+planItem.getClass().getName()+", "+planItem.getId());
+		log.info("writeDescriptor (PlanItem): "+planItem.getUser().getName()+", "+planItem.getClass().getName()+", "+planItem.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -683,7 +685,7 @@ public class PersistentStore {
 
 			datastore.put(planItemEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing goal failed.");
+			log.info("FATAL: Writing goal failed.");
 			e1.printStackTrace();
 
 		}
@@ -692,7 +694,7 @@ public class PersistentStore {
 
 	
 	public static void writeDescriptor(UserProfile userProfile) throws Exception {
-		System.out.println("writeDescriptor (UserProfile): "+userProfile.getUser().getName()+", "+userProfile.getClass().getName()+", "+userProfile.getId());
+		log.info("writeDescriptor (UserProfile): "+userProfile.getUser().getName()+", "+userProfile.getClass().getName()+", "+userProfile.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -701,7 +703,7 @@ public class PersistentStore {
 
 			datastore.put(profileEntity);
 		} catch (Exception e1) {
-			System.out.println("FATAL: Writing goal failed.");
+			log.info("FATAL: Writing goal failed.");
 			e1.printStackTrace();
 
 		}
@@ -729,7 +731,7 @@ public class PersistentStore {
 	public static UserPlan readUserPlan(User user, CourseDescriptor course) {
 		UserPlan plan = null;
 		try {
-			System.out.println("read userPlan for "+user.getName());
+			log.info("read userPlan for "+user.getName());
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			Filter userFilter = new FilterPredicate("userid", FilterOperator.EQUAL, user.getId());
 			Filter courseFilter = new FilterPredicate("course", FilterOperator.EQUAL, course.getId());
@@ -740,7 +742,7 @@ public class PersistentStore {
 
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
-				System.out.println("read userPlan for "+user.getName()+", "+id);
+				log.info("read userPlan for "+user.getName()+", "+id);
 				plan = (UserPlan)readDescriptor(UserPlan.class.getName(), id);
 			}
 			
@@ -779,7 +781,7 @@ public class PersistentStore {
 	public static void deleteGenericEntity(GenericDescriptor generic) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		System.out.println("deleteGenericEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		log.info("deleteGenericEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 		
 		if (generic instanceof UserPlan) {
 			for(UserGoal goal : ((UserPlan)generic).goals) {
@@ -813,7 +815,7 @@ public class PersistentStore {
 
 
 	public static void deleteToManyRelation(GenericDescriptor source, String relation, String targetClass) {
-		System.out.println("deleteToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
+		log.info("deleteToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		
 		if (source == null || relation == null) {
@@ -852,7 +854,7 @@ public class PersistentStore {
 	
 	
 	public static void clearLog() {
-		System.out.println("clearLog");
+		log.info("clearLog");
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		
 		Query q = new Query("logEntity");

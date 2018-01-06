@@ -3,10 +3,12 @@ package stimulatedplanning;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.logging.Logger;
 
 import stimulatedplanning.util.HashArrayList;
 
 public class UserGoal extends GenericUserObject {
+	private static final Logger log = Logger.getLogger(UserGoal.class.getName());   
 	
 	GoalDescriptor goalDescriptor;
 	HashArrayList<UserLesson> lessons;
