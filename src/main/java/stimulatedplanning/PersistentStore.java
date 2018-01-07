@@ -583,16 +583,21 @@ public class PersistentStore {
 			planEntity.setProperty("course", courseId);
 			planEntity.setProperty("plannedTimePerWeek", userPlan.getPlannedTimePerWeek());
 			planEntity.setProperty("isAllCourseIntention", userPlan.isAllCourseIntention());
-			planEntity.setProperty("obstacles", userPlan.getObstacles());
-			planEntity.setProperty("copingPlan", userPlan.getCopingPlan());
+			planEntity.setProperty("obstacles", new Text(userPlan.getObstacles()));
+			planEntity.setProperty("copingPlan", new Text(userPlan.getCopingPlan()));
 			planEntity.setProperty("intentionCompleted", userPlan.isIntentionCompleted());
 			
 
 			EmbeddedEntity ee = new EmbeddedEntity();
 		    Map<String, String> map = userPlan.completionStatusMap;
 
-		    for (String key : map.keySet()) { // TODO: maybe there is a more efficient way of solving this
-		        ee.setProperty(key, map.get(key));
+		    for (String key : map.keySet()) { 
+				String value = map.get(key);
+				if (value != null && value.getBytes().length > 1500) {
+					ee.setProperty(key, new Text(value));
+				} else {
+					ee.setProperty(key, value);
+				}
 		    }
 
 		    planEntity.setProperty("completionStatusMap", ee);

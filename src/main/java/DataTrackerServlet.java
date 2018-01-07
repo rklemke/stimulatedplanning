@@ -77,6 +77,7 @@ public class DataTrackerServlet extends HttpServlet {
 		
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(completionStatusMap);
+        completionStatusMap.remove("feedbackFrame");
 
 		String callback = request.getParameter("callback");
 		if (callback != null && !"".equals(callback)) {
