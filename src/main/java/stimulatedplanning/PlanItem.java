@@ -185,7 +185,7 @@ public class PlanItem extends GenericUserObject {
 		}
 		GsonBuilder builder = new GsonBuilder();
 		jsonPlanItem = builder.create().toJson(calendarItem);
-		log.info("Title: "+calendarItem.get("title")+", status: "+status+", planCompletionStatus: "+planCompletionStatus+", jsonPlanItem: "+jsonPlanItem);
+		//log.info("Title: "+calendarItem.get("title")+", status: "+status+", planCompletionStatus: "+planCompletionStatus+", jsonPlanItem: "+jsonPlanItem);
 	}
 	
 

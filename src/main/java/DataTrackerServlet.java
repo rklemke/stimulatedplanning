@@ -38,7 +38,7 @@ public class DataTrackerServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		log.info("DataTrackerServlet called.");
+		//log.info("DataTrackerServlet called.");
 		HttpSession session = StimulatedPlanningFactory.initializeSession(request, response);
 		
 		User user = (User)session.getAttribute("user");
@@ -73,7 +73,7 @@ public class DataTrackerServlet extends HttpServlet {
 
         HashMap<String, String> completionStatusMap = userPlan.getCompletionStatusMap();
         completionStatusMap.put("feedbackFrame", content);
-        log.info("FeedbackFrame: "+content);
+        //log.info("FeedbackFrame: "+content);
 		
 		Gson gson = new Gson();
 		String jsonObject = gson.toJson(completionStatusMap);

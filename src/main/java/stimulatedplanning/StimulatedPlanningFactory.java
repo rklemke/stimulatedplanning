@@ -433,8 +433,8 @@ public class StimulatedPlanningFactory {
 			}
 		}
 		
-		log.info("userGoals: "+userPlan.goals.size()+", planItems: "+userPlan.planItems.size());
-		log.info("selectedGoals: "+selectedGoals.size()+", selectedLessons: "+selectedLessons.size());
+		//log.info("userGoals: "+userPlan.goals.size()+", planItems: "+userPlan.planItems.size());
+		//log.info("selectedGoals: "+selectedGoals.size()+", selectedLessons: "+selectedLessons.size());
 		
 		session.setAttribute("selectedGoals", selectedGoals);
 		session.setAttribute("selectedLessons", selectedLessons);

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.logging.Logger;
@@ -51,6 +53,7 @@ public class UserPlan extends GenericUserObject {
 	public void addPlanItem(PlanItem planItem) {
 		if (planItem != null && planItem.getId() != null && planItem.getLesson() != null) {
 			planItems.add(planItem);
+			planItems.sort(Comparator.comparing(PlanItem::getStartDate));
 		}
 	}
 	

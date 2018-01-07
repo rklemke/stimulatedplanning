@@ -114,7 +114,7 @@ public class PersistentStore {
 		Entity entity = null;
 
 		if (source == null || targets == null || !targets.hasNext()) {
-			log.info("writeToManyRelation: nothing to write: "+relation);
+			//log.info("writeToManyRelation: nothing to write: "+relation);
 			return;
 		}
 
@@ -141,7 +141,7 @@ public class PersistentStore {
 			String key = source.getClass().getName() + "_" + relation + "_" + target.getClass().getName();
 			String id = source.getId() + "_" + relation + "_" + l;
 			
-			log.info("writeToManyRelation: "+key+", "+id);
+			//log.info("writeToManyRelation: "+key+", "+id);
 
 			try {
 				entity = datastore.get(KeyFactory.createKey(key, id));
@@ -168,7 +168,7 @@ public class PersistentStore {
 	}
 
 	private static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget) throws Exception {
-		log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
+		//log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity entity = null;
 		
@@ -251,7 +251,7 @@ public class PersistentStore {
 	}
 
 	private static GenericDescriptor readDescriptor(String type, String id) throws Exception {
-		log.info("readDescriptor: "+type+", "+id);
+		//log.info("readDescriptor: "+type+", "+id);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		Entity genericEntity = null;
@@ -298,12 +298,12 @@ public class PersistentStore {
 				String keys = readStringProperty(genericEntity, "completionGoalKeys", null);
 				if (keys != null && keys.length()>0) {
 					keys = keys.replace("[", "").replace("]", "").replace(" ", "");
-					log.info("Reading completionGoals: " + keys);
+					//log.info("Reading completionGoals: " + keys);
 					if (keys.length()>0) {
 						ArrayList<String> keysList = new ArrayList<>(Arrays.asList(keys.split(",")));
 						if (ee != null && keysList != null && keysList.size() > 0) {
 						    for (String key : keysList) {
-						    	log.info("Key: "+key+", "+(String) ee.getProperty(key));
+						    	//log.info("Key: "+key+", "+(String) ee.getProperty(key));
 						        goal.addCompletionGoal(key, (String) ee.getProperty(key));
 						    }
 						}
@@ -388,11 +388,11 @@ public class PersistentStore {
 				planItem.setStatus(readStatus(genericEntity));
 				planItem.setPlanStatus(readPlanStatus(genericEntity));
 				planItem.setPlanCompletionStatus(readPlanCompletionStatus(genericEntity));
-				log.info("readDescriptor: planItem: pre trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
+				//log.info("readDescriptor: planItem: pre trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
 				planItem.trackPlanStatus();
 				planItem.updateMapAndJson();
 				writeDescriptor(planItem);
-				log.info("readDescriptor: planItem: post trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
+				//log.info("readDescriptor: planItem: post trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
 				return planItem;
 			} else if (UserProfile.class.getName().equals(type)) {
 				User user = getUser(readStringProperty(genericEntity, "userid", null));
@@ -423,14 +423,14 @@ public class PersistentStore {
 	}
 
 	protected static LessonStatus readStatus(Entity genericEntity) {
-		log.info("readStatus 1: "+genericEntity.getProperties().toString());
+		//log.info("readStatus 1: "+genericEntity.getProperties().toString());
 		if (genericEntity.hasProperty("status")) {
-			log.info("readStatus 2a: "+genericEntity.getProperty("status"));
+			//log.info("readStatus 2a: "+genericEntity.getProperty("status"));
 			LessonStatus status = LessonStatus.valueOf((String)genericEntity.getProperty("status"));
-			log.info("readStatus 2b: "+status);
+			//log.info("readStatus 2b: "+status);
 			return status;
 		} else {
-			log.info("readStatus 3: "+LessonStatus.INITIAL);
+			//log.info("readStatus 3: "+LessonStatus.INITIAL);
 			return LessonStatus.INITIAL;
 		}
 		

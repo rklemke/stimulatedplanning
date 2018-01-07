@@ -3,6 +3,7 @@ package stimulatedplanning.util;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -55,6 +56,10 @@ public class HashArrayList<T extends GenericDescriptor> implements Iterable<T>, 
 	
 	public void forEach(Consumer<? super T> action) {
 		arrayList.forEach(action);
+	}
+	
+	public void sort(Comparator<? super T> c) {
+		arrayList.sort(c);
 	}
 	
 	public Spliterator<T> spliterator() {

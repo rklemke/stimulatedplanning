@@ -124,7 +124,7 @@ public class GoalSettingServlet extends HttpServlet {
 		
 		if (selectedSchedule != null) {
 			userPlanDirty = true;
-			log.info("selectedSchedule: "+selectedSchedule);
+			//log.info("selectedSchedule: "+selectedSchedule);
 			//session.setAttribute("selectedSchedule", selectedSchedule);
 			userPlan.setPlannedTimePerWeek(selectedSchedule);
 		}
@@ -177,9 +177,18 @@ public class GoalSettingServlet extends HttpServlet {
 			}
 		}
 		
+		if (submit == null && userPlan.isIntentionCompleted()) {
+			if (user.isTreatmentGroup()) {
+				nextJSP = "/StimulatedPlanning.jsp";
+			} else {
+				nextJSP = "/GoalSetting.jsp";
+			}
+		}
+		
 		if (userPlanDirty) {
 			log.info("writing user plan for " + user.getName() + ", " + course.getId() + ", " + userPlan.getId());
 			try {
+				userPlan.calculateAchievementRates();
 				PersistentStore.writeDescriptor(userPlan);
 			} catch (Exception e) {
 				e.printStackTrace();

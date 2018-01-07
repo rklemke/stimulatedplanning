@@ -46,7 +46,7 @@ public class StimulatedPlanningServlet extends HttpServlet {
 		boolean userPlanDirty = false;
 
 		String calenderItems = request.getParameter("calenderItems");
-		log.info("calenderItems: "+calenderItems);
+		//log.info("calenderItems: "+calenderItems);
 		
 		GsonBuilder builder = new GsonBuilder();
 		Object o = builder.create().fromJson(calenderItems, Object.class);
@@ -87,16 +87,17 @@ public class StimulatedPlanningServlet extends HttpServlet {
 			}
 		}
 
-		if (o != null) {
-			log.info("o: "+o.toString());
-			log.info("o.class: "+o.getClass().getName());
-		} else {
-			log.info("o: null");
-		}
+//		if (o != null) {
+//			log.info("o: "+o.toString());
+//			log.info("o.class: "+o.getClass().getName());
+//		} else {
+//			log.info("o: null");
+//		}
 		
 		if (userPlanDirty) {
 			log.info("writing user plan for " + user.getName() + ", " + course.getId() + ", " + userPlan.getId());
 			try {
+				userPlan.calculateAchievementRates();
 				PersistentStore.writeDescriptor(userPlan);
 			} catch (Exception e) {
 				e.printStackTrace();

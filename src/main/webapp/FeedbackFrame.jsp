@@ -93,7 +93,7 @@
 				</a>
 			</td>
 			<td><div id="progressbar4"><div class="progress-label"><%= completionStatusMap.get("calc.userPlanNotPlannedRate") %> %</div></div></td>
-			<td>You have not yet planned <%= completionStatusMap.get("calc.userPlanNotPlanned") %> of your <%= completionStatusMap.get("raw.plannableItems") %> intended activities. You can re-plan to improve your plan accuracy (click the icon on the left to access the calendar).</td>
+			<td><% if (Integer.valueOf(completionStatusMap.get("calc.userPlanNotPlanned")) > 0) { %>You have not yet planned <%= completionStatusMap.get("calc.userPlanNotPlanned") %> of your <%= completionStatusMap.get("raw.plannableItems") %> intended activities. <% } else { %>You have planned all activities (nothing unplanned). <% } %>You can re-plan to improve your plan accuracy (click the icon on the left to access the calendar).</td>
 		</tr>
 	</table>
 <% } %>

@@ -54,16 +54,9 @@
 <body>
 <div id="wrap" class="ui-frame"> 
 <form id="thankYouForm" method="POST" action="ThankYouServlet">
-	<h2>Thank you for your participation</h2>
-	<p>You are now well prepared to follow your course!</p>
-	<p>You can now use the main navigation of the course to start with your activities.</p>
-	<div class="ui-widget ui-widget-content ui-wrapper">
-		<p>Maybe a nice picture here?</p>
-	</div>
-<!-- 	<div class="confirm">
-		<button type="submit" id="next" name="submit" value="Next" >Next</button>
-	</div>
- -->	
+	<img height="500" src="/img/tick-305245_640.png">
+	<h2 style="float: left;">Thank you for your participation</h2>
+	<p>You can now use the main navigation of the course to start with your activities or go to the <a href="https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/course/" target="_parent">course overview</a>.</p>
 </form>
 </div>
 
