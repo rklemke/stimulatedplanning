@@ -74,10 +74,13 @@ public class StimulatedPlanningServlet extends HttpServlet {
 								item.setUser(user);
 								item.setJsonPlanItem(builder.create().toJson(evt));
 								item.trackPlanStatus();
+								item.updateMapAndJson();
 							} else { // event doesn't exist in calendar: create
-								item = new PlanItem(id, user, lesson, builder.create().toJson(evt));
+								item = StimulatedPlanningFactory.createPlanItem(user, lesson, builder.create().toJson(evt));
+								//item = new PlanItem(id, user, lesson, builder.create().toJson(evt));
 								userPlan.addPlanItem(item);
 								item.trackPlanStatus();
+								item.updateMapAndJson();
 							}
 						}
 					}

@@ -296,6 +296,13 @@ public class StimulatedPlanningFactory {
 	}
 	
 	
+	public static PlanItem createPlanItem(User user, LessonDescriptor lesson, String jsonPlanItem ) {
+		PlanItem planItem = new PlanItem(getUUID(), user, lesson, jsonPlanItem);
+		
+		return planItem;
+	}
+	
+	
 	public static UserProfile createUserProfile(User user, String email) {
 		UserProfile userProfile = new UserProfile(getUUID(), user, email);
 		

@@ -333,6 +333,9 @@ public class PersistentStore {
 				plan.setPlannedTimePerWeek(readStringProperty(genericEntity, "plannedTimePerWeek", null));
 				plan.setAllCourseIntention(readBooleanProperty(genericEntity, "isAllCourseIntention", false));
 				plan.setIntentionCompleted(readBooleanProperty(genericEntity, "intentionCompleted", false));
+				plan.setObstacles(readStringProperty(genericEntity, "obstacles", null));
+				plan.setCopingPlan(readStringProperty(genericEntity, "copingPlan", null));
+
 				relationList = readToManyRelation(plan, "userGoals", UserGoal.class.getName(), true);
 				for (GenericDescriptor generic : relationList) {
 					plan.addGoal((UserGoal)generic);
@@ -347,8 +350,14 @@ public class PersistentStore {
 					Set<String> keys = map.keySet();
 					for (String key : keys) {
 						Object val = map.get(key);
-						if (val != null && val instanceof Integer) {
-							plan.completionStatusMap.put(key, (String)val);
+						if (val != null) {
+							if (val instanceof String) {
+								plan.completionStatusMap.put(key, (String)val);
+							} else if (val instanceof Text) {
+								plan.completionStatusMap.put(key, ((Text)val).getValue());
+							} else if (val instanceof Integer) {
+								plan.completionStatusMap.put(key, String.valueOf(val));
+							}
 						}
 					}
 				}
@@ -405,7 +414,18 @@ public class PersistentStore {
 	}
 	
 	protected static String readStringProperty(Entity genericEntity, String key, String defaultValue) {
-		String prop = (String)genericEntity.getProperty(key);
+		Object propObj = genericEntity.getProperty(key);
+		String prop = null;
+		if (propObj != null) {
+			if (propObj instanceof String) {
+				prop = (String)propObj;
+			} else if (propObj instanceof Text) {
+				Text text = (Text)propObj;
+				prop = text.getValue();
+			} else {
+				prop = propObj.toString();
+			}
+		}
 		if (prop == null) {
 			prop = defaultValue;
 		}

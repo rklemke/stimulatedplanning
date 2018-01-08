@@ -297,7 +297,7 @@
 				while(lessonIterator.hasNext()) {
 					UserLesson userLesson = lessonIterator.next();
 					LessonDescriptor lesson = userLesson.getLesson();
-					if (!userPlan.hasPlanItem(lesson.getId())) {
+					if (!userPlan.hasPlanItemForLesson(lesson)) {
 		%>
 						<div 
 							class="fc-event plan-a plan-ok ui-draggable ui-draggable-handle" 
@@ -344,7 +344,7 @@
 		<%
 				while(lessonIterator.hasNext()) {
 					LessonDescriptor lesson = lessonIterator.next();
-					if (!userPlan.hasPlanItem(lesson.getId())) {
+					if (!userPlan.hasPlanItemForLesson(lesson)) {
 		%>
 					<div 
 						class="fc-event plan-a plan-ok ui-draggable ui-draggable-handle" 
