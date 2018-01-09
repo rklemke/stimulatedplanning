@@ -201,7 +201,7 @@
   while(iterator2.hasNext()) {
 	  LessonDescriptor lesson = iterator2.next();
   %>
-        <li><input class="goal_<%= goal.getId() %> moduleselectToggle" type="checkbox" name="goal<%= goal.getId() %>" id="lesson<%= lesson.getId() %>" value="<%= lesson.getId() %>" <% if (selectedLessons != null && selectedLessons.containsKey(lesson.getId())) { %>checked <% } %> >
+        <li><input class="goal_<%= goal.getId() %> moduleselectToggle" type="checkbox" name="goal<%= goal.getId() %>" id="lesson<%= lesson.getId() %>" value="<%= lesson.getId() %>" onClick="$( '#gsc-<%= goal.getId() %>').prop('checked', true);" <% if (selectedLessons != null && selectedLessons.containsKey(lesson.getId())) { %>checked <% } %> >
         <label for="lesson<%= lesson.getId() %>"><%= lesson.getTitle() %></label></li>
   <%
   }
