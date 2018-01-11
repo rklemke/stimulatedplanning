@@ -75,7 +75,7 @@
 				</a>
 			</td>
 			<td><div id="progressbar2"><div class="progress-label"><%= completionStatusMap.get("calc.userPlanAchievementRate") %> %</div></div></td>
-			<td>You have completed <%= completionStatusMap.get("raw.planAchievementCompleted") %> of your <%= completionStatusMap.get("raw.plannableItems") %> intended course activities.</td>
+			<td>You have completed <%= completionStatusMap.get("raw.planAchievementCompleted") %> of your <%= completionStatusMap.get("raw.plannedItemsTotal") %> planned course activities.</td>
 		</tr>
 		<tr> <!-- Items delayed row -->
 			<td>
