@@ -3,6 +3,6 @@
   <cron>
     <url>/Cron_MailNotificationServlet</url>
     <description>Progress Report</description>
-    <schedule>every 2 hours from 07:00 to 23:00</schedule>
+    <schedule>every monday 08:00</schedule>
   </cron>
 </cronentries>
