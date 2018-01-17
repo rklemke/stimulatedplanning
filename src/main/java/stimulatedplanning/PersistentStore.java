@@ -406,6 +406,7 @@ public class PersistentStore {
 			} else if (UserProfile.class.getName().equals(type)) {
 				User user = getUser(readStringProperty(genericEntity, "userid", null));
 				UserProfile userProfile = new UserProfile(readStringProperty(genericEntity, "uid", null), user, readStringProperty(genericEntity, "email", null));
+				userProfile.setFullName(readStringProperty(genericEntity, "fullName", null));
 				return userProfile;
 			}
 		}
@@ -725,6 +726,7 @@ public class PersistentStore {
 		try {
 			Entity profileEntity = createGenericUserEntity(userProfile);
 			profileEntity.setProperty("email", userProfile.getEmail());
+			profileEntity.setProperty("fullName", userProfile.getFullName());
 
 			datastore.put(profileEntity);
 		} catch (Exception e1) {

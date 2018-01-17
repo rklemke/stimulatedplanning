@@ -39,6 +39,7 @@ import javax.mail.internet.MimeMessage;
 
 
 import stimulatedplanning.*;
+import stimulatedplanning.util.*;
 
 
 /**
@@ -72,7 +73,23 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 		ArrayList<UserProfile> userProfiles = PersistentStore.getUserProfiles();
 		if (userProfiles == null || userProfiles.isEmpty()) {
 			userProfiles = new ArrayList<UserProfile>();
-			User user = StimulatedPlanningFactory.getUser("rklemke", "rklemke");
+			
+			for (String[] userProfileStrings : UserProfileCVS.userProfiles) {
+				User user = StimulatedPlanningFactory.getUser(userProfileStrings[1], userProfileStrings[1]);
+				UserProfile userProfile;
+				if (user != null) {
+					userProfile = StimulatedPlanningFactory.createUserProfile(user, userProfileStrings[3]);
+					userProfile.setFullName(userProfileStrings[2]);
+					userProfiles.add(userProfile);
+					try {
+						PersistentStore.writeDescriptor(userProfile);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+/*			User user = StimulatedPlanningFactory.getUser("rklemke", "rklemke");
 			UserProfile userProfile;
 			if (user != null) {
 				userProfile = StimulatedPlanningFactory.createUserProfile(user, "roland.klemke@ou.nl");
@@ -93,8 +110,9 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 					e.printStackTrace();
 				}
 			}
+*/		
 		}
-		
+
 		CourseDescriptor course = StimulatedPlanningFactory.generateTestCourse();
 		
 		User user = null;
@@ -105,8 +123,13 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 		
 		for (UserProfile profile : userProfiles) {
 			user = profile.getUser();
-			message = "Dear "+user.getName()+"\n\n";
+			String userName = profile.getFullName();
+			if (userName == null || "".equals(userName)) {
+				userName = user.getName();
+			}
+			message = "Dear "+userName+"\n\n";
 			if (user.isTreatmentGroup()) {
+				boolean sendMail = false;
 				plan = StimulatedPlanningFactory.getUserPlan(user, course);
 				completionStatusMap = plan.getCompletionStatusMap();
 				
@@ -129,17 +152,20 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 							}
 						}
 						if (count > 0 ) {
+							sendMail = true;
 							message += "Your next planned activities:\n" + planItemsMsg;
 							message += "Show your plan in your calendar: https://goo.gl/T9CmTi \n\n";
 						}
 					}
 					
 					if (planned < intended) {
+						sendMail = true;
 						message += "You have not yet planned "+(intended - planned)+" of your "+intended+" intended activities.\n";
 						message += "You can plan your activities in the calendar: https://goo.gl/T9CmTi \n\n";
 					}
 					
 					if (achievement > 0) {
+						sendMail = true;
 						message += "You have completed "+achievement+" of your "+intended+" intended activities.\n";
 						if (late == 0) {
 							message += "You are doing very well! Continue like this!\n";
@@ -148,18 +174,21 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 					}
 					
 					if (achievement < achievementTotal) {
+						sendMail = true;
 						message += "You have completed "+(achievementTotal - achievement)+" of your "+intended+" intended activities, which you didn’t plan.\n";
 						message += "Would you like to re-plan? If yes please follow this link: https://goo.gl/T9CmTi \n\n";
 					}
 
 					if (late > 0) {
+						sendMail = true;
 						message += "We have noticed that you are late on "+late+" of your "+planned+" planned activities. Would you like to re-plan these?\n";
 						message += "If yes, please follow this link: https://goo.gl/T9CmTi \n\n";
 					}
 					
 				}
-				
-				sendMail(profile.getEmail(), "Progress report", message);
+				if (sendMail) {
+					sendMail(profile.getEmail(), "Progress report", message);
+				}
 			}
 		}
 				
