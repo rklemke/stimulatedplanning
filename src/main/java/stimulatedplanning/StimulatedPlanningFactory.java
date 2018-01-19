@@ -252,16 +252,16 @@ public class StimulatedPlanningFactory {
 
 			
 			ModuleDescriptor module4 = new ModuleDescriptor(getUUID(), 
-					"Risks for Social Networks Users- Online Unfair behaviours", 
-					"Risks for Social Networks Users- Online Unfair behaviours", "");
+					"Risks for Social Networks Users", 
+					"Risks for Social Networks Users", "");
 			course.addModule(module4);
 			LessonDescriptor lesson41 = new LessonDescriptor(getUUID() ,
-					"Risk  for social networks users: cyberbullying, phishing, and others",
-					"Risk  for social networks users: cyberbullying, phishing, and others","");
+					"Risk  for social networks users",
+					"Risk  for social networks users","");
 			module4.addLesson(lesson41);	
 			ContentDescriptor content411 = new ContentDescriptor(getUUID(), 
-					"Risk  for social networks users: cyberbullying, phishing, and others", 
-					"Risk  for social networks users: cyberbullying, phishing, and others", 
+					"Risk  for social networks users", 
+					"Risk  for social networks users", 
 					testCourseBaseURL+"courseware/7fe10f9a5dd04ccfb094d49a903e7326/a43cb0f2df3645f7944e9d070dd89f5b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%40a43cb0f2df3645f7944e9d070dd89f5b");
 			lesson41.addContent(content411);
 

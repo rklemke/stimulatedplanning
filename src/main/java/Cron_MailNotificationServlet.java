@@ -166,7 +166,7 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 					
 					if (achievement > 0) {
 						sendMail = true;
-						message += "You have completed "+achievement+" of your "+intended+" intended activities.\n";
+						message += "You have completed "+achievement+" of your "+planned+" planned activities.\n";
 						if (late == 0) {
 							message += "You are doing very well! Continue like this!\n";
 						}
@@ -181,7 +181,15 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 
 					if (late > 0) {
 						sendMail = true;
-						message += "We have noticed that you are late on "+late+" of your "+planned+" planned activities. Would you like to re-plan these?\n";
+						message += "We have noticed that you are late on "+late+" of your "+planned+" planned activities.\n";
+						if ((plan.getObstacles() != null && !"".equals(plan.getObstacles())) || (plan.getCopingPlan() != null && !"".equals(plan.getCopingPlan())) ) {
+							message += "your plan b is: \n";
+							message += plan.getObstacles() + "\n";
+							message += plan.getCopingPlan() + "\n";
+						} else {
+							message += "your plan b is: empty. \n";
+						}
+						message += "Would you like to re-plan?\n";
 						message += "If yes, please follow this link: https://goo.gl/T9CmTi \n\n";
 					}
 					
@@ -212,8 +220,9 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 	    String bodyFooter = "\n";
 	    bodyFooter += "On behalf of the OUNL (Open University of the Netherlands) that provided this course we thank you for choosing us.\n";
 	    bodyFooter += "During the course some features will be tested. All the data is collected in anonymous form.\n";
-	    bodyFooter += "In case of any questions, please contact Alessandra Antonaci (mailto:alessandra.antonaci@ou.nl).\n";
+	    bodyFooter += "In case of any questions, please contact our support team (mailto:support.mooc@ou.nl).\n";
 	    bodyFooter += "To access to the course click on the following link https://ou.edia.nl/\n";
+	    bodyFooter += "If you want to sign-out please send an email to (mailto:support.mooc@ou.nl).\n";
 	    bodyFooter += "Enjoy the course.\n\n";
 	    bodyFooter += "Warm Regards,\n";
 	    bodyFooter += "The OUNL team\n";    
