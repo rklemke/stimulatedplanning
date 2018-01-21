@@ -70,49 +70,8 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 		// TODO: check delayed plan items
 		// TODO: if delayed plan items available: send report
 		
-		ArrayList<UserProfile> userProfiles = PersistentStore.getUserProfiles();
-		if (userProfiles == null || userProfiles.isEmpty()) {
-			userProfiles = new ArrayList<UserProfile>();
-			
-			for (String[] userProfileStrings : UserProfileCVS.userProfiles) {
-				User user = StimulatedPlanningFactory.getUser(userProfileStrings[1], userProfileStrings[1]);
-				UserProfile userProfile;
-				if (user != null) {
-					userProfile = StimulatedPlanningFactory.createUserProfile(user, userProfileStrings[3]);
-					userProfile.setFullName(userProfileStrings[2]);
-					userProfiles.add(userProfile);
-					try {
-						PersistentStore.writeDescriptor(userProfile);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			
-/*			User user = StimulatedPlanningFactory.getUser("rklemke", "rklemke");
-			UserProfile userProfile;
-			if (user != null) {
-				userProfile = StimulatedPlanningFactory.createUserProfile(user, "roland.klemke@ou.nl");
-				userProfiles.add(userProfile);
-				try {
-					PersistentStore.writeDescriptor(userProfile);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			user = StimulatedPlanningFactory.getUser("Sandra_Xai", "Sandra_Xai");
-			if (user != null) {
-				userProfile = StimulatedPlanningFactory.createUserProfile(user, "alessandra.antonaci@ou.nl");
-				userProfiles.add(userProfile);
-				try {
-					PersistentStore.writeDescriptor(userProfile);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-*/		
-		}
-
+		ArrayList<UserProfile> userProfiles = StimulatedPlanningFactory.getUserProfiles();
+		log.info("Cron_MailNotificationServlet: found userProfiles: "+userProfiles.size());
 		CourseDescriptor course = StimulatedPlanningFactory.generateTestCourse();
 		
 		User user = null;
@@ -122,6 +81,7 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 		String message = null;
 		
 		for (UserProfile profile : userProfiles) {
+			log.info("Cron_MailNotificationServlet: check userProfile: "+profile.getFullName());
 			user = profile.getUser();
 			String userName = profile.getFullName();
 			if (userName == null || "".equals(userName)) {

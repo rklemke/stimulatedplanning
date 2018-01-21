@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 
 import stimulatedplanning.util.HashArrayList;
+import stimulatedplanning.util.UserProfileCVS;
 
 public class StimulatedPlanningFactory {
 	public static final StimulatedPlanningFactory instance = new StimulatedPlanningFactory();
@@ -94,7 +95,10 @@ public class StimulatedPlanningFactory {
 	public static CourseDescriptor generateTestCourse() {
 		CourseDescriptor course = instance.retrieveTestCourse();
 		if (course == null) {
-			course = new CourseDescriptor(instance.testCourseId, "Introduction to Computer Security", "Introduction to Computer Security", testCourseBaseURL+"info");
+			course = new CourseDescriptor(instance.testCourseId, 
+					"Introduction to Computer Security", 
+					"Introduction to Computer Security", 
+					testCourseBaseURL+"info");
 			ModuleDescriptor module1 = new ModuleDescriptor(getUUID(), 
 					"Introduction to Computer Security", 
 					"Introduction to Computer Security", "");
@@ -166,34 +170,14 @@ public class StimulatedPlanningFactory {
 			lesson21.addContent(content211);
 
 			LessonDescriptor lesson23 = new LessonDescriptor(getUUID() ,
-					"How passwords work?",
+					"Passwords",
 					"What happens on the network when you enter a password","");
 			module2.addLesson(lesson23);
 			ContentDescriptor content231 = new ContentDescriptor(getUUID(), 
-					"How passwords work?", 
-					"What happens on the network when you enter a password", 
+					"How passwords work? How can they be attacked? And how can we setup them correctly?", 
+					"How passwords work? How can they be attacked? And how can we setup them correctly?", 
 					testCourseBaseURL+"courseware/7f3c8908698a4fa785c2bab76dc403c9/0437f85591cc4e0c964437b4d1bfad1e/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400437f85591cc4e0c964437b4d1bfad1e");
 			lesson23.addContent(content231);
-
-			LessonDescriptor lesson24 = new LessonDescriptor(getUUID() ,
-					"How passwords can be attacked?",
-					"How passwords can be attacked?","");
-			module2.addLesson(lesson24);
-			ContentDescriptor content241 = new ContentDescriptor(getUUID(), 
-					"How passwords can be attacked?", 
-					"How passwords can be attacked?", 
-					testCourseBaseURL+"courseware/7f3c8908698a4fa785c2bab76dc403c9/a8735d7566884b6bb5a05851a0836204/"); //1"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40vertical%2Bblock%40c38c05ecb5ee40e4bcb21f1a3f1f5289");
-			lesson24.addContent(content241);
-
-			LessonDescriptor lesson25 = new LessonDescriptor(getUUID() ,
-					"Good password checklist",
-					"Good password checklist","");
-			module2.addLesson(lesson25);
-			ContentDescriptor content251 = new ContentDescriptor(getUUID(), 
-					"Good password checklist", 
-					"Good password checklist", 
-					testCourseBaseURL+"courseware/7f3c8908698a4fa785c2bab76dc403c9/a97c3e16628d458a933cff6bc7f6a492/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%40a97c3e16628d458a933cff6bc7f6a492");
-			lesson25.addContent(content251);
 
 			LessonDescriptor lesson26 = new LessonDescriptor(getUUID() ,
 					"Password managers",
@@ -265,6 +249,7 @@ public class StimulatedPlanningFactory {
 					testCourseBaseURL+"courseware/7fe10f9a5dd04ccfb094d49a903e7326/a43cb0f2df3645f7944e9d070dd89f5b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%40a43cb0f2df3645f7944e9d070dd89f5b");
 			lesson41.addContent(content411);
 
+
 			GoalDescriptor goal2 = new GoalDescriptor(getUUID(), module1.getTitle(), 
 					"I intend to participate in the course activities to learn about "+module1.getTitle(), "");
 			ListIterator<LessonDescriptor> iterator = module1.getLessons();
@@ -333,6 +318,34 @@ public class StimulatedPlanningFactory {
 		}
 		return user;
 		
+	}
+	
+	
+	public static ArrayList<UserProfile> getUserProfiles() {
+		ArrayList<UserProfile> userProfiles = PersistentStore.getUserProfiles();
+		if (userProfiles == null || userProfiles.isEmpty()) {
+			userProfiles = new ArrayList<UserProfile>();
+			
+			for (String[] userProfileStrings : UserProfileCVS.getUserProfiles("WEB-INF/profileResources/OUNL_ICS18_2018_1_student_profile_info.csv")) {
+				User user = StimulatedPlanningFactory.getUser(userProfileStrings[1], userProfileStrings[1]);
+				UserProfile userProfile;
+				if (user != null) {
+					userProfile = StimulatedPlanningFactory.createUserProfile(user, userProfileStrings[3]);
+					userProfile.setFullName(userProfileStrings[2]);
+					userProfiles.add(userProfile);
+					try {
+						PersistentStore.writeDescriptor(userProfile);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+		}
+		
+		return userProfiles;
+
+
 	}
 	
 	

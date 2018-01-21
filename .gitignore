@@ -3,6 +3,9 @@ appengine-generated/
 
 build/
 
+#additional userprofile folder
+profileResources/
+
 # Compiled class file
 *.class
 
