@@ -127,7 +127,7 @@
 				<b>THEN</b> I'll not plan any activities immediately after the other to take all the time I need.</li>
 				<li><b>IF</b> the Internet connection will not work properly at home <br>
 				<b>THEN</b> I'll use the mobile data of my telephone to follow the MOOC.</li>
-				<li><b>IF</b> the location I chose  (i.e. a coffee) is too busy to find concentration <br>
+				<li><b>IF</b> the location I chose  (i.e. a caf&eacute;) is too busy to find concentration <br>
 				<b>THEN</b> I'll change it (by going home).</li>
 				<li><b>IF</b> I come later home from work and I miss my planned course activity<br>
 				<b>THEN</b> I will re-plan my course activity to the next possible day.<br></li>

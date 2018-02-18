@@ -414,7 +414,7 @@ public class PersistentStore {
 		return null;
 	}
 	
-	protected static String readStringProperty(Entity genericEntity, String key, String defaultValue) {
+	public static String readStringProperty(Entity genericEntity, String key, String defaultValue) {
 		Object propObj = genericEntity.getProperty(key);
 		String prop = null;
 		if (propObj != null) {
@@ -893,6 +893,24 @@ public class PersistentStore {
 		}
 		
 	}
+	
 
+	
+	public static PreparedQuery getEntitiesOfType(String entityType) {
+		try {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			Query q = new Query(entityType);
+			
+			PreparedQuery pq = datastore.prepare(q);
+
+			return pq;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 
 }
