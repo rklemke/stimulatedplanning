@@ -84,6 +84,9 @@
     
   </script>
   <style>
+ 
+ /*@import url(http://fonts.googleapis.com/css?family=Satisfy);*/
+
   
   .ui-tabs-vertical { width: 65em; }
   .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 25em; }
@@ -138,6 +141,97 @@
 .ui-button:active, .ui-button.ui-state-active:hover {
     background: #ff9800;
 }
+
+/*
+Code by Creative Punch
+ http://creative-punch.net/2014/02/create-css3-post-it-note/#comments
+Create a CSS3 post-it note without images
+*/
+
+.quote-container {
+  margin-top: 50px;
+  position: relative;
+}
+
+.note {
+  color: #333;
+  position: relative;
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: 20px;
+  /* Firefox */
+  -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
+  /* Safari+Chrome */
+  -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+  /* Opera */
+  box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+}
+
+.note .author {
+  display: block;
+  margin: 40px 0 0 0;
+  text-align: right;
+}
+
+.yellow {
+  background: #eae672;
+  -webkit-transform: rotate(2deg);
+  -moz-transform: rotate(2deg);
+  -o-transform: rotate(2deg);
+  -ms-transform: rotate(2deg);
+  transform: rotate(2deg);
+}
+
+.pin {
+  background-color: #aaa;
+  display: block;
+  height: 32px;
+  width: 2px;
+  position: absolute;
+  left: 50%;
+  top: -16px;
+  z-index: 1;
+}
+
+.pin:after {
+  background-color: #A31;
+  background-image: radial-gradient(25% 25%, circle, hsla(0,0%,100%,.3), hsla(0,0%,0%,.3));
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px hsla(0,0%,0%,.1),
+              inset 3px 3px 3px hsla(0,0%,100%,.2),
+              inset -3px -3px 3px hsla(0,0%,0%,.2),
+              23px 20px 3px hsla(0,0%,0%,.15);
+  content: '';
+  height: 12px;
+  left: -5px;
+  position: absolute;
+  top: -10px;
+  width: 12px;
+}
+
+.pin:before {
+  background-color: hsla(0,0%,0%,0.1);
+  box-shadow: 0 0 .25em hsla(0,0%,0%,.1);
+  content: '';
+  height: 24px;
+  width: 2px;
+  left: 0;
+  position: absolute;
+  top: 8px;
+  transform: rotate(57.5deg);
+  -moz-transform: rotate(57.5deg);
+  -webkit-transform: rotate(57.5deg);
+  -o-transform: rotate(57.5deg);
+  -ms-transform: rotate(57.5deg);
+  transform-origin: 50% 100%;
+  -moz-transform-origin: 50% 100%;
+  -webkit-transform-origin: 50% 100%;
+  -ms-transform-origin: 50% 100%;
+  -o-transform-origin: 50% 100%;
+}
+
   </style>
 </head>
 <body>
@@ -146,10 +240,10 @@
 
 <!--  <div class="ui-frame">  -->
 <form id="goalSelectForm" method="POST" action="GoalSettingServlet">
-<h2>Your intentions with this course</h2>
+<!-- h2>Your intentions with this course</h2 -->
 <!--  (<%= user.getName() %>) [<%= session.getAttribute("loginData") %>] -->
 <% if(!userPlan.isIntentionCompleted() && "intention.topic".equals(intentionStep)) { %>
-<p>Please indicate your intentions with respect to this course's content offer.</p>
+<p>Select your activities.</p>
 <div id="tabs">
   <ul>
     <li class="tabs-0" id="li-0">
@@ -226,7 +320,7 @@
 
 <% } else if(!userPlan.isIntentionCompleted() && "intention.schedule".equals(intentionStep)) { %>
 
-<p>Please indicate your intentions with respect to the estimated time you intent to spend on this course's activities.</p>
+<p>How much time per week can you invest in this course?</p>
 <div class="ui-widget ui-widget-content">
   <ul class="ul-goals">
     <li>
@@ -250,14 +344,17 @@
 
 <% } else if(userPlan.isIntentionCompleted() || "intention.feedback".equals(intentionStep)) { %>
 
+<div class="quote-container">
+      <i class="pin"></i>
+  <blockquote class="note yellow">
 <p>Memo</p>
-<div class="ui-widget ui-widget-content">
+<!-- div class="ui-widget ui-widget-content" -->
 		<div id="selectedGoal">
 			<%			
 		if (selectedGoals != null) {
 			String separator = "";
 		%>
-		<p>Your selection:</p>
+		<!-- p>Your selection:</p -->
 		<ul>
 		<% 
 		if (userPlan.isAllCourseIntention()) {
@@ -305,6 +402,9 @@
 		}
 		%>	
 		</div>
+  </blockquote>
+
+<!-- /div -->
 </div>
 <% } %>
  		<div class="confirm">
@@ -312,12 +412,12 @@
 		<% 
 		if (!userPlan.isIntentionCompleted() && !PlanningSteps.intentionSteps[0].equals(intentionStep)) {
 		%>
-			<button type="submit" id="prev" name="submit" value="Previous">Save and Previous</button>
+			<button type="submit" id="prev" name="submit" value="Previous">Go Back</button>
 		<%
 		}
 		if (!userPlan.isIntentionCompleted() && !PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
 		%>
-			<button type="submit" id="next" name="submit" value="Next">Save and Next</button>
+			<button type="submit" id="next" name="submit" value="Next">Continue</button>
 		<%
 		}
 		if (userPlan.isIntentionCompleted() || (selectedGoals != null && PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep))) {

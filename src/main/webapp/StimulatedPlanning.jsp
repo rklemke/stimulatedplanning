@@ -280,8 +280,8 @@
 <div id="wrap" class="ui-wrapper">
 
 <div id="leftbar">
-<h4>Your Intention: <%= selectedGoalProfile %></h4>
-<p>Plan your recommended activities by dragging them from the list below to the calendar.</p>
+<!-- h4>Your Intention: <%= selectedGoalProfile %></h4 -->
+<p>Plan your activities by dragging them from the list below to the calendar.</p>
 <div id="accordion">
 <%
 	if (hasPlannableGoals) {
@@ -406,8 +406,8 @@
 <div class="confirm">
 	<form id="planningForm" method="POST" action="StimulatedPlanningServlet">
 		<input type="hidden" name="calenderItems" id="calenderItems" value="">
-		<button type="submit" id="ok" name="submit" value="OK" onclick="retrieveAllEvents();">Save</button>
-		<button type="submit" id="next" name="submit" value="Next" onclick="retrieveAllEvents();">Save and Next</button>
+		<!-- button type="submit" id="ok" name="submit" value="OK" onclick="retrieveAllEvents();">Save</button -->
+		<button type="submit" id="next" name="submit" value="Next" onclick="retrieveAllEvents();">Continue</button>
 	</form>
 </div>
 

@@ -181,7 +181,7 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 	    bodyFooter += "On behalf of the OUNL (Open University of the Netherlands) that provided this course we thank you for choosing us.\n";
 	    bodyFooter += "During the course some features will be tested. All the data is collected in anonymous form.\n";
 	    bodyFooter += "In case of any questions, please contact our support team (mailto:support.mooc@ou.nl).\n";
-	    bodyFooter += "To access to the course click on the following link https://ou.edia.nl/\n";
+	    bodyFooter += "To access to the course click on the following link "+StimulatedPlanningFactory.platformHomeUrl+"\n";
 	    bodyFooter += "If you want to sign-out please send an email to (mailto:support.mooc@ou.nl).\n";
 	    bodyFooter += "Enjoy the course.\n\n";
 	    bodyFooter += "Warm Regards,\n";

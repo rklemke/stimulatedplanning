@@ -137,8 +137,8 @@
 		</div>
 	</div>
 	<div class="confirm">
-		<button type="submit" id="ok" name="submit" value="OK" >Save</button>
-		<button type="submit" id="next" name="submit" value="Next" >Save and Next</button>
+		<!-- button type="submit" id="ok" name="submit" value="OK" >Save</button -->
+		<button type="submit" id="next" name="submit" value="Next" >Continue</button>
 	</div>
 	
 </form>

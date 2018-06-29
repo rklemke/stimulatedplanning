@@ -49,13 +49,15 @@
 .ui-button:active, .ui-button.ui-state-active:hover {
     background: #ff9800;
 }
+
   </style>
 </head>
 <body>
 <div id="wrap" class="ui-frame"> 
 <form id="thankYouForm" method="POST" action="ThankYouServlet">
-	<h3 style="float: left;">Now you're ready to get started with the course! 
-	<br><a href="https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/course/" target="_parent">Click here to go to the course overview</a></h3>
+	<h3 style="float: left;">Your data have been saved successfully. 
+	<br>Now you’re ready to start the course. 
+	<br><a href="<%= course.getUrl() %>" target="_parent">Click here to go to the course overview</a></h3>
 	<img style="float: left;" height="500" src="/img/tick-305245_640.png">
 </form>
 </div>
