@@ -161,6 +161,7 @@ Create a CSS3 post-it note without images
   padding: 20px;
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: 20px;
+  font-weight: bold;
   /* Firefox */
   -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
   /* Safari+Chrome */
