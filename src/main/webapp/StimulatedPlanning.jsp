@@ -303,6 +303,7 @@
 							class="fc-event plan-a plan-ok ui-draggable ui-draggable-handle" 
 							id="<%= lesson.getId() %>" 
 							data-duration="<%= lesson.getLessonDurationString() %>"
+							title="Learning Time: <%= lesson.getLessonDurationString() %>"
 						><%= lesson.getTitle() %></div>
 		<%
 					} else {
@@ -313,6 +314,7 @@
 								class="fc-event plan-b ui-draggable ui-draggable-handle" 
 								id="<%= lesson.getId() %>" 
 								data-duration="<%= lesson.getLessonDurationString() %>"
+								title="Learning Time: <%= lesson.getLessonDurationString() %>"
 							><%= lesson.getTitle() %></div>
 <%
 						} else {
@@ -321,6 +323,7 @@
 								class="fc-event plan-a plan-late ui-draggable ui-draggable-handle" 
 								id="<%= "late_"+lesson.getId() %>" 
 								data-duration="<%= lesson.getLessonDurationString() %>"
+								title="Learning Time: <%= lesson.getLessonDurationString() %>"
 							><%= lesson.getTitle() %></div>
 <%
 						}
@@ -350,6 +353,7 @@
 						class="fc-event plan-a plan-ok ui-draggable ui-draggable-handle" 
 						id="<%= lesson.getId() %>" 
 						data-duration="<%= lesson.getLessonDurationString() %>"
+						title="Learning Time: <%= lesson.getLessonDurationString() %>"
 					><%= lesson.getTitle() %></div>
 		<%
 					} else {
@@ -360,6 +364,7 @@
 								class="fc-event plan-b ui-draggable ui-draggable-handle" 
 								id="<%= lesson.getId() %>" 
 								data-duration="<%= lesson.getLessonDurationString() %>"
+								title="Learning Time: <%= lesson.getLessonDurationString() %>"
 							><%= lesson.getTitle() %></div>
 <%
 						} else {
@@ -368,6 +373,7 @@
 								class="fc-event plan-a plan-late ui-draggable ui-draggable-handle" 
 								id="<%= "late_"+lesson.getId() %>" 
 								data-duration="<%= lesson.getLessonDurationString() %>"
+								title="Learning Time: <%= lesson.getLessonDurationString() %>"
 							><%= lesson.getTitle() %></div>
 <%
 						}
