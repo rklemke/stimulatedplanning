@@ -34,6 +34,101 @@
   <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+
+  	var icons = {
+      header: "iconClosed",
+      activeHeader: "iconOpen"
+    };
+    
+    $( function() {
+
+    $( document).tooltip({
+    	track: true
+    });
+    $( "button" ).button();
+    $( 'input[type="button"]' ).button();
+    $( 'input[type="button"]' ).click(function(e) {
+    	addCopingPlan();
+	});
+	$( ".exampleItem" ).click(function(e) {
+		selectExample(this.id);
+	});
+	updatePlanForm();
+
+  } );
+  
+
+	function guid() {
+	  function s4() {
+		return Math.floor((1 + Math.random()) * 0x10000)
+		  .toString(16)
+		  .substring(1);
+	  }
+	  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+	}
+
+	function updatePlanForm() {
+		$("#plan_table").val($( "#copingPlan tbody" ).html());
+		//alert($("#plan_table").val());
+	}
+	
+    function addCopingPlan() {
+      var valid = (($("#plan_if").val().length > 0) && ($("#plan_then").val().length > 0));
+ 	  var uuid = guid();
+ 	  var editCall = 'selectAndRemoveExample( "'+uuid+'" );';
+ 	  var removeCall = 'removeExample( "'+uuid+'" );'; //'$( "#'+uuid+' " ).remove()';
+ 	  
+      if ( valid ) {
+        $( "#copingPlan tbody" ).append( "<tr id='"+uuid+"'>" +
+          "<td id='"+uuid+"-if'>" + $("#plan_if").val() + "</td>" +
+          "<td id='"+uuid+"-then'>" + $("#plan_then").val() + "</td>" +
+          "<td>" + 
+          	"<img src='/img/pencil.png' onclick='"+editCall+"' title='Edit this line.' />" + 
+          	"<img src='/img/cross-mark-on-a-black-circle-background.png' onclick='"+removeCall+"' title='Remove this line.' />" + 
+          "</td>" +
+        "</tr>" );
+        $( "#completeCopingPlan" ).val($( "#copingPlan tbody" ).html());
+        $("#plan_if").val("");
+        $("#plan_then").val("");
+        
+        updatePlanForm();
+        
+      }
+      return valid;
+    }
+    
+    
+    function removeExample(id) {
+    	$("#"+id).remove();
+        updatePlanForm();
+    }
+  
+    function selectAndRemoveExample(id) {
+    	$("#plan_if").val($("#"+id+"-if").html());
+    	$("#plan_then").val($("#"+id+"-then").html());
+    	$("#"+id).remove();
+        updatePlanForm();
+    }
+  
+    function selectExample(id) {
+    	$("#plan_if").val($("#"+id+"-if").html());
+    	$("#plan_then").val($("#"+id+"-then").html());
+        updatePlanForm();
+    }
+  
+  function checkAll(t, ...ids) {
+	  for (var id of ids) {
+		  $(id).prop('checked', t);
+		  if (id.startsWith('.')) {
+			  $(id).checkboxradio('refresh');
+		  }
+	  }
+  }
+  
+    
+  </script>
+
   <style>
   .ui-tabs-vertical { width: 65em; }
   .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 25em; }
@@ -56,15 +151,30 @@
 		float: right;
 	}
   .ui-wrapper { overflow: auto;}
+  .ui-tooltip {
+    border: 1px solid white;
+    background: #111;
+    color: white;
+  }
+  
 
 	#wrap {
 		width: 1040px;
 		margin: 0 auto;
 	}
 
-.ui-button:active, .ui-button.ui-state-active:hover {
-    background: #ff9800;
-}
+	.ui-button:active, .ui-button.ui-state-active:hover {
+		background: #ff9800;
+	}
+
+	.exampleItem:hover {
+		text-decoration: underline;	
+		cursor: pointer;
+	}
+
+	textarea {
+	  resize: vertical; /* user can resize vertically, but width is fixed */
+	}
   </style>
 </head>
 <body>
@@ -110,35 +220,46 @@
 			</ul><%	} %>
 			</div>
 			<div>
-				<div style="float: left; width: 300px; margin-left: 10px;">
-					<label><b>IF</b> I meet one of the following situations:</label>
-					<textarea style="width: 300px; height: 150px;" id="obstacles" name="obstacles" ><%= userPlan.getObstacles() %></textarea>
-				</div>
-				<div style="float: left; width: 300px; margin-left: 10px;">
-					<label><b>THEN</b> I will perform the following action:</label> 
-					<textarea style="width: 300px; height: 150px;" id="copingPlan" name="copingPlan" ><%= userPlan.getCopingPlan() %></textarea>
-				</div>
+			  <table id="copingPlan" class="ui-widget ui-widget-content">
+				<thead>
+				  <tr class="ui-widget-header ">
+					<th title="IF I meet one of the following situations - click on the examples on the right for inspiration."><b>IF</b></th>
+					<th title="THEN I will perform the following action - click on the examples on the right for inspiration."><b>THEN</b></th>
+					<th></th>
+				  </tr>
+				</thead>
+				<tbody>
+					<%= userPlan.getCopingPlan() %>
+				</tbody>
+				<thead>
+				  <tr>
+					<td><textarea style="width: 250px; height: 100px;" name="plan_if" id="plan_if"  title="Enter a situation or click on an example on the right." ></textarea></td>
+					<td><textarea style="width: 250px; height: 100px;" name="plan_then" id="plan_then"  title="Enter an action or click on an example on the right." ></textarea></td>
+					<td><input type="button" id="addCopingPlan" name="addCopingPlan" value="Add" title="Add the IF and THEN plan to the list." /></td>
+				  </tr>
+				</thead>
+			  </table><input type="hidden" name="plan_table" id="plan_table" value=""> 
 			</div>
 		</div>
 		<div style="float: left; width: 360px; margin-left: 10px; margin-top: 10px;">
-			<label><b>Examples</b></label>
-			<ul>
-				<li><b>IF</b> I realise that I need more time for an activity <BR>
-				<b>THEN</b> I'll not plan any activities immediately after the other to take all the time I need.</li>
-				<li><b>IF</b> the Internet connection will not work properly at home <br>
-				<b>THEN</b> I'll use the mobile data of my telephone to follow the MOOC.</li>
-				<li><b>IF</b> the location I chose  (i.e. a caf&eacute;) is too busy to find concentration <br>
-				<b>THEN</b> I'll change it (by going home).</li>
-				<li><b>IF</b> I come later home from work and I miss my planned course activity<br>
-				<b>THEN</b> I will re-plan my course activity to the next possible day.<br></li>
-				<li><b>IF</b> I am too tired to follow another course activity on the same day<br>
-				<b>THEN</b> I will re-plan my course activities to have less activities on the same day.<br></li>
+			<label title="Click on the examples to reuse them."><b>Examples</b></label>
+			<ul id="exampleList">
+				<li class="ui-widget"><span class="exampleItem" id="example-1" title="Click on the examples to reuse them."><b>IF</b> <span id="example-1-if">I realise that I need more time for an activity</span> <br>
+				<b>THEN</b> <span id="example-1-then">I'll not plan any activities immediately after the other to take all the time I need.</span></span></li>
+				<li><span class="exampleItem" id="example-2" title="Click on the examples to reuse them."><b>IF</b> <span id="example-2-if">the Internet connection will not work properly at home</span> <br>
+				<b>THEN</b> <span id="example-2-then">I'll use the mobile data of my telephone to follow the MOOC.</span></span></li>
+				<li><span class="exampleItem" id="example-3" title="Click on the examples to reuse them."><b>IF</b> <span id="example-3-if">the location I chose  (i.e. a café) is too busy to find concentration</span> <br>
+				<b>THEN</b> <span id="example-3-then">I'll change it (by going home).</span></span></li>
+				<li><span class="exampleItem" id="example-4" title="Click on the examples to reuse them."><b>IF</b> <span id="example-4-if">I come later home from work and I miss my planned course activity</span><br>
+				<b>THEN</b> <span id="example-4-then">I will re-plan my course activity to the next possible day.</span></span></li>
+				<li><span class="exampleItem" id="example-5" title="Click on the examples to reuse them."><b>IF</b> <span id="example-5-if">I am too tired to follow another course activity on the same day</span><br>
+				<b>THEN</b> <span id="example-5-then">I will re-plan my course activities to have less activities on the same day.</span></span></li>
 			</ul> 
 		</div>
 	</div>
 	<div class="confirm">
 		<!-- button type="submit" id="ok" name="submit" value="OK" >Save</button -->
-		<button type="submit" id="next" name="submit" value="Next" >Continue</button>
+		<button type="submit" id="next" name="submit" value="Next" title="Click continue to go to the next page. Your selection will be saved automatically.">Continue</button>
 	</div>
 	
 </form>

@@ -44,8 +44,10 @@ public class CopingPlanServlet extends HttpServlet {
 		UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
 		boolean userPlanDirty = false;
 		
-		String obstacles = request.getParameter("obstacles");
-		String copingPlan = request.getParameter("copingPlan");
+//		String obstacles = request.getParameter("obstacles");
+//		String copingPlan = request.getParameter("copingPlan");
+		String obstacles = "";
+		String copingPlan = request.getParameter("plan_table");
 		
 		if (obstacles != null && !obstacles.equals(userPlan.getObstacles())) {
 			userPlan.setObstacles(obstacles);

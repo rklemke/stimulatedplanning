@@ -28,6 +28,10 @@ public class LessonDescriptor extends GenericDescriptor {
 		String formatted = String.format("%02d", hours) + ":" + String.format("%02d", minutes);
 		return formatted;
 	}
+	
+	public String getLessonTooltip() {
+		return "'"+getTitle()+"' contains "+contents.size()+" activit"+(contents.size()==1?"y":"ies")+" and takes "+lessonDuration.toMinutes()+" minutes to be completed.";
+	}
 
 	public void addContent(ContentDescriptor content) {
 		this.contents.add(content);
