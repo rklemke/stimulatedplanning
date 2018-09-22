@@ -61,6 +61,10 @@
         	"ui-checkboxradio-checked": "ui-checkboxradio-checked-orange"
         }
     });
+    $( document).tooltip({
+    	track: true
+    });
+    $( "button" ).button();
 
   } );
   
@@ -122,6 +126,11 @@
   .ui-frame { width: 65em; }
  
   .ui-wrapper { overflow: auto; width: 1048px;}
+  .ui-tooltip {
+    border: 1px solid white;
+    background: #111;
+    color: white;
+  }
 
 	#wrap {
 		width: 1048px;
@@ -427,17 +436,17 @@ Create a CSS3 post-it note without images
 		<% 
 		if (!userPlan.isIntentionCompleted() && !PlanningSteps.intentionSteps[0].equals(intentionStep)) {
 		%>
-			<button type="submit" id="prev" name="submit" value="Previous">Go Back</button>
+			<button type="submit" id="prev" name="submit" value="Previous" title="Click continue to go to the previous page. Your selection will be saved automatically.">Go Back</button>
 		<%
 		}
 		if (!userPlan.isIntentionCompleted() && !PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
 		%>
-			<button type="submit" id="next" name="submit" value="Next">Continue</button>
+			<button type="submit" id="next" name="submit" value="Next" title="Click continue to go to the next page. Your selection will be saved automatically.">Continue</button>
 		<%
 		}
 		if (userPlan.isIntentionCompleted() || (selectedGoals != null && PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep))) {
 		%>
-			<button type="submit" id="continue" name="submit" value="Continue">Continue</button>
+			<button type="submit" id="continue" name="submit" value="Continue" title="Click continue to go to the next page. Your selection will be saved automatically.">Continue</button>
 		<%
 		}
 		%>	

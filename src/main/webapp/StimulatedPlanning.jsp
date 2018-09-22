@@ -20,6 +20,10 @@
       heightStyle: "auto",
       collapsible: true
     });
+    $( document).tooltip({
+    	track: true
+    });
+    $( "button" ).button();
   } );
 </script>
 <%
@@ -170,12 +174,12 @@
 </script>
 <style>
 
-	body {
+/*	body {
 		margin-top: 40px;
 		text-align: center;
 		font-size: 14px;
 		font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-	}
+	}*/
 		
 	#wrap {
 		width: 1040px;
@@ -271,6 +275,11 @@
 	}
 	
   .ui-wrapper { overflow: auto; width: 1048px;}
+  .ui-tooltip {
+    border: 1px solid white;
+    background: #111;
+    color: white;
+  }
 	
 
 </style>
@@ -290,7 +299,7 @@
 			ListIterator<UserLesson> lessonIterator = goal.getLessons();
 			if (lessonIterator.hasNext()) {
 %>
-		  <h3><%= goal.getGoalDescriptor().getTitle() %></h3>
+		  <h3 title="Click to open list of activities."><%= goal.getGoalDescriptor().getTitle() %></h3>
 		  <div>
 				<div class="external-events">
 		<%
@@ -341,7 +350,7 @@
 			ListIterator<LessonDescriptor> lessonIterator = goal.getLessons();
 			if (lessonIterator.hasNext()) {
 %>
-		  <h3><%= goal.getTitle() %></h3>
+		  <h3 title="Click to open list of activities."><%= goal.getTitle() %></h3>
 		  <div>
 				<div class="external-events">
 		<%
@@ -401,19 +410,11 @@
 		<div id="calendar"></div>
 		<div style="clear:both"></div>
 		
-<!-- 		<div id="feedbackMessage">
-			Dear Lousie Learner,
-			<ul>
-			<li>You are running late for your plan and did not complete lesson 1.4 in time</li>
-			<li>You also did not yet plan lesson 1.5 onwards.</li>
-			<li>Please replan your activities accordingly!</li>
-			</ul>
-		</div>   -->
 <div class="confirm">
 	<form id="planningForm" method="POST" action="StimulatedPlanningServlet">
 		<input type="hidden" name="calenderItems" id="calenderItems" value="">
 		<!-- button type="submit" id="ok" name="submit" value="OK" onclick="retrieveAllEvents();">Save</button -->
-		<button type="submit" id="next" name="submit" value="Next" onclick="retrieveAllEvents();">Continue</button>
+		<button type="submit" id="next" name="submit" value="Next" onclick="retrieveAllEvents();" title="Click continue to go to the next page. Your selection will be saved automatically.">Continue</button>
 	</form>
 </div>
 
