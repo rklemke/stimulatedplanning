@@ -71,30 +71,7 @@ Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 					$( '#ajaxresult' ).html('Connected. '+userName);
 		    	} else {
 					var datatxt = data.feedbackFrame;
-//					  var datatxt = "<div width='48%' style='float:left;'>";
-//				      datatxt += userName;
-//				      datatxt += "<table id='feedbacktable' class='tablesorter'>";
-//				      datatxt += "<thead><tr><th>Tracked attribute</th><th>Tracked value</th></tr></thead>";
-//					  $.each(data,function(key,val){
-//						  if (key.startsWith("calc")) {
-//							  val += " %";
-//							  datatxt += "<tr><td align='top'>" + key + "</td><td align='top'>" + val + "</td></tr>";
-//						  }
-//					  });
-//				      datatxt += "</table>";
-//				      datatxt += "</div><div width='48%' style='float:left; margin-left: 20px;'>";
-//				      datatxt += "<table id='feedbacktable2' class='tablesorter'>";
-//				      datatxt += "<thead><tr><th>Raw attribute</th><th>Raw value</th></tr></thead>";
-//					  $.each(data,function(key,val){
-//						  if (!key.startsWith("calc")) {
-//							  datatxt += "<tr><td>" + key + "</td><td>" + val + "</td></tr>";
-//						  }
-//					  });
-//				      datatxt += "</table>";
-//				      datatxt += "</div>";
 					  $( '#ajaxresult' ).html(datatxt);
-//					  $( '#feedbacktable' ).tablesorter( {sortList: [[0,0], [1,0]]} );
-//					  $( '#feedbacktable2' ).tablesorter( {sortList: [[0,0], [1,0]]} );
 		    	}
 		    },
 		    complete: function() {

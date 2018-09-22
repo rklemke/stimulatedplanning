@@ -41,11 +41,25 @@
     $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
 //    $( "#tabs2" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
 //    $( "#tabs2 li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
-    $( "input" ).checkboxradio({
+    $( "input .goalselectToggle" ).checkboxradio({
       icon: true,
       classes: {
       	"ui-checkboxradio-checked": "ui-checkboxradio-checked-orange"
       }
+    });
+
+    $( "input .moduleselectToggle" ).checkboxradio({
+        icon: true,
+        classes: {
+        	"ui-checkboxradio-checked": "ui-checkboxradio-checked-orange"
+        }
+    });
+
+    $( "input .goalselectToggle" ).checkboxradio({
+        icon: true,
+        classes: {
+        	"ui-checkboxradio-checked": "ui-checkboxradio-checked-orange"
+        }
     });
 
   } );
@@ -325,19 +339,19 @@ Create a CSS3 post-it note without images
 <div class="ui-widget ui-widget-content">
   <ul class="ul-goals">
     <li>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-1" value="1" <% if (userScheduleIntention != null && userScheduleIntention.equals("1")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-1">I intend to spend about <b>one hour</b> per week on this course</label>
+    	<input class="scheduleselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-1" value="1" <% if (userScheduleIntention != null && userScheduleIntention.equals("1")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-1">I intend to spend about <b>one hour</b> per week on this course</label>
     </li>
     <li>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-2" value="2" <% if (userScheduleIntention != null && userScheduleIntention.equals("2")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-2">I intend to spend about <b>two hours</b> per week on this course</label>
+    	<input class="scheduleselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-2" value="2" <% if (userScheduleIntention != null && userScheduleIntention.equals("2")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-2">I intend to spend about <b>two hours</b> per week on this course</label>
     </li>
     <li>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-3" value="3" <% if (userScheduleIntention != null && userScheduleIntention.equals("3")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-3">I intend to spend about <b>three hours</b> per week on this course</label>
+    	<input class="scheduleselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-3" value="3" <% if (userScheduleIntention != null && userScheduleIntention.equals("3")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-3">I intend to spend about <b>three hours</b> per week on this course</label>
     </li>
     <li>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-4" value="4" <% if (userScheduleIntention != null && userScheduleIntention.equals("4")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-4">I intend to spend about <b>four hours</b> per week on this course</label>
+    	<input class="scheduleselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-4" value="4" <% if (userScheduleIntention != null && userScheduleIntention.equals("4")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-4">I intend to spend about <b>four hours</b> per week on this course</label>
     </li>
     <li>
-    	<input class="goalselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-5" value="5" <% if (userScheduleIntention != null && userScheduleIntention.equals("5")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-5">I intend to spend about <b>five hours</b> per week on this course</label>
+    	<input class="scheduleselectToggle" type="radio" name="scheduleSelectRadio" id="tabs2-5" value="5" <% if (userScheduleIntention != null && userScheduleIntention.equals("5")) { %>checked <% } %> ><label class="goalSelectLabel" for="tabs2-5">I intend to spend about <b>five hours</b> per week on this course</label>
     </li>
   </ul>
   <div id="selectedGoals"></div>

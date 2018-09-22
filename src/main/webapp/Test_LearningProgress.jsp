@@ -80,6 +80,83 @@
 <p id="learningContent">Here goes the learning content!</p>
 
 <!-- <iframe width="800" height="550" id="trackerFrame" src="./mooc-integration/appengine_additional_html.html"></iframe> -->
-<iframe width="800" height="600" id="trackerFrame" src="./mooc-integration/openedx_tracker.html"></iframe>
+<!-- <iframe width="800" height="600" id="trackerFrame" src="./mooc-integration/openedx_tracker.html"></iframe> -->
+<!-- <iframe width="1100" height="600" id="feedbackFrame" src=""></iframe> -->
+
+<script type="text/javascript">
+	var timeoutInterval = 30000;
+	var userNameDefault = "Guest";
+	var userIdDefault = "unknown";
+	var pageUrlDefault = window.location.href;
+
+	function getUserName() {
+	  var tmpName = $('.label-username').html();
+	  if (tmpName == null) {
+	    tmpName = userNameDefault;
+	  }
+	  return tmpName;
+	}
+
+	function getUserId() {
+	  return getUserName();
+	}
+
+	function getPageUrl() {
+		var tmpId = $('#pageurl', window.parent.document).val();
+		if (tmpId == null) {
+		  tmpId = pageUrlDefault;
+		}
+		return tmpId;
+	}
+	
+	function tickerRequest() {
+		  var userName = getUserName();
+		  var userId = getUserId(); 
+		  var pageUrl = getPageUrl();
+		  $.ajax({
+		    dataType: 'jsonp',
+		    url: '/DataTrackerServlet',
+		    method: 'POST',
+		    data: {
+			userName: userName,
+			userid: userId,
+			page: pageUrl
+		    }, 
+		    success: function(data) {
+		    	if ($('#stimulatedPlanningFrame').length) {
+		    		$("#stimulatedPlanningFrame").attr("src", "/GoalSettingServlet");
+					$( '#ajaxresult' ).html('Connected. '+userName);
+		    	} else if ($('#feedbackFrame').length) {
+		    		$("#feedbackFrame").attr("src", "/FeedbackFrame.jsp");
+					$( '#ajaxresult' ).html('Connected. '+userName);
+		    	} else {
+					var datatxt = data.feedbackFrame;
+					  $( '#ajaxresult' ).html(datatxt);
+		    	}
+		    },
+		    complete: function() {
+		      // Schedule the next request when the current one's complete
+		    	if (!$('#stimulatedPlanningFrame').length && !$('#feedbackFrame').length) {
+				      timeoutInterval += timeoutInterval; // get slower, when user just stays on page.
+				      setTimeout(tickerRequest, timeoutInterval);
+		    	}
+		    }
+		  });
+		}
+
+		$('#trackerFrame').ready(function() {
+		  // run the first time; all subsequent calls will take care of themselves
+		  setTimeout(tickerRequest, 20);
+		  
+//		  if ( $( "#stimulatedPlanningFrame" ).length ) {
+//			    $( "#stimulatedPlanningFrame" ).attr("src", "/GoalSettingServlet");
+//			}	  
+		});
+
+</script>
+
+
+<div id="ajaxresult">Loading content.</div>
+
 </body>
 </html>

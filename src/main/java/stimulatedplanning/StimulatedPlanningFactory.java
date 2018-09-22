@@ -691,25 +691,36 @@ public class StimulatedPlanningFactory {
 
 	
 	public static HttpSession initializeSession(HttpServletRequest request, HttpServletResponse response) {
+		//log.info("init session 0: call stack");
+		//(new Exception()).printStackTrace();
+
 		HttpSession session = request.getSession();
+		
+		Enumeration<String> valnames = session.getAttributeNames();
+		if (valnames.hasMoreElements()) {
+			for (String valname = valnames.nextElement(); valnames.hasMoreElements(); valname = valnames.nextElement() ) {
+				log.info("session attribute: "+valname+", "+session.getAttribute(valname));
+			}
+		}
 		
 		String loginData = "";
 		
 		String userNameR = request.getParameter("userName");
 		String useridR = request.getParameter("userid");
 
+		log.info("init session 1: userNameR: "+userNameR+", useridR: "+useridR);
 		if (userNameR == null || useridR == null) {
 			userNameR = userGuest;
 			useridR = userUnknown;
 		}
 		
-//		log.info("userNameR: "+userNameR+", useridR: "+useridR);
+		log.info("init session 2: userNameR: "+userNameR+", useridR: "+useridR);
 		loginData += " | userNameR: "+userNameR+", useridR: "+useridR;
 		
 		String userName = (String)session.getAttribute("userName");
 		String userid = (String)session.getAttribute("userid");
 		
-//		log.info("userName: "+userName+", userid: "+userid);
+		log.info("init session 3: userName: "+userName+", userid: "+userid);
 		loginData += " | userName: "+userName+", userid: "+userid;
 
 		if (userName == null || userid == null 
@@ -721,15 +732,15 @@ public class StimulatedPlanningFactory {
 			session.setAttribute("userid", userid);
 		}
 
-//		log.info("userName(2): "+userName+", userid(2): "+userid);
+		log.info("init session 4: userName(2): "+userName+", userid(2): "+userid);
 		loginData += " | userName(2): "+userName+", userid(2): "+userid;
 
 		User user = (User)session.getAttribute("user");
 		if (user != null) {
-//			log.info("user.name(1): "+user.getName()+", user.id(1): "+user.getId());
+			log.info("init session 5a: userName(3a): "+userName+", userid(3a): "+userid);
 			loginData += " | user.name(1): "+user.getName()+", user.id(1): "+user.getId();
 		} else {
-//			log.info("user.name(1): null, user.id(1): null");
+			log.info("init session 5b: userName(3b): null, userid(3b): null");
 			loginData += " | user.name(1): null, user.id(1): null";
 		}
 		
@@ -740,7 +751,7 @@ public class StimulatedPlanningFactory {
 			session.setAttribute("user", user);
 		}
 		
-		log.info("user.name: "+user.getName()+", user.id: "+user.getId());
+		log.info("init session 6: user.name(4): "+user.getName()+", user.id(4): "+user.getId());
 		loginData += " | user.name: "+user.getName()+", user.id: "+user.getId();
 
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
@@ -762,6 +773,9 @@ public class StimulatedPlanningFactory {
 			selectedGoals.add(ugoal.getGoalDescriptor());
 			for (UserLesson ulesson : ugoal.lessons) {
 				selectedLessons.add(ulesson.getLesson());
+			}
+			if (ugoal.getCompletionGoal() != null && ugoal.getCompletionGoal().length()>0) {
+				session.setAttribute("completionSelectRB", ugoal.getCompletionGoal());
 			}
 		}
 		
