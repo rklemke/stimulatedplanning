@@ -1,9 +1,7 @@
 <!-- 
 Open EdX additional HTML content
 Login to Open EdX as author
-
 On each content page: add a Raw HTML content block and paste the text below.
-
 Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 -->
 
@@ -12,47 +10,45 @@ Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 
 <!-- Pages with Planning Tool -->
 
-<iframe width="1100" height="600" id="feedbackFrame" src=""></iframe>
+<iframe width="1100" height="600" id="SP_feedbackFrame" src=""></iframe>
 
 <!-- Pages with Feedback -->
 
-<iframe width="1100" height="600" id="stimulatedPlanningFrame" src=""></iframe>
+<iframe width="1100" height="600" id="SP_stimulatedPlanningFrame" src=""></iframe>
 
-<!-- Pages with Tracker -->
+<!-- Pages with Tracker / Feedback / Planning Tool -->
 
-<link rel="stylesheet" href="https://stimulatedplanning.appspot.com/tablesorter/themes/blue/style.css">
-<script src="https://stimulatedplanning.appspot.com/tablesorter/jquery.tablesorter.min.js"></script>
-
+<div id="SP_ajaxresult">Loading content.</div>
 <script type="text/javascript">
-	var timeoutInterval = 30000;
-	var userNameDefault = "Guest";
-	var userIdDefault = "unknown";
-	var pageUrlDefault = window.location.href;
-
-	function getUserName() {
+	var SP_timeoutInterval = 30000;
+	var SP_userNameDefault = "Guest";
+	var SP_userIdDefault = "unknown";
+	var SP_pageUrlDefault = window.location.href;
+	function SP_getUserName() {
 	  var tmpName = $('.label-username').html();
 	  if (tmpName == null) {
-	    tmpName = userNameDefault;
+	    tmpName = $('.username').html();;
+	  }
+	  if (tmpName == null) {
+	    tmpName = SP_userNameDefault;
 	  }
 	  return tmpName;
 	}
-
-	function getUserId() {
-	  return getUserName();
+	function SP_getUserId() {
+	  return SP_getUserName();
 	}
-
-	function getPageUrl() {
+	function SP_getPageUrl() {
 		var tmpId = $('#pageurl', window.parent.document).val();
 		if (tmpId == null) {
-		  tmpId = pageUrlDefault;
+		  tmpId = SP_pageUrlDefault;
 		}
 		return tmpId;
 	}
 	
-	function tickerRequest() {
-		  var userName = getUserName();
-		  var userId = getUserId(); 
-		  var pageUrl = getPageUrl(); 
+	function SP_tickerRequest() {
+		  var userName = SP_getUserName();
+		  var userId = SP_getUserId(); 
+		  var pageUrl = SP_getPageUrl(); 
 		  $.ajax({
 		    dataType: 'jsonp',
 		    url: 'https://stimulatedplanning.appspot.com/DataTrackerServlet',
@@ -62,58 +58,29 @@ Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 			userid: userId,
 			page: pageUrl
 		    }, 
-		    success: function(data) {
-		    	if ($('#stimulatedPlanningFrame').length) {
-		    		$("#stimulatedPlanningFrame").attr("src", "https://stimulatedplanning.appspot.com/GoalSettingServlet");
-					$( '#ajaxresult' ).html('Connected. '+userName);
-		    	} else if ($('#feedbackFrame').length) {
-		    		$("#feedbackFrame").attr("src", "https://stimulatedplanning.appspot.com/FeedbackFrame.jsp");
-					$( '#ajaxresult' ).html('Connected. '+userName);
+		    success: function(SP_data) {
+		    	if ($('#SP_stimulatedPlanningFrame').length) {
+		    		$("#SP_stimulatedPlanningFrame").attr("src", "https://stimulatedplanning.appspot.com/GoalSettingServlet");
+					$( '#SP_ajaxresult' ).html('Connected. '+userName);
+		    	} else if ($('#SP_feedbackFrame').length) {
+		    		$("#SP_feedbackFrame").attr("src", "https://stimulatedplanning.appspot.com/FeedbackFrame.jsp");
+					$( '#SP_ajaxresult' ).html('Connected. '+userName);
 		    	} else {
-					var datatxt = data.feedbackFrame;
-					  $( '#ajaxresult' ).html(datatxt);
+					var SP_datatxt = SP_data.feedbackFrame;
+ //                   alert(SP_datatxt);
+					  $( '#SP_ajaxresult' ).html(SP_datatxt);
 		    	}
 		    },
 		    complete: function() {
 		      // Schedule the next request when the current one's complete
 		      
-		    	if (!$('#stimulatedPlanningFrame').length && !$('#feedbackFrame').length) {
-				      timeoutInterval += timeoutInterval; // get slower, when user just stays on page.
-				      setTimeout(tickerRequest, timeoutInterval);
+		    	if (!$('#SP_stimulatedPlanningFrame').length && !$('#SP_feedbackFrame').length) {
+				      SP_timeoutInterval += SP_timeoutInterval; // get slower, when user just stays on page.
+				      setTimeout(SP_tickerRequest, SP_timeoutInterval);
 		    	}
 		    }
 		  });
 		}
-
-		$('#trackerFrame').ready(function() {
-		  // run the first time; all subsequent calls will take care of themselves
-		  setTimeout(tickerRequest, 20);
-		  
-//		  if ( $( "#stimulatedPlanningFrame" ).length ) {
-//			    $( "#stimulatedPlanningFrame" ).attr("src", "/GoalSettingServlet");
-//			}	  
-		});
-
+		
+		setTimeout(SP_tickerRequest, 2000);
 </script>
-
-
-<div id="ajaxresult">Loading content.</div>
-
-
-
-
-
-
-
-
-<script type="text/javascript">
-	$('#loadTracker').ready(function() {
-		// run the first time; all subsequent calls will take care of themselves
-		$('#loadTracker').load( "https://stimulatedplanning.appspot.com/mooc-integration/openedx_tracker.html" );
-	});
-
-</script>
-<div id="loadTracker">Loading ...</div>
-
-
-
