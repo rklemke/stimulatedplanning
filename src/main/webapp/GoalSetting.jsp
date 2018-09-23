@@ -264,10 +264,12 @@ Create a CSS3 post-it note without images
 
 <!--  <div class="ui-frame">  -->
 <form id="goalSelectForm" method="POST" action="GoalSettingServlet">
+<input type="hidden" name="userName" id="userName" value="<%= user.getName() %>">
+<input type="hidden" name="userid" id="userid" value="<%= user.getId() %>">
 <!-- h2>Your intentions with this course</h2 -->
-<!--  (<%= user.getName() %>) [<%= session.getAttribute("loginData") %>] -->
+<!-- (<%= user.getName() %>) [<%= session.getAttribute("loginData") %>] -->
 <% if(!userPlan.isIntentionCompleted() && "intention.topic".equals(intentionStep)) { %>
-<p>Select your activities.</p>
+<p>Select your activities, <%= user.getName() %>.</p>
 <div id="tabs">
   <ul>
     <li class="tabs-0" id="li-0">
@@ -344,7 +346,7 @@ Create a CSS3 post-it note without images
 
 <% } else if(!userPlan.isIntentionCompleted() && "intention.schedule".equals(intentionStep)) { %>
 
-<p>How much time per week can you invest in this course?</p>
+<p>How much time per week can you invest in this course, <%= user.getName() %>?</p>
 <div class="ui-widget ui-widget-content">
   <ul class="ul-goals">
     <li>
@@ -371,7 +373,7 @@ Create a CSS3 post-it note without images
 <div class="quote-container">
       <i class="pin"></i>
   <blockquote class="note yellow">
-<p>Memo</p>
+<p>Memo for <%= user.getName() %></p>
 <!-- div class="ui-widget ui-widget-content" -->
 		<div id="selectedGoal">
 			<%			

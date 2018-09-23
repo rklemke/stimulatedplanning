@@ -412,6 +412,8 @@
 		
 <div class="confirm">
 	<form id="planningForm" method="POST" action="StimulatedPlanningServlet">
+		<input type="hidden" name="userName" id="userName" value="<%= user.getName() %>">
+		<input type="hidden" name="userid" id="userid" value="<%= user.getId() %>">
 		<input type="hidden" name="calenderItems" id="calenderItems" value="">
 		<!-- button type="submit" id="ok" name="submit" value="OK" onclick="retrieveAllEvents();">Save</button -->
 		<button type="submit" id="next" name="submit" value="Next" onclick="retrieveAllEvents();" title="Click continue to go to the next page. Your selection will be saved automatically.">Continue</button>

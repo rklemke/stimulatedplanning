@@ -180,6 +180,8 @@
 <body>
 <div id="wrap" class="ui-frame"> 
 <form id="copingPlanForm" method="POST" action="CopingPlanServlet">
+	<input type="hidden" name="userName" id="userName" value="<%= user.getName() %>">
+	<input type="hidden" name="userid" id="userid" value="<%= user.getId() %>">
 
 	<h2>Make your Plan B</h2>
 	<p>Think about any inconvenience that could undermine your plan of completing the activities you selected within this course.</p>
