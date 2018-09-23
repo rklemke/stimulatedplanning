@@ -1,8 +1,17 @@
 <!-- 
 Open EdX additional HTML content
 Login to Open EdX as author
-On each content page: add a Raw HTML content block and paste the text below.
+
+To add the planning tool:
+On  the selected page, where the planning tool should be add two content blocks:
+1. add an IFrame and paste the content of the section <Pages with Planning tool>
+2. add a raw html content and paste the content of the section <pages with tracker / feedback / planning tool>
+
+To add tracking to the content pages:
+On each content page: add a Raw HTML content block and paste the text from section <pages with tracker / feedback / planning tool>.
 Paste in appropriate sections (adapt URL to DataTrackerServlet below):
+
+The section <pages with feedback> is currently not in use and should not be pasted anywhere.
 -->
 
 
@@ -10,11 +19,11 @@ Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 
 <!-- Pages with Planning Tool -->
 
-<iframe width="1100" height="600" id="SP_feedbackFrame" src=""></iframe>
+<iframe width="1100" height="600" id="SP_stimulatedPlanningFrame" src=""></iframe>
 
 <!-- Pages with Feedback -->
 
-<iframe width="1100" height="600" id="SP_stimulatedPlanningFrame" src=""></iframe>
+<iframe width="1100" height="600" id="SP_feedbackFrame" src=""></iframe>
 
 <!-- Pages with Tracker / Feedback / Planning Tool -->
 
