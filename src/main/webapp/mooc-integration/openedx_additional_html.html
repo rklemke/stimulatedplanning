@@ -3,27 +3,28 @@ Open EdX additional HTML content
 Login to Open EdX as author
 
 To add the planning tool:
-On  the selected page, where the planning tool should be add two content blocks:
-1. add an IFrame and paste the content of the section <Pages with Planning tool>
-2. add a raw html content and paste the content of the section <pages with tracker / feedback / planning tool>
+On  the selected page, where the planning tool should be add one content block raw html:
+1. paste the content of the section <Pages with Planning tool>
+2. paste the content of the section <pages with tracker / feedback / planning tool>
+3. save the content block
 
 To add tracking to the content pages:
 On each content page: add a Raw HTML content block and paste the text from section <pages with tracker / feedback / planning tool>.
-Paste in appropriate sections (adapt URL to DataTrackerServlet below):
 
-The section <pages with feedback> is currently not in use and should not be pasted anywhere.
+
+WARNING: The section <pages with feedback> is currently not in use and should not be pasted anywhere.
 -->
 
 
 <!-- script src="https://code.jquery.com/jquery-1.12.4.js"></script /-->
 
-<!-- Pages with Planning Tool -->
-
-<iframe width="1100" height="600" id="SP_stimulatedPlanningFrame" src=""></iframe>
-
 <!-- Pages with Feedback -->
 
 <iframe width="1100" height="600" id="SP_feedbackFrame" src=""></iframe>
+
+<!-- Pages with Planning Tool -->
+
+<iframe width="1100" height="600" id="SP_stimulatedPlanningFrame" src=""></iframe>
 
 <!-- Pages with Tracker / Feedback / Planning Tool -->
 
@@ -69,7 +70,7 @@ The section <pages with feedback> is currently not in use and should not be past
 		    }, 
 		    success: function(SP_data) {
 		    	if ($('#SP_stimulatedPlanningFrame').length) {
-		    		$("#SP_stimulatedPlanningFrame").attr("src", "https://stimulatedplanning.appspot.com/GoalSettingServlet");
+		    		$("#SP_stimulatedPlanningFrame").attr("src", "https://stimulatedplanning.appspot.com/GoalSettingServlet?userName="+userName+"&userid="+userId);
 					$( '#SP_ajaxresult' ).html('Connected. '+userName);
 		    	} else if ($('#SP_feedbackFrame').length) {
 		    		$("#SP_feedbackFrame").attr("src", "https://stimulatedplanning.appspot.com/FeedbackFrame.jsp");
