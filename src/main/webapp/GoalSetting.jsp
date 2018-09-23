@@ -266,6 +266,7 @@ Create a CSS3 post-it note without images
 <form id="goalSelectForm" method="POST" action="GoalSettingServlet">
 <input type="hidden" name="userName" id="userName" value="<%= user.getName() %>">
 <input type="hidden" name="userid" id="userid" value="<%= user.getId() %>">
+<input type="hidden" name="intentionStep" id="intentionStep" value="<%= intentionStep %>">
 <!-- h2>Your intentions with this course</h2 -->
 <!-- (<%= user.getName() %>) [<%= session.getAttribute("loginData") %>] -->
 <% if(!userPlan.isIntentionCompleted() && "intention.topic".equals(intentionStep)) { %>
@@ -443,12 +444,12 @@ Create a CSS3 post-it note without images
 		}
 		if (!userPlan.isIntentionCompleted() && !PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
 		%>
-			<button type="submit" id="next" name="submit" value="Next" title="Click continue to go to the next page. Your selection will be saved automatically.">Continue</button>
+			<button type="submit" id="next" name="submit" value="Next" title="Click continue to go to the next page (1). Your selection will be saved automatically.">Continue</button>
 		<%
 		}
 		if (userPlan.isIntentionCompleted() || (selectedGoals != null && PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep))) {
 		%>
-			<button type="submit" id="continue" name="submit" value="Continue" title="Click continue to go to the next page. Your selection will be saved automatically.">Continue</button>
+			<button type="submit" id="continue" name="submit" value="Continue" title="Click continue to go to the next page (2). Your selection will be saved automatically.">Continue</button>
 		<%
 		}
 		%>	

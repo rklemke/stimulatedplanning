@@ -211,7 +211,7 @@ public class PersistentStore {
 	private static Entity createGenericEntity(GenericDescriptor generic) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		log.info("createGenericEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		//log.info("createGenericEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 
 		Entity entity = null;
 		try {
@@ -233,7 +233,7 @@ public class PersistentStore {
 	}
 
 	private static Entity createGenericUserEntity(GenericUserObject generic) {
-		log.info("createGenericUserEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		//log.info("createGenericUserEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 		Entity entity = null;
 
 		try {
@@ -478,7 +478,7 @@ public class PersistentStore {
 	}
 	
 	public static void writeDescriptor(GenericDescriptor generic) throws Exception {
-		log.info("writeDescriptor (GenericDescriptor): "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		//log.info("writeDescriptor (GenericDescriptor): "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -494,7 +494,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(CourseDescriptor course) throws Exception {
-		log.info("writeDescriptor (CourseDescriptor): "+course.getTitle()+", "+course.getClass().getName()+", "+course.getId());
+		//log.info("writeDescriptor (CourseDescriptor): "+course.getTitle()+", "+course.getClass().getName()+", "+course.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -513,7 +513,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(ModuleDescriptor module) throws Exception {
-		log.info("writeDescriptor (ModuleDescriptor): "+module.getTitle()+", "+module.getClass().getName()+", "+module.getId());
+		//log.info("writeDescriptor (ModuleDescriptor): "+module.getTitle()+", "+module.getClass().getName()+", "+module.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -531,7 +531,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(GoalDescriptor goal) throws Exception {
-		log.info("writeDescriptor (GoalDescriptor): "+goal.getTitle()+", "+goal.getClass().getName()+", "+goal.getId());
+		//log.info("writeDescriptor (GoalDescriptor): "+goal.getTitle()+", "+goal.getClass().getName()+", "+goal.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -561,7 +561,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(LessonDescriptor lesson) throws Exception {
-		log.info("writeDescriptor (LessonDescriptor): "+lesson.getTitle()+", "+lesson.getClass().getName()+", "+lesson.getId());
+		//log.info("writeDescriptor (LessonDescriptor): "+lesson.getTitle()+", "+lesson.getClass().getName()+", "+lesson.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -579,7 +579,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(ContentDescriptor content) throws Exception {
-		log.info("writeDescriptor (ContentDescriptor): "+content.getTitle()+", "+content.getClass().getName()+", "+content.getId());
+		//log.info("writeDescriptor (ContentDescriptor): "+content.getTitle()+", "+content.getClass().getName()+", "+content.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -595,7 +595,7 @@ public class PersistentStore {
 	}
 	
 	public static void writeDescriptor(UserPlan userPlan) throws Exception {
-		log.info("writeDescriptor (UserPlan): "+userPlan.getUser().getName()+", "+userPlan.getClass().getName()+", "+userPlan.getId());
+		//log.info("writeDescriptor (UserPlan): "+userPlan.getUser().getName()+", "+userPlan.getClass().getName()+", "+userPlan.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -637,7 +637,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(UserGoal userGoal) throws Exception {
-		log.info("writeDescriptor (UserGoal): "+userGoal.getUser().getName()+", "+userGoal.getClass().getName()+", "+userGoal.getId());
+		//log.info("writeDescriptor (UserGoal): "+userGoal.getUser().getName()+", "+userGoal.getClass().getName()+", "+userGoal.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -659,7 +659,7 @@ public class PersistentStore {
 
 
 	public static void writeDescriptor(UserLesson userLesson) throws Exception {
-		log.info("writeDescriptor (UserLesson): "+userLesson.getUser().getName()+", "+userLesson.getClass().getName()+", "+userLesson.getId());
+		//log.info("writeDescriptor (UserLesson): "+userLesson.getUser().getName()+", "+userLesson.getClass().getName()+", "+userLesson.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -679,7 +679,7 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(UserContent userContent) throws Exception {
-		log.info("writeDescriptor (UserContent): "+userContent.getUser().getName()+", "+userContent.getClass().getName()+", "+userContent.getId());
+		//log.info("writeDescriptor (UserContent): "+userContent.getUser().getName()+", "+userContent.getClass().getName()+", "+userContent.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -698,7 +698,7 @@ public class PersistentStore {
 
 
 	public static void writeDescriptor(PlanItem planItem) throws Exception {
-		log.info("writeDescriptor (PlanItem): "+planItem.getUser().getName()+", "+planItem.getClass().getName()+", "+planItem.getId());
+		//log.info("writeDescriptor (PlanItem): "+planItem.getUser().getName()+", "+planItem.getClass().getName()+", "+planItem.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
@@ -720,7 +720,7 @@ public class PersistentStore {
 
 	
 	public static void writeDescriptor(UserProfile userProfile) throws Exception {
-		log.info("writeDescriptor (UserProfile): "+userProfile.getUser().getName()+", "+userProfile.getClass().getName()+", "+userProfile.getId());
+		//log.info("writeDescriptor (UserProfile): "+userProfile.getUser().getName()+", "+userProfile.getClass().getName()+", "+userProfile.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {

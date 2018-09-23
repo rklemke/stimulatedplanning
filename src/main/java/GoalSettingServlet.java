@@ -42,6 +42,12 @@ public class GoalSettingServlet extends HttpServlet {
 		boolean userPlanDirty = false;
 
 		String intentionStep = (String)session.getAttribute("intentionStep");
+		if (intentionStep == null || "".equals(intentionStep)) {
+			intentionStep = request.getParameter("intentionStep");
+			if (intentionStep == null || "".equals(intentionStep)) {
+				session.setAttribute("intentionStep", intentionStep);
+			}
+		}
 
 		String completionSelectRB = request.getParameter("completionSelectRB");
 		if (completionSelectRB != null) {
@@ -132,6 +138,7 @@ public class GoalSettingServlet extends HttpServlet {
 		String submit = request.getParameter("submit");
 		String nextJSP = "/GoalSetting.jsp";
 		
+		log.info("GoalSettingServlet: intentStep: "+intentionStep+", submit: "+submit);
 		if (submit != null && submit.equals("Next")) {
 			if (PlanningSteps.intentionSteps[PlanningSteps.intentionSteps.length-1].equals(intentionStep)) {
 				userPlan.setIntentionCompleted(true);
@@ -166,6 +173,8 @@ public class GoalSettingServlet extends HttpServlet {
 				}
 			}
 		}
+		
+		log.info("GoalSettingServlet: intentStep next: "+intentionStep+", submit: "+submit);
 		
 		if (submit != null && submit.equals("Continue")) {
 			userPlan.setIntentionCompleted(true);
