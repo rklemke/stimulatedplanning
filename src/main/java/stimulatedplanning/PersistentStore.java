@@ -59,6 +59,7 @@ public class PersistentStore {
 		userEntity.setProperty("uid", user.getId());
 		userEntity.setProperty("treatmentGroup", user.isTreatmentGroup());
 		userEntity.setProperty("clan", user.getClan().getId());
+		userEntity.setProperty("onlineStatus", user.getOnlineStatus().getId());
 
 		datastore.put(userEntity);
 
@@ -76,6 +77,8 @@ public class PersistentStore {
 				Clan clan = (Clan)readDescriptor(Clan.class.getName(), readStringProperty(userEntity, "clan", null));
 				user.setClan(clan);
 			}
+			UserOnlineStatus onlineStatus = (UserOnlineStatus)readDescriptor(UserOnlineStatus.class.getName(), readStringProperty(userEntity, "onlineStatus", null));
+			user.setOnlineStatus(onlineStatus);
 			if (!userEntity.hasProperty("treatmentGroup")) {
 				writeUser(user);
 			}

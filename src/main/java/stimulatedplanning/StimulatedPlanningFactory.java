@@ -720,6 +720,14 @@ public class StimulatedPlanningFactory {
 						e.printStackTrace();
 					}
 				}
+				if (user.getOnlineStatus() != null) {
+					user.getOnlineStatus().updateOnlineStatus(page);
+					try {
+						PersistentStore.writeDescriptor(user.getOnlineStatus());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 			}
 			
 		}

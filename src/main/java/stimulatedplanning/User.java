@@ -3,12 +3,14 @@ package stimulatedplanning;
 import java.io.Serializable;
 
 import senseofcommunity.Clan;
+import senseofcommunity.UserOnlineStatus;
 
 public class User implements Serializable {
 	protected String name;
 	protected String id;
 	protected boolean treatmentGroup;
 	protected Clan clan;
+	protected UserOnlineStatus onlineStatus;
 
 	public String getName() {
 		return name;
@@ -35,6 +37,13 @@ public class User implements Serializable {
 	}
 	public void setClan(Clan clan) {
 		this.clan = clan;
+	}
+	
+	public UserOnlineStatus getOnlineStatus() {
+		return onlineStatus;
+	}
+	public void setOnlineStatus(UserOnlineStatus onlineStatus) {
+		this.onlineStatus = onlineStatus;
 	}
 	
 	public User(String name, String id) {

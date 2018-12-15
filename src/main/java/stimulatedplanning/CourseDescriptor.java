@@ -63,5 +63,51 @@ public class CourseDescriptor extends GenericDescriptor {
 		}
 		return duration;
 	}
+	
+	
+	public int distance(String url1, String url2) {
+		int counter1=0, counter2=0;
+		boolean found1=false, found2=false;
+		if (url1 == null || url2 == null) {
+			return 100;
+		}
+		int iend1 = url1.indexOf("?"); 
+		if (iend1 != -1) {
+			url1 = url1.substring(0 , iend1);
+		}
+		int iend2 = url1.indexOf("?"); 
+		if (iend2 != -1) {
+			url2 = url2.substring(0 , iend2);
+		}
+		if (url1.equals(url2)) {
+			return 0;
+		}
+		for (ModuleDescriptor module: modules) {
+			for (LessonDescriptor lesson : module.lessons) {
+				for (ContentDescriptor content: lesson.contents) {
+					String curl = content.url;
+					if (curl != null) {
+						int iend3 = curl.indexOf("?");
+						if (iend3 != -1) {
+							curl = curl.substring(0 , iend3);
+						}
+						if (curl.endsWith("1") && iend3 > 0) {
+							curl = curl.substring(0 , iend3-1);
+						}
+					}
+					
+					if (!found1) counter1++;
+					if (!found2) counter2++;
+					if (url1.equals(content.url)) {
+						found1 = true;
+					}
+					if (url2.equals(content.url)) {
+						found2 = true;
+					}
+				}
+			}
+		}
+		return Math.abs(counter1-counter2);
+	}
 
 }
