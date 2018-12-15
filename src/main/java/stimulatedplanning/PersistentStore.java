@@ -15,6 +15,16 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+
+import senseofcommunity.Clan;
+import senseofcommunity.InformationObject;
+import senseofcommunity.SelectionObject;
+import senseofcommunity.SelectionObjectType;
+import senseofcommunity.SelectionOption;
+import senseofcommunity.UserOnlineStatus;
+import senseofcommunity.UserSelectedOption;
+import stimulatedplanning.util.HashArrayList;
+
 import com.google.appengine.api.datastore.Text;
 
 //import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
@@ -48,6 +58,7 @@ public class PersistentStore {
 		userEntity.setProperty("name", user.getName());
 		userEntity.setProperty("uid", user.getId());
 		userEntity.setProperty("treatmentGroup", user.isTreatmentGroup());
+		userEntity.setProperty("clan", user.getClan().getId());
 
 		datastore.put(userEntity);
 
@@ -60,6 +71,11 @@ public class PersistentStore {
 		if (userEntity != null) {
 			User user = new User((String) userEntity.getProperty("name"), userId);
 			user.setTreatmentGroup(readBooleanProperty(userEntity, "treatmentGroup", StimulatedPlanningFactory.random.nextBoolean()));
+			if (user.isTreatmentGroup()) {
+				//Clan clan = (Clan)StimulatedPlanningFactory.getObject(readStringProperty(userEntity, "clan", null));
+				Clan clan = (Clan)readDescriptor(Clan.class.getName(), readStringProperty(userEntity, "clan", null));
+				user.setClan(clan);
+			}
 			if (!userEntity.hasProperty("treatmentGroup")) {
 				writeUser(user);
 			}
@@ -108,7 +124,7 @@ public class PersistentStore {
 
 	}
 
-	private static void writeToManyRelation(GenericDescriptor source, ListIterator<? extends GenericDescriptor> targets,
+	protected static void writeToManyRelation(GenericDescriptor source, ListIterator<? extends GenericDescriptor> targets,
 			String relation, int size, boolean writeTarget) throws Exception {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity entity = null;
@@ -135,6 +151,11 @@ public class PersistentStore {
 				else if (target instanceof UserLesson) writeDescriptor((UserLesson)target);
 				else if (target instanceof UserContent) writeDescriptor((UserContent)target);
 				else if (target instanceof PlanItem) writeDescriptor((PlanItem)target);
+				else if (target instanceof Clan) writeDescriptor((Clan)target);
+				else if (target instanceof UserOnlineStatus) writeDescriptor((UserOnlineStatus)target);
+				else if (target instanceof SelectionObject) writeDescriptor((SelectionObject)target);
+				else if (target instanceof SelectionOption) writeDescriptor((SelectionOption)target);
+				else if (target instanceof UserSelectedOption) writeDescriptor((UserSelectedOption)target);
 				else writeDescriptor(target);
 			}
 
@@ -167,7 +188,7 @@ public class PersistentStore {
 
 	}
 
-	private static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget) throws Exception {
+	protected static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget) throws Exception {
 		//log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity entity = null;
@@ -208,7 +229,7 @@ public class PersistentStore {
 		return arrayList;
 	}
 
-	private static Entity createGenericEntity(GenericDescriptor generic) {
+	protected static Entity createGenericEntity(GenericDescriptor generic) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		//log.info("createGenericEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
@@ -232,7 +253,7 @@ public class PersistentStore {
 		return entity;
 	}
 
-	private static Entity createGenericUserEntity(GenericUserObject generic) {
+	protected static Entity createGenericUserEntity(GenericUserObject generic) {
 		//log.info("createGenericUserEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 		Entity entity = null;
 
@@ -250,7 +271,25 @@ public class PersistentStore {
 		return entity;
 	}
 
-	private static GenericDescriptor readDescriptor(String type, String id) throws Exception {
+	protected static Entity createInformationObjectEntity(InformationObject generic) {
+		//log.info("createGenericUserEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		Entity entity = null;
+
+		try {
+			entity = createGenericEntity(generic);
+
+			entity.setProperty("content", generic.getContent());
+			
+		} catch (Exception e1) {
+			log.info("FATAL: Writing generic user entity failed.");
+			e1.printStackTrace();
+
+		}
+
+		return entity;
+	}
+
+	protected static GenericDescriptor readDescriptor(String type, String id) throws Exception {
 		//log.info("readDescriptor: "+type+", "+id);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -262,156 +301,285 @@ public class PersistentStore {
 			e.printStackTrace();
 			genericEntity = null;
 		}
-		ArrayList<GenericDescriptor> relationList = null;
 		if (genericEntity != null) {
 			if (CourseDescriptor.class.getName().equals(type)) {
-				CourseDescriptor course = new CourseDescriptor(readStringProperty(genericEntity, "uid", null),
-						readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-						readStringProperty(genericEntity, "url", null));
-				relationList = readToManyRelation(course, "modules", ModuleDescriptor.class.getName(), true);
-				for (GenericDescriptor generic : relationList) {
-					course.addModule((ModuleDescriptor)generic);
-				}
-				relationList = readToManyRelation(course, "goals", GoalDescriptor.class.getName(), true);
-				for (GenericDescriptor generic : relationList) {
-					course.addGoal((GoalDescriptor)generic);
-				}
-				return course;
+				return readCourseDescriptor(genericEntity);
 			} else if (ModuleDescriptor.class.getName().equals(type)) {
-				ModuleDescriptor module = new ModuleDescriptor(readStringProperty(genericEntity,"uid", null),
-						readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-						readStringProperty(genericEntity, "url", null));
-				relationList = readToManyRelation(module, "lessons", LessonDescriptor.class.getName(), true);
-				for (GenericDescriptor generic : relationList) {
-					module.addLesson((LessonDescriptor)generic);
-				}
-				return module;
+				return readModuleDescriptor(genericEntity);
 			} else if (GoalDescriptor.class.getName().equals(type)) {
-				GoalDescriptor goal = new GoalDescriptor(readStringProperty(genericEntity, "uid", null),
-						readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-						readStringProperty(genericEntity, "url", null));
-				relationList = readToManyRelation(goal, "lessons", LessonDescriptor.class.getName(), true);
-				for (GenericDescriptor generic : relationList) {
-					goal.addLesson((LessonDescriptor)generic);
-				}
-				EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionGoals");
-				String keys = readStringProperty(genericEntity, "completionGoalKeys", null);
-				if (keys != null && keys.length()>0) {
-					keys = keys.replace("[", "").replace("]", "").replace(" ", "");
-					//log.info("Reading completionGoals: " + keys);
-					if (keys.length()>0) {
-						ArrayList<String> keysList = new ArrayList<>(Arrays.asList(keys.split(",")));
-						if (ee != null && keysList != null && keysList.size() > 0) {
-						    for (String key : keysList) {
-						    	//log.info("Key: "+key+", "+(String) ee.getProperty(key));
-						        goal.addCompletionGoal(key, (String) ee.getProperty(key));
-						    }
-						}
-					}
-				}
-				
-				return goal;
+				return readGoalDescriptor(genericEntity);
 			} else if (LessonDescriptor.class.getName().equals(type)) {
-				LessonDescriptor lesson = new LessonDescriptor(readStringProperty(genericEntity, "uid", null),
-						readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-						readStringProperty(genericEntity, "url", null));
-				relationList = readToManyRelation(lesson, "contents", ContentDescriptor.class.getName(), true);
-				for (GenericDescriptor generic : relationList) {
-					lesson.addContent((ContentDescriptor)generic);
-				}
-				return lesson;
+				return readLessonDescriptor(genericEntity);
 			} else if (ContentDescriptor.class.getName().equals(type)) {
-				ContentDescriptor content = new ContentDescriptor(readStringProperty(genericEntity, "uid", null),
-						readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-						readStringProperty(genericEntity, "url", null));
-				return content;
+				return readContentDescriptor(genericEntity);
 			} else if (UserPlan.class.getName().equals(type)) {
-				User user = getUser(readStringProperty(genericEntity, "userid", null));
-				CourseDescriptor course = (CourseDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "course", null));				
-				UserPlan plan = new UserPlan(readStringProperty(genericEntity, "uid", null), user);
-				plan.setCourse(course);
-				plan.setPlannedTimePerWeek(readStringProperty(genericEntity, "plannedTimePerWeek", null));
-				plan.setAllCourseIntention(readBooleanProperty(genericEntity, "isAllCourseIntention", false));
-				plan.setIntentionCompleted(readBooleanProperty(genericEntity, "intentionCompleted", false));
-				plan.setObstacles(readStringProperty(genericEntity, "obstacles", null));
-				plan.setCopingPlan(readStringProperty(genericEntity, "copingPlan", null));
-
-				relationList = readToManyRelation(plan, "userGoals", UserGoal.class.getName(), true);
-				for (GenericDescriptor generic : relationList) {
-					plan.addGoal((UserGoal)generic);
-				}
-				relationList = readToManyRelation(plan, "planItems", PlanItem.class.getName(), true);
-				for (GenericDescriptor generic : relationList) {
-					plan.addPlanItem((PlanItem)generic);
-				}
-				EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionStatusMap");
-				if (ee != null) {
-					Map<String, Object> map = ee.getProperties();
-					Set<String> keys = map.keySet();
-					for (String key : keys) {
-						Object val = map.get(key);
-						if (val != null) {
-							if (val instanceof String) {
-								plan.completionStatusMap.put(key, (String)val);
-							} else if (val instanceof Text) {
-								plan.completionStatusMap.put(key, ((Text)val).getValue());
-							} else if (val instanceof Integer) {
-								plan.completionStatusMap.put(key, String.valueOf(val));
-							}
-						}
-					}
-				}
-				return plan;
+				return readUserPlan(genericEntity);
 			} else if (UserGoal.class.getName().equals(type)) {
-				User user = getUser(readStringProperty(genericEntity, "userid", null));
-				GoalDescriptor goal = (GoalDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "goal", null));				
-				UserGoal userGoal = new UserGoal(readStringProperty(genericEntity, "uid", null), user, goal);
-				userGoal.setCompletionGoal(readStringProperty(genericEntity, "completionGoal", null));
-				userGoal.setStatus(readStatus(genericEntity));
-				relationList = readToManyRelation(userGoal, "lessons", UserLesson.class.getName(), true);
-				for (GenericDescriptor generic : relationList) {
-					userGoal.addLesson((UserLesson)generic);
-				}
-				return userGoal;
+				return readUserGoal(genericEntity);
 			} else if (UserLesson.class.getName().equals(type)) {
-				User user = getUser(readStringProperty(genericEntity, "userid", null));
-				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));				
-				UserLesson userLesson = new UserLesson(readStringProperty(genericEntity, "uid", null), user, lesson);
-				userLesson.setStatus(readStatus(genericEntity));
-				relationList = readToManyRelation(userLesson, "contents", UserContent.class.getName(), true);
-				for (GenericDescriptor generic : relationList) {
-					userLesson.addContent((UserContent)generic);
-				}
-				return userLesson;
+				return readUserLesson(genericEntity);
 			} else if (UserContent.class.getName().equals(type)) {
-				User user = getUser(readStringProperty(genericEntity, "userid", null));
-				ContentDescriptor content = (ContentDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "content", null));				
-				UserContent userContent = new UserContent(readStringProperty(genericEntity, "uid", null), user, content);
-				userContent.setStatus(readStatus(genericEntity));
-				return userContent;
+				return readUserContent(genericEntity);
 			} else if (PlanItem.class.getName().equals(type)) {
-				User user = getUser(readStringProperty(genericEntity, "userid", null));
-				LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));
-				String jsonPlanItem = readStringProperty(genericEntity, "jsonPlanItem", null);
-				PlanItem planItem = new PlanItem(readStringProperty(genericEntity, "uid", null), user, lesson, jsonPlanItem);
-				planItem.setStatus(readStatus(genericEntity));
-				planItem.setPlanStatus(readPlanStatus(genericEntity));
-				planItem.setPlanCompletionStatus(readPlanCompletionStatus(genericEntity));
-				//log.info("readDescriptor: planItem: pre trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
-				planItem.trackPlanStatus();
-				planItem.updateMapAndJson();
-				writeDescriptor(planItem);
-				//log.info("readDescriptor: planItem: post trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
-				return planItem;
+				return readPlanItem(genericEntity);
 			} else if (UserProfile.class.getName().equals(type)) {
-				User user = getUser(readStringProperty(genericEntity, "userid", null));
-				UserProfile userProfile = new UserProfile(readStringProperty(genericEntity, "uid", null), user, readStringProperty(genericEntity, "email", null));
-				userProfile.setFullName(readStringProperty(genericEntity, "fullName", null));
-				return userProfile;
+				return readUserProfile(genericEntity);
+			} else if (UserOnlineStatus.class.getName().equals(type)) {
+				return readUserOnlineStatus(genericEntity);
+			} else if (Clan.class.getName().equals(type)) {
+				return readClan(genericEntity);
+			} else if (SelectionObject.class.getName().equals(type)) {
+				return readSelectionObject(genericEntity);
+			} else if (SelectionOption.class.getName().equals(type)) {
+				return readSelectionOption(genericEntity);
+			} else if (UserSelectedOption.class.getName().equals(type)) {
+				return readUserSelectedOption(genericEntity);
 			}
 		}
 
 		return null;
+	}
+	
+	protected static CourseDescriptor readCourseDescriptor(Entity genericEntity) throws Exception {
+		ArrayList<GenericDescriptor> relationList = null;
+		CourseDescriptor course = new CourseDescriptor(readStringProperty(genericEntity, "uid", null),
+				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+				readStringProperty(genericEntity, "url", null));
+		relationList = readToManyRelation(course, "modules", ModuleDescriptor.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			course.addModule((ModuleDescriptor)generic);
+		}
+		relationList = readToManyRelation(course, "goals", GoalDescriptor.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			course.addGoal((GoalDescriptor)generic);
+		}
+		return course;
+	}
+	
+	protected static ModuleDescriptor readModuleDescriptor(Entity genericEntity) throws Exception {
+		ArrayList<GenericDescriptor> relationList = null;
+		ModuleDescriptor module = new ModuleDescriptor(readStringProperty(genericEntity,"uid", null),
+				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+				readStringProperty(genericEntity, "url", null));
+		relationList = readToManyRelation(module, "lessons", LessonDescriptor.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			module.addLesson((LessonDescriptor)generic);
+		}
+		return module;
+	}
+	
+	protected static GoalDescriptor readGoalDescriptor(Entity genericEntity) throws Exception {
+		ArrayList<GenericDescriptor> relationList = null;
+		GoalDescriptor goal = new GoalDescriptor(readStringProperty(genericEntity, "uid", null),
+				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+				readStringProperty(genericEntity, "url", null));
+		relationList = readToManyRelation(goal, "lessons", LessonDescriptor.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			goal.addLesson((LessonDescriptor)generic);
+		}
+		EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionGoals");
+		String keys = readStringProperty(genericEntity, "completionGoalKeys", null);
+		if (keys != null && keys.length()>0) {
+			keys = keys.replace("[", "").replace("]", "").replace(" ", "");
+			//log.info("Reading completionGoals: " + keys);
+			if (keys.length()>0) {
+				ArrayList<String> keysList = new ArrayList<>(Arrays.asList(keys.split(",")));
+				if (ee != null && keysList != null && keysList.size() > 0) {
+				    for (String key : keysList) {
+				    	//log.info("Key: "+key+", "+(String) ee.getProperty(key));
+				        goal.addCompletionGoal(key, (String) ee.getProperty(key));
+				    }
+				}
+			}
+		}
+		
+		return goal;
+	}
+	
+	protected static LessonDescriptor readLessonDescriptor(Entity genericEntity) throws Exception {
+		ArrayList<GenericDescriptor> relationList = null;
+		LessonDescriptor lesson = new LessonDescriptor(readStringProperty(genericEntity, "uid", null),
+				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+				readStringProperty(genericEntity, "url", null));
+		relationList = readToManyRelation(lesson, "contents", ContentDescriptor.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			lesson.addContent((ContentDescriptor)generic);
+		}
+		return lesson;
+	}
+	
+	protected static ContentDescriptor readContentDescriptor(Entity genericEntity) throws Exception {
+		ContentDescriptor content = new ContentDescriptor(readStringProperty(genericEntity, "uid", null),
+				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+				readStringProperty(genericEntity, "url", null));
+		return content;
+	}
+	
+	protected static UserPlan readUserPlan(Entity genericEntity) throws Exception {
+		ArrayList<GenericDescriptor> relationList = null;
+		User user = getUser(readStringProperty(genericEntity, "userid", null));
+		CourseDescriptor course = (CourseDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "course", null));				
+		UserPlan plan = new UserPlan(readStringProperty(genericEntity, "uid", null), user);
+		plan.setCourse(course);
+		plan.setPlannedTimePerWeek(readStringProperty(genericEntity, "plannedTimePerWeek", null));
+		plan.setAllCourseIntention(readBooleanProperty(genericEntity, "isAllCourseIntention", false));
+		plan.setIntentionCompleted(readBooleanProperty(genericEntity, "intentionCompleted", false));
+		plan.setObstacles(readStringProperty(genericEntity, "obstacles", null));
+		plan.setCopingPlan(readStringProperty(genericEntity, "copingPlan", null));
+
+		relationList = readToManyRelation(plan, "userGoals", UserGoal.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			plan.addGoal((UserGoal)generic);
+		}
+		relationList = readToManyRelation(plan, "planItems", PlanItem.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			plan.addPlanItem((PlanItem)generic);
+		}
+		EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionStatusMap");
+		if (ee != null) {
+			Map<String, Object> map = ee.getProperties();
+			Set<String> keys = map.keySet();
+			for (String key : keys) {
+				Object val = map.get(key);
+				if (val != null) {
+					if (val instanceof String) {
+						plan.completionStatusMap.put(key, (String)val);
+					} else if (val instanceof Text) {
+						plan.completionStatusMap.put(key, ((Text)val).getValue());
+					} else if (val instanceof Integer) {
+						plan.completionStatusMap.put(key, String.valueOf(val));
+					}
+				}
+			}
+		}
+		return plan;
+	}
+	
+	protected static UserGoal readUserGoal(Entity genericEntity) throws Exception {
+		ArrayList<GenericDescriptor> relationList = null;
+		User user = getUser(readStringProperty(genericEntity, "userid", null));
+		GoalDescriptor goal = (GoalDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "goal", null));				
+		UserGoal userGoal = new UserGoal(readStringProperty(genericEntity, "uid", null), user, goal);
+		userGoal.setCompletionGoal(readStringProperty(genericEntity, "completionGoal", null));
+		userGoal.setStatus(readStatus(genericEntity));
+		relationList = readToManyRelation(userGoal, "lessons", UserLesson.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			userGoal.addLesson((UserLesson)generic);
+		}
+		return userGoal;
+	}
+	
+	protected static UserLesson readUserLesson(Entity genericEntity) throws Exception {
+		ArrayList<GenericDescriptor> relationList = null;
+		User user = getUser(readStringProperty(genericEntity, "userid", null));
+		LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));				
+		UserLesson userLesson = new UserLesson(readStringProperty(genericEntity, "uid", null), user, lesson);
+		userLesson.setStatus(readStatus(genericEntity));
+		relationList = readToManyRelation(userLesson, "contents", UserContent.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			userLesson.addContent((UserContent)generic);
+		}
+		return userLesson;
+	}
+	
+	protected static UserContent readUserContent(Entity genericEntity) throws Exception {
+		User user = getUser(readStringProperty(genericEntity, "userid", null));
+		ContentDescriptor content = (ContentDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "content", null));				
+		UserContent userContent = new UserContent(readStringProperty(genericEntity, "uid", null), user, content);
+		userContent.setStatus(readStatus(genericEntity));
+		return userContent;
+	}
+	
+	protected static PlanItem readPlanItem(Entity genericEntity) throws Exception {
+		User user = getUser(readStringProperty(genericEntity, "userid", null));
+		LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));
+		String jsonPlanItem = readStringProperty(genericEntity, "jsonPlanItem", null);
+		PlanItem planItem = new PlanItem(readStringProperty(genericEntity, "uid", null), user, lesson, jsonPlanItem);
+		planItem.setStatus(readStatus(genericEntity));
+		planItem.setPlanStatus(readPlanStatus(genericEntity));
+		planItem.setPlanCompletionStatus(readPlanCompletionStatus(genericEntity));
+		//log.info("readDescriptor: planItem: pre trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
+		planItem.trackPlanStatus();
+		planItem.updateMapAndJson();
+		writeDescriptor(planItem);
+		//log.info("readDescriptor: planItem: post trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
+		return planItem;
+	}
+	
+	protected static UserProfile readUserProfile(Entity genericEntity) throws Exception {
+		User user = getUser(readStringProperty(genericEntity, "userid", null));
+		UserProfile userProfile = new UserProfile(readStringProperty(genericEntity, "uid", null), user, readStringProperty(genericEntity, "email", null));
+		userProfile.setFullName(readStringProperty(genericEntity, "fullName", null));
+		return userProfile;
+	}
+	
+	protected static UserOnlineStatus readUserOnlineStatus(Entity genericEntity) throws Exception {
+		User user = getUser(readStringProperty(genericEntity, "userid", null));
+		UserOnlineStatus onlineStatus = new UserOnlineStatus(readStringProperty(genericEntity, "uid", null),
+				user);
+		
+		onlineStatus.setLastAccess(new Date(Long.parseLong(readStringProperty(genericEntity, "lastAccess", null))));
+		onlineStatus.setLastUrl(readStringProperty(genericEntity, "lastUrl", null));
+		return onlineStatus;
+	}
+	
+	protected static Clan readClan(Entity genericEntity) throws Exception {
+		ArrayList<GenericDescriptor> relationList = null;
+		Clan clan = StimulatedPlanningFactory.getClan(readStringProperty(genericEntity, "uid", null));
+		if (clan == null) {
+			clan = new Clan(readStringProperty(genericEntity, "uid", null),
+				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+				readStringProperty(genericEntity, "url", null));
+			relationList = readToManyRelation(clan, "userStati", UserOnlineStatus.class.getName(), true);
+			for (GenericDescriptor generic : relationList) {
+				clan.addUserOnlineStatus((UserOnlineStatus)generic);
+			}
+		}
+		return clan;
+
+	}
+	
+	protected static SelectionObject readSelectionObject(Entity genericEntity) throws Exception {
+		ArrayList<GenericDescriptor> relationList = null;
+		SelectionObject selectionObject = new SelectionObject(readStringProperty(genericEntity, "uid", null),
+				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+				readStringProperty(genericEntity, "url", null));
+		selectionObject.setContent(readStringProperty(genericEntity, "content", null));
+		selectionObject.setType(readSelectionObjectType(genericEntity));
+		relationList = readToManyRelation(selectionObject, "options", SelectionOption.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			selectionObject.addOption((SelectionOption)generic);
+		}
+		return selectionObject;
+	}
+	
+	protected static SelectionOption readSelectionOption(Entity genericEntity) {
+		SelectionOption selectionOption = new SelectionOption(readStringProperty(genericEntity, "uid", null),
+				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+				readStringProperty(genericEntity, "url", null));
+		selectionOption.setContent(readStringProperty(genericEntity, "content", null));
+		selectionOption.setCorrect(readBooleanProperty(genericEntity, "isCorrect", false));
+		return selectionOption;
+	}
+	
+	protected static UserSelectedOption readUserSelectedOption(Entity genericEntity) throws Exception {
+		User user = getUser(readStringProperty(genericEntity, "userid", null));
+		SelectionObject selectionObject = (SelectionObject)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "selectionObject", null));	
+		SelectionOption selectedOption = (SelectionOption)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "selectedOption", null));	
+
+		UserSelectedOption userSelectedOption = new UserSelectedOption(readStringProperty(genericEntity, "uid", null), user);
+		userSelectedOption.setSelectionObject(selectionObject);
+		userSelectedOption.setSelectedOption(selectedOption);
+		
+		return null;
+	}
+	
+	protected static InformationObject readInformationObject(Entity genericEntity) {
+		InformationObject informationObject = new InformationObject(readStringProperty(genericEntity, "uid", null),
+				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+				readStringProperty(genericEntity, "url", null));
+		informationObject.setContent(readStringProperty(genericEntity, "content", null));
+		return informationObject;
 	}
 	
 	public static String readStringProperty(Entity genericEntity, String key, String defaultValue) {
@@ -455,6 +623,15 @@ public class PersistentStore {
 			return LessonStatus.INITIAL;
 		}
 		
+	}
+	
+	protected static SelectionObjectType readSelectionObjectType(Entity genericEntity) {
+		if (genericEntity.hasProperty("type")) {
+			SelectionObjectType status = SelectionObjectType.valueOf((String)genericEntity.getProperty("type"));
+			return status;
+		} else {
+			return SelectionObjectType.SINGLE_USER_SELECTION;
+		}
 	}
 	
 	protected static PlanStatus readPlanStatus(Entity genericEntity) {
@@ -738,6 +915,161 @@ public class PersistentStore {
 	}
 
 
+	public static void writeDescriptor(InformationObject generic) throws Exception {
+		//log.info("writeDescriptor (Clan): "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity entity = createInformationObjectEntity(generic);
+			
+			datastore.put(entity);
+		} catch (Exception e1) {
+			log.info("FATAL: Writing generic entity failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+
+
+	public static void writeDescriptor(Clan generic) throws Exception {
+		//log.info("writeDescriptor (Clan): "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity entity = createInformationObjectEntity(generic);
+			
+			writeToManyRelation(generic, generic.getUserOnlineStatus(), "userStati", generic.userCount(), true);
+
+			datastore.put(entity);
+		} catch (Exception e1) {
+			log.info("FATAL: Writing generic entity failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+
+
+	public static void writeDescriptor(SelectionObject generic) throws Exception {
+		//log.info("writeDescriptor (SelectionObject): "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity entity = createInformationObjectEntity(generic);
+			entity.setProperty("type", generic.getType().toString());
+
+			writeToManyRelation(generic, generic.getOptions(), "options", generic.getOptionCount(), true);
+
+			datastore.put(entity);
+		} catch (Exception e1) {
+			log.info("FATAL: Writing generic entity failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+
+	public static void writeDescriptor(SelectionOption generic) throws Exception {
+		//log.info("writeDescriptor (SelectionOption): "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity entity = createInformationObjectEntity(generic);
+			entity.setProperty("isCorrect", generic.isCorrect());				
+
+			datastore.put(entity);
+		} catch (Exception e1) {
+			log.info("FATAL: Writing generic entity failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+
+	public static void writeDescriptor(UserOnlineStatus userOnlineStatus) throws Exception {
+		//log.info("writeDescriptor (UserOnlineStatus): "+userOnlineStatus.getUser().getName()+", "+userOnlineStatus.getClass().getName()+", "+userOnlineStatus.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity userOnlineStatusEntity = createGenericUserEntity(userOnlineStatus);
+			userOnlineStatusEntity.setProperty("lastAccess", userOnlineStatus.getLastAccess().getTime());
+			userOnlineStatusEntity.setProperty("lastUrl", userOnlineStatus.getLastUrl());
+
+			datastore.put(userOnlineStatusEntity);
+		} catch (Exception e1) {
+			log.info("FATAL: Writing goal failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+
+	public static void writeDescriptor(UserSelectedOption userSelectedOption) throws Exception {
+		//log.info("writeDescriptor (UserSelectedOption): "+userOnlineStatus.getUser().getName()+", "+userOnlineStatus.getClass().getName()+", "+userOnlineStatus.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		try {
+			Entity userOnlineStatusEntity = createGenericUserEntity(userSelectedOption);
+			userOnlineStatusEntity.setProperty("selectionObject", userSelectedOption.getSelectionObject().getId());
+			userOnlineStatusEntity.setProperty("selectedOption", userSelectedOption.getSelectedOption().getId());
+
+			datastore.put(userOnlineStatusEntity);
+		} catch (Exception e1) {
+			log.info("FATAL: Writing goal failed.");
+			e1.printStackTrace();
+
+		}
+
+	}
+	
+	
+	public static HashArrayList<Clan> readAllClans() {
+		HashArrayList<Clan> clans = new HashArrayList<Clan>();
+		Clan clan = null;
+		try {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			Query q = new Query(Clan.class.getName());
+			
+			PreparedQuery pq = datastore.prepare(q);
+
+			for (Entity result : pq.asIterable()) {
+				String id = (String) result.getProperty("uid");
+				clan = (Clan)readDescriptor(Clan.class.getName(), id);
+				clans.add(clan);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return clans;
+	}
+
+
+
+	public static UserOnlineStatus readUserOnlineStatus(User user) {
+		UserOnlineStatus onlineStatus = null;
+		try {
+			log.info("read userOnlineStatus for "+user.getName());
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			Filter userFilter = new FilterPredicate("userid", FilterOperator.EQUAL, user.getId());
+			Query q = new Query(UserOnlineStatus.class.getName()).setFilter(userFilter);
+			
+			PreparedQuery pq = datastore.prepare(q);
+
+			for (Entity result : pq.asIterable()) {
+				String id = (String) result.getProperty("uid");
+				log.info("read userPlan for "+user.getName()+", "+id);
+				onlineStatus = (UserOnlineStatus)readDescriptor(UserOnlineStatus.class.getName(), id);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return onlineStatus;
+	}
 
 
 	

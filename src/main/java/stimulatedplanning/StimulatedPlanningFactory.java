@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
+import senseofcommunity.Clan;
+import senseofcommunity.UserOnlineStatus;
 import stimulatedplanning.util.HashArrayList;
 import stimulatedplanning.util.UserProfileCVS;
 
@@ -44,6 +46,7 @@ public class StimulatedPlanningFactory {
 	public static final String ACTIVITY_TYPE_COMPLETE = "complete";
 	
 	private HashMap<String, GenericDescriptor> courseObjects = new HashMap<>();
+	private HashArrayList<Clan> clans = new HashArrayList<>();
 	
 	private CourseDescriptor retrieveTestCourse() {
 		if (instance.testCourse != null) {
@@ -87,6 +90,22 @@ public class StimulatedPlanningFactory {
 			return null;
 		}
 		return instance.courseObjects.get(id);
+	}
+	
+	public static void addClan(Clan clan) {
+		instance.clans.add(clan);
+	}
+	
+	public static Clan getClan(String id) {
+		if (instance.clans.size() == 0) {
+			instance.clans = PersistentStore.readAllClans();
+		}
+		if (!instance.clans.containsKey(id)) {
+			log.info("Warning: trying to retrieve clan not in list: "+id);
+			new Exception().printStackTrace();
+			return null;
+		}
+		return instance.clans.get(id);
 	}
 	
 	public static String getUUID() {
@@ -633,7 +652,25 @@ public class StimulatedPlanningFactory {
 		
 		return userProfile;
 	}
+
 	
+	public static UserOnlineStatus getUserOnlineStatus(User user) {
+		UserOnlineStatus userOnlineStatus = PersistentStore.readUserOnlineStatus(user);
+		if (userOnlineStatus == null) {
+			userOnlineStatus = createUserOnlineStatus(user);
+		}
+		return userOnlineStatus;
+	}
+	
+	
+	public static UserOnlineStatus createUserOnlineStatus(User user) {
+		log.info("create userOnlineStatus for "+user.getName());
+		UserOnlineStatus userOnlineStatus = new UserOnlineStatus(StimulatedPlanningFactory.getUUID(), user);
+		
+		return userOnlineStatus;
+	}
+	
+
 	
 	public static void trackAndLogEvent(HttpServletRequest request, HttpServletResponse response, String logType) {
 		HttpSession session = request.getSession();
@@ -765,6 +802,12 @@ public class StimulatedPlanningFactory {
 		if (userPlan == null || !user.getId().equals(userPlan.getUser().getId())) {
 			userPlan = StimulatedPlanningFactory.getUserPlan(user, course);
 			session.setAttribute("userPlan", userPlan);
+		}
+	
+		UserOnlineStatus userOnlineStatus = (UserOnlineStatus)session.getAttribute("userOnlineStatus");
+		if (userOnlineStatus == null || !user.getId().equals(userOnlineStatus.getUser().getId())) {
+			userOnlineStatus = StimulatedPlanningFactory.getUserOnlineStatus(user);
+			session.setAttribute("userOnlineStatus", userOnlineStatus);
 		}
 	
 		HashArrayList<GoalDescriptor> selectedGoals = new HashArrayList<GoalDescriptor>();
