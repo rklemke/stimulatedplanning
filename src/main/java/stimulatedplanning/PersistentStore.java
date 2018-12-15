@@ -409,9 +409,18 @@ public class PersistentStore {
 	}
 	
 	protected static ContentDescriptor readContentDescriptor(Entity genericEntity) throws Exception {
+		ArrayList<GenericDescriptor> relationList = null;
 		ContentDescriptor content = new ContentDescriptor(readStringProperty(genericEntity, "uid", null),
 				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
 				readStringProperty(genericEntity, "url", null));
+		relationList = readToManyRelation(content, "informationObjects", InformationObject.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			content.addInformationObject((InformationObject)generic);
+		}
+		relationList = readToManyRelation(content, "selectionObjects", SelectionObject.class.getName(), true);
+		for (GenericDescriptor generic : relationList) {
+			content.addSelectionObject((SelectionObject)generic);
+		}
 		return content;
 	}
 	
@@ -761,6 +770,9 @@ public class PersistentStore {
 
 		try {
 			Entity contentEntity = createGenericEntity(content);
+
+			writeToManyRelation(content, content.getInformationObjects(), "informationObjects", content.informationObjects.size(), true);
+			writeToManyRelation(content, content.getSelectionObjects(), "selectionObjects", content.selectionObjects.size(), true);
 
 			datastore.put(contentEntity);
 		} catch (Exception e1) {
