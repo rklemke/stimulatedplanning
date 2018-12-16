@@ -1,5 +1,7 @@
 package senseofcommunity;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ListIterator;
 
 import stimulatedplanning.LessonDescriptor;
@@ -38,5 +40,36 @@ public class Clan extends InformationObject {
 	public int userCount() {
 		return userStati.size();
 	}
+
+
+	private HashArrayList<UserOnlineStatus> getUsersInTimeframe(int maxMinutesAgo, int minMinutesAgo) {
+		Date now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.MINUTE, -maxMinutesAgo);
+		Date min = cal.getTime();
+		cal.setTime(now);
+		cal.add(Calendar.MINUTE, -minMinutesAgo);
+		Date max = cal.getTime();
+		HashArrayList<UserOnlineStatus> recentUsers = new HashArrayList<>();
+		for (UserOnlineStatus status: userStati) {
+			if ((minMinutesAgo == 0 || status.getLastAccess().after(min)) 
+					&& (maxMinutesAgo == 0 || status.getLastAccess().before(max))) {
+				recentUsers.add(status);
+			}
+		}
+		return recentUsers;
+	}
 	
+	public HashArrayList<UserOnlineStatus> getOnlineUsers() {
+		return getUsersInTimeframe(2, 0);
+	}
+
+	public HashArrayList<UserOnlineStatus> getRecentUsers() {
+		return getUsersInTimeframe(10, 2);
+	}
+
+	public HashArrayList<UserOnlineStatus> getOfflineUsers() {
+		return getUsersInTimeframe(0, 10);
+	}
 }

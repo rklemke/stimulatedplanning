@@ -1,7 +1,11 @@
 package senseofcommunity;
 
+import java.util.ArrayList;
 import java.util.ListIterator;
 
+import stimulatedplanning.PersistentStore;
+import stimulatedplanning.StimulatedPlanningFactory;
+import stimulatedplanning.User;
 import stimulatedplanning.util.HashArrayList;
 
 public class SelectionObject extends InformationObject {
@@ -40,5 +44,23 @@ public class SelectionObject extends InformationObject {
 	}
 	
 	
+	public void clearSelectionForUser(User user) {
+		UserSelectedOption selectedOption;
+		for (SelectionOption option : options) {
+			selectedOption = PersistentStore.readUserSelectionOption(user, this, option);
+			PersistentStore.deleteGenericEntity(selectedOption);
+		}
+		
+	}
+
+
+	public void setSelectionForUser(User user, ArrayList<SelectionOption> selection) {
+		clearSelectionForUser(user);
+		for (SelectionOption option : selection) {
+			StimulatedPlanningFactory.createUserSelectedOption(user, this, option);
+		}
+	}
+
+
 
 }

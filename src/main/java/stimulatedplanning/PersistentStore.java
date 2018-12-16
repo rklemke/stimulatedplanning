@@ -580,6 +580,7 @@ public class PersistentStore {
 		SelectionOption selectedOption = (SelectionOption)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "selectedOption", null));	
 
 		UserSelectedOption userSelectedOption = new UserSelectedOption(readStringProperty(genericEntity, "uid", null), user);
+		userSelectedOption.setLastAccess(new Date(Long.parseLong(readStringProperty(genericEntity, "lastAccess", null))));
 		userSelectedOption.setSelectionObject(selectionObject);
 		userSelectedOption.setSelectedOption(selectedOption);
 		
@@ -1025,11 +1026,12 @@ public class PersistentStore {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		try {
-			Entity userOnlineStatusEntity = createGenericUserEntity(userSelectedOption);
-			userOnlineStatusEntity.setProperty("selectionObject", userSelectedOption.getSelectionObject().getId());
-			userOnlineStatusEntity.setProperty("selectedOption", userSelectedOption.getSelectedOption().getId());
+			Entity userSelectedOptionEntity = createGenericUserEntity(userSelectedOption);
+			userSelectedOptionEntity.setProperty("lastAccess", userSelectedOption.getLastAccess().getTime());
+			userSelectedOptionEntity.setProperty("selectionObject", userSelectedOption.getSelectionObject().getId());
+			userSelectedOptionEntity.setProperty("selectedOption", userSelectedOption.getSelectedOption().getId());
 
-			datastore.put(userOnlineStatusEntity);
+			datastore.put(userSelectedOptionEntity);
 		} catch (Exception e1) {
 			log.info("FATAL: Writing goal failed.");
 			e1.printStackTrace();
@@ -1125,6 +1127,32 @@ public class PersistentStore {
 			e.printStackTrace();
 		}
 		return plan;
+	}
+	
+	
+	public static UserSelectedOption readUserSelectionOption(User user, SelectionObject selectionObject, SelectionOption selectionOption) {
+		UserSelectedOption selectedOption = null;
+		try {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			Filter userFilter = new FilterPredicate("userid", FilterOperator.EQUAL, user.getId());
+			Filter selectionObjectFilter = new FilterPredicate("selectionObject", FilterOperator.EQUAL, selectionObject.getId());
+			Filter selectionOptionFilter = new FilterPredicate("selectionOption", FilterOperator.EQUAL, selectionOption.getId());
+			CompositeFilter userSelectedFilter = CompositeFilterOperator.and(userFilter, selectionObjectFilter, selectionOptionFilter);
+			Query q = new Query(UserPlan.class.getName()).setFilter(userSelectedFilter);
+			
+			PreparedQuery pq = datastore.prepare(q);
+
+			for (Entity result : pq.asIterable()) {
+				String id = (String) result.getProperty("uid");
+				//log.info("read userPlan for "+user.getName()+", "+id);
+				selectedOption = (UserSelectedOption)readDescriptor(UserSelectedOption.class.getName(), id);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return selectedOption;
 	}
 	
 	

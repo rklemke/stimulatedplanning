@@ -17,7 +17,10 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 
 import senseofcommunity.Clan;
+import senseofcommunity.SelectionObject;
+import senseofcommunity.SelectionOption;
 import senseofcommunity.UserOnlineStatus;
+import senseofcommunity.UserSelectedOption;
 import stimulatedplanning.util.HashArrayList;
 import stimulatedplanning.util.UserProfileCVS;
 
@@ -671,6 +674,16 @@ public class StimulatedPlanningFactory {
 	}
 	
 
+	public static UserSelectedOption createUserSelectedOption(User user, SelectionObject selectionObject, SelectionOption selectionOption) {
+		log.info("create userSelectedOption for "+user.getName());
+		UserSelectedOption userSelectedOption = new UserSelectedOption(StimulatedPlanningFactory.getUUID(), user);
+		userSelectedOption.setSelectionObject(selectionObject);
+		userSelectedOption.setSelectedOption(selectionOption);
+		userSelectedOption.setLastAccess(new Date());
+		return userSelectedOption;
+	}
+	
+
 	
 	public static void trackAndLogEvent(HttpServletRequest request, HttpServletResponse response, String logType) {
 		HttpSession session = request.getSession();
@@ -720,6 +733,7 @@ public class StimulatedPlanningFactory {
 						e.printStackTrace();
 					}
 				}
+				// RK: addition for SoC experiment
 				if (user.getOnlineStatus() != null) {
 					user.getOnlineStatus().updateOnlineStatus(page);
 					try {

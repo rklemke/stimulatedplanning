@@ -1,5 +1,8 @@
 package senseofcommunity;
 
+import stimulatedplanning.PersistentStore;
+import stimulatedplanning.User;
+
 public class SelectionOption extends InformationObject {
 	
 	protected boolean isCorrect;
@@ -20,5 +23,5 @@ public class SelectionOption extends InformationObject {
 		super(id, title, description, url);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 }
