@@ -17,7 +17,9 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 
 import senseofcommunity.Clan;
+import senseofcommunity.InformationObject;
 import senseofcommunity.SelectionObject;
+import senseofcommunity.SelectionObjectType;
 import senseofcommunity.SelectionOption;
 import senseofcommunity.UserOnlineStatus;
 import senseofcommunity.UserSelectedOption;
@@ -36,12 +38,16 @@ public class StimulatedPlanningFactory {
 	private CourseDescriptor testCourse;
 	//public static final String platformHomeUrl = "https://ou.edia.nl/";
 	//public static final String planningUrl = "https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/courseware/c440e614880f44cab61666f5783994c3/9c1b1985a20e4289b02f5e95c61e4485/?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%409c1b1985a20e4289b02f5e95c61e4485";
-	public static final String platformHomeUrl = "https://edge.edx.org/";
-	public static final String planningUrl = "https://edge.edx.org/courses/course-v1:DelftX+Sandbox_Welten+2018/courseware/ca508c0a998744d9baca503243547577/a42163024f11463eb492c34128bc859d/1?activate_block_id=block-v1%3ADelftX%2BSandbox_Welten%2B2018%2Btype%40vertical%2Bblock%4059532b2c3bf34650a960d73198deedb0";
+	//public static final String platformHomeUrl = "https://edge.edx.org/";
+	//public static final String planningUrl = "https://edge.edx.org/courses/course-v1:DelftX+Sandbox_Welten+2018/courseware/ca508c0a998744d9baca503243547577/a42163024f11463eb492c34128bc859d/1?activate_block_id=block-v1%3ADelftX%2BSandbox_Welten%2B2018%2Btype%40vertical%2Bblock%4059532b2c3bf34650a960d73198deedb0";
+	public static final String platformHomeUrl = "https://localhost/";
+	public static final String planningUrl = "https://localhost/courses/course-v1:DelftX+Sandbox_Welten+2018/courseware/ca508c0a998744d9baca503243547577/a42163024f11463eb492c34128bc859d/1?activate_block_id=block-v1%3ADelftX%2BSandbox_Welten%2B2018%2Btype%40vertical%2Bblock%4059532b2c3bf34650a960d73198deedb0";
 	//private static final String testCourseId = "ICS18";
-	public static final String testCourseId = "SBW18";
+	//public static final String testCourseId = "SBW18";
+	public static final String testCourseId = "SoC18";
 	//private static final String testCourseBaseURL = "https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/";
-	public static final String testCourseBaseURL = "https://edge.edx.org/courses/course-v1:DelftX+Sandbox_Welten+2018/";
+	//public static final String testCourseBaseURL = "https://edge.edx.org/courses/course-v1:DelftX+Sandbox_Welten+2018/";
+	public static final String testCourseBaseURL = "https://localhost/courses/course-v1:DelftX+Sandbox_Welten+2018/";
 	public static final String userUnknown = "unknown";
 	public static final String userGuest = "Guest";
 	
@@ -101,12 +107,7 @@ public class StimulatedPlanningFactory {
 	
 	public static Clan getClan(String id) {
 		if (instance.clans.size() == 0) {
-			instance.clans = PersistentStore.readAllClans();
-		}
-		if (!instance.clans.containsKey(id)) {
-			log.info("Warning: trying to retrieve clan not in list: "+id);
-			new Exception().printStackTrace();
-			return null;
+			getOrGenerateClans();
 		}
 		return instance.clans.get(id);
 	}
@@ -122,9 +123,140 @@ public class StimulatedPlanningFactory {
 	 * @return
 	 */
 	public static CourseDescriptor generateTestCourse() {
-		return generateTestCourseSandbox();
+		return generateDevTestCourse();
 	}	
-	
+
+	private static HashArrayList<Clan> getOrGenerateClans() {
+		if (instance.clans.size() == 0) {
+			instance.clans = PersistentStore.readAllClans();
+		}
+		if (instance.clans.size() == 0) {
+			Clan clan1 = new Clan(getUUID(), 
+					"Defenders", 
+					"Defenders", "");
+			instance.clans.add(clan1);
+			
+			Clan clan2 = new Clan(getUUID(), 
+					"Hackers", 
+					"Hackers", "");
+			instance.clans.add(clan2);
+			try {
+				PersistentStore.writeDescriptor(clan1);
+				PersistentStore.writeDescriptor(clan2);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return instance.clans;
+	}
+	/**
+	 * generate the structure for the course to be used according to dev test structure.
+	 * @return
+	 */
+	public static CourseDescriptor generateDevTestCourse() {
+		getOrGenerateClans();
+		CourseDescriptor course = instance.retrieveTestCourse();
+		if (course == null) {
+			course = new CourseDescriptor(instance.testCourseId, 
+					"Security Dev Test Course", 
+					"Security Dev Test Course", 
+					testCourseBaseURL+"course/");
+
+			
+			ModuleDescriptor module2 = new ModuleDescriptor(getUUID(), 
+					"Module 1- Computer Security Principles", 
+					"Module 1- Computer Security Principles", "");
+			course.addModule(module2);
+			LessonDescriptor lesson21 = new LessonDescriptor(getUUID() ,
+					"module1. lesson 1",
+					"module1. lesson 1","");
+			module2.addLesson(lesson21);	
+			ContentDescriptor content211 = new ContentDescriptor(getUUID(), 
+					"The Security Principles", 
+					"The Security Principles", 
+					testCourseBaseURL+"courseware/4cb17259b1024410901476642c28df19/1ff9b47cae3b4d51bbfa22b458c4a25d/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%4083d79097d5d94304a6fa9a5aed25dce3");
+			lesson21.addContent(content211);
+			InformationObject info2111 = new InformationObject(getUUID(), 
+					"Intro text", 
+					"Intro text", 
+					testCourseBaseURL+"courseware/4cb17259b1024410901476642c28df19/1ff9b47cae3b4d51bbfa22b458c4a25d/");
+			content211.addInformationObject(info2111);
+			
+			ModuleDescriptor module3 = new ModuleDescriptor(getUUID(), 
+					"Module 2- Tips on how to protect your computer", 
+					"Module 2- Tips on how to protect your computer", "");
+			course.addModule(module3);
+			LessonDescriptor lesson31 = new LessonDescriptor(getUUID() ,
+					"Threats and attacks",
+					"Threats and attacks","");
+			module3.addLesson(lesson31);	
+			ContentDescriptor content311 = new ContentDescriptor(getUUID(), 
+					"The basic concept of malware", 
+					"The basic concept of malware", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+			lesson31.addContent(content311);
+			SelectionObject sele3111 = new SelectionObject(getUUID(), 
+					"Intro text", 
+					"Intro text", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			sele3111.setType(SelectionObjectType.CLAN_SELECTION);
+			content311.addSelectionObject(sele3111);
+			SelectionOption option3111a = new SelectionOption(getUUID(), 
+					"Option a", 
+					"Option a", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			sele3111.addOption(option3111a);
+			SelectionOption option3111b = new SelectionOption(getUUID(), 
+					"Option b", 
+					"Option b", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			sele3111.addOption(option3111b);
+			
+			ContentDescriptor content312 = new ContentDescriptor(getUUID(), 
+					"Passwords", 
+					"Passwords", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+			lesson31.addContent(content312);
+			ContentDescriptor content313 = new ContentDescriptor(getUUID(), 
+					"Passwords Managers", 
+					"What are and how passwords manager programs work?", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+			lesson31.addContent(content313);
+
+
+
+			
+			GoalDescriptor goal3 = new GoalDescriptor(getUUID(), module2.getTitle(), 
+					"I intend to participate in the course activities to learn about "+module2.getTitle(), "");
+			ListIterator<LessonDescriptor> iterator = module2.getLessons();
+			while (iterator.hasNext()) {
+				goal3.addLesson(iterator.next());
+			}
+			course.addGoal(goal3);
+			
+			GoalDescriptor goal4 = new GoalDescriptor(getUUID(), module3.getTitle(), 
+					"I intend to participate in the course activities to learn about "+module3.getTitle(), "");
+			iterator = module3.getLessons();
+			while (iterator.hasNext()) {
+				goal4.addLesson(iterator.next());
+			}
+			course.addGoal(goal4);
+			
+
+			GoalDescriptor goal1 = new GoalDescriptor(getUUID(), "Browsing the Course", "I intend to browse around", "");
+			goal1.addCompletionGoal("100", "all materials (100%)");
+			goal1.addCompletionGoal("70", "most materials (70%)");
+			goal1.addCompletionGoal("40", "some materials (40%)");
+			goal1.addCompletionGoal("10", "less than 10%");
+			goal1.addCompletionGoal("0", "I have not decided yet");
+			course.addGoal(goal1);
+			
+			instance.storeTestCourse(course);
+		}
+		
+		return course;
+	}
+
 	/**
 	 * generate the structure for the course to be used according to Sandbox structure.
 	 * @return
@@ -560,6 +692,16 @@ public class StimulatedPlanningFactory {
 		if (user == null) {
 			user = new User(userName, userid);
 			user.setTreatmentGroup(random.nextBoolean());
+			if (user.isTreatmentGroup()) {
+				if (instance.clans.size()==0) {
+					getOrGenerateClans();
+				}
+				if (instance.clans.size()>0) {
+					int clanNumber = random.nextInt(instance.clans.size());
+					user.setClan(instance.clans.get(clanNumber));
+				}
+				// TODO: retrieve all clans and randomly assign to one
+			}
 			if (!userGuest.equals(user.getName()) && !userUnknown.equals(userid)) {
 				try {
 					PersistentStore.writeUser(user);

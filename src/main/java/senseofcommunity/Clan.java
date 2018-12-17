@@ -42,19 +42,27 @@ public class Clan extends InformationObject {
 	}
 
 
-	private HashArrayList<UserOnlineStatus> getUsersInTimeframe(int maxMinutesAgo, int minMinutesAgo) {
+	/**
+	 * Retrieves all users of the clan, that have been active in the given time interval.
+	 * if maxSecondsAgo == 0, every activity earlier than minSeconds ago is counted.
+	 * if minSecondsAgo == 0, every activity later than maxSeconds ago is counted.
+	 * @param maxSecondsAgo positive amount of seconds or 0 to ignore border
+	 * @param minSecondsAgo positive amount of seconds or 0 to ignore border
+	 * @return
+	 */
+	private HashArrayList<UserOnlineStatus> getUsersInTimeframe(int maxSecondsAgo, int minSecondsAgo) {
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
-		cal.add(Calendar.MINUTE, -maxMinutesAgo);
-		Date min = cal.getTime();
-		cal.setTime(now);
-		cal.add(Calendar.MINUTE, -minMinutesAgo);
+		cal.add(Calendar.SECOND, -maxSecondsAgo);
 		Date max = cal.getTime();
+		cal.setTime(now);
+		cal.add(Calendar.SECOND, -minSecondsAgo);
+		Date min = cal.getTime();
 		HashArrayList<UserOnlineStatus> recentUsers = new HashArrayList<>();
 		for (UserOnlineStatus status: userStati) {
-			if ((minMinutesAgo == 0 || status.getLastAccess().after(min)) 
-					&& (maxMinutesAgo == 0 || status.getLastAccess().before(max))) {
+			if ((maxSecondsAgo == 0 || status.getLastAccess().after(max)) 
+					&& (minSecondsAgo == 0 || status.getLastAccess().before(min))) {
 				recentUsers.add(status);
 			}
 		}
@@ -62,14 +70,14 @@ public class Clan extends InformationObject {
 	}
 	
 	public HashArrayList<UserOnlineStatus> getOnlineUsers() {
-		return getUsersInTimeframe(2, 0);
+		return getUsersInTimeframe(120, 0);
 	}
 
 	public HashArrayList<UserOnlineStatus> getRecentUsers() {
-		return getUsersInTimeframe(10, 2);
+		return getUsersInTimeframe(600, 120);
 	}
 
 	public HashArrayList<UserOnlineStatus> getOfflineUsers() {
-		return getUsersInTimeframe(0, 10);
+		return getUsersInTimeframe(0, 600);
 	}
 }
