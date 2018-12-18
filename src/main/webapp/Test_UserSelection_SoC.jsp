@@ -31,7 +31,7 @@
 </head>
 <body>
 <H2>Select a user to test with.</H2>
-<form id="goalSelectForm" method="POST" action="Test_UserSelectionServlet">
+<form id="goalSelectForm" method="POST" action="Test_UserSelectionServlet_SoC">
 <label for="userSelect">Select a user:</label>
 <select name="userSelect" id="userSelect">
   <option value="unknown">Guest</option>
@@ -43,11 +43,11 @@
   <option value="a5">Leia-5</option>
 </optgroup>
 <optgroup label="Bibeg's Test Users">
-  <option value="a1">Luke-1</option>
-  <option value="a2">Luke-2</option>
-  <option value="a3">Luke-3</option>
-  <option value="a4">Luke-4</option>
-  <option value="a5">Luke-5</option>
+  <option value="b1">Luke-1</option>
+  <option value="b2">Luke-2</option>
+  <option value="b3">Luke-3</option>
+  <option value="b4">Luke-4</option>
+  <option value="b5">Luke-5</option>
 </optgroup>
 <optgroup label="Roland's Test Users">
   <option value="r1">Darth-1</option>
@@ -59,8 +59,8 @@
 </select>
 <input type="hidden" value="unknown" id="userid" name="userid">
 <input type="hidden" value="Guest" id="userName" name="userName">
-<input type="submit" id="submitIntention" name="submitIntention" value="Intention"></input>
-<input type="submit" id="submitLearning" name="submitLearning" value="Learning"></input>
+<input type="submit" id="submitIntention" name="submitLogin" value="Login"></input>
+<!--  input type="submit" id="submitLearning" name="submitLearning" value="Learning"></input>  -->
 </form>
 </body>
 </html>

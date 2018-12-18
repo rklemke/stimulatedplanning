@@ -25,7 +25,8 @@ public class Clan extends InformationObject {
 	}
 
 	public void addUser(User user) {
-		UserOnlineStatus onlineStatus = StimulatedPlanningFactory.getUserOnlineStatus(user);
+//		UserOnlineStatus onlineStatus = StimulatedPlanningFactory.getUserOnlineStatus(user);
+		UserOnlineStatus onlineStatus = user.getOnlineStatus();
 		userStati.add(onlineStatus);
 	}
 
@@ -80,4 +81,29 @@ public class Clan extends InformationObject {
 	public HashArrayList<UserOnlineStatus> getOfflineUsers() {
 		return getUsersInTimeframe(0, 600);
 	}
+
+	public HashArrayList<UserOnlineStatus> getOnlineUsersSorted(UserOnlineStatus userStatus) {
+		HashArrayList<UserOnlineStatus> sorted = getOnlineUsers();
+		if (userStatus != null && sorted != null) {
+			sorted.sort(userStatus.relativeComparator());
+		}
+		return sorted;
+	}
+
+	public HashArrayList<UserOnlineStatus> getRecentUsersSorted(UserOnlineStatus userStatus) {
+		HashArrayList<UserOnlineStatus> sorted = getRecentUsers();
+		if (userStatus != null && sorted != null) {
+			sorted.sort(userStatus.relativeComparator());
+		}
+		return sorted;
+	}
+
+	public HashArrayList<UserOnlineStatus> getOfflineUsersSorted(UserOnlineStatus userStatus) {
+		HashArrayList<UserOnlineStatus> sorted = getOfflineUsers();
+		if (userStatus != null && sorted != null) {
+			sorted.sort(userStatus.relativeComparator());
+		}
+		return sorted;
+	}
+
 }

@@ -58,7 +58,9 @@ public class PersistentStore {
 		userEntity.setProperty("name", user.getName());
 		userEntity.setProperty("uid", user.getId());
 		userEntity.setProperty("treatmentGroup", user.isTreatmentGroup());
-		userEntity.setProperty("clan", user.getClan().getId());
+		if (user.isTreatmentGroup()) {
+			userEntity.setProperty("clan", user.getClan().getId());
+		}
 		userEntity.setProperty("onlineStatus", user.getOnlineStatus().getId());
 
 		datastore.put(userEntity);
@@ -77,7 +79,7 @@ public class PersistentStore {
 				Clan clan = (Clan)readDescriptor(Clan.class.getName(), readStringProperty(userEntity, "clan", null));
 				user.setClan(clan);
 			}
-			UserOnlineStatus onlineStatus = (UserOnlineStatus)readDescriptor(UserOnlineStatus.class.getName(), readStringProperty(userEntity, "onlineStatus", null));
+			UserOnlineStatus onlineStatus = (UserOnlineStatus)readUserOnlineStatus(readStringProperty(userEntity, "onlineStatus", null), user);
 			user.setOnlineStatus(onlineStatus);
 			if (!userEntity.hasProperty("treatmentGroup")) {
 				writeUser(user);
@@ -535,9 +537,34 @@ public class PersistentStore {
 		return onlineStatus;
 	}
 	
+	protected static UserOnlineStatus readUserOnlineStatus(String id, User user) throws Exception {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		Entity genericEntity = null;
+
+		try {
+			genericEntity = datastore.get(KeyFactory.createKey(UserOnlineStatus.class.getName(), id));
+		} catch (Exception e) {
+			e.printStackTrace();
+			genericEntity = null;
+		}
+		if (genericEntity != null) {
+			UserOnlineStatus onlineStatus = new UserOnlineStatus(readStringProperty(genericEntity, "uid", null),
+					user);
+			user.setOnlineStatus(onlineStatus);
+			onlineStatus.setLastAccess(new Date(Long.parseLong(readStringProperty(genericEntity, "lastAccess", null))));
+			onlineStatus.setLastUrl(readStringProperty(genericEntity, "lastUrl", null));
+			return onlineStatus;
+		}
+		return null;
+	}
+	
 	protected static Clan readClan(Entity genericEntity) throws Exception {
 		ArrayList<GenericDescriptor> relationList = null;
-		Clan clan = StimulatedPlanningFactory.getClan(readStringProperty(genericEntity, "uid", null));
+		Clan clan = null;
+		if (StimulatedPlanningFactory.getNoOfClans() > 0) {
+			clan = StimulatedPlanningFactory.getClan(readStringProperty(genericEntity, "uid", null));
+		}
 		if (clan == null) {
 			clan = new Clan(readStringProperty(genericEntity, "uid", null),
 				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),

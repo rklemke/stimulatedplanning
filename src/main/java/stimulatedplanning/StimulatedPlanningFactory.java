@@ -112,6 +112,29 @@ public class StimulatedPlanningFactory {
 		return instance.clans.get(id);
 	}
 	
+	public static int getNoOfClans() {
+		return instance.clans.size();
+	}
+	
+	public static HashArrayList<Clan> getClans(String id) {
+		if (instance.clans.size() == 0) {
+			getOrGenerateClans();
+		}
+		return instance.clans;
+	}
+	
+	public static Clan getOtherClan(Clan clan) {
+		if (instance.clans.size() == 0) {
+			getOrGenerateClans();
+		}
+		for (Clan otherClan : instance.clans) {
+			if (clan != otherClan) {
+				return otherClan;
+			}
+		}
+		return null;
+	}
+	
 	public static String getUUID() {
 		UUID uuid = UUID.randomUUID();
         return uuid.toString();
@@ -217,13 +240,42 @@ public class StimulatedPlanningFactory {
 					"Passwords", 
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
 			lesson31.addContent(content312);
+			SelectionObject sele3121 = new SelectionObject(getUUID(), 
+					"Test", 
+					"Which are correct?", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			sele3121.setType(SelectionObjectType.CLAN_MULTI_TEST);
+			content312.addSelectionObject(sele3121);
+			SelectionOption option3121a = new SelectionOption(getUUID(), 
+					"Option a", 
+					"Option a", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option3121a.setCorrect(false);
+			sele3111.addOption(option3121a);
+			SelectionOption option3121b = new SelectionOption(getUUID(), 
+					"Option b", 
+					"Option b", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option3121b.setCorrect(true);
+			sele3111.addOption(option3121b);
+			SelectionOption option3121c = new SelectionOption(getUUID(), 
+					"Option c", 
+					"Option c", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option3121c.setCorrect(false);
+			sele3111.addOption(option3121c);
+			SelectionOption option3121d = new SelectionOption(getUUID(), 
+					"Option d", 
+					"Option d", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option3121d.setCorrect(true);
+			sele3111.addOption(option3121d);
+			
 			ContentDescriptor content313 = new ContentDescriptor(getUUID(), 
 					"Passwords Managers", 
 					"What are and how passwords manager programs work?", 
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
 			lesson31.addContent(content313);
-
-
 
 			
 			GoalDescriptor goal3 = new GoalDescriptor(getUUID(), module2.getTitle(), 
@@ -691,6 +743,8 @@ public class StimulatedPlanningFactory {
 		}
 		if (user == null) {
 			user = new User(userName, userid);
+			UserOnlineStatus status = getUserOnlineStatus(user);
+			user.setOnlineStatus(status);
 			user.setTreatmentGroup(random.nextBoolean());
 			if (user.isTreatmentGroup()) {
 				if (instance.clans.size()==0) {
@@ -698,13 +752,21 @@ public class StimulatedPlanningFactory {
 				}
 				if (instance.clans.size()>0) {
 					int clanNumber = random.nextInt(instance.clans.size());
-					user.setClan(instance.clans.get(clanNumber));
+					Clan clan = instance.clans.get(clanNumber);
+					clan.addUser(user);
+					user.setClan(clan);
+					try {
+						PersistentStore.writeDescriptor(clan);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 				// TODO: retrieve all clans and randomly assign to one
 			}
 			if (!userGuest.equals(user.getName()) && !userUnknown.equals(userid)) {
 				try {
 					PersistentStore.writeUser(user);
+					PersistentStore.writeDescriptor(status);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -877,7 +939,7 @@ public class StimulatedPlanningFactory {
 				}
 				// RK: addition for SoC experiment
 				if (user.getOnlineStatus() != null) {
-					user.getOnlineStatus().updateOnlineStatus(page);
+					user.getOnlineStatus().updateOnlineStatus(page, course.indexInCourse(page));
 					try {
 						PersistentStore.writeDescriptor(user.getOnlineStatus());
 					} catch (Exception e) {

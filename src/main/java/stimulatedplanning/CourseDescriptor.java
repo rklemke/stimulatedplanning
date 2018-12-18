@@ -63,7 +63,43 @@ public class CourseDescriptor extends GenericDescriptor {
 		}
 		return duration;
 	}
-	
+
+	public int indexInCourse(String url) {
+		int counter=0;
+		boolean found=false;
+		if (url == null) {
+			return 100;
+		}
+		int iend = url.indexOf("?"); 
+		if (iend != -1) {
+			url = url.substring(0 , iend);
+		}
+
+		foundit: // label to break the three loops
+		for (ModuleDescriptor module: modules) {
+			for (LessonDescriptor lesson : module.lessons) {
+				for (ContentDescriptor content: lesson.contents) {
+					String curl = content.url;
+					if (curl != null) {
+						int iend3 = curl.indexOf("?");
+						if (iend3 != -1) {
+							curl = curl.substring(0 , iend3);
+						}
+						if (curl.endsWith("1") && iend3 > 0) {
+							curl = curl.substring(0 , iend3-1);
+						}
+					}
+					
+					if (!found) counter++;
+					if (url.equals(content.url)) {
+						found = true;
+						break foundit; // breaks out of all three nested loops
+					}
+				}
+			}
+		}
+		return counter;
+	}
 	
 	public int distance(String url1, String url2) {
 		int counter1=0, counter2=0;
@@ -75,7 +111,7 @@ public class CourseDescriptor extends GenericDescriptor {
 		if (iend1 != -1) {
 			url1 = url1.substring(0 , iend1);
 		}
-		int iend2 = url1.indexOf("?"); 
+		int iend2 = url2.indexOf("?"); 
 		if (iend2 != -1) {
 			url2 = url2.substring(0 , iend2);
 		}

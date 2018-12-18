@@ -1,5 +1,6 @@
 package senseofcommunity;
 
+import java.util.Comparator;
 import java.util.Date;
 
 import stimulatedplanning.GenericUserObject;
@@ -9,6 +10,7 @@ public class UserOnlineStatus extends GenericUserObject {
 	
 	Date lastAccess;
 	String lastUrl;
+	int lastIndex;
 	
 
 	public Date getLastAccess() {
@@ -39,9 +41,20 @@ public class UserOnlineStatus extends GenericUserObject {
 	}
 	
 	
-	public void updateOnlineStatus(String url) {
+	public void updateOnlineStatus(String url, int index) {
 		lastAccess = new Date();
 		lastUrl = url;
+		lastIndex = index;
+	}
+	
+	
+	public Comparator<UserOnlineStatus> relativeComparator() {
+		UserOnlineStatus referenceStatus = this;
+		return new Comparator<UserOnlineStatus>() {
+			public int compare(UserOnlineStatus s1, UserOnlineStatus s2) {
+				return Math.abs(Math.abs(referenceStatus.lastIndex-s1.lastIndex)-Math.abs(referenceStatus.lastIndex-s2.lastIndex));
+			}
+		};
 	}
 
 
