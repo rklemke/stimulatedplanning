@@ -180,128 +180,194 @@ public class StimulatedPlanningFactory {
 		getOrGenerateClans();
 		CourseDescriptor course = instance.retrieveTestCourse();
 		if (course == null) {
+			
+			// Course
+			
 			course = new CourseDescriptor(instance.testCourseId, 
 					"Security Dev Test Course", 
 					"Security Dev Test Course", 
 					testCourseBaseURL+"course/");
 
-			
-			ModuleDescriptor module2 = new ModuleDescriptor(getUUID(), 
+			//
+			// Module 1
+			//
+			ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
 					"Module 1- Computer Security Principles", 
 					"Module 1- Computer Security Principles", "");
-			course.addModule(module2);
-			LessonDescriptor lesson21 = new LessonDescriptor(getUUID() ,
+			course.addModule(module);
+			LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
 					"module1. lesson 1",
 					"module1. lesson 1","");
-			module2.addLesson(lesson21);	
-			ContentDescriptor content211 = new ContentDescriptor(getUUID(), 
+			module.addLesson(lesson);	
+			ContentDescriptor content = new ContentDescriptor(getUUID(), 
 					"The Security Principles", 
 					"The Security Principles", 
 					testCourseBaseURL+"courseware/4cb17259b1024410901476642c28df19/1ff9b47cae3b4d51bbfa22b458c4a25d/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%4083d79097d5d94304a6fa9a5aed25dce3");
-			lesson21.addContent(content211);
-			InformationObject info2111 = new InformationObject(getUUID(), 
+			lesson.addContent(content);
+
+			InformationObject info = new InformationObject(getUUID(), 
 					"Intro text", 
 					"Intro text", 
 					testCourseBaseURL+"courseware/4cb17259b1024410901476642c28df19/1ff9b47cae3b4d51bbfa22b458c4a25d/");
-			content211.addInformationObject(info2111);
+			content.addInformationObject(info);
+
+			info = new InformationObject(getUUID(), 
+					"Additional text", 
+					"Additional text", 
+					testCourseBaseURL+"courseware/4cb17259b1024410901476642c28df19/1ff9b47cae3b4d51bbfa22b458c4a25d/");
+			content.addInformationObject(info);
+
+			// Goal for Module 1
 			
-			ModuleDescriptor module3 = new ModuleDescriptor(getUUID(), 
+			GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
+					"I intend to participate in the course activities to learn about "+module.getTitle(), "");
+			ListIterator<LessonDescriptor> iterator = module.getLessons();
+			while (iterator.hasNext()) {
+				goal.addLesson(iterator.next());
+			}
+			course.addGoal(goal);
+			
+			
+			//
+			// Module 2
+			//
+			module = new ModuleDescriptor(getUUID(), 
 					"Module 2- Tips on how to protect your computer", 
 					"Module 2- Tips on how to protect your computer", "");
-			course.addModule(module3);
-			LessonDescriptor lesson31 = new LessonDescriptor(getUUID() ,
+			course.addModule(module);
+			
+			lesson = new LessonDescriptor(getUUID() ,
 					"Threats and attacks",
 					"Threats and attacks","");
-			module3.addLesson(lesson31);	
-			ContentDescriptor content311 = new ContentDescriptor(getUUID(), 
-					"The basic concept of malware", 
-					"The basic concept of malware", 
-					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
-			lesson31.addContent(content311);
-			SelectionObject sele3111 = new SelectionObject(getUUID(), 
-					"Intro text", 
-					"Intro text", 
-					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
-			sele3111.setType(SelectionObjectType.CLAN_SELECTION);
-			content311.addSelectionObject(sele3111);
-			SelectionOption option3111a = new SelectionOption(getUUID(), 
-					"Option a", 
-					"Option a", 
-					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
-			sele3111.addOption(option3111a);
-			SelectionOption option3111b = new SelectionOption(getUUID(), 
-					"Option b", 
-					"Option b", 
-					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
-			sele3111.addOption(option3111b);
+			module.addLesson(lesson);
 			
-			ContentDescriptor content312 = new ContentDescriptor(getUUID(), 
+			content = new ContentDescriptor(getUUID(), 
+					"The basic concept of malware", 
+					"The basic concept of malware", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+			lesson.addContent(content);
+			
+			SelectionObject sele = new SelectionObject(getUUID(), 
+					"Intro text", 
+					"Intro text", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			sele.setType(SelectionObjectType.CLAN_SELECTION);
+			//content311.addSelectionObject(sele3111);
+			content.addInformationObject(sele);
+			
+			SelectionOption option = new SelectionOption(getUUID(), 
+					"Option a", 
+					"Option a", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			sele.addOption(option);
+			
+			option = new SelectionOption(getUUID(), 
+					"Option b", 
+					"Option b", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			sele.addOption(option);
+			
+			content = new ContentDescriptor(getUUID(), 
 					"Passwords", 
 					"Passwords", 
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
-			lesson31.addContent(content312);
-			SelectionObject sele3121 = new SelectionObject(getUUID(), 
+			lesson.addContent(content);
+			
+			sele = new SelectionObject(getUUID(), 
 					"Test", 
 					"Which are correct?", 
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
-			sele3121.setType(SelectionObjectType.CLAN_MULTI_TEST);
-			content312.addSelectionObject(sele3121);
-			SelectionOption option3121a = new SelectionOption(getUUID(), 
-					"Option a", 
-					"Option a", 
-					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
-			option3121a.setCorrect(false);
-			sele3111.addOption(option3121a);
-			SelectionOption option3121b = new SelectionOption(getUUID(), 
-					"Option b", 
-					"Option b", 
-					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
-			option3121b.setCorrect(true);
-			sele3111.addOption(option3121b);
-			SelectionOption option3121c = new SelectionOption(getUUID(), 
-					"Option c", 
-					"Option c", 
-					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
-			option3121c.setCorrect(false);
-			sele3111.addOption(option3121c);
-			SelectionOption option3121d = new SelectionOption(getUUID(), 
-					"Option d", 
-					"Option d", 
-					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
-			option3121d.setCorrect(true);
-			sele3111.addOption(option3121d);
+			sele.setType(SelectionObjectType.CLAN_MULTI_TEST);
+			content.addInformationObject(sele);
 			
-			ContentDescriptor content313 = new ContentDescriptor(getUUID(), 
+			option = new SelectionOption(getUUID(), 
+					"Option a", 
+					"Option a", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option.setCorrect(false);
+			sele.addOption(option);
+			
+			option = new SelectionOption(getUUID(), 
+					"Option b", 
+					"Option b", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option.setCorrect(true);
+			sele.addOption(option);
+			
+			option = new SelectionOption(getUUID(), 
+					"Option c", 
+					"Option c", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option.setCorrect(false);
+			sele.addOption(option);
+
+			option = new SelectionOption(getUUID(), 
+					"Option d", 
+					"Option d", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option.setCorrect(true);
+			sele.addOption(option);
+			
+			sele = new SelectionObject(getUUID(), 
+					"Test", 
+					"Which are also correct?", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			sele.setType(SelectionObjectType.CLAN_MULTI_TEST);
+			content.addInformationObject(sele);
+			
+			option = new SelectionOption(getUUID(), 
+					"Option a", 
+					"Option a", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option.setCorrect(false);
+			sele.addOption(option);
+			
+			option = new SelectionOption(getUUID(), 
+					"Option b", 
+					"Option b", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option.setCorrect(true);
+			sele.addOption(option);
+			
+			option = new SelectionOption(getUUID(), 
+					"Option c", 
+					"Option c", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option.setCorrect(false);
+			sele.addOption(option);
+			
+			option = new SelectionOption(getUUID(), 
+					"Option d", 
+					"Option d", 
+					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+			option.setCorrect(true);
+			sele.addOption(option);
+			
+			content = new ContentDescriptor(getUUID(), 
 					"Passwords Managers", 
 					"What are and how passwords manager programs work?", 
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
-			lesson31.addContent(content313);
+			lesson.addContent(content);
 
+			// Goal for module 2
 			
-			GoalDescriptor goal3 = new GoalDescriptor(getUUID(), module2.getTitle(), 
-					"I intend to participate in the course activities to learn about "+module2.getTitle(), "");
-			ListIterator<LessonDescriptor> iterator = module2.getLessons();
+			goal = new GoalDescriptor(getUUID(), module.getTitle(), 
+					"I intend to participate in the course activities to learn about "+module.getTitle(), "");
+			iterator = module.getLessons();
 			while (iterator.hasNext()) {
-				goal3.addLesson(iterator.next());
+				goal.addLesson(iterator.next());
 			}
-			course.addGoal(goal3);
+			course.addGoal(goal);
 			
-			GoalDescriptor goal4 = new GoalDescriptor(getUUID(), module3.getTitle(), 
-					"I intend to participate in the course activities to learn about "+module3.getTitle(), "");
-			iterator = module3.getLessons();
-			while (iterator.hasNext()) {
-				goal4.addLesson(iterator.next());
-			}
-			course.addGoal(goal4);
-			
+			// Browsing goal for course
 
-			GoalDescriptor goal1 = new GoalDescriptor(getUUID(), "Browsing the Course", "I intend to browse around", "");
-			goal1.addCompletionGoal("100", "all materials (100%)");
-			goal1.addCompletionGoal("70", "most materials (70%)");
-			goal1.addCompletionGoal("40", "some materials (40%)");
-			goal1.addCompletionGoal("10", "less than 10%");
-			goal1.addCompletionGoal("0", "I have not decided yet");
-			course.addGoal(goal1);
+			goal = new GoalDescriptor(getUUID(), "Browsing the Course", "I intend to browse around", "");
+			goal.addCompletionGoal("100", "all materials (100%)");
+			goal.addCompletionGoal("70", "most materials (70%)");
+			goal.addCompletionGoal("40", "some materials (40%)");
+			goal.addCompletionGoal("10", "less than 10%");
+			goal.addCompletionGoal("0", "I have not decided yet");
+			course.addGoal(goal);
 			
 			instance.storeTestCourse(course);
 		}

@@ -33,15 +33,15 @@ public class Test_UserSelectionServlet_SoC extends HttpServlet {
 		// TODO Auto-generated method stub
 
 		String nextServlet = "/AwarenessFrame.jsp";
-//		if (request.getParameter("submitIntention") != null) {
-//			nextServlet = "/Test_Intention.jsp";
-//		} else if (request.getParameter("submitPlanning") != null) {
-//			nextServlet = "/StimulatedPlanningServlet";
+		if (request.getParameter("submitLogin") != null) {
+			nextServlet = "/Test_UserNavigation_SoC.jsp";
+		} else if (request.getParameter("submitClan") != null) {
+			nextServlet = "/AwarenessFrame.jsp";
 //		} else if (request.getParameter("submitCoping") != null) {
 //			nextServlet = "/CopingPlan.jsp";
 //		} else if (request.getParameter("submitLearning") != null) {
 //			nextServlet = "/Test_LearningProgress.jsp";
-//		}
+		}
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextServlet);
 		dispatcher.forward(request,response);

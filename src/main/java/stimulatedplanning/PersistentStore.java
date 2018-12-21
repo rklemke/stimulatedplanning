@@ -422,10 +422,10 @@ public class PersistentStore {
 		for (GenericDescriptor generic : relationList) {
 			content.addInformationObject((InformationObject)generic);
 		}
-		relationList = readToManyRelation(content, "selectionObjects", SelectionObject.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			content.addSelectionObject((SelectionObject)generic);
-		}
+//		relationList = readToManyRelation(content, "selectionObjects", SelectionObject.class.getName(), true);
+//		for (GenericDescriptor generic : relationList) {
+//			content.addSelectionObject((SelectionObject)generic);
+//		}
 		return content;
 	}
 	
@@ -803,7 +803,7 @@ public class PersistentStore {
 			Entity contentEntity = createGenericEntity(content);
 
 			writeToManyRelation(content, content.getInformationObjects(), "informationObjects", content.informationObjects.size(), true);
-			writeToManyRelation(content, content.getSelectionObjects(), "selectionObjects", content.selectionObjects.size(), true);
+//			writeToManyRelation(content, content.getSelectionObjects(), "selectionObjects", content.selectionObjects.size(), true);
 
 			datastore.put(contentEntity);
 		} catch (Exception e1) {

@@ -2,6 +2,7 @@ package stimulatedplanning;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 
 import stimulatedplanning.util.HashArrayList;
@@ -33,12 +34,20 @@ public class CourseDescriptor extends GenericDescriptor {
 		return modules.listIterator();
 	}
 	
+	public List<ModuleDescriptor> getModuleList() {
+		return modules.unmodifiableList();
+	}
+	
 	public void addGoal(GoalDescriptor goal) {
 		this.goals.add(goal);
 	}
 	
 	public ListIterator<GoalDescriptor> getGoals() {
 		return goals.listIterator();
+	}
+	
+	public List<GoalDescriptor> getGoalList() {
+		return goals.unmodifiableList();
 	}
 	
 	public GoalDescriptor getGoal(String id) {

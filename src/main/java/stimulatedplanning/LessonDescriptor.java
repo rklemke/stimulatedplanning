@@ -2,6 +2,7 @@ package stimulatedplanning;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 
 import stimulatedplanning.util.HashArrayList;
@@ -39,6 +40,10 @@ public class LessonDescriptor extends GenericDescriptor {
 	
 	public ListIterator<ContentDescriptor> getContents() {
 		return contents.listIterator();
+	}
+	
+	public List<ContentDescriptor> getContentList() {
+		return contents.unmodifiableList();
 	}
 	
 	public LessonDescriptor() {

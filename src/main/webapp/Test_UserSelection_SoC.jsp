@@ -59,8 +59,8 @@
 </select>
 <input type="hidden" value="unknown" id="userid" name="userid">
 <input type="hidden" value="Guest" id="userName" name="userName">
-<input type="submit" id="submitIntention" name="submitLogin" value="Login"></input>
-<!--  input type="submit" id="submitLearning" name="submitLearning" value="Learning"></input>  -->
+<input type="submit" id="submitLogin" name="submitLogin" value="Login"></input>
+<input type="submit" id="submitClan" name="submitClan" value="Clan"></input>  -->
 </form>
 </body>
 </html>
