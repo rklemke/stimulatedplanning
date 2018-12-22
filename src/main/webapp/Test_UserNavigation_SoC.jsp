@@ -61,7 +61,8 @@
 </head>
 <body>
 
-<H2>Select a content.</H2>
+<H2>Welcome, <%= user.getName() %></H2>
+<a href="Test_UserSelection_SoC.jsp">Change user</a>
 <form id="contentSelectForm">
 <label for="contentSelect">Select a content:</label>
 <select name="contentSelect" id="contentSelect">
@@ -76,8 +77,6 @@
 </select>
 <input type="hidden" value="unknown" id="contentId" name="contentId">
 <input type="hidden" value="Guest" id="contentName" name="contentName">
-<input type="submit" id="submitLogin" name="submitLogin" value="Login"></input>
-<input type="submit" id="submitClan" name="submitClan" value="Clan"></input>  -->
 </form>
 
 <iframe id="contentFrame" style="width:860px; height:480px;"></iframe>

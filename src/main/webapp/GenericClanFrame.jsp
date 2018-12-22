@@ -78,19 +78,28 @@
 		}
 
 		var users = [
-		new user("A", "inCurrentPage", "server/images/profileImage.png", "Apple"),
-		new user("B", "inCurrentPage", "server/images/profileImage.png", "Ball"),
-		new user("C", "inOtherPage", "server/images/avatar.png", "Cat"),
-		new user("D", "inCurrentPage", "server/images/profileImage.png", "Dog"),
-		new user("E", "inCurrentPage", "server/images/profileImage.png", "Elephant"),
-		new user("F", "Offline", "server/images/profileImage.png", "Fan"),
-		new user("G", "inCurrentPage", "server/images/profileImage.png", "Gun"),
-		new user("H", "inOtherPage", "server/images/profileImage.png", "Horse"),
-		new user("I", "inCurrentPage", "server/images/profileImage.png", "India"),
-		new user("J", "inCurrentPage", "server/images/profileImage.png", "Jelly"),
-		new user("K", "Offline", "server/images/profileImage.png", "Kathmandu"),
-		new user("L", "inCurrentPage", "server/images/profileImage.png", "Lavender")];
-
+<% if (user.isTreatmentGroup()) {
+	  boolean comma = false;
+	  for (UserOnlineStatus status: userClan.getOnlineUsersSorted(userStatus)) {
+		User clanUser = status.getUser();
+		if (comma) {%>, <%}%>  
+		new user("<%= clanUser.getName() %>", "inCurrentPage", "img/profile/profileImage.png", "<%= clanUser.getName() %>")
+<%	  comma = true;
+      } 
+	  for (UserOnlineStatus status: userClan.getRecentUsersSorted(userStatus)) {
+		User clanUser = status.getUser();
+		if (comma) {%>, <%}%>  
+		new user("<%= clanUser.getName() %>", "inOtherPage", "img/profile/profileImage.png", "<%= clanUser.getName() %>")
+<%	  comma = true;
+      } 
+	  for (UserOnlineStatus status: userClan.getOfflineUsersSorted(userStatus)) {
+		User clanUser = status.getUser();
+		if (comma) {%>, <%}%>  
+		new user("<%= clanUser.getName() %>", "Offline", "img/profile/profileImage.png", "<%= clanUser.getName() %>")
+<%	  comma = true;
+      } 
+   } %>
+		]
         $(".links").click(function () {
                 alert("Chat page");
             });
@@ -128,7 +137,7 @@
 	<div class="container">
 	
 	<div class = "columnOne"  >
-	<img id="ClanLogo"  src="server/images/ClanDefault.png"/>
+	<img id="ClanLogo"  src="img/clan/ClanDefault.png"/>
 	
 	<div  id="AW_myClanFrame" >
 	
