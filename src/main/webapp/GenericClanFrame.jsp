@@ -33,7 +33,11 @@
   ContentDescriptor contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
   List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
   InformationObject currentInformationObject = (InformationObject)session.getAttribute("currentInformationObject");
-  int currentInformationObjectIdx = (int)session.getAttribute("currentInformationObjectIdx");
+  int currentInformationObjectIdx = 0;
+  Object idxS = (Object)session.getAttribute("currentInformationObjectIdx");
+  if (idxS != null) {
+	  currentInformationObjectIdx = ((Integer)idxS).intValue();
+  }
   
   
 %>
@@ -124,7 +128,6 @@
 	<div class="container">
 	
 	<div class = "columnOne"  >
-	
 	<img id="ClanLogo"  src="server/images/ClanDefault.png"/>
 	
 	<div  id="AW_myClanFrame" >
@@ -141,12 +144,10 @@
 	<%    if (currentInformationObjectIdx > 0) { %>
 	[PREV]
 	<%    } %>
-	<%    if (currentInformationObjectIdx < informationObjectList.size()-1) { %>
-	<%       if (currentInformationObject instanceof SelectionObject) { %>
+	<%    if (currentInformationObject instanceof SelectionObject) { %>
 	[VOTE]
-	<%       } else { %>
+	<%    } else if (currentInformationObjectIdx < informationObjectList.size()-1) { %>
 	[NEXT]
-	<%       } %>
 	<%    } %>
 	<% } %>
 	</div><!--columnTwo-->

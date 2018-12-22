@@ -170,6 +170,7 @@ public class PersistentStore {
 				else if (target instanceof Clan) writeDescriptor((Clan)target);
 				else if (target instanceof UserOnlineStatus) writeDescriptor((UserOnlineStatus)target);
 				else if (target instanceof SelectionObject) writeDescriptor((SelectionObject)target);
+				else if (target instanceof InformationObject) writeDescriptor((InformationObject)target);
 				else if (target instanceof SelectionOption) writeDescriptor((SelectionOption)target);
 				else if (target instanceof UserSelectedOption) writeDescriptor((UserSelectedOption)target);
 				else writeDescriptor(target);
@@ -205,7 +206,7 @@ public class PersistentStore {
 	}
 
 	protected static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget, HashMap<String, Object> cache) throws Exception {
-		//log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
+		log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity entity = null;
 		
@@ -238,7 +239,11 @@ public class PersistentStore {
 				}
 				
 				GenericDescriptor generic = readDescriptor(targetClass, targetId, cache);
-				arrayList.add(generic);
+				if (generic != null) {
+					arrayList.add(generic);
+				} else {
+					log.info("relation target not found: "+l+", "+size+", "+targetClass+", "+targetId);
+				}
 			}
 			l++;		
 		}
@@ -248,7 +253,7 @@ public class PersistentStore {
 	protected static Entity createGenericEntity(GenericDescriptor generic) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		//log.info("createGenericEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		log.info("createGenericEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 
 		Entity entity = null;
 		try {
@@ -295,6 +300,7 @@ public class PersistentStore {
 			entity = createGenericEntity(generic);
 
 			entity.setProperty("content", generic.getContent());
+			entity.setProperty("sequence", generic.getSequence());
 			
 		} catch (Exception e1) {
 			log.info("FATAL: Writing generic user entity failed.");
@@ -306,7 +312,7 @@ public class PersistentStore {
 	}
 
 	protected static GenericDescriptor readDescriptor(String type, String id, HashMap<String, Object> cache) throws Exception {
-		//log.info("readDescriptor: "+type+", "+id);
+		log.info("readDescriptor: "+type+", "+id);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 		Entity genericEntity = null;
@@ -344,6 +350,8 @@ public class PersistentStore {
 				return readUserOnlineStatus(genericEntity, cache);
 			} else if (Clan.class.getName().equals(type)) {
 				return readClan(genericEntity, cache);
+			} else if (InformationObject.class.getName().equals(type)) {
+				return readInformationObject(genericEntity, cache);
 			} else if (SelectionObject.class.getName().equals(type)) {
 				return readSelectionObject(genericEntity, cache);
 			} else if (SelectionOption.class.getName().equals(type)) {
@@ -467,20 +475,33 @@ public class PersistentStore {
 			exc.printStackTrace();
 		}
 		if (content == null) {
-			ArrayList<GenericDescriptor> relationList = null;
+			ArrayList<GenericDescriptor> relationList1 = null;
+			ArrayList<GenericDescriptor> relationList2 = null;
 			content = new ContentDescriptor(readStringProperty(genericEntity, "uid", null),
 					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
 					readStringProperty(genericEntity, "url", null));
 			cache.put(content.getId(), content);
-			relationList = readToManyRelation(content, "informationObjects", InformationObject.class.getName(), true, cache);
-			relationList.addAll(readToManyRelation(content, "selectionObjects", SelectionObject.class.getName(), true, cache));
-			ArrayList<InformationObject> relationList2 = (ArrayList)relationList;
-			Collections.sort(relationList2, new Comparator<InformationObject>( ) {
+			relationList1 = readToManyRelation(content, "informationObjects", InformationObject.class.getName(), true, cache);
+			log.info("informationObjects: "+relationList1.size());
+			relationList2 = readToManyRelation(content, "selectionObjects", SelectionObject.class.getName(), true, cache);
+			log.info("selectionObjects: "+relationList2.size());
+			if (relationList1.size()>0 && relationList2.size()>0) {
+				relationList1.addAll(relationList2);
+			} else if (relationList2.size()>0) {
+				relationList1 = relationList2;
+			}
+			ArrayList<InformationObject> relationListAll = (ArrayList)relationList1;
+			Collections.sort(relationListAll, new Comparator<InformationObject>( ) {
 				public int compare(InformationObject o1, InformationObject o2) {
+					if (o1 == null || o2 == null) {
+						log.info("compare (null): "+o1+", "+o2);
+						return 0;
+					}
+					log.info("compare: "+o1+", "+o2);
 					return o1.getSequence()-o2.getSequence();
 				}
 			});
-			for (GenericDescriptor generic : relationList2) {
+			for (GenericDescriptor generic : relationListAll) {
 				content.addInformationObject((InformationObject)generic);
 			}
 	//		relationList = readToManyRelation(content, "selectionObjects", SelectionObject.class.getName(), true);
@@ -733,6 +754,7 @@ public class PersistentStore {
 					readStringProperty(genericEntity, "url", null));
 			cache.put(selectionObject.getId(), selectionObject);
 			selectionObject.setContent(readStringProperty(genericEntity, "content", null));
+			selectionObject.setSequence(Integer.valueOf(readStringProperty(genericEntity, "sequence", null)));
 			selectionObject.setType(readSelectionObjectType(genericEntity));
 			relationList = readToManyRelation(selectionObject, "options", SelectionOption.class.getName(), true, cache);
 			for (GenericDescriptor generic : relationList) {
@@ -1140,8 +1162,6 @@ public class PersistentStore {
 
 		try {
 			Entity entity = createInformationObjectEntity(generic);
-			entity.setProperty("content", generic.getContent());
-			entity.setProperty("sequence", generic.getSequence());
 			
 			datastore.put(entity);
 		} catch (Exception e1) {

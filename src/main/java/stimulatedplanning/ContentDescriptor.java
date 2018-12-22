@@ -37,11 +37,6 @@ public class ContentDescriptor extends GenericDescriptor {
 		return informationObjects.listIterator();
 	}
 
-
-//	public void addSelectionObject(SelectionObject selectionObject) {
-//		this.selectionObjects.add(selectionObject);
-//	}
-//	
 	public ListIterator<SelectionObject> getSelectionObjects() {
 		return selectionObjects.listIterator();
 	}

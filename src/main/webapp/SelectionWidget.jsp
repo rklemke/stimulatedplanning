@@ -33,7 +33,11 @@
   ContentDescriptor contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
   List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
   SelectionObject currentSelectionObject = (SelectionObject)session.getAttribute("currentInformationObject");
-  int currentInformationObjectIdx = (int)session.getAttribute("currentInformationObjectIdx");
+  int currentInformationObjectIdx = 0;
+  Object idxS = (Object)session.getAttribute("currentInformationObjectIdx");
+  if (idxS != null) {
+	  currentInformationObjectIdx = ((Integer)idxS).intValue();
+  }
   
 %>
 

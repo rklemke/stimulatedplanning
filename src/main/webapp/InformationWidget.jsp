@@ -33,7 +33,11 @@
   ContentDescriptor contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
   List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
   InformationObject currentInformationObject = (InformationObject)session.getAttribute("currentInformationObject");
-  int currentInformationObjectIdx = (int)session.getAttribute("currentInformationObjectIdx");
+  int currentInformationObjectIdx = 0;
+  Object idxS = (Object)session.getAttribute("currentInformationObjectIdx");
+  if (idxS != null) {
+	  currentInformationObjectIdx = ((Integer)idxS).intValue();
+  }
 
   
 %>
@@ -54,7 +58,7 @@
 	<body>
 	
 	<div class="container">
-	
+<% if (currentInformationObject != null) { %>	
 	<div style="display: inline-block; text-align: center; width: 98%; height: 10%">
 	<strong style=" font-size: 24px"><%= currentInformationObject.getTitle() %></strong>
 	</div>
@@ -64,7 +68,7 @@
 		<%= currentInformationObject.getContent() %>
 	</div><!--column-->
 	
-	
+<% } %>	
 	</div><!--container-->
 	
 	</body>

@@ -53,7 +53,11 @@ public class InformationObjectServlet_SoC extends HttpServlet {
 		ContentDescriptor contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
 		List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
 		InformationObject currentInformationObject = (InformationObject)session.getAttribute("currentInformationObject");
-		int currentInformationObjectIdx = (int)session.getAttribute("currentInformationObjectIdx");
+		int currentInformationObjectIdx = 0;
+		Object idxS = (Object)session.getAttribute("currentInformationObjectIdx");
+		if (idxS != null) {
+			currentInformationObjectIdx = ((Integer)idxS).intValue();
+		}
 
 		String nextServlet = "/InformationWidget.jsp";
 		if (currentInformationObject != null && currentInformationObject instanceof SelectionObject) {
