@@ -1,6 +1,7 @@
 package senseofcommunity;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 
 import stimulatedplanning.PersistentStore;
@@ -29,6 +30,10 @@ public class SelectionObject extends InformationObject {
 	
 	public ListIterator<SelectionOption> getOptions() {
 		return options.listIterator();
+	}
+	
+	public List<SelectionOption> getOptionList() {
+		return options.unmodifiableList();
 	}
 	
 	public int getOptionCount() {

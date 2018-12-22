@@ -31,7 +31,11 @@ import com.google.appengine.api.datastore.Text;
 //import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -67,27 +71,34 @@ public class PersistentStore {
 
 	}
 
-	public static User getUser(String userId) throws Exception {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-		Entity userEntity = datastore.get(KeyFactory.createKey(User.class.getName(), userId));
-		if (userEntity != null) {
-			User user = new User((String) userEntity.getProperty("name"), userId);
-			user.setTreatmentGroup(readBooleanProperty(userEntity, "treatmentGroup", StimulatedPlanningFactory.random.nextBoolean()));
-			if (user.isTreatmentGroup()) {
-				//Clan clan = (Clan)StimulatedPlanningFactory.getObject(readStringProperty(userEntity, "clan", null));
-				Clan clan = (Clan)readDescriptor(Clan.class.getName(), readStringProperty(userEntity, "clan", null));
-				user.setClan(clan);
-			}
-			UserOnlineStatus onlineStatus = (UserOnlineStatus)readUserOnlineStatus(readStringProperty(userEntity, "onlineStatus", null), user);
-			user.setOnlineStatus(onlineStatus);
-			if (!userEntity.hasProperty("treatmentGroup")) {
-				writeUser(user);
-			}
-			return user;
+	public static User getUser(String userId, HashMap<String, Object> cache) throws Exception {
+		User user = null;
+		try {
+			user = (User)cache.get(userId);
+		} catch (Exception exc) {
+			exc.printStackTrace();
 		}
-
-		return null;
+		if (user == null) {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	
+			Entity userEntity = datastore.get(KeyFactory.createKey(User.class.getName(), userId));
+			if (userEntity != null) {
+				user = new User((String) userEntity.getProperty("name"), userId);
+				cache.put(user.getId(), user);
+				user.setTreatmentGroup(readBooleanProperty(userEntity, "treatmentGroup", StimulatedPlanningFactory.random.nextBoolean()));
+				if (user.isTreatmentGroup()) {
+					//Clan clan = (Clan)StimulatedPlanningFactory.getObject(readStringProperty(userEntity, "clan", null));
+					Clan clan = (Clan)readDescriptor(Clan.class.getName(), readStringProperty(userEntity, "clan", null), cache);
+					user.setClan(clan);
+				}
+				UserOnlineStatus onlineStatus = (UserOnlineStatus)readUserOnlineStatus(readStringProperty(userEntity, "onlineStatus", null), user, cache);
+				user.setOnlineStatus(onlineStatus);
+				if (!userEntity.hasProperty("treatmentGroup")) {
+					writeUser(user);
+				}
+			}
+		}
+		return user;
 	}
 
 	public static void writeLog(Map<String, String[]> parameters) throws Exception {
@@ -193,7 +204,7 @@ public class PersistentStore {
 
 	}
 
-	protected static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget) throws Exception {
+	protected static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget, HashMap<String, Object> cache) throws Exception {
 		//log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		Entity entity = null;
@@ -226,7 +237,7 @@ public class PersistentStore {
 					size = sizen;
 				}
 				
-				GenericDescriptor generic = readDescriptor(targetClass, targetId);
+				GenericDescriptor generic = readDescriptor(targetClass, targetId, cache);
 				arrayList.add(generic);
 			}
 			l++;		
@@ -294,7 +305,7 @@ public class PersistentStore {
 		return entity;
 	}
 
-	protected static GenericDescriptor readDescriptor(String type, String id) throws Exception {
+	protected static GenericDescriptor readDescriptor(String type, String id, HashMap<String, Object> cache) throws Exception {
 		//log.info("readDescriptor: "+type+", "+id);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -308,160 +319,220 @@ public class PersistentStore {
 		}
 		if (genericEntity != null) {
 			if (CourseDescriptor.class.getName().equals(type)) {
-				return readCourseDescriptor(genericEntity);
+				return readCourseDescriptor(genericEntity, cache);
 			} else if (ModuleDescriptor.class.getName().equals(type)) {
-				return readModuleDescriptor(genericEntity);
+				return readModuleDescriptor(genericEntity, cache);
 			} else if (GoalDescriptor.class.getName().equals(type)) {
-				return readGoalDescriptor(genericEntity);
+				return readGoalDescriptor(genericEntity, cache);
 			} else if (LessonDescriptor.class.getName().equals(type)) {
-				return readLessonDescriptor(genericEntity);
+				return readLessonDescriptor(genericEntity, cache);
 			} else if (ContentDescriptor.class.getName().equals(type)) {
-				return readContentDescriptor(genericEntity);
+				return readContentDescriptor(genericEntity, cache);
 			} else if (UserPlan.class.getName().equals(type)) {
-				return readUserPlan(genericEntity);
+				return readUserPlan(genericEntity, cache);
 			} else if (UserGoal.class.getName().equals(type)) {
-				return readUserGoal(genericEntity);
+				return readUserGoal(genericEntity, cache);
 			} else if (UserLesson.class.getName().equals(type)) {
-				return readUserLesson(genericEntity);
+				return readUserLesson(genericEntity, cache);
 			} else if (UserContent.class.getName().equals(type)) {
-				return readUserContent(genericEntity);
+				return readUserContent(genericEntity, cache);
 			} else if (PlanItem.class.getName().equals(type)) {
-				return readPlanItem(genericEntity);
+				return readPlanItem(genericEntity, cache);
 			} else if (UserProfile.class.getName().equals(type)) {
-				return readUserProfile(genericEntity);
+				return readUserProfile(genericEntity, cache);
 			} else if (UserOnlineStatus.class.getName().equals(type)) {
-				return readUserOnlineStatus(genericEntity);
+				return readUserOnlineStatus(genericEntity, cache);
 			} else if (Clan.class.getName().equals(type)) {
-				return readClan(genericEntity);
+				return readClan(genericEntity, cache);
 			} else if (SelectionObject.class.getName().equals(type)) {
-				return readSelectionObject(genericEntity);
+				return readSelectionObject(genericEntity, cache);
 			} else if (SelectionOption.class.getName().equals(type)) {
-				return readSelectionOption(genericEntity);
+				return readSelectionOption(genericEntity, cache);
 			} else if (UserSelectedOption.class.getName().equals(type)) {
-				return readUserSelectedOption(genericEntity);
+				return readUserSelectedOption(genericEntity, cache);
 			}
 		}
 
 		return null;
 	}
 	
-	protected static CourseDescriptor readCourseDescriptor(Entity genericEntity) throws Exception {
-		ArrayList<GenericDescriptor> relationList = null;
-		CourseDescriptor course = new CourseDescriptor(readStringProperty(genericEntity, "uid", null),
-				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-				readStringProperty(genericEntity, "url", null));
-		relationList = readToManyRelation(course, "modules", ModuleDescriptor.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			course.addModule((ModuleDescriptor)generic);
+	protected static CourseDescriptor readCourseDescriptor(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		CourseDescriptor course = null;
+		try {
+			course = (CourseDescriptor)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
 		}
-		relationList = readToManyRelation(course, "goals", GoalDescriptor.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			course.addGoal((GoalDescriptor)generic);
+		if (course == null) {
+			ArrayList<GenericDescriptor> relationList = null;
+			course = new CourseDescriptor(readStringProperty(genericEntity, "uid", null),
+					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+					readStringProperty(genericEntity, "url", null));
+			cache.put(course.getId(), course);
+			relationList = readToManyRelation(course, "modules", ModuleDescriptor.class.getName(), true, cache);
+			for (GenericDescriptor generic : relationList) {
+				course.addModule((ModuleDescriptor)generic);
+			}
+			relationList = readToManyRelation(course, "goals", GoalDescriptor.class.getName(), true, cache);
+			for (GenericDescriptor generic : relationList) {
+				course.addGoal((GoalDescriptor)generic);
+			}
 		}
 		return course;
 	}
 	
-	protected static ModuleDescriptor readModuleDescriptor(Entity genericEntity) throws Exception {
-		ArrayList<GenericDescriptor> relationList = null;
-		ModuleDescriptor module = new ModuleDescriptor(readStringProperty(genericEntity,"uid", null),
-				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-				readStringProperty(genericEntity, "url", null));
-		relationList = readToManyRelation(module, "lessons", LessonDescriptor.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			module.addLesson((LessonDescriptor)generic);
+	protected static ModuleDescriptor readModuleDescriptor(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		ModuleDescriptor module = null;
+		try {
+			module = (ModuleDescriptor)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (module == null) {
+			ArrayList<GenericDescriptor> relationList = null;
+			module = new ModuleDescriptor(readStringProperty(genericEntity,"uid", null),
+					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+					readStringProperty(genericEntity, "url", null));
+			cache.put(module.getId(), module);
+			relationList = readToManyRelation(module, "lessons", LessonDescriptor.class.getName(), true, cache);
+			for (GenericDescriptor generic : relationList) {
+				module.addLesson((LessonDescriptor)generic);
+			}
 		}
 		return module;
 	}
 	
-	protected static GoalDescriptor readGoalDescriptor(Entity genericEntity) throws Exception {
-		ArrayList<GenericDescriptor> relationList = null;
-		GoalDescriptor goal = new GoalDescriptor(readStringProperty(genericEntity, "uid", null),
-				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-				readStringProperty(genericEntity, "url", null));
-		relationList = readToManyRelation(goal, "lessons", LessonDescriptor.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			goal.addLesson((LessonDescriptor)generic);
+	protected static GoalDescriptor readGoalDescriptor(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		GoalDescriptor goal = null;
+		try {
+			goal = (GoalDescriptor)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
 		}
-		EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionGoals");
-		String keys = readStringProperty(genericEntity, "completionGoalKeys", null);
-		if (keys != null && keys.length()>0) {
-			keys = keys.replace("[", "").replace("]", "").replace(" ", "");
-			//log.info("Reading completionGoals: " + keys);
-			if (keys.length()>0) {
-				ArrayList<String> keysList = new ArrayList<>(Arrays.asList(keys.split(",")));
-				if (ee != null && keysList != null && keysList.size() > 0) {
-				    for (String key : keysList) {
-				    	//log.info("Key: "+key+", "+(String) ee.getProperty(key));
-				        goal.addCompletionGoal(key, (String) ee.getProperty(key));
-				    }
+		if (goal == null) {
+			ArrayList<GenericDescriptor> relationList = null;
+			goal = new GoalDescriptor(readStringProperty(genericEntity, "uid", null),
+					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+					readStringProperty(genericEntity, "url", null));
+			cache.put(goal.getId(), goal);
+			relationList = readToManyRelation(goal, "lessons", LessonDescriptor.class.getName(), true, cache);
+			for (GenericDescriptor generic : relationList) {
+				goal.addLesson((LessonDescriptor)generic);
+			}
+			EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionGoals");
+			String keys = readStringProperty(genericEntity, "completionGoalKeys", null);
+			if (keys != null && keys.length()>0) {
+				keys = keys.replace("[", "").replace("]", "").replace(" ", "");
+				//log.info("Reading completionGoals: " + keys);
+				if (keys.length()>0) {
+					ArrayList<String> keysList = new ArrayList<>(Arrays.asList(keys.split(",")));
+					if (ee != null && keysList != null && keysList.size() > 0) {
+					    for (String key : keysList) {
+					    	//log.info("Key: "+key+", "+(String) ee.getProperty(key));
+					        goal.addCompletionGoal(key, (String) ee.getProperty(key));
+					    }
+					}
 				}
 			}
 		}
-		
 		return goal;
 	}
 	
-	protected static LessonDescriptor readLessonDescriptor(Entity genericEntity) throws Exception {
-		ArrayList<GenericDescriptor> relationList = null;
-		LessonDescriptor lesson = new LessonDescriptor(readStringProperty(genericEntity, "uid", null),
-				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-				readStringProperty(genericEntity, "url", null));
-		relationList = readToManyRelation(lesson, "contents", ContentDescriptor.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			lesson.addContent((ContentDescriptor)generic);
+	protected static LessonDescriptor readLessonDescriptor(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		LessonDescriptor lesson = null;
+		try {
+			lesson = (LessonDescriptor)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (lesson == null) {
+			ArrayList<GenericDescriptor> relationList = null;
+			lesson = new LessonDescriptor(readStringProperty(genericEntity, "uid", null),
+					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+					readStringProperty(genericEntity, "url", null));
+			cache.put(lesson.getId(), lesson);
+			relationList = readToManyRelation(lesson, "contents", ContentDescriptor.class.getName(), true, cache);
+			for (GenericDescriptor generic : relationList) {
+				lesson.addContent((ContentDescriptor)generic);
+			}
 		}
 		return lesson;
 	}
 	
-	protected static ContentDescriptor readContentDescriptor(Entity genericEntity) throws Exception {
-		ArrayList<GenericDescriptor> relationList = null;
-		ContentDescriptor content = new ContentDescriptor(readStringProperty(genericEntity, "uid", null),
-				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-				readStringProperty(genericEntity, "url", null));
-		relationList = readToManyRelation(content, "informationObjects", InformationObject.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			content.addInformationObject((InformationObject)generic);
+	protected static ContentDescriptor readContentDescriptor(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		ContentDescriptor content = null;
+		try {
+			content = (ContentDescriptor)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
 		}
-//		relationList = readToManyRelation(content, "selectionObjects", SelectionObject.class.getName(), true);
-//		for (GenericDescriptor generic : relationList) {
-//			content.addSelectionObject((SelectionObject)generic);
-//		}
+		if (content == null) {
+			ArrayList<GenericDescriptor> relationList = null;
+			content = new ContentDescriptor(readStringProperty(genericEntity, "uid", null),
+					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+					readStringProperty(genericEntity, "url", null));
+			cache.put(content.getId(), content);
+			relationList = readToManyRelation(content, "informationObjects", InformationObject.class.getName(), true, cache);
+			relationList.addAll(readToManyRelation(content, "selectionObjects", SelectionObject.class.getName(), true, cache));
+			ArrayList<InformationObject> relationList2 = (ArrayList)relationList;
+			Collections.sort(relationList2, new Comparator<InformationObject>( ) {
+				public int compare(InformationObject o1, InformationObject o2) {
+					return o1.getSequence()-o2.getSequence();
+				}
+			});
+			for (GenericDescriptor generic : relationList2) {
+				content.addInformationObject((InformationObject)generic);
+			}
+	//		relationList = readToManyRelation(content, "selectionObjects", SelectionObject.class.getName(), true);
+	//		for (GenericDescriptor generic : relationList) {
+	//			content.addSelectionObject((SelectionObject)generic);
+	//		}
+		}
 		return content;
 	}
 	
-	protected static UserPlan readUserPlan(Entity genericEntity) throws Exception {
-		ArrayList<GenericDescriptor> relationList = null;
-		User user = getUser(readStringProperty(genericEntity, "userid", null));
-		CourseDescriptor course = (CourseDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "course", null));				
-		UserPlan plan = new UserPlan(readStringProperty(genericEntity, "uid", null), user);
-		plan.setCourse(course);
-		plan.setPlannedTimePerWeek(readStringProperty(genericEntity, "plannedTimePerWeek", null));
-		plan.setAllCourseIntention(readBooleanProperty(genericEntity, "isAllCourseIntention", false));
-		plan.setIntentionCompleted(readBooleanProperty(genericEntity, "intentionCompleted", false));
-		plan.setObstacles(readStringProperty(genericEntity, "obstacles", null));
-		plan.setCopingPlan(readStringProperty(genericEntity, "copingPlan", null));
-
-		relationList = readToManyRelation(plan, "userGoals", UserGoal.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			plan.addGoal((UserGoal)generic);
+	protected static UserPlan readUserPlan(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		UserPlan plan = null;
+		try {
+			plan = (UserPlan)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
 		}
-		relationList = readToManyRelation(plan, "planItems", PlanItem.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			plan.addPlanItem((PlanItem)generic);
-		}
-		EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionStatusMap");
-		if (ee != null) {
-			Map<String, Object> map = ee.getProperties();
-			Set<String> keys = map.keySet();
-			for (String key : keys) {
-				Object val = map.get(key);
-				if (val != null) {
-					if (val instanceof String) {
-						plan.completionStatusMap.put(key, (String)val);
-					} else if (val instanceof Text) {
-						plan.completionStatusMap.put(key, ((Text)val).getValue());
-					} else if (val instanceof Integer) {
-						plan.completionStatusMap.put(key, String.valueOf(val));
+		if (plan == null) {
+			ArrayList<GenericDescriptor> relationList = null;
+			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
+			CourseDescriptor course = (CourseDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "course", null));				
+			plan = new UserPlan(readStringProperty(genericEntity, "uid", null), user);
+			cache.put(plan.getId(), plan);
+			plan.setCourse(course);
+			plan.setPlannedTimePerWeek(readStringProperty(genericEntity, "plannedTimePerWeek", null));
+			plan.setAllCourseIntention(readBooleanProperty(genericEntity, "isAllCourseIntention", false));
+			plan.setIntentionCompleted(readBooleanProperty(genericEntity, "intentionCompleted", false));
+			plan.setObstacles(readStringProperty(genericEntity, "obstacles", null));
+			plan.setCopingPlan(readStringProperty(genericEntity, "copingPlan", null));
+	
+			relationList = readToManyRelation(plan, "userGoals", UserGoal.class.getName(), true, cache);
+			for (GenericDescriptor generic : relationList) {
+				plan.addGoal((UserGoal)generic);
+			}
+			relationList = readToManyRelation(plan, "planItems", PlanItem.class.getName(), true, cache);
+			for (GenericDescriptor generic : relationList) {
+				plan.addPlanItem((PlanItem)generic);
+			}
+			EmbeddedEntity ee = (EmbeddedEntity) genericEntity.getProperty("completionStatusMap");
+			if (ee != null) {
+				Map<String, Object> map = ee.getProperties();
+				Set<String> keys = map.keySet();
+				for (String key : keys) {
+					Object val = map.get(key);
+					if (val != null) {
+						if (val instanceof String) {
+							plan.completionStatusMap.put(key, (String)val);
+						} else if (val instanceof Text) {
+							plan.completionStatusMap.put(key, ((Text)val).getValue());
+						} else if (val instanceof Integer) {
+							plan.completionStatusMap.put(key, String.valueOf(val));
+						}
 					}
 				}
 			}
@@ -469,107 +540,177 @@ public class PersistentStore {
 		return plan;
 	}
 	
-	protected static UserGoal readUserGoal(Entity genericEntity) throws Exception {
-		ArrayList<GenericDescriptor> relationList = null;
-		User user = getUser(readStringProperty(genericEntity, "userid", null));
-		GoalDescriptor goal = (GoalDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "goal", null));				
-		UserGoal userGoal = new UserGoal(readStringProperty(genericEntity, "uid", null), user, goal);
-		userGoal.setCompletionGoal(readStringProperty(genericEntity, "completionGoal", null));
-		userGoal.setStatus(readStatus(genericEntity));
-		relationList = readToManyRelation(userGoal, "lessons", UserLesson.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			userGoal.addLesson((UserLesson)generic);
+	protected static UserGoal readUserGoal(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		UserGoal userGoal = null;
+		try {
+			userGoal = (UserGoal)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (userGoal == null) {
+			ArrayList<GenericDescriptor> relationList = null;
+			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
+			GoalDescriptor goal = (GoalDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "goal", null));				
+			userGoal = new UserGoal(readStringProperty(genericEntity, "uid", null), user, goal);
+			cache.put(userGoal.getId(), userGoal);
+			userGoal.setCompletionGoal(readStringProperty(genericEntity, "completionGoal", null));
+			userGoal.setStatus(readStatus(genericEntity));
+			relationList = readToManyRelation(userGoal, "lessons", UserLesson.class.getName(), true, cache);
+			for (GenericDescriptor generic : relationList) {
+				userGoal.addLesson((UserLesson)generic);
+			}
 		}
 		return userGoal;
 	}
 	
-	protected static UserLesson readUserLesson(Entity genericEntity) throws Exception {
-		ArrayList<GenericDescriptor> relationList = null;
-		User user = getUser(readStringProperty(genericEntity, "userid", null));
-		LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));				
-		UserLesson userLesson = new UserLesson(readStringProperty(genericEntity, "uid", null), user, lesson);
-		userLesson.setStatus(readStatus(genericEntity));
-		relationList = readToManyRelation(userLesson, "contents", UserContent.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			userLesson.addContent((UserContent)generic);
+	protected static UserLesson readUserLesson(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		UserLesson userLesson = null;
+		try {
+			userLesson = (UserLesson)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (userLesson == null) {
+			ArrayList<GenericDescriptor> relationList = null;
+			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
+			LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));				
+			userLesson = new UserLesson(readStringProperty(genericEntity, "uid", null), user, lesson);
+			cache.put(userLesson.getId(), userLesson);
+			userLesson.setStatus(readStatus(genericEntity));
+			relationList = readToManyRelation(userLesson, "contents", UserContent.class.getName(), true, cache);
+			for (GenericDescriptor generic : relationList) {
+				userLesson.addContent((UserContent)generic);
+			}
 		}
 		return userLesson;
 	}
 	
-	protected static UserContent readUserContent(Entity genericEntity) throws Exception {
-		User user = getUser(readStringProperty(genericEntity, "userid", null));
-		ContentDescriptor content = (ContentDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "content", null));				
-		UserContent userContent = new UserContent(readStringProperty(genericEntity, "uid", null), user, content);
-		userContent.setStatus(readStatus(genericEntity));
+	protected static UserContent readUserContent(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		UserContent userContent = null;
+		try {
+			userContent = (UserContent)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (userContent == null) {
+			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
+			ContentDescriptor content = (ContentDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "content", null));				
+			userContent = new UserContent(readStringProperty(genericEntity, "uid", null), user, content);
+			userContent.setStatus(readStatus(genericEntity));
+		}
 		return userContent;
 	}
 	
-	protected static PlanItem readPlanItem(Entity genericEntity) throws Exception {
-		User user = getUser(readStringProperty(genericEntity, "userid", null));
-		LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));
-		String jsonPlanItem = readStringProperty(genericEntity, "jsonPlanItem", null);
-		PlanItem planItem = new PlanItem(readStringProperty(genericEntity, "uid", null), user, lesson, jsonPlanItem);
-		planItem.setStatus(readStatus(genericEntity));
-		planItem.setPlanStatus(readPlanStatus(genericEntity));
-		planItem.setPlanCompletionStatus(readPlanCompletionStatus(genericEntity));
-		//log.info("readDescriptor: planItem: pre trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
-		planItem.trackPlanStatus();
-		planItem.updateMapAndJson();
-		writeDescriptor(planItem);
-		//log.info("readDescriptor: planItem: post trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
+	protected static PlanItem readPlanItem(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		PlanItem planItem = null;
+		try {
+			planItem = (PlanItem)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (planItem == null) {
+			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
+			LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));
+			String jsonPlanItem = readStringProperty(genericEntity, "jsonPlanItem", null);
+			planItem = new PlanItem(readStringProperty(genericEntity, "uid", null), user, lesson, jsonPlanItem);
+			cache.put(planItem.getId(), planItem);
+			planItem.setStatus(readStatus(genericEntity));
+			planItem.setPlanStatus(readPlanStatus(genericEntity));
+			planItem.setPlanCompletionStatus(readPlanCompletionStatus(genericEntity));
+			//log.info("readDescriptor: planItem: pre trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
+			planItem.trackPlanStatus();
+			planItem.updateMapAndJson();
+			writeDescriptor(planItem);
+			//log.info("readDescriptor: planItem: post trackPlanStatus: "+planItem.getId()+", "+planItem.getTitle()+", "+planItem.getStatus());
+		}
 		return planItem;
 	}
 	
-	protected static UserProfile readUserProfile(Entity genericEntity) throws Exception {
-		User user = getUser(readStringProperty(genericEntity, "userid", null));
-		UserProfile userProfile = new UserProfile(readStringProperty(genericEntity, "uid", null), user, readStringProperty(genericEntity, "email", null));
-		userProfile.setFullName(readStringProperty(genericEntity, "fullName", null));
+	protected static UserProfile readUserProfile(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		UserProfile userProfile = null;
+		try {
+			userProfile = (UserProfile)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (userProfile == null) {
+			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
+			userProfile = new UserProfile(readStringProperty(genericEntity, "uid", null), user, readStringProperty(genericEntity, "email", null));
+			userProfile.setFullName(readStringProperty(genericEntity, "fullName", null));
+			cache.put(userProfile.getId(), userProfile);
+		}
 		return userProfile;
 	}
 	
-	protected static UserOnlineStatus readUserOnlineStatus(Entity genericEntity) throws Exception {
-		User user = getUser(readStringProperty(genericEntity, "userid", null));
-		UserOnlineStatus onlineStatus = new UserOnlineStatus(readStringProperty(genericEntity, "uid", null),
-				user);
-		
-		onlineStatus.setLastAccess(new Date(Long.parseLong(readStringProperty(genericEntity, "lastAccess", null))));
-		onlineStatus.setLastUrl(readStringProperty(genericEntity, "lastUrl", null));
+	protected static UserOnlineStatus readUserOnlineStatus(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		UserOnlineStatus onlineStatus = null;
+		try {
+			onlineStatus = (UserOnlineStatus)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (onlineStatus == null) {
+			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
+			onlineStatus = new UserOnlineStatus(readStringProperty(genericEntity, "uid", null),
+					user);
+			cache.put(onlineStatus.getId(), onlineStatus);
+			onlineStatus.setLastAccess(new Date(Long.parseLong(readStringProperty(genericEntity, "lastAccess", null))));
+			onlineStatus.setLastUrl(readStringProperty(genericEntity, "lastUrl", null));
+			user.setOnlineStatus(onlineStatus);
+		}
 		return onlineStatus;
 	}
 	
-	protected static UserOnlineStatus readUserOnlineStatus(String id, User user) throws Exception {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
-		Entity genericEntity = null;
-
+	protected static UserOnlineStatus readUserOnlineStatus(String id, User user, HashMap<String, Object> cache) throws Exception {
+		UserOnlineStatus onlineStatus = null;
 		try {
-			genericEntity = datastore.get(KeyFactory.createKey(UserOnlineStatus.class.getName(), id));
-		} catch (Exception e) {
-			e.printStackTrace();
-			genericEntity = null;
+			onlineStatus = (UserOnlineStatus)cache.get(id);
+		} catch (Exception exc) {
+			exc.printStackTrace();
 		}
-		if (genericEntity != null) {
-			UserOnlineStatus onlineStatus = new UserOnlineStatus(readStringProperty(genericEntity, "uid", null),
-					user);
-			user.setOnlineStatus(onlineStatus);
-			onlineStatus.setLastAccess(new Date(Long.parseLong(readStringProperty(genericEntity, "lastAccess", null))));
-			onlineStatus.setLastUrl(readStringProperty(genericEntity, "lastUrl", null));
-			return onlineStatus;
+		if (onlineStatus == null) {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+			Entity genericEntity = null;
+
+			try {
+				genericEntity = datastore.get(KeyFactory.createKey(UserOnlineStatus.class.getName(), id));
+			} catch (Exception e) {
+				e.printStackTrace();
+				genericEntity = null;
+			}
+			if (genericEntity != null) {
+				onlineStatus = new UserOnlineStatus(readStringProperty(genericEntity, "uid", null),
+						user);
+				cache.put(onlineStatus.getId(), onlineStatus);
+				user.setOnlineStatus(onlineStatus);
+				onlineStatus.setLastAccess(new Date(Long.parseLong(readStringProperty(genericEntity, "lastAccess", null))));
+				onlineStatus.setLastUrl(readStringProperty(genericEntity, "lastUrl", null));
+				return onlineStatus;
+			}
 		}
 		return null;
 	}
 	
-	protected static Clan readClan(Entity genericEntity) throws Exception {
+	protected static Clan readClan(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
 		ArrayList<GenericDescriptor> relationList = null;
 		Clan clan = null;
 		if (StimulatedPlanningFactory.getNoOfClans() > 0) {
 			clan = StimulatedPlanningFactory.getClan(readStringProperty(genericEntity, "uid", null));
 		}
 		if (clan == null) {
+			try {
+				clan = (Clan)cache.get(readStringProperty(genericEntity, "uid", null));
+			} catch (Exception exc) {
+				exc.printStackTrace();
+			}
+		}
+		if (clan == null) {
 			clan = new Clan(readStringProperty(genericEntity, "uid", null),
 				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
 				readStringProperty(genericEntity, "url", null));
-			relationList = readToManyRelation(clan, "userStati", UserOnlineStatus.class.getName(), true);
+			cache.put(clan.getId(), clan);
+			relationList = readToManyRelation(clan, "userStati", UserOnlineStatus.class.getName(), true, cache);
 			for (GenericDescriptor generic : relationList) {
 				clan.addUserOnlineStatus((UserOnlineStatus)generic);
 			}
@@ -578,47 +719,82 @@ public class PersistentStore {
 
 	}
 	
-	protected static SelectionObject readSelectionObject(Entity genericEntity) throws Exception {
-		ArrayList<GenericDescriptor> relationList = null;
-		SelectionObject selectionObject = new SelectionObject(readStringProperty(genericEntity, "uid", null),
-				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-				readStringProperty(genericEntity, "url", null));
-		selectionObject.setContent(readStringProperty(genericEntity, "content", null));
-		selectionObject.setType(readSelectionObjectType(genericEntity));
-		relationList = readToManyRelation(selectionObject, "options", SelectionOption.class.getName(), true);
-		for (GenericDescriptor generic : relationList) {
-			selectionObject.addOption((SelectionOption)generic);
+	protected static SelectionObject readSelectionObject(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		SelectionObject selectionObject = null;
+		try {
+			selectionObject = (SelectionObject)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (selectionObject == null) {
+			ArrayList<GenericDescriptor> relationList = null;
+			selectionObject = new SelectionObject(readStringProperty(genericEntity, "uid", null),
+					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+					readStringProperty(genericEntity, "url", null));
+			cache.put(selectionObject.getId(), selectionObject);
+			selectionObject.setContent(readStringProperty(genericEntity, "content", null));
+			selectionObject.setType(readSelectionObjectType(genericEntity));
+			relationList = readToManyRelation(selectionObject, "options", SelectionOption.class.getName(), true, cache);
+			for (GenericDescriptor generic : relationList) {
+				selectionObject.addOption((SelectionOption)generic);
+			}
 		}
 		return selectionObject;
 	}
 	
-	protected static SelectionOption readSelectionOption(Entity genericEntity) {
-		SelectionOption selectionOption = new SelectionOption(readStringProperty(genericEntity, "uid", null),
-				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-				readStringProperty(genericEntity, "url", null));
-		selectionOption.setContent(readStringProperty(genericEntity, "content", null));
-		selectionOption.setCorrect(readBooleanProperty(genericEntity, "isCorrect", false));
+	protected static SelectionOption readSelectionOption(Entity genericEntity, HashMap<String, Object> cache) {
+		SelectionOption selectionOption = null;
+		try {
+			selectionOption = (SelectionOption)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (selectionOption == null) {
+			selectionOption = new SelectionOption(readStringProperty(genericEntity, "uid", null),
+					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+					readStringProperty(genericEntity, "url", null));
+			cache.put(selectionOption.getId(), selectionOption);
+			selectionOption.setContent(readStringProperty(genericEntity, "content", null));
+			selectionOption.setCorrect(readBooleanProperty(genericEntity, "isCorrect", false));
+		}
 		return selectionOption;
 	}
 	
-	protected static UserSelectedOption readUserSelectedOption(Entity genericEntity) throws Exception {
-		User user = getUser(readStringProperty(genericEntity, "userid", null));
-		SelectionObject selectionObject = (SelectionObject)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "selectionObject", null));	
-		SelectionOption selectedOption = (SelectionOption)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "selectedOption", null));	
-
-		UserSelectedOption userSelectedOption = new UserSelectedOption(readStringProperty(genericEntity, "uid", null), user);
-		userSelectedOption.setLastAccess(new Date(Long.parseLong(readStringProperty(genericEntity, "lastAccess", null))));
-		userSelectedOption.setSelectionObject(selectionObject);
-		userSelectedOption.setSelectedOption(selectedOption);
-		
-		return null;
+	protected static UserSelectedOption readUserSelectedOption(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		UserSelectedOption userSelectedOption = null;
+		try {
+			userSelectedOption = (UserSelectedOption)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (userSelectedOption == null) {
+			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
+			SelectionObject selectionObject = (SelectionObject)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "selectionObject", null));	
+			SelectionOption selectedOption = (SelectionOption)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "selectedOption", null));	
+	
+			userSelectedOption = new UserSelectedOption(readStringProperty(genericEntity, "uid", null), user);
+			cache.put(userSelectedOption.getId(), userSelectedOption);
+			userSelectedOption.setLastAccess(new Date(Long.parseLong(readStringProperty(genericEntity, "lastAccess", null))));
+			userSelectedOption.setSelectionObject(selectionObject);
+			userSelectedOption.setSelectedOption(selectedOption);
+		}
+		return userSelectedOption;
 	}
 	
-	protected static InformationObject readInformationObject(Entity genericEntity) {
-		InformationObject informationObject = new InformationObject(readStringProperty(genericEntity, "uid", null),
-				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-				readStringProperty(genericEntity, "url", null));
-		informationObject.setContent(readStringProperty(genericEntity, "content", null));
+	protected static InformationObject readInformationObject(Entity genericEntity, HashMap<String, Object> cache) {
+		InformationObject informationObject = null;
+		try {
+			informationObject = (InformationObject)cache.get(readStringProperty(genericEntity, "uid", null));
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (informationObject == null) {
+			informationObject = new InformationObject(readStringProperty(genericEntity, "uid", null),
+					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
+					readStringProperty(genericEntity, "url", null));
+			informationObject.setContent(readStringProperty(genericEntity, "content", null));
+			informationObject.setSequence(Integer.valueOf(readStringProperty(genericEntity, "sequence", null)));
+		}
 		return informationObject;
 	}
 	
@@ -803,7 +979,7 @@ public class PersistentStore {
 			Entity contentEntity = createGenericEntity(content);
 
 			writeToManyRelation(content, content.getInformationObjects(), "informationObjects", content.informationObjects.size(), true);
-//			writeToManyRelation(content, content.getSelectionObjects(), "selectionObjects", content.selectionObjects.size(), true);
+			writeToManyRelation(content, content.getSelectionObjects(), "selectionObjects", content.selectionObjects.size(), true);
 
 			datastore.put(contentEntity);
 		} catch (Exception e1) {
@@ -964,6 +1140,8 @@ public class PersistentStore {
 
 		try {
 			Entity entity = createInformationObjectEntity(generic);
+			entity.setProperty("content", generic.getContent());
+			entity.setProperty("sequence", generic.getSequence());
 			
 			datastore.put(entity);
 		} catch (Exception e1) {
@@ -1079,7 +1257,7 @@ public class PersistentStore {
 
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
-				clan = (Clan)readDescriptor(Clan.class.getName(), id);
+				clan = (Clan)readDescriptor(Clan.class.getName(), id, new HashMap<String, Object>());
 				clans.add(clan);
 			}
 			
@@ -1104,7 +1282,7 @@ public class PersistentStore {
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
 				log.info("read userPlan for "+user.getName()+", "+id);
-				onlineStatus = (UserOnlineStatus)readDescriptor(UserOnlineStatus.class.getName(), id);
+				onlineStatus = (UserOnlineStatus)readDescriptor(UserOnlineStatus.class.getName(), id, new HashMap<String, Object>());
 			}
 			
 		} catch (Exception e) {
@@ -1120,7 +1298,7 @@ public class PersistentStore {
 	public static CourseDescriptor readCourse(String id) {
 		CourseDescriptor course = null;
 		try {
-			course = (CourseDescriptor)readDescriptor(CourseDescriptor.class.getName(), id);
+			course = (CourseDescriptor)readDescriptor(CourseDescriptor.class.getName(), id, new HashMap<String, Object>());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1145,7 +1323,7 @@ public class PersistentStore {
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
 				log.info("read userPlan for "+user.getName()+", "+id);
-				plan = (UserPlan)readDescriptor(UserPlan.class.getName(), id);
+				plan = (UserPlan)readDescriptor(UserPlan.class.getName(), id, new HashMap<String, Object>());
 			}
 			
 		} catch (Exception e) {
@@ -1171,7 +1349,7 @@ public class PersistentStore {
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
 				//log.info("read userPlan for "+user.getName()+", "+id);
-				selectedOption = (UserSelectedOption)readDescriptor(UserSelectedOption.class.getName(), id);
+				selectedOption = (UserSelectedOption)readDescriptor(UserSelectedOption.class.getName(), id, new HashMap<String, Object>());
 			}
 			
 		} catch (Exception e) {
@@ -1193,7 +1371,7 @@ public class PersistentStore {
 
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
-				profile = (UserProfile)readDescriptor(UserProfile.class.getName(), id);
+				profile = (UserProfile)readDescriptor(UserProfile.class.getName(), id, new HashMap<String, Object>());
 				profiles.add(profile);
 			}
 			

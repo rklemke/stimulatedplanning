@@ -52,7 +52,7 @@
         change: function( event, data ) {
           contentId.val(data.item.value);
           contentName.val($( "#contentSelect option:selected" ).text());
-          $("#contentFrame").attr("src", "GenericClanFrame.jsp");
+          $("#contentFrame").attr("src", "GenericClanFrameServlet_SoC?contentId="+data.item.value+"&contentName="+$( "#contentSelect option:selected" ).text());
         }
        });
    
@@ -80,7 +80,7 @@
 <input type="submit" id="submitClan" name="submitClan" value="Clan"></input>  -->
 </form>
 
-<iframe id="contentFrame"></iframe>
+<iframe id="contentFrame" style="width:860px; height:480px;"></iframe>
 
 </body>
 </html>

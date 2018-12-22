@@ -30,6 +30,11 @@
 	  otherClanOffline = otherClan.getOfflineUsers().size()+1;
   }
   
+  ContentDescriptor contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
+  List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
+  InformationObject currentInformationObject = (InformationObject)session.getAttribute("currentInformationObject");
+  int currentInformationObjectIdx = (int)session.getAttribute("currentInformationObjectIdx");
+  
   
 %>
 
@@ -39,6 +44,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Test User Navigation</title>
+    <link rel="stylesheet" href="css/IdentityWidgetStyling.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -46,7 +52,7 @@
     <script type="text/javascript">
 	    $(document).ready(function () {
 		//this is temp and the frameholder src should be replaced by the active link
-		$("#frameHolder").attr("src","SelectionWidget.jsp");
+		$("#frameHolder").attr("src","InformationObjectServlet_SoC");
 		
 		function user (name, status, avatarURL, altText) {
 		this.name=name;
@@ -129,6 +135,20 @@
 	
 	<div class="columnTwo">
 	<iframe id="frameHolder"></iframe>
+	</div><!--columnTwo-->
+	<div class="columnTwo">
+	<% if (informationObjectList != null) { %>
+	<%    if (currentInformationObjectIdx > 0) { %>
+	[PREV]
+	<%    } %>
+	<%    if (currentInformationObjectIdx < informationObjectList.size()-1) { %>
+	<%       if (currentInformationObject instanceof SelectionObject) { %>
+	[VOTE]
+	<%       } else { %>
+	[NEXT]
+	<%       } %>
+	<%    } %>
+	<% } %>
 	</div><!--columnTwo-->
 
 	</div><!--container-->

@@ -32,8 +32,9 @@
   
   ContentDescriptor contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
   List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
-  SelectionObject currentSelectionObject = (SelectionObject)session.getAttribute("currentInformationObject");
+  InformationObject currentInformationObject = (InformationObject)session.getAttribute("currentInformationObject");
   int currentInformationObjectIdx = (int)session.getAttribute("currentInformationObjectIdx");
+
   
 %>
 
@@ -41,18 +42,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Selection Widget</title>
-    <link rel="stylesheet" href="css/SelectionWidgetStyling.css">
+    <title>Information Widget</title>
+    <link rel="stylesheet" href="css/WidgetStyling.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- link rel="stylesheet" href="css/jquery-ui.css"  -->
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script type="text/javascript">
-	$(document).ready(function () {
-		  $( "#selectable" ).selectable();
-	});
-
-	</script>
 
 </head>
 
@@ -61,21 +56,14 @@
 	<div class="container">
 	
 	<div style="display: inline-block; text-align: center; width: 98%; height: 10%">
-	<strong style=" font-size: 24px">Help your clan to find your identity!</strong>
+	<strong style=" font-size: 24px"><%= currentInformationObject.getTitle() %></strong>
 	</div>
 	
 	<div class="column">
-	<ol id="selectable">
-	<% for (SelectionOption option : currentSelectionObject.getOptionList()) { %>
-	  <li class="ui-widget-content" id="<%= option.getId() %>"><%= option.getTitle() %></li>
-	<% } %>
-	</ol>
-	
+		<%= currentInformationObject.getDescription() %>
+		<%= currentInformationObject.getContent() %>
 	</div><!--column-->
 	
-	<div id="buttonControl">
-	<button class="ui-button ui-widget ui-corner-all">Submit</button>
-	</div><!--button Control-->
 	
 	</div><!--container-->
 	

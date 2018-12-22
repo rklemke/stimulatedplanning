@@ -802,7 +802,7 @@ public class StimulatedPlanningFactory {
 	public static User getUser(String userid, String userName) {
 		User user = null;
 		try {
-			user = PersistentStore.getUser(userid);
+			user = PersistentStore.getUser(userid, new HashMap<String, Object>());
 		} catch (Exception e) {
 			//e.printStackTrace();
 			user = null;

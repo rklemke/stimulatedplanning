@@ -1,0 +1,50 @@
+
+
+.container {
+	margin-right: auto;
+    margin-left: auto;
+    padding: 5px;
+    width:800px;
+    height: 400px;
+	border: 2.5px Solid #808080;
+	overflow:hidden; 
+	word-wrap:break-word
+}
+
+.column {
+    display:inline-block;
+    float: left;
+    border: 2.5px Solid #808080;
+    margin: 5px;
+    padding: 5px;
+}
+
+#AW_myClanFrame{
+    width: 490px;
+    height: 370px;
+}
+
+#AW_otherClanFrame{
+    width:260px;
+    height: 260px;
+}
+
+#AW_ledger{
+    width: 260px;
+    height: 85px;
+}
+#AW_OtherClanOnline{
+	margin-top: 30px;
+}
+#AW_OtherClanOffline{
+	margin-top: 30px;
+}
+
+.links {
+    display: inline-block;
+    margin: 2.5px;
+    border: solid medium;
+    padding: 2.5px;
+	width: 25px;
+	height: 25px;
+}
