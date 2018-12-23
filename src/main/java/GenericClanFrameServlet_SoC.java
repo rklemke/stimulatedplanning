@@ -49,26 +49,49 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 		String contentId = request.getParameter("contentId");
 		String contentName = request.getParameter("contentName");
 		log.info("contentId "+contentId+" contentName "+contentName);
-
-		session.setAttribute("contentDescriptor", null);
-		session.setAttribute("informationObjectList", null);
-		session.setAttribute("currentInformationObject", null);
-		session.setAttribute("currentInformationObjectIdx", 0);
-
+		
 		ContentDescriptor contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
 		List<InformationObject> informationObjectList = null;
 		InformationObject currentInformationObject = null;
-		if (contentDescriptor != null) {
-			session.setAttribute("contentDescriptor", contentDescriptor);
-			informationObjectList = contentDescriptor.getAllInformationObjectList();
-			if (informationObjectList != null) {
-				session.setAttribute("informationObjectList", informationObjectList);
-				if (informationObjectList.size()>0) {
-					currentInformationObject = informationObjectList.get(0);
-					session.setAttribute("currentInformationObject", currentInformationObject);
-					session.setAttribute("currentInformationObjectIdx", 0);
+		int currentInformationObjectIdx = 0;
+
+		if (request.getParameter("buttonPrev") != null) {
+			contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
+			informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
+			currentInformationObjectIdx = (Integer)session.getAttribute("currentInformationObjectIdx");
+			currentInformationObjectIdx--;
+			currentInformationObject = informationObjectList.get(currentInformationObjectIdx);
+			session.setAttribute("currentInformationObject", currentInformationObject);
+			session.setAttribute("currentInformationObjectIdx", currentInformationObjectIdx);
+			
+		} else if (request.getParameter("buttonNext") != null) {
+			contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
+			informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
+			currentInformationObjectIdx = (Integer)session.getAttribute("currentInformationObjectIdx");
+			currentInformationObjectIdx++;
+			currentInformationObject = informationObjectList.get(currentInformationObjectIdx);
+			session.setAttribute("currentInformationObject", currentInformationObject);
+			session.setAttribute("currentInformationObjectIdx", currentInformationObjectIdx);
+			
+		} else {
+			session.setAttribute("contentDescriptor", null);
+			session.setAttribute("informationObjectList", null);
+			session.setAttribute("currentInformationObject", null);
+			session.setAttribute("currentInformationObjectIdx", 0);
+
+			if (contentDescriptor != null) {
+				session.setAttribute("contentDescriptor", contentDescriptor);
+				informationObjectList = contentDescriptor.getAllInformationObjectList();
+				if (informationObjectList != null) {
+					session.setAttribute("informationObjectList", informationObjectList);
+					if (informationObjectList.size()>0) {
+						currentInformationObject = informationObjectList.get(0);
+						session.setAttribute("currentInformationObject", currentInformationObject);
+						session.setAttribute("currentInformationObjectIdx", 0);
+					}
 				}
 			}
+
 		}
 
 

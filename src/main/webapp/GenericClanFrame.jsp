@@ -57,6 +57,23 @@
 			//this is temp and the frameholder src should be replaced by the active link
 			$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC");
 			$("#AW_frameHolder").attr("src","ClanMembers.jsp");
+    		<% if (informationObjectList != null) { %>
+    		<%    if (currentInformationObjectIdx > 0) { %>
+    			$("#buttonPrev").on("click", function() {
+    				$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC?currentInformationObjectIdx=<%= currentInformationObjectIdx-1 %>");
+    			});
+    		<%    } %>
+    		<%    if (currentInformationObject instanceof SelectionObject) { %>
+				$("#buttonSubmit").on("click", function() {
+					alert("submit");
+					//$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC?nav=prev");
+				});
+    		<%    } else if (currentInformationObjectIdx < informationObjectList.size()-1) { %>
+				$("#buttonNext").on("click", function() {
+					$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC?currentInformationObjectIdx=<%= currentInformationObjectIdx+1 %>");
+				});
+    		<%    } %>
+    		<% } %>
     	    $(document).tooltip();
 		})
 	</script>
@@ -78,19 +95,18 @@
 	<iframe id="Selection_frameHolder"></iframe>
 	
 	<div id="buttonControl">
-	<% if (informationObjectList != null) { %>
-	<%    if (currentInformationObjectIdx > 0) { %>
-	<button class="ui-button ui-widget ui-corner-all">Prev</button>
-	[PREV]
-	<%    } %>
-	<%    if (currentInformationObject instanceof SelectionObject) { %>
-	<button class="ui-button ui-widget ui-corner-all">Submit</button>
-	[VOTE]
-	<%    } else if (currentInformationObjectIdx < informationObjectList.size()-1) { %>
-	<button class="ui-button ui-widget ui-corner-all">Next</button>
-	[NEXT]
-	<%    } %>
-	<% } %>
+	<form id="infoNavForm" method="POST" action="GenericClanFrameServlet_SoC">
+		<% if (informationObjectList != null) { %>
+		<%    if (currentInformationObjectIdx > 0) { %>
+			<input type="submit" id="buttonPrev" name="buttonPrev" class="ui-button ui-widget ui-corner-all" value="Prev"></input>
+		<%    } %>
+		<%    if (currentInformationObject instanceof SelectionObject) { %>
+			<button id="buttonSubmit" class="ui-button ui-widget ui-corner-all">Submit</button>
+		<%    } else if (currentInformationObjectIdx < informationObjectList.size()-1) { %>
+			<input type="submit" id="buttonNext" name="buttonNext" class="ui-button ui-widget ui-corner-all" value="Next"></input>
+		<%    } %>
+		<% } %>
+	</form>
 	</div><!--button Control-->
 	
 	</div><!--columnTwo-->
