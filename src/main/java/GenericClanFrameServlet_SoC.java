@@ -56,13 +56,15 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 		session.setAttribute("currentInformationObjectIdx", 0);
 
 		ContentDescriptor contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
+		List<InformationObject> informationObjectList = null;
+		InformationObject currentInformationObject = null;
 		if (contentDescriptor != null) {
 			session.setAttribute("contentDescriptor", contentDescriptor);
-			List<InformationObject> informationObjectList = contentDescriptor.getAllInformationObjectList();
+			informationObjectList = contentDescriptor.getAllInformationObjectList();
 			if (informationObjectList != null) {
 				session.setAttribute("informationObjectList", informationObjectList);
 				if (informationObjectList.size()>0) {
-					InformationObject currentInformationObject = informationObjectList.get(0);
+					currentInformationObject = informationObjectList.get(0);
 					session.setAttribute("currentInformationObject", currentInformationObject);
 					session.setAttribute("currentInformationObjectIdx", 0);
 				}
@@ -71,15 +73,15 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 
 
 		String nextServlet = "/GenericClanFrame.jsp";
-//		if (request.getParameter("submitLogin") != null) {
-//			nextServlet = "/Test_UserNavigation_SoC.jsp";
+		if (currentInformationObject == null) {
+			nextServlet = "/AwarenessFrame.jsp";
 //		} else if (request.getParameter("submitClan") != null) {
 //			nextServlet = "/AwarenessFrame.jsp";
 //		} else if (request.getParameter("submitCoping") != null) {
 //			nextServlet = "/CopingPlan.jsp";
 //		} else if (request.getParameter("submitLearning") != null) {
 //			nextServlet = "/Test_LearningProgress.jsp";
-//		}
+		}
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextServlet);
 		dispatcher.forward(request,response);

@@ -1,0 +1,19 @@
+.container {
+	margin-right: auto;
+    margin-left: auto;
+    padding: 0.5px;
+    width:99%;
+    height: 99%;
+	overflow:hidden; 
+	word-wrap:break-word;
+	/*border: solid medium;*/
+}
+
+.profiles {
+    display: inline-block;
+    margin: 2px;
+    border: solid medium;
+    padding: 2px;
+	width: 25px;
+	height: 25px;
+}

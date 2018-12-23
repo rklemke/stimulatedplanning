@@ -66,6 +66,7 @@ public class PersistentStore {
 			userEntity.setProperty("clan", user.getClan().getId());
 		}
 		userEntity.setProperty("onlineStatus", user.getOnlineStatus().getId());
+		userEntity.setProperty("avatarUrl", user.getAvatarUrl());
 
 		datastore.put(userEntity);
 
@@ -93,6 +94,7 @@ public class PersistentStore {
 				}
 				UserOnlineStatus onlineStatus = (UserOnlineStatus)readUserOnlineStatus(readStringProperty(userEntity, "onlineStatus", null), user, cache);
 				user.setOnlineStatus(onlineStatus);
+				user.setAvatarUrl((String) userEntity.getProperty("avatarUrl"));
 				if (!userEntity.hasProperty("treatmentGroup")) {
 					writeUser(user);
 				}
@@ -731,6 +733,7 @@ public class PersistentStore {
 				readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
 				readStringProperty(genericEntity, "url", null));
 			cache.put(clan.getId(), clan);
+			clan.setClanLogo(readStringProperty(genericEntity, "clanLogo", null));
 			relationList = readToManyRelation(clan, "userStati", UserOnlineStatus.class.getName(), true, cache);
 			for (GenericDescriptor generic : relationList) {
 				clan.addUserOnlineStatus((UserOnlineStatus)generic);
@@ -1180,6 +1183,7 @@ public class PersistentStore {
 		try {
 			Entity entity = createInformationObjectEntity(generic);
 			
+			entity.setProperty("clanLogo", generic.getClanLogo());
 			writeToManyRelation(generic, generic.getUserOnlineStatus(), "userStati", generic.userCount(), true);
 
 			datastore.put(entity);

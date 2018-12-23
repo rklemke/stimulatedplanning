@@ -63,6 +63,7 @@ public class InformationObjectServlet_SoC extends HttpServlet {
 		if (currentInformationObject != null && currentInformationObject instanceof SelectionObject) {
 			nextServlet = "/SelectionWidget.jsp";
 		}
+
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextServlet);
 		dispatcher.forward(request,response);

@@ -11,7 +11,6 @@ import stimulatedplanning.util.HashArrayList;
 
 public class Clan extends InformationObject {
 
-	protected HashArrayList<UserOnlineStatus> userStati;
 
 	public Clan() {
 		// TODO Auto-generated constructor stub
@@ -24,6 +23,18 @@ public class Clan extends InformationObject {
 		userStati = new HashArrayList<UserOnlineStatus>();
 	}
 
+	protected String clanLogo;
+	public String getClanLogo() {
+		if (clanLogo != null && clanLogo.length()>0) {
+			return clanLogo;
+		}
+		return "/img/clan/"+title+"Default.png";
+	}
+	public void setClanLogo(String clanLogo) {
+		this.clanLogo = clanLogo;
+	}
+	
+	protected HashArrayList<UserOnlineStatus> userStati;
 	public void addUser(User user) {
 //		UserOnlineStatus onlineStatus = StimulatedPlanningFactory.getUserOnlineStatus(user);
 		UserOnlineStatus onlineStatus = user.getOnlineStatus();

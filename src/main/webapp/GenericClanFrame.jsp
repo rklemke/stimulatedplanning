@@ -49,87 +49,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Test User Navigation</title>
     <link rel="stylesheet" href="css/IdentityWidgetStyling.css">
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
 	    $(document).ready(function () {
-		//this is temp and the frameholder src should be replaced by the active link
-		$("#frameHolder").attr("src","InformationObjectServlet_SoC");
-		
-		function user (name, status, avatarURL, altText) {
-		this.name=name;
-		this.GetName = function() {
-        return this.name;
-		};
-		this.status=status;
-		this.GetStatus = function() {
-        return this.status;
-		};
-		this.avatarURL=avatarURL;
-		this.GetAvatarURL = function() {
-        return this.avatarURL;
-		};
-		this.altText =  altText;
-		this.getAltText = function(){
-			return this.altText;
-		};
-		}
-
-		var users = [
-<% if (user.isTreatmentGroup()) {
-	  boolean comma = false;
-	  for (UserOnlineStatus status: userClan.getOnlineUsersSorted(userStatus)) {
-		User clanUser = status.getUser();
-		if (comma) {%>, <%}%>  
-		new user("<%= clanUser.getName() %>", "inCurrentPage", "img/profile/profileImage.png", "<%= clanUser.getName() %>")
-<%	  comma = true;
-      } 
-	  for (UserOnlineStatus status: userClan.getRecentUsersSorted(userStatus)) {
-		User clanUser = status.getUser();
-		if (comma) {%>, <%}%>  
-		new user("<%= clanUser.getName() %>", "inOtherPage", "img/profile/profileImage.png", "<%= clanUser.getName() %>")
-<%	  comma = true;
-      } 
-	  for (UserOnlineStatus status: userClan.getOfflineUsersSorted(userStatus)) {
-		User clanUser = status.getUser();
-		if (comma) {%>, <%}%>  
-		new user("<%= clanUser.getName() %>", "Offline", "img/profile/profileImage.png", "<%= clanUser.getName() %>")
-<%	  comma = true;
-      } 
-   } %>
-		]
-        $(".links").click(function () {
-                alert("Chat page");
-            });
-			
-        $(document).tooltip();
-		
-		$.each(users, function (index, value) {
-		//console.log(value.GetName());
-		var color;
-		if (value.GetStatus() == "inCurrentPage") {
-		color = 'green';
-		} 
-		else if (value.GetStatus() == "inOtherPage") {
-		color = 'blue';
-		} 
-		else {
-		color = 'grey';
-		}
-		loadImage(value.GetAvatarURL(), color,"#AW_myClanFrame", value.getAltText());
-		});
-		
-		function loadImage(path, color, target, altText) {
-		var userDP = '<div class="links" ' + 'style= "border-color: '+ color+';'+'background-color: '+ color +'"' +'>' +
-		'<a href="#" '+'title= "'+ altText +'">'+
-		'<img src="'+ path +'"'+' width="25px" height="25px" '+'">' +
-		'</a>' +
-		'</div>';
-		console.log(userDP);
-		$(userDP).appendTo(target);
-		};
+			//this is temp and the frameholder src should be replaced by the active link
+			$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC");
+			$("#AW_frameHolder").attr("src","ClanMembers.jsp");
+    	    $(document).tooltip();
 		})
 	</script>
 </head>
@@ -137,30 +65,36 @@
 	<div class="container">
 	
 	<div class = "columnOne"  >
-	<img id="ClanLogo"  src="img/clan/ClanDefault.png"/>
 	
-	<div  id="AW_myClanFrame" >
+	<img id="ClanLogo"  src="<%= userClan.getClanLogo() %>"/>
+	
+	<iframe id="AW_frameHolder"></iframe>
 	
 	</div><!--columnOne-->
 
-	</div><!--ClanLogo-->
 	
 	<div class="columnTwo">
-	<iframe id="frameHolder"></iframe>
-	</div><!--columnTwo-->
-	<div class="columnTwo">
+	<iframe id="Selection_frameHolder"></iframe>
+	
+	<div id="buttonControl">
 	<% if (informationObjectList != null) { %>
 	<%    if (currentInformationObjectIdx > 0) { %>
+	<button class="ui-button ui-widget ui-corner-all">Prev</button>
 	[PREV]
 	<%    } %>
 	<%    if (currentInformationObject instanceof SelectionObject) { %>
+	<button class="ui-button ui-widget ui-corner-all">Submit</button>
 	[VOTE]
 	<%    } else if (currentInformationObjectIdx < informationObjectList.size()-1) { %>
+	<button class="ui-button ui-widget ui-corner-all">Next</button>
 	[NEXT]
 	<%    } %>
 	<% } %>
+	</div><!--button Control-->
+	
 	</div><!--columnTwo-->
 
 	</div><!--container-->
+
 </body>
 </html>

@@ -1,0 +1,135 @@
+.container {
+	margin-right: auto;
+    margin-left: auto;
+    padding: 0.2em;
+    width:48em;
+    height: 24em;
+	border: 2.5px Solid #808080;
+	/*overflow:hidden;*/
+	word-wrap:break-word;
+}
+
+.column {
+    display: block;
+	float: left;
+    margin: 0.2em;
+    padding: 0.2em;
+	/*border: 2.5px Solid #808080;*/
+}
+
+#GridOne{
+	width: 27em;
+	height: 23em;
+	padding: 0.2em;
+	margin: 0.2em;
+}
+
+.imgHolder {
+	display: block;
+	float: left;
+	width: 4em;
+	height: 4em;
+	margin: 0.2em;
+	padding: 0.2em;
+	/*border: 2.5px Solid #808080;*/
+}
+
+.imgHolder img{
+	width: 98%;
+	height: 98%;
+}
+
+.headerText{ 
+display: inline-block;
+width: 9.5em;
+height: 1.75em;
+font-weight: bold;
+font-size: 2em;
+margin: 0.2em;
+padding: 0.2em;
+/*border: 2.5px Solid #808080;*/
+}
+
+#AW_frameHolder{
+	display: block;
+	float: left;
+    width: 26.25em;
+    height: 17em;
+	margin: 0.2em;
+
+}
+
+#GridTwo{
+    width:18.5em;
+	height: 13.5em;
+	padding: 0.2em;
+}
+
+#GridTwo .imgHolder{
+	display: block;
+	float: left;
+	width: 4em;
+	height: 4em;
+	margin: 0.2em;
+	padding: 0.2em;
+	/*border: 2.5px Solid #808080;*/
+}
+
+#GridTwo .headerText{
+display: inline-block;
+width: 5.5em;
+height: 1.75em;
+font-weight: bold;
+font-size: 2em;
+margin: 0.2em;
+padding: 0.2em;
+/*border: 2.5px Solid #808080;*/
+}
+
+#AW_OtherClanOnline{
+	display: block;
+	float: left;
+	width: 17.5em;
+	height: 2em;
+	border: 2.5px Solid #808080;
+	
+}
+
+#AW_OtherClanOffline{
+	display: block;
+	float: left;
+	width: 17.5em;
+	height: 2em;
+	border: 2.5px Solid #808080;
+}
+
+#GridThree{
+    width:18.5em;
+	height: 8.5em;
+	padding: 0.2em;
+}
+
+#GridThree .ledger {
+	display: block;
+	float: left;
+	width: 17.5em;
+    height: 1em;
+	margin: 0.2em;
+	padding: 0.2em;
+	/*border: 2.5px Solid #808080;*/
+}
+#GridThree svg {
+	display: inline-block;
+	float: left;
+	width: 0.75em;
+	height: 0.75em;
+	margin-top:0.25em;
+}
+
+#GridThree svg rect {
+	display: inline-block;
+	width: 0.75em;
+	height: 0.75em;
+	stroke-width: 1px;
+	stroke: rgb(0,0,0);
+}

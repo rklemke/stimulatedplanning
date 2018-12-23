@@ -29,56 +29,45 @@
 	  otherClanRecent = otherClan.getRecentUsers().size()+1;
 	  otherClanOffline = otherClan.getOfflineUsers().size()+1;
   }
-  
-  ContentDescriptor contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
-  List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
-  SelectionObject currentSelectionObject = (SelectionObject)session.getAttribute("currentInformationObject");
-  int currentInformationObjectIdx = 0;
-  Object idxS = (Object)session.getAttribute("currentInformationObjectIdx");
-  if (idxS != null) {
-	  currentInformationObjectIdx = ((Integer)idxS).intValue();
-  }
-  
+    
 %>
 
 
 <!DOCTYPE html>
 <html>
+<% if (user.isTreatmentGroup()) { %>
 <head>
-    <title>Selection Widget</title>
-    <link rel="stylesheet" href="css/SelectionWidgetStyling.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <!-- link rel="stylesheet" href="css/jquery-ui.css"  -->
+    <link rel="stylesheet" href="css/ClanMembersStyling.css">
+    <link rel="stylesheet" href="css/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script type="text/javascript">
-	$(document).ready(function () {
-		  $( "#selectable" ).selectable();
-	});
-
-	</script>
-
 </head>
+<body>
+   <div class="container" id="AW_myClanFrame">
+      	<% for (UserOnlineStatus status: onlineUsers) { %>
+      		<div class="profiles" style="border-color:lawngreen; background-color:lawngreen;">
+				<a href="#" title= "<%= status.getUser().getName() %>">
+					<img src="<%= status.getUser().getAvatarUrl() %>" width="25px" height="25px">
+				</a>
+      		</div>
+       	<% } %>
+       	<% for (UserOnlineStatus status: recentUsers) { %>
+      		<div class="profiles" style="border-color:blue; background-color:blue;">
+				<a href="#" title= "<%= status.getUser().getName() %>">
+					<img src="<%= status.getUser().getAvatarUrl() %>" width="25px" height="25px">
+				</a>
+      		</div>
+       	<% } %>
+       	<% for (UserOnlineStatus status: offlineUsers) { %>
+      		<div class="profiles" style="border-color:grey; background-color:grey;">
+				<a href="#" title= "<%= status.getUser().getName() %>">
+					<img src="<%= status.getUser().getAvatarUrl() %>" width="25px" height="25px">
+				</a>
+      		</div>
+       	<% } %>
 
-	<body>
-	
-	<div class="container">
-	
-	<div style="display: inline-block; text-align: center; width: 98%; height: 10%">
-	<strong style=" font-size: 24px">Help your clan to find your identity!</strong>
-	</div>
-	
-	<div class="column">
-	<ol id="selectable">
-	<% for (SelectionOption option : currentSelectionObject.getOptionList()) { %>
-	  <li class="ui-widget-content" id="<%= option.getId() %>"><%= option.getTitle() %></li>
-	<% } %>
-	</ol>
-	
-	</div><!--column-->
-	
-	</div><!--container-->
-	
-	</body>
+        </div>
 
+</body>
+ <% } %>
 </html>

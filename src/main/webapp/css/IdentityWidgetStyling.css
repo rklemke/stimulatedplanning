@@ -1,65 +1,64 @@
 
-
 .container {
 	margin-right: auto;
     margin-left: auto;
-    padding: 2.5px;
-    width:800px;
-    height: 400px;
+    padding: 0.2em;
+    width:48em;
+    height: 24em;
 	border: 2.5px Solid #808080;
-	overflow:hidden; 
-	word-wrap:break-word
+	/*overflow:hidden;*/
+	word-wrap:break-word;
 }
 
 .columnOne {
-    float: left;
-    margin: 2.5px;
-    padding: 2.5px;
-	width: 25%;
-	height: 98%;
+    display: block;
+	float: left;
+    margin: 0.2em;
+    padding: 0.2em;
 }
 
 
 #ClanLogo{
-	display: block; 
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	height: 100px;
-	width: 100px;
+	display: block;
+	width: 5em;
+	height: 5em;
+	margin: 1em;
+	padding-left:2.25em;
 
 }
 
-#AW_myClanFrame{
+#AW_frameHolder{
 	overflow: hidden;
-	display: inline-block;
-	height: 67%;
-	width: 100%;
-	border: 2.5px Solid #808080;
-}
-
-.links {
-    display: inline-block;
-    margin: 2.5px;
-    border: solid medium;
-    padding: 2.5px;
-	width: 25px;
-	height: 25px;
+	display: block;
+	height: 13em;
+	width: 12.25em;
+	/*border: 2.5px Solid #808080;*/
 }
 
 .columnTwo {
-    float: left;
-    margin: 2.5px;
-    padding: 2.5px;
-	width: 72%;
-	height: 90%;
+	display: inline-block;
+    margin: 0.2em;
+    padding: 0.2em;
+	width: 33.25em;
+	height: 23em;
 }
 
-#frameHolder{
+#Selection_frameHolder{
 	display: inline-block;
-	margin: 2.5px;
-    padding: 2.5px;
-	width: 98%;
-	height: 98%;
+	margin: 0.2em;
+    padding: 0.2em;
+	width: 32.5em;
+	height: 20em;
 }
+
+#buttonControl {
+	width:32em;
+	height: 2em;
+    display: inline-block;
+	text-align: center;
+    margin-top: 0.2em;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 0.2em;
+}
+
