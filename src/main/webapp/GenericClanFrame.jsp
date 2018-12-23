@@ -65,8 +65,9 @@
 	<div class="container">
 	
 	<div class = "columnOne"  >
-	
+<% if (user.isTreatmentGroup()) { %>	
 	<img id="ClanLogo"  src="<%= userClan.getClanLogo() %>"/>
+<% } %>	
 	
 	<iframe id="AW_frameHolder"></iframe>
 	
