@@ -954,6 +954,35 @@ public class StimulatedPlanningFactory {
 	}
 	
 
+	public static ArrayList<UserSelectedOption> readClanSelectionOption(Clan clan, SelectionObject selectionObject, SelectionOption selectionOption) {
+		ArrayList<UserSelectedOption> selectedOptions = new ArrayList<>();
+		UserSelectedOption selectedOption = null;
+		try {
+			for (UserOnlineStatus status: clan.getOnlineUsers()) {
+				selectedOption = PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
+				if (selectedOption != null) {
+					selectedOptions.add(selectedOption);
+				}						
+			}
+			for (UserOnlineStatus status: clan.getRecentUsers()) {
+				selectedOption = PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
+				if (selectedOption != null) {
+					selectedOptions.add(selectedOption);
+				}						
+			}
+			for (UserOnlineStatus status: clan.getOfflineUsers()) {
+				selectedOption = PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
+				if (selectedOption != null) {
+					selectedOptions.add(selectedOption);
+				}						
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return selectedOptions;
+	}
+
 	
 	public static void trackAndLogEvent(HttpServletRequest request, HttpServletResponse response, String logType) {
 		HttpSession session = request.getSession();

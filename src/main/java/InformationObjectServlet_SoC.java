@@ -15,8 +15,11 @@ import javax.servlet.http.HttpSession;
 
 import senseofcommunity.InformationObject;
 import senseofcommunity.SelectionObject;
+import senseofcommunity.SelectionOption;
+import senseofcommunity.UserSelectedOption;
 import stimulatedplanning.ContentDescriptor;
 import stimulatedplanning.CourseDescriptor;
+import stimulatedplanning.PersistentStore;
 import stimulatedplanning.StimulatedPlanningFactory;
 import stimulatedplanning.User;
 import stimulatedplanning.UserPlan;
@@ -54,15 +57,39 @@ public class InformationObjectServlet_SoC extends HttpServlet {
 		List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
 		InformationObject currentInformationObject = (InformationObject)session.getAttribute("currentInformationObject");
 		int currentInformationObjectIdx = 0;
-//		if (request.getParameter("currentInformationObjectIdx") != null) {
-//			currentInformationObjectIdx = Integer.valueOf(request.getParameter("currentInformationObjectIdx"));
-//			session.setAttribute("currentInformationObjectIdx", currentInformationObjectIdx);
-//		} else {
-			Object idxS = (Object)session.getAttribute("currentInformationObjectIdx");
-			if (idxS != null) {
-				currentInformationObjectIdx = ((Integer)idxS).intValue();
+
+		Object idxS = (Object)session.getAttribute("currentInformationObjectIdx");
+		if (idxS != null) {
+			currentInformationObjectIdx = ((Integer)idxS).intValue();
+		}
+			
+		String submitIndicator = request.getParameter("submitIndicator");
+		log.info("submitIndicator: "+submitIndicator);
+		if (submitIndicator != null && currentInformationObject != null && currentInformationObject instanceof SelectionObject) { // we handle a form submission
+			SelectionObject currentSelectionObject = (SelectionObject)currentInformationObject;
+			String[] selectedOptionIds = request.getParameterValues("selectionRadio");
+			for (SelectionOption option : currentSelectionObject.getOptionList()) {
+				UserSelectedOption userOption = PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
+				boolean foundId = false;
+				for (String optionId: selectedOptionIds) {
+					if (option.getId().equals(optionId)) {
+						foundId = true;
+						break;
+					}
+				}
+				if (!foundId && userOption != null) {
+					PersistentStore.deleteGenericEntity(userOption);
+				} else if (foundId && userOption == null) {
+					userOption = StimulatedPlanningFactory.createUserSelectedOption(user, currentSelectionObject, option);
+					try {
+						PersistentStore.writeDescriptor(userOption);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 			}
-//		}
+		}
+	
 
 		String nextServlet = "/InformationWidget.jsp";
 		if (currentInformationObject != null && currentInformationObject instanceof SelectionObject) {

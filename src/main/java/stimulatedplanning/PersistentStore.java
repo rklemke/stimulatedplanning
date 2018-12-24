@@ -1364,9 +1364,9 @@ public class PersistentStore {
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			Filter userFilter = new FilterPredicate("userid", FilterOperator.EQUAL, user.getId());
 			Filter selectionObjectFilter = new FilterPredicate("selectionObject", FilterOperator.EQUAL, selectionObject.getId());
-			Filter selectionOptionFilter = new FilterPredicate("selectionOption", FilterOperator.EQUAL, selectionOption.getId());
+			Filter selectionOptionFilter = new FilterPredicate("selectedOption", FilterOperator.EQUAL, selectionOption.getId());
 			CompositeFilter userSelectedFilter = CompositeFilterOperator.and(userFilter, selectionObjectFilter, selectionOptionFilter);
-			Query q = new Query(UserPlan.class.getName()).setFilter(userSelectedFilter);
+			Query q = new Query(UserSelectedOption.class.getName()).setFilter(userSelectedFilter);
 			
 			PreparedQuery pq = datastore.prepare(q);
 

@@ -49,8 +49,12 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 		String contentId = request.getParameter("contentId");
 		String contentName = request.getParameter("contentName");
 		log.info("contentId "+contentId+" contentName "+contentName);
-		
-		ContentDescriptor contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
+		ContentDescriptor contentDescriptor = null;
+		if (contentId != null) {
+			contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
+		} else {
+			contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
+		}
 		List<InformationObject> informationObjectList = null;
 		InformationObject currentInformationObject = null;
 		int currentInformationObjectIdx = 0;

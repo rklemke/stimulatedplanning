@@ -69,11 +69,37 @@
 	</div>
 	
 	<div class="column">
+	<form id="selectionForm" method="POST" action="InformationObjectServlet_SoC">
+	<input type="hidden" id="submitIndicator" name="submitIndicator" value="true">
 	<ol id="selectable">
-	<% for (SelectionOption option : currentSelectionObject.getOptionList()) { %>
-	  <li class="ui-widget-content" id="<%= option.getId() %>"><%= option.getTitle() %></li>
+	<% for (SelectionOption option : currentSelectionObject.getOptionList()) { 
+		ArrayList<UserSelectedOption> selectedOptions = new ArrayList<>();
+		UserSelectedOption userSelectedOption = PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
+		int optionCount = 0;
+		int clanSize = 1;
+		boolean isSelected = (userSelectedOption!=null);
+		if (user.isTreatmentGroup()) {
+			selectedOptions = StimulatedPlanningFactory.readClanSelectionOption(user.getClan(), currentSelectionObject, option);
+			optionCount = selectedOptions.size();
+			clanSize = Math.max(clanSize, user.getClan().userCount());
+		}
+	%>
+	  <li class="ui-widget-content" id="li-<%= option.getId() %>">
+    	<input class="selectionOption" type="checkbox" name="selectionRadio" id="so-<%= option.getId() %>" value="<%= option.getId() %>" <% if (isSelected) { %>checked <% } %> >
+	  	<%= option.getTitle() %><%
+		if (user.isTreatmentGroup()) {
+			for (UserSelectedOption selectedOption: selectedOptions) { 
+			%><!-- div class="profiles" style="" -->
+					<a href="#" title= "<%= selectedOption.getUser().getName() %>">
+						<img src="<%= selectedOption.getUser().getAvatarUrl() %>" width="25px" height="25px">
+					</a>
+	      		<!-- /div --><%
+	        } 
+		 } 
+		 %></li>
 	<% } %>
 	</ol>
+	</form>
 	
 	</div><!--column-->
 	

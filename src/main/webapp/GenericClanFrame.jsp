@@ -58,19 +58,9 @@
 			$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC");
 			$("#AW_frameHolder").attr("src","ClanMembers.jsp");
     		<% if (informationObjectList != null) { %>
-    		<%    if (currentInformationObjectIdx > 0) { %>
-    			$("#buttonPrev").on("click", function() {
-    				$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC?currentInformationObjectIdx=<%= currentInformationObjectIdx-1 %>");
-    			});
-    		<%    } %>
     		<%    if (currentInformationObject instanceof SelectionObject) { %>
 				$("#buttonSubmit").on("click", function() {
-					alert("submit");
-					//$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC?nav=prev");
-				});
-    		<%    } else if (currentInformationObjectIdx < informationObjectList.size()-1) { %>
-				$("#buttonNext").on("click", function() {
-					$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC?currentInformationObjectIdx=<%= currentInformationObjectIdx+1 %>");
+					$("#Selection_frameHolder").contents().find('form').submit();
 				});
     		<%    } %>
     		<% } %>
@@ -100,13 +90,14 @@
 		<%    if (currentInformationObjectIdx > 0) { %>
 			<input type="submit" id="buttonPrev" name="buttonPrev" class="ui-button ui-widget ui-corner-all" value="Prev"></input>
 		<%    } %>
-		<%    if (currentInformationObject instanceof SelectionObject) { %>
-			<button id="buttonSubmit" class="ui-button ui-widget ui-corner-all">Submit</button>
-		<%    } else if (currentInformationObjectIdx < informationObjectList.size()-1) { %>
+		<%    if (!(currentInformationObject instanceof SelectionObject) && currentInformationObjectIdx < informationObjectList.size()-1) { %>
 			<input type="submit" id="buttonNext" name="buttonNext" class="ui-button ui-widget ui-corner-all" value="Next"></input>
 		<%    } %>
 		<% } %>
 	</form>
+	<%    if (currentInformationObject instanceof SelectionObject) { %>
+		<button id="buttonSubmit" class="ui-button ui-widget ui-corner-all">Submit</button>
+	<%    } %>
 	</div><!--button Control-->
 	
 	</div><!--columnTwo-->
