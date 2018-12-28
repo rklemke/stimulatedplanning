@@ -71,10 +71,13 @@ public class InformationObjectServlet_SoC extends HttpServlet {
 			for (SelectionOption option : currentSelectionObject.getOptionList()) {
 				UserSelectedOption userOption = PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
 				boolean foundId = false;
-				for (String optionId: selectedOptionIds) {
-					if (option.getId().equals(optionId)) {
-						foundId = true;
-						break;
+				if (selectedOptionIds != null) {
+					for (String optionId: selectedOptionIds) {
+						log.info("option: "+option.getId()+", optionId: "+optionId);
+						if (option.getId().equals(optionId)) {
+							foundId = true;
+							break;
+						}
 					}
 				}
 				if (!foundId && userOption != null) {
