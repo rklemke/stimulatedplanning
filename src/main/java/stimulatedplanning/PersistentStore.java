@@ -19,6 +19,7 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import senseofcommunity.Clan;
 import senseofcommunity.InformationObject;
 import senseofcommunity.SelectionObject;
+import senseofcommunity.SelectionObjectPurpose;
 import senseofcommunity.SelectionObjectType;
 import senseofcommunity.SelectionOption;
 import senseofcommunity.UserOnlineStatus;
@@ -759,6 +760,7 @@ public class PersistentStore {
 			selectionObject.setContent(readStringProperty(genericEntity, "content", null));
 			selectionObject.setSequence(Integer.valueOf(readStringProperty(genericEntity, "sequence", null)));
 			selectionObject.setType(readSelectionObjectType(genericEntity));
+			selectionObject.setPurpose(readSelectionObjectPurpose(genericEntity));
 			relationList = readToManyRelation(selectionObject, "options", SelectionOption.class.getName(), true, cache);
 			for (GenericDescriptor generic : relationList) {
 				selectionObject.addOption((SelectionOption)generic);
@@ -872,6 +874,15 @@ public class PersistentStore {
 			return status;
 		} else {
 			return SelectionObjectType.SINGLE_USER_SELECTION;
+		}
+	}
+	
+	protected static SelectionObjectPurpose readSelectionObjectPurpose(Entity genericEntity) {
+		if (genericEntity.hasProperty("purpose")) {
+			SelectionObjectPurpose status = SelectionObjectPurpose.valueOf((String)genericEntity.getProperty("purpose"));
+			return status;
+		} else {
+			return SelectionObjectPurpose.TEST;
 		}
 	}
 	
@@ -1203,6 +1214,7 @@ public class PersistentStore {
 		try {
 			Entity entity = createInformationObjectEntity(generic);
 			entity.setProperty("type", generic.getType().toString());
+			entity.setProperty("purpose", generic.getPurpose().toString());
 
 			writeToManyRelation(generic, generic.getOptions(), "options", generic.getOptionCount(), true);
 

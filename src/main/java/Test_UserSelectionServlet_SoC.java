@@ -37,8 +37,9 @@ public class Test_UserSelectionServlet_SoC extends HttpServlet {
 			nextServlet = "/Test_UserNavigation_SoC.jsp";
 		} else if (request.getParameter("submitClan") != null) {
 			nextServlet = "/AwarenessFrame.jsp";
-//		} else if (request.getParameter("submitCoping") != null) {
-//			nextServlet = "/CopingPlan.jsp";
+		} else if (request.getParameter("submitChat") != null) {
+			//nextServlet = "/chat/servlet/LoginServlet";
+			nextServlet = "/Test_UserChat_SoC.jsp";
 //		} else if (request.getParameter("submitLearning") != null) {
 //			nextServlet = "/Test_LearningProgress.jsp";
 		}

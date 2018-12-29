@@ -29,6 +29,8 @@
 	  otherClanRecent = otherClan.getRecentUsers().size()+1;
 	  otherClanOffline = otherClan.getOfflineUsers().size()+1;
   }
+  
+  String currentUserId ="";
     
 %>
 
@@ -44,26 +46,29 @@
 </head>
 <body>
    <div class="container" id="AW_myClanFrame">
-      	<% for (UserOnlineStatus status: onlineUsers) { %>
-      		<div class="profiles" style="border-color:lawngreen; background-color:lawngreen;">
-				<a href="#" title= "<%= status.getUser().getName() %>">
-					<img src="<%= status.getUser().getAvatarUrl() %>" width="25px" height="25px">
-				</a>
-      		</div>
+      	<% for (UserOnlineStatus status: onlineUsers) {
+      		currentUserId = "user"+status.getUser().getId();
+      		session.setAttribute(currentUserId, status.getUser());
+      		%><jsp:include page="UserIconDisplay.jspf" >
+    			<jsp:param name="userId" value="<%= currentUserId %>" />
+	   			<jsp:param name="color" value="lawngreen" />
+			 </jsp:include>
        	<% } %>
-       	<% for (UserOnlineStatus status: recentUsers) { %>
-      		<div class="profiles" style="border-color:blue; background-color:blue;">
-				<a href="#" title= "<%= status.getUser().getName() %>">
-					<img src="<%= status.getUser().getAvatarUrl() %>" width="25px" height="25px">
-				</a>
-      		</div>
+       	<% for (UserOnlineStatus status: recentUsers) { 
+      		currentUserId = "user"+status.getUser().getId();
+      		session.setAttribute(currentUserId, status.getUser());
+      		%><jsp:include page="UserIconDisplay.jspf" >
+    			<jsp:param name="userId" value="<%= currentUserId %>" />
+	   			<jsp:param name="color" value="blue" />
+			 </jsp:include>
        	<% } %>
-       	<% for (UserOnlineStatus status: offlineUsers) { %>
-      		<div class="profiles" style="border-color:grey; background-color:grey;">
-				<a href="#" title= "<%= status.getUser().getName() %>">
-					<img src="<%= status.getUser().getAvatarUrl() %>" width="25px" height="25px">
-				</a>
-      		</div>
+       	<% for (UserOnlineStatus status: offlineUsers)  { 
+      		currentUserId = "user"+status.getUser().getId();
+      		session.setAttribute(currentUserId, status.getUser());
+      		%><jsp:include page="UserIconDisplay.jspf" >
+    			<jsp:param name="userId" value="<%= currentUserId %>" />
+	   			<jsp:param name="color" value="grey" />
+			 </jsp:include>
        	<% } %>
 
         </div>

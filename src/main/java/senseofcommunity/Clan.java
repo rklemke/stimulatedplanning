@@ -82,15 +82,15 @@ public class Clan extends InformationObject {
 	}
 	
 	public HashArrayList<UserOnlineStatus> getOnlineUsers() {
-		return getUsersInTimeframe(120, 0);
+		return getUsersInTimeframe(UserOnlineStatus.ONLINE_SECONDS, 0);
 	}
 
 	public HashArrayList<UserOnlineStatus> getRecentUsers() {
-		return getUsersInTimeframe(600, 120);
+		return getUsersInTimeframe(UserOnlineStatus.RECENT_SECONDS, UserOnlineStatus.ONLINE_SECONDS);
 	}
 
 	public HashArrayList<UserOnlineStatus> getOfflineUsers() {
-		return getUsersInTimeframe(0, 600);
+		return getUsersInTimeframe(0, UserOnlineStatus.RECENT_SECONDS);
 	}
 
 	public HashArrayList<UserOnlineStatus> getOnlineUsersSorted(UserOnlineStatus userStatus) {

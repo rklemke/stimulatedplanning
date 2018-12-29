@@ -19,12 +19,15 @@ import com.google.gson.Gson;
 import senseofcommunity.Clan;
 import senseofcommunity.InformationObject;
 import senseofcommunity.SelectionObject;
+import senseofcommunity.SelectionObjectPurpose;
 import senseofcommunity.SelectionObjectType;
 import senseofcommunity.SelectionOption;
 import senseofcommunity.UserOnlineStatus;
 import senseofcommunity.UserSelectedOption;
 import stimulatedplanning.util.HashArrayList;
 import stimulatedplanning.util.UserProfileCVS;
+
+import chat.*;
 
 public class StimulatedPlanningFactory {
 	public static final StimulatedPlanningFactory instance = new StimulatedPlanningFactory();
@@ -247,7 +250,10 @@ public class StimulatedPlanningFactory {
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
 			lesson.addContent(content);
 			
-			SelectionObject sele = new SelectionObject(getUUID(), 
+			SelectionObject sele = generateUserAvatarSelection();
+			content.addInformationObject(sele);
+			
+			sele = new SelectionObject(getUUID(), 
 					"Intro text", 
 					"Intro text", 
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
@@ -275,9 +281,9 @@ public class StimulatedPlanningFactory {
 			
 			sele = new SelectionObject(getUUID(), 
 					"Test", 
-					"Which are correct?", 
+					"Which is correct?", 
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
-			sele.setType(SelectionObjectType.CLAN_MULTI_TEST);
+			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			content.addInformationObject(sele);
 			
 			option = new SelectionOption(getUUID(), 
@@ -373,6 +379,116 @@ public class StimulatedPlanningFactory {
 		}
 		
 		return course;
+	}
+	
+	
+	protected static SelectionObject generateUserAvatarSelection() {
+		String[] userIconFiles = {
+				"001-boy.png",
+				"002-girl.png",
+				"003-boy-1.png",
+				"004-woman.png",
+				"005-boy-2.png",
+				"006-man.png",
+				"007-old-man.png",
+				"008-girl-1.png",
+				"009-man-1.png",
+				"010-policeman.png",
+				"011-girl-2.png",
+				"012-man-2.png",
+				"013-waiter.png",
+				"014-woman-1.png",
+				"015-man-3.png",
+				"016-girl-3.png",
+				"017-man-4.png",
+				"018-girl-4.png",
+				"019-boy-3.png",
+				"020-woman-2.png",
+				"021-girl-5.png",
+				"022-postman.png",
+				"023-girl-6.png",
+				"024-clown.png",
+				"025-woman-3.png",
+				"026-boy-4.png",
+				"027-old-woman.png",
+				"028-santa-claus.png",
+				"029-waitress.png",
+				"030-man-5.png",
+				"031-man-6.png",
+				"032-burglar.png",
+				"033-woman-4.png",
+				"034-man-7.png",
+				"035-man-8.png",
+				"036-man-9.png",
+				"037-old-woman-1.png",
+				"038-man-10.png",
+				"039-woman-5.png",
+				"040-boy-5.png",
+				"041-woman-6.png",
+				"042-boy-6.png",
+				"043-girl-7.png",
+				"044-boy-7.png",
+				"045-builder.png",
+				"046-man-11.png",
+				"047-woman-7.png",
+				"048-boy-8.png",
+				"049-man-12.png",
+				"050-woman-8.png",
+				"001-man-13.png",
+				"002-woman-14.png",
+				"003-woman-13.png",
+				"004-woman-12.png",
+				"005-woman-11.png",
+				"006-woman-10.png",
+				"007-woman-9.png",
+				"008-woman-8.png",
+				"009-woman-7.png",
+				"010-woman-6.png",
+				"011-woman-5.png",
+				"012-woman-4.png",
+				"013-woman-3.png",
+				"014-man-12.png",
+				"015-man-11.png",
+				"016-man-10.png",
+				"017-man-9.png",
+				"018-man-8.png",
+				"019-man-7.png",
+				"020-man-6.png",
+				"021-man-5.png",
+				"022-man-4.png",
+				"023-man-3.png",
+				"024-man-2.png",
+				"025-man-1.png",
+				"026-man.png",
+				"027-boy-6.png",
+				"028-boy-5.png",
+				"029-boy-4.png",
+				"030-boy-3.png",
+				"031-boy-2.png",
+				"032-boy-1.png",
+				"033-boy.png",
+				"034-woman-2.png",
+				"035-woman-1.png",
+				"036-woman.png"
+			};
+		
+		SelectionObject sele = new SelectionObject(getUUID(), 
+				"Select your avatar", 
+				"Select your avatar", 
+				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+		sele.setType(SelectionObjectType.SINGLE_USER_SELECTION);
+		sele.setPurpose(SelectionObjectPurpose.USER_AVATAR);
+		
+		SelectionOption option = null;
+		for (String url : userIconFiles) {
+			option = new SelectionOption(getUUID(), 
+					url, 
+					url, 
+					"/img/profile/"+url);
+			sele.addOption(option);
+		}
+		
+		return sele;
 	}
 
 	/**
@@ -981,6 +1097,40 @@ public class StimulatedPlanningFactory {
 			e.printStackTrace();
 		}
 		return selectedOptions;
+	}
+	
+	
+	private HashMap<String, ChatRoomList> chatRoomListMap = new HashMap<>();
+	public static ChatRoomList getChatRoomListForUser(User user) {
+		ChatRoomList list = null;
+		String title = null;
+		if (user != null && user.isTreatmentGroup()) {
+			title = user.getClan().getTitle();
+			list = instance.chatRoomListMap.get(title);
+			if (list == null) {
+				log.info("create new chat room list for: "+title);
+				list = new ChatRoomList();
+				list.addRoom(new ChatRoom(title+": I need help", "Ask your peers for help."));
+				list.addRoom(new ChatRoom(title+": I need a challenge", "Tackle challenges together"));
+				list.addRoom(new ChatRoom(title+": I need a teacher", "Ask your teacher for support"));
+				list.addRoom(new ChatRoom(title+": Just want to chat", "Open chat, but follow the rules"));
+				list.addRoom(new ChatRoom("StartUp", "Startup chat room. Chatter is added to this after he logs in."));
+				instance.chatRoomListMap.put(title, list);
+			}
+		} else {
+			title = "control";
+			list = instance.chatRoomListMap.get(title);
+			if (list == null) {
+				log.info("create new chat room list for: "+title);
+				list = new ChatRoomList();
+				list.addRoom(new ChatRoom("I need help", "Ask your peers for help."));
+				list.addRoom(new ChatRoom("I need a teacher", "Ask your teacher for support"));
+				list.addRoom(new ChatRoom("Just want to chat", "Open chat, but follow the rules"));
+				list.addRoom(new ChatRoom("StartUp", "Startup chat room. Chatter is added to this after he logs in."));
+				instance.chatRoomListMap.put(title, list);
+			}
+		}
+		return list;
 	}
 
 	

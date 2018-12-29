@@ -15,6 +15,8 @@
   int otherClanRecent = 0;
   int otherClanOffline = 0;
   
+  String currentUserId = "";
+  
   HashArrayList<UserOnlineStatus> onlineUsers = new HashArrayList<>();
   HashArrayList<UserOnlineStatus> recentUsers = new HashArrayList<>();
   HashArrayList<UserOnlineStatus> offlineUsers = new HashArrayList<>();
@@ -38,7 +40,12 @@
   if (idxS != null) {
 	  currentInformationObjectIdx = ((Integer)idxS).intValue();
   }
-  
+
+	String checkboxType = "radio";
+	if (currentSelectionObject.isMultipleChoiceTest() || currentSelectionObject.isMultiVoting()) {
+		checkboxType = "checkbox";
+	}
+
 %>
 
 
@@ -47,6 +54,7 @@
 <head>
     <title>Selection Widget</title>
     <link rel="stylesheet" href="css/SelectionWidgetStyling.css">
+    <link rel="stylesheet" href="css/ClanMembersStyling.css">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!-- link rel="stylesheet" href="css/jquery-ui.css"  -->
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -83,17 +91,22 @@
 			optionCount = selectedOptions.size();
 			clanSize = Math.max(clanSize, user.getClan().userCount());
 		}
+		
 	%>
 	  <li class="ui-widget-content" id="li-<%= option.getId() %>">
-    	<input class="selectionOption" type="checkbox" name="selectionRadio" id="so-<%= option.getId() %>" value="<%= option.getId() %>" <% if (isSelected) { %>checked <% } %> >
-	  	<%= option.getTitle() %><%
-		if (user.isTreatmentGroup()) {
+    	<input class="selectionOption" type="<%= checkboxType %>" name="selectionRadio" id="so-<%= option.getId() %>" value="<%= option.getId() %>" <% if (isSelected) { %>checked <% } %> >
+    	<% if (currentSelectionObject.isAvatarPurpose()) { %>
+    	<img src="<%= option.getUrl() %>" width="25" height="25">
+    	<% } else { %>
+	  	<%= option.getTitle() %>
+	  	<% } %><%
+		if (user.isTreatmentGroup() && currentSelectionObject.isClan()) {
 			for (UserSelectedOption selectedOption: selectedOptions) { 
-			%><!-- div class="profiles" style="" -->
-					<a href="#" title= "<%= selectedOption.getUser().getName() %>">
-						<img src="<%= selectedOption.getUser().getAvatarUrl() %>" width="25px" height="25px">
-					</a>
-	      		<!-- /div --><%
+	      		currentUserId = "user"+selectedOption.getUser().getId();
+	      		session.setAttribute(currentUserId, selectedOption.getUser());
+			%><jsp:include page="UserIconDisplay.jspf" >
+    			<jsp:param name="userId" value="<%= currentUserId %>" />
+			 </jsp:include><%
 	        } 
 		 } 
 		 %></li>

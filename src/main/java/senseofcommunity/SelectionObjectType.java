@@ -3,8 +3,9 @@ package senseofcommunity;
 public enum SelectionObjectType {
 	SINGLE_USER_SELECTION, 
 	SINGLE_USER_SINGLE_TEST, 
-	SINGLE_USER_MULIT_TEST, 
+	SINGLE_USER_MULTI_TEST, 
 	CLAN_SELECTION, 
 	CLAN_SINGLE_TEST, 
 	CLAN_MULTI_TEST;
 }
+
