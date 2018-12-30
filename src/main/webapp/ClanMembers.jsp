@@ -45,34 +45,9 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
-   <div class="container" id="AW_myClanFrame">
-      	<% for (UserOnlineStatus status: onlineUsers) {
-      		currentUserId = "user"+status.getUser().getId();
-      		session.setAttribute(currentUserId, status.getUser());
-      		%><jsp:include page="UserIconDisplay.jspf" >
-    			<jsp:param name="userId" value="<%= currentUserId %>" />
-	   			<jsp:param name="color" value="lawngreen" />
-			 </jsp:include>
-       	<% } %>
-       	<% for (UserOnlineStatus status: recentUsers) { 
-      		currentUserId = "user"+status.getUser().getId();
-      		session.setAttribute(currentUserId, status.getUser());
-      		%><jsp:include page="UserIconDisplay.jspf" >
-    			<jsp:param name="userId" value="<%= currentUserId %>" />
-	   			<jsp:param name="color" value="blue" />
-			 </jsp:include>
-       	<% } %>
-       	<% for (UserOnlineStatus status: offlineUsers)  { 
-      		currentUserId = "user"+status.getUser().getId();
-      		session.setAttribute(currentUserId, status.getUser());
-      		%><jsp:include page="UserIconDisplay.jspf" >
-    			<jsp:param name="userId" value="<%= currentUserId %>" />
-	   			<jsp:param name="color" value="grey" />
-			 </jsp:include>
-       	<% } %>
-
-        </div>
-
+	<div class="container" id="AW_myClanFrame">
+		<jsp:include page="ClanMembersPart.jspf" />
+	</div>
 </body>
  <% } %>
 </html>

@@ -214,6 +214,12 @@ public class StimulatedPlanningFactory {
 					testCourseBaseURL+"courseware/4cb17259b1024410901476642c28df19/1ff9b47cae3b4d51bbfa22b458c4a25d/");
 			content.addInformationObject(info);
 
+			SelectionObject sele = generateUserAvatarSelection();
+			content.addInformationObject(sele);
+			
+			sele = generateClanLogoSelection();
+			content.addInformationObject(sele);
+			
 			info = new InformationObject(getUUID(), 
 					"Additional text", 
 					"Additional text", 
@@ -250,14 +256,12 @@ public class StimulatedPlanningFactory {
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
 			lesson.addContent(content);
 			
-			SelectionObject sele = generateUserAvatarSelection();
-			content.addInformationObject(sele);
-			
 			sele = new SelectionObject(getUUID(), 
 					"Intro text", 
 					"Intro text", 
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 			sele.setType(SelectionObjectType.CLAN_SELECTION);
+			sele.setPurpose(SelectionObjectPurpose.CLAN_IDENTITY);
 			//content311.addSelectionObject(sele3111);
 			content.addInformationObject(sele);
 			
@@ -284,6 +288,7 @@ public class StimulatedPlanningFactory {
 					"Which is correct?", 
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
+			sele.setPurpose(SelectionObjectPurpose.TEST);
 			content.addInformationObject(sele);
 			
 			option = new SelectionOption(getUUID(), 
@@ -319,6 +324,7 @@ public class StimulatedPlanningFactory {
 					"Which are also correct?", 
 					testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 			sele.setType(SelectionObjectType.CLAN_MULTI_TEST);
+			sele.setPurpose(SelectionObjectPurpose.TEST);
 			content.addInformationObject(sele);
 			
 			option = new SelectionOption(getUUID(), 
@@ -490,6 +496,40 @@ public class StimulatedPlanningFactory {
 		
 		return sele;
 	}
+
+	protected static SelectionObject generateClanLogoSelection() {
+		String[] clanLogoFiles = {
+				"001-hacker.png",
+				"003-smartphone.png",
+				"006-cctv.png",
+				"009-email.png",
+				"011-fingerprint-scan.png",
+				"012-bitcoin.png",
+				"017-hacker-1.png",
+				"018-hacker-2.png",
+				"032-server.png",
+				"035-pendrive.png"
+			};
+		
+		SelectionObject sele = new SelectionObject(getUUID(), 
+				"Select your clan logo", 
+				"Select your clan logo", 
+				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
+		sele.setType(SelectionObjectType.CLAN_SELECTION);
+		sele.setPurpose(SelectionObjectPurpose.CLAN_AVATAR);
+		
+		SelectionOption option = null;
+		for (String url : clanLogoFiles) {
+			option = new SelectionOption(getUUID(), 
+					url, 
+					url, 
+					"/img/clan/"+url);
+			sele.addOption(option);
+		}
+		
+		return sele;
+	}
+
 
 	/**
 	 * generate the structure for the course to be used according to Sandbox structure.

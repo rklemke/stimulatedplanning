@@ -1,6 +1,7 @@
 package senseofcommunity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -95,13 +96,30 @@ public class SelectionObject extends InformationObject {
 	public boolean isUserAvatarPurpose() {
 		return purpose == SelectionObjectPurpose.USER_AVATAR;
 	}
+	public boolean isUserIdentityPurpose() {
+		return purpose == SelectionObjectPurpose.USER_IDENTITY;
+	}
 	public boolean isClanAvatarPurpose() {
 		return purpose == SelectionObjectPurpose.CLAN_AVATAR;
 	}
 	public boolean isClanIdentityPurpose() {
 		return purpose == SelectionObjectPurpose.CLAN_IDENTITY;
 	}
-
+	
+	
+	protected Date deadline;
+	public Date getDeadline() {
+		return deadline;
+	}
+	public void setDeadline(Date deadline) {
+		this.deadline = deadline;
+	}
+	public boolean hasDeadline() {
+		return deadline != null;
+	}
+	public boolean isExpired() {
+		return hasDeadline() && new Date().after(deadline);
+	}
 
 	public void clearSelectionForUser(User user) {
 		UserSelectedOption selectedOption;
@@ -118,6 +136,22 @@ public class SelectionObject extends InformationObject {
 		for (SelectionOption option : selection) {
 			StimulatedPlanningFactory.createUserSelectedOption(user, this, option);
 		}
+	}
+	
+	
+	public SelectionOption getClanPreferredOption(Clan clan) {
+		int max = 0;
+		SelectionOption selected = null;
+		ArrayList<UserSelectedOption> selectedOptions;
+
+		for (SelectionOption option: options) {
+			selectedOptions = StimulatedPlanningFactory.readClanSelectionOption(clan, this, option);
+			if (selectedOptions.size() > max) {
+				max = selectedOptions.size();
+				selected = option;
+			}
+		}
+		return selected;
 	}
 
 

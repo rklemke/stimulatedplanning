@@ -1,6 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*" %>
+<%@ page 
+	language="java" 
+	contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"
+	import="stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*" %>
 <%
   session = StimulatedPlanningFactory.initializeSession(request, response);
 
@@ -45,6 +47,8 @@
 	if (currentSelectionObject.isMultipleChoiceTest() || currentSelectionObject.isMultiVoting()) {
 		checkboxType = "checkbox";
 	}
+	
+	boolean isExpired = currentSelectionObject.isExpired();
 
 %>
 
@@ -61,7 +65,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
 	$(document).ready(function () {
-		  $( "#selectable" ).selectable();
+		  $(".selectionOption").checkboxRadio();
 	});
 
 	</script>
@@ -73,7 +77,7 @@
 	<div class="container">
 	
 	<div style="display: inline-block; text-align: center; width: 98%; height: 10%">
-	<strong style=" font-size: 24px">Help your clan to find your identity!</strong>
+	<strong style=" font-size: 24px"><%= currentSelectionObject.getTitle() %></strong>
 	</div>
 	
 	<div class="column">
@@ -94,12 +98,20 @@
 		
 	%>
 	  <li class="ui-widget-content" id="li-<%= option.getId() %>">
-    	<input class="selectionOption" type="<%= checkboxType %>" name="selectionRadio" id="so-<%= option.getId() %>" value="<%= option.getId() %>" <% if (isSelected) { %>checked <% } %> >
-    	<% if (currentSelectionObject.isAvatarPurpose()) { %>
+    	<input 
+    		class="selectionOption" 
+    		type="<%= checkboxType %>" 
+    		name="selectionRadio" 
+    		id="so-<%= option.getId() %>" 
+    		value="<%= option.getId() %>" 
+    		<% if (isSelected) { %>checked <% } %> 
+    		<% if (isExpired) { %>disabled <% } %> 
+    	>
+    	<label for="so-<%= option.getId() %>"><% if (currentSelectionObject.isAvatarPurpose()) { %>
     	<img src="<%= option.getUrl() %>" width="25" height="25">
     	<% } else { %>
 	  	<%= option.getTitle() %>
-	  	<% } %><%
+	  	<% } %></label><%
 		if (user.isTreatmentGroup() && currentSelectionObject.isClan()) {
 			for (UserSelectedOption selectedOption: selectedOptions) { 
 	      		currentUserId = "user"+selectedOption.getUser().getId();

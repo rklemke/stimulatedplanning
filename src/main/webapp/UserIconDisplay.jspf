@@ -7,7 +7,7 @@
   session = request.getSession();
   String userId = request.getParameter("userId");
   User user = (User)session.getAttribute(userId);
-  String color = request.getParameter("userId");
+  String color = request.getParameter("color");
   if (color == null) {
 	  UserOnlineStatus status = user.getOnlineStatus();
 	  if (status.isOnline()) color = "lawngreen";

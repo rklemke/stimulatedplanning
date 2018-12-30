@@ -90,7 +90,7 @@
 		<%    if (currentInformationObjectIdx > 0) { %>
 			<input type="submit" id="buttonPrev" name="buttonPrev" class="ui-button ui-widget ui-corner-all" value="Prev"></input>
 		<%    } %>
-		<%    if (!(currentInformationObject instanceof SelectionObject) && currentInformationObjectIdx < informationObjectList.size()-1) { %>
+		<%    if (/*!(currentInformationObject instanceof SelectionObject) && */currentInformationObjectIdx < informationObjectList.size()-1) { %>
 			<input type="submit" id="buttonNext" name="buttonNext" class="ui-button ui-widget ui-corner-all" value="Next"></input>
 		<%    } %>
 		<% } %>

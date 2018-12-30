@@ -13,9 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import senseofcommunity.Clan;
 import senseofcommunity.InformationObject;
 import senseofcommunity.SelectionObject;
 import senseofcommunity.SelectionOption;
+import senseofcommunity.UserOnlineStatus;
 import senseofcommunity.UserSelectedOption;
 import stimulatedplanning.ContentDescriptor;
 import stimulatedplanning.CourseDescriptor;
@@ -80,6 +82,8 @@ public class InformationObjectServlet_SoC extends HttpServlet {
 						}
 					}
 				}
+				
+				// checking and storing the selection
 				if (!foundId && userOption != null) {
 					PersistentStore.deleteGenericEntity(userOption);
 				} else if (foundId && userOption == null) {
@@ -88,6 +92,56 @@ public class InformationObjectServlet_SoC extends HttpServlet {
 						PersistentStore.writeDescriptor(userOption);
 					} catch (Exception e) {
 						e.printStackTrace();
+					}
+				}
+				
+				// checking and storing effects for special purpose cases
+				if (foundId && userOption != null && currentSelectionObject.isUserAvatarPurpose()) {
+					user.setAvatarUrl(userOption.getSelectedOption().getUrl());
+					log.info("user "+user.getName()+" gets avatar "+userOption.getSelectedOption().getUrl());
+					try {
+						PersistentStore.writeUser(user);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else if (foundId && userOption != null && currentSelectionObject.isUserIdentityPurpose()) {
+					UserOnlineStatus status = user.getOnlineStatus();
+					status.setTitle(userOption.getSelectedOption().getTitle());
+					status.setDescription(userOption.getSelectedOption().getDescription());
+					log.info("user "+user.getName()+" gets identity "+userOption.getSelectedOption().getTitle());
+					try {
+						PersistentStore.writeDescriptor(status);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else if (currentSelectionObject.isClanAvatarPurpose()) {
+					if (user.isTreatmentGroup()) {
+						Clan clan = user.getClan();
+						SelectionOption preferredOption = currentSelectionObject.getClanPreferredOption(clan);
+						if (preferredOption != null) {
+							clan.setClanLogo(preferredOption.getUrl());
+							log.info("clan "+clan.getTitle()+" gets icon "+preferredOption.getUrl());
+							try {
+								PersistentStore.writeDescriptor(clan);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				} else if (currentSelectionObject.isClanIdentityPurpose()) {
+					if (user.isTreatmentGroup()) {
+						Clan clan = user.getClan();
+						SelectionOption preferredOption = currentSelectionObject.getClanPreferredOption(clan);
+						if (preferredOption != null) {
+							log.info("clan "+clan.getTitle()+" will be updated to "+preferredOption.getTitle());
+							clan.setTitle(preferredOption.getTitle());
+							clan.setDescription(preferredOption.getDescription());
+							try {
+								PersistentStore.writeDescriptor(clan);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
 					}
 				}
 			}
