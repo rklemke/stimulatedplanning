@@ -46,7 +46,7 @@
 </head>
 <body>
 	<div class="container" id="AW_myClanFrame">
-		<jsp:include page="ClanMembersPart.jspf" />
+		<jsp:include page="ClanMembersPart.jsp" />
 	</div>
 </body>
  <% } %>

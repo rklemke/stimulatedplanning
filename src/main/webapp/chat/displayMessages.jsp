@@ -163,7 +163,7 @@ function winopen(path)
 	{
   		currentUserId = "user"+chatters[i].getUser().getId();
   		session.setAttribute(currentUserId, chatters[i].getUser());
-  		%><jsp:include page="/UserIconDisplay.jspf" >
+  		%><jsp:include page="/UserIconDisplay.jsp" >
 			<jsp:param name="userId" value="<%= currentUserId %>" />
 		 </jsp:include>
    	<% }

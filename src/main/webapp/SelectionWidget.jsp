@@ -134,7 +134,7 @@
 			for (UserSelectedOption selectedOption: selectedOptions) { 
 	      		currentUserId = "user"+selectedOption.getUser().getId();
 	      		session.setAttribute(currentUserId, selectedOption.getUser());
-			%><jsp:include page="UserIconDisplay.jspf" >
+			%><jsp:include page="UserIconDisplay.jsp" >
     			<jsp:param name="userId" value="<%= currentUserId %>" />
 			 </jsp:include><%
 	        } 

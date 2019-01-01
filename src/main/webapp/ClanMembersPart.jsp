@@ -33,7 +33,7 @@
 		if (!excludeSelf || !(user.getId().equals(status.getUser().getId()))) {
 			currentUserId = "user"+status.getUser().getId();
 			session.setAttribute(currentUserId, status.getUser());
-			%><jsp:include page="UserIconDisplay.jspf" >
+			%><jsp:include page="UserIconDisplay.jsp" >
 			<jsp:param name="userId" value="<%= currentUserId %>" />
 			</jsp:include><% 
 		}
@@ -42,7 +42,7 @@
 		if (!excludeSelf || !(user.getId().equals(status.getUser().getId()))) {
 			currentUserId = "user"+status.getUser().getId();
 			session.setAttribute(currentUserId, status.getUser());
-			%><jsp:include page="UserIconDisplay.jspf" >
+			%><jsp:include page="UserIconDisplay.jsp" >
 			<jsp:param name="userId" value="<%= currentUserId %>" />
 			</jsp:include><% 
 		}
@@ -51,7 +51,7 @@
 		if (!excludeSelf || !(user.getId().equals(status.getUser().getId()))) {
 			currentUserId = "user"+status.getUser().getId();
 			session.setAttribute(currentUserId, status.getUser());
-			%><jsp:include page="UserIconDisplay.jspf" >
+			%><jsp:include page="UserIconDisplay.jsp" >
 			<jsp:param name="userId" value="<%= currentUserId %>" />
 			</jsp:include><% 
 		}
