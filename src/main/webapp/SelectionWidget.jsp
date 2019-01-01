@@ -84,7 +84,25 @@
 	<form id="selectionForm" method="POST" action="InformationObjectServlet_SoC">
 	<input type="hidden" id="submitIndicator" name="submitIndicator" value="true">
 	<ol id="selectable">
-	<% for (SelectionOption option : currentSelectionObject.getOptionList()) { 
+	<% 
+	List<SelectionOption> options = currentSelectionObject.getOptionList();
+	if (currentSelectionObject.isClanIdentityPurpose()) {
+		ArrayList<SelectionOption> temp = new ArrayList<>();
+		if (userClan != null) {
+			if (Clan.CLAN_1_ID.equals(userClan.getId())) {
+				for (int i=0; i<options.size()/2; i++) {
+					temp.add(options.get(i));
+				}
+				options = temp;
+			} else if (Clan.CLAN_2_ID.equals(userClan.getId())) {
+				for (int i=options.size()/2; i<options.size(); i++) {
+					temp.add(options.get(i));
+				}
+				options = temp;
+			}
+		}
+	}
+	for (SelectionOption option : options) { 
 		ArrayList<UserSelectedOption> selectedOptions = new ArrayList<>();
 		UserSelectedOption userSelectedOption = PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
 		int optionCount = 0;

@@ -90,7 +90,7 @@ public class PersistentStore {
 				user.setTreatmentGroup(readBooleanProperty(userEntity, "treatmentGroup", StimulatedPlanningFactory.random.nextBoolean()));
 				if (user.isTreatmentGroup()) {
 					//Clan clan = (Clan)StimulatedPlanningFactory.getObject(readStringProperty(userEntity, "clan", null));
-					Clan clan = (Clan)readDescriptor(Clan.class.getName(), readStringProperty(userEntity, "clan", null), cache);
+					Clan clan = (Clan)readDescriptor(Clan.class.getName(), readStringProperty(userEntity, "clan", null), cache, null);
 					user.setClan(clan);
 				}
 				UserOnlineStatus onlineStatus = (UserOnlineStatus)readUserOnlineStatus(readStringProperty(userEntity, "onlineStatus", null), user, cache);
@@ -165,18 +165,21 @@ public class PersistentStore {
 		return entity;
 	}
 
-	protected static GenericDescriptor readDescriptor(String type, String id, HashMap<String, Object> cache) throws Exception {
+	protected static GenericDescriptor readDescriptor(String type, String id, HashMap<String, Object> cache, Entity retrievedEntity) throws Exception {
 		log.info("readDescriptor: "+type+", "+id);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		Entity genericEntity = null;
+		Entity genericEntity = retrievedEntity;
 
-		try {
-			genericEntity = datastore.get(KeyFactory.createKey(type, id));
-		} catch (Exception e) {
-			e.printStackTrace();
-			genericEntity = null;
+		if (genericEntity == null) {
+			try {
+				genericEntity = datastore.get(KeyFactory.createKey(type, id));
+			} catch (Exception e) {
+				e.printStackTrace();
+				genericEntity = null;
+			}			
 		}
+		
 		if (genericEntity != null) {
 			if (CourseDescriptor.class.getName().equals(type)) {
 				return readCourseDescriptor(genericEntity, cache);
@@ -262,7 +265,7 @@ public class PersistentStore {
 	public static CourseDescriptor readCourse(String id) {
 		CourseDescriptor course = null;
 		try {
-			course = (CourseDescriptor)readDescriptor(CourseDescriptor.class.getName(), id, new HashMap<String, Object>());
+			course = (CourseDescriptor)readDescriptor(CourseDescriptor.class.getName(), id, new HashMap<String, Object>(), null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -561,7 +564,7 @@ public class PersistentStore {
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
 				log.info("read userPlan for "+user.getName()+", "+id);
-				plan = (UserPlan)readDescriptor(UserPlan.class.getName(), id, new HashMap<String, Object>());
+				plan = (UserPlan)readDescriptor(UserPlan.class.getName(), id, new HashMap<String, Object>(), result);
 			}
 			
 		} catch (Exception e) {
@@ -806,7 +809,7 @@ public class PersistentStore {
 	
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
-				profile = (UserProfile)readDescriptor(UserProfile.class.getName(), id, new HashMap<String, Object>());
+				profile = (UserProfile)readDescriptor(UserProfile.class.getName(), id, new HashMap<String, Object>(), result);
 				profiles.add(profile);
 			}
 			
@@ -898,7 +901,7 @@ public class PersistentStore {
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
 				log.info("read userPlan for "+user.getName()+", "+id);
-				onlineStatus = (UserOnlineStatus)readDescriptor(UserOnlineStatus.class.getName(), id, new HashMap<String, Object>());
+				onlineStatus = (UserOnlineStatus)readDescriptor(UserOnlineStatus.class.getName(), id, new HashMap<String, Object>(), result);
 			}
 			
 		} catch (Exception e) {
@@ -955,6 +958,27 @@ public class PersistentStore {
 
 	}
 	
+	public static HashArrayList<Clan> readAllClans() {
+		HashArrayList<Clan> clans = new HashArrayList<Clan>();
+		Clan clan = null;
+		try {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			Query q = new Query(Clan.class.getName());
+			
+			PreparedQuery pq = datastore.prepare(q);
+
+			for (Entity result : pq.asIterable()) {
+				String id = (String) result.getProperty("uid");
+				clan = (Clan)readDescriptor(Clan.class.getName(), id, new HashMap<String, Object>(), result);
+				clans.add(clan);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return clans;
+	}
+
 	public static void writeDescriptor(Clan generic) throws Exception {
 		//log.info("writeDescriptor (Clan): "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -974,27 +998,6 @@ public class PersistentStore {
 
 	}
 
-
-	public static HashArrayList<Clan> readAllClans() {
-		HashArrayList<Clan> clans = new HashArrayList<Clan>();
-		Clan clan = null;
-		try {
-			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-			Query q = new Query(Clan.class.getName());
-			
-			PreparedQuery pq = datastore.prepare(q);
-
-			for (Entity result : pq.asIterable()) {
-				String id = (String) result.getProperty("uid");
-				clan = (Clan)readDescriptor(Clan.class.getName(), id, new HashMap<String, Object>());
-				clans.add(clan);
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return clans;
-	}
 
 
 
@@ -1136,7 +1139,7 @@ public class PersistentStore {
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
 				//log.info("read userPlan for "+user.getName()+", "+id);
-				selectedOption = (UserSelectedOption)readDescriptor(UserSelectedOption.class.getName(), id, new HashMap<String, Object>());
+				selectedOption = (UserSelectedOption)readDescriptor(UserSelectedOption.class.getName(), id, new HashMap<String, Object>(), result);
 			}
 			
 		} catch (Exception e) {
@@ -1419,7 +1422,7 @@ public class PersistentStore {
 					size = sizen;
 				}
 				
-				GenericDescriptor generic = readDescriptor(targetClass, targetId, cache);
+				GenericDescriptor generic = readDescriptor(targetClass, targetId, cache, null);
 				if (generic != null) {
 					arrayList.add(generic);
 				} else {

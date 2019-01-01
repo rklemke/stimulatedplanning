@@ -11,6 +11,8 @@ import stimulatedplanning.util.HashArrayList;
 
 public class Clan extends InformationObject {
 
+	public static final String CLAN_1_ID = "clan-1";
+	public static final String CLAN_2_ID = "clan-2";
 
 	public Clan() {
 		// TODO Auto-generated constructor stub
