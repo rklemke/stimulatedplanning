@@ -5,6 +5,7 @@ public enum SelectionObjectPurpose {
 	USER_AVATAR, 
 	USER_IDENTITY, 
 	CLAN_AVATAR,
-	CLAN_IDENTITY;
+	CLAN_IDENTITY,
+	CLAN_VOTING;
 }
 
