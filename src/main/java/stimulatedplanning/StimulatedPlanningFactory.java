@@ -1298,13 +1298,21 @@ public class StimulatedPlanningFactory {
 			user = new User(userName, userid);
 			UserOnlineStatus status = getUserOnlineStatus(user);
 			user.setOnlineStatus(status);
-			user.setTreatmentGroup(random.nextBoolean());
+			boolean treatment = random.nextFloat() > 0.4; // (60% treatment, 40% control)
+			user.setTreatmentGroup(treatment);
 			if (user.isTreatmentGroup()) {
 				if (instance.clans.size()==0) {
 					getOrGenerateClans();
 				}
 				if (instance.clans.size()>0) {
 					int clanNumber = random.nextInt(instance.clans.size());
+					if (instance.clans.size()>1) { // don't allow one clan to grow too fast
+						if (instance.clans.get(0).userCount() > instance.clans.get(1).userCount()+1) {
+							clanNumber = 1;
+						} else if (instance.clans.get(1).userCount() > instance.clans.get(0).userCount()+1) {
+							clanNumber = 0;
+						}
+					}
 					Clan clan = instance.clans.get(clanNumber);
 					clan.addUser(user);
 					user.setClan(clan);
@@ -1539,14 +1547,14 @@ public class StimulatedPlanningFactory {
 		}
 		
 		// TODO: update user plan based on event, if it is of logType "track"
-		if ("track".equals(logType)) {
+		if ("track".equals(logType) || "trackClan".equals(logType)) {
 			String activityType = request.getParameter("activityType");
 			if (activityType == null) {
 				activityType = StimulatedPlanningFactory.ACTIVITY_TYPE_ACCESS;
 			}
 			String page = request.getParameter("page");
 			if (page != null) {
-				if (userPlan.trackLearningProgress(page, activityType)) {
+				if ("track".equals(logType) && userPlan.trackLearningProgress(page, activityType)) {
 					try {
 						PersistentStore.writeDescriptor(userPlan);
 					} catch (Exception e) {
@@ -1554,8 +1562,12 @@ public class StimulatedPlanningFactory {
 					}
 				}
 				// RK: addition for SoC experiment
-				if (user.getOnlineStatus() != null) {
+				if ("trackClan".equals(logType) && user.getOnlineStatus() != null) {
 					user.getOnlineStatus().updateOnlineStatus(page, course.indexInCourse(page));
+					if (user.isTreatmentGroup()) {
+						Clan clan = user.getClan();
+						clan.updateUserOnlineStatus(user.getOnlineStatus());
+					}
 					try {
 						PersistentStore.writeDescriptor(user.getOnlineStatus());
 					} catch (Exception e) {

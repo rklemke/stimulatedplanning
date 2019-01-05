@@ -47,6 +47,10 @@ public class Clan extends InformationObject {
 		userStati.add(status);
 	}
 
+	public void updateUserOnlineStatus(UserOnlineStatus status) {
+		userStati.addOrReplace(status);
+	}
+
 	public ListIterator<UserOnlineStatus> getUserOnlineStatus() {
 		return userStati.listIterator();
 	}

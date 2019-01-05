@@ -49,7 +49,11 @@ public class DataTrackerServlet extends HttpServlet {
 		
 		
 		try {
-			StimulatedPlanningFactory.trackAndLogEvent(request, response, "track");
+			String logType = "track";
+			if (request.getParameter("logType") != null) {
+				logType = request.getParameter("logType");
+			}
+			StimulatedPlanningFactory.trackAndLogEvent(request, response, logType);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
