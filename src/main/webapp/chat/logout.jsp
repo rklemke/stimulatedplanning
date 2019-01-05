@@ -38,7 +38,7 @@
 		//ChatRoomList roomlist = (ChatRoomList) application.getAttribute("chatroomlist");
 		ChatRoomList roomlist = StimulatedPlanningFactory.getChatRoomListForUser(user);
 		ChatRoom chatRoom = roomlist.getRoomOfChatter(nickname);
-		chatRoom.addMessage(new Message("system", nickname + " has logged out.", new java.util.Date().getTime()));
+		chatRoom.addMessage(new Message(null, nickname + " has logged out.", new java.util.Date().getTime()));
 		if ( chatRoom != null)
 		{
 			chatRoom.removeChatter(nickname);

@@ -30,12 +30,19 @@
 <HTML>
 <HEAD>
 <TITLE>Cryptography Chat - <%=nickname%> (<%=roomname%>) </TITLE>
+<link rel="stylesheet" type="text/css" href="/css/chat/chat.css">
 </HEAD>
-<!-- TODO: replace with iframes? -->
-<FRAMESET rows="80%,20%">
-<FRAME SRC="displayMessages.jsp#current" name="MessageWin">
-<FRAME SRC="sendMessage.jsp" name="TypeWin">
-</FRAMESET>
+<div class="container">
+<div>
+<iframe SRC="displayMessages.jsp#current" name="MessageWin" style="width:100%; height:84%;"></iframe>
+</div>
+
+<div>
+<iframe SRC="sendMessage.jsp" name="TypeWin" style="width:100%; height:16%;margin-top: 0.2em;"></iframe>
+</div>
+
+</div><!-- container -->
+
 <NOFRAMES>
 <H2>This chat rquires a browser with frames support</h2>
 </NOFRAMES>
