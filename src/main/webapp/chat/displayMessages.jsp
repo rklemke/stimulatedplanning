@@ -1,5 +1,7 @@
 <%@ page isErrorPage="false" errorPage="error.jsp" import="java.text.DateFormat,chat.*, stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*" %>
 <%
+	System.out.println("displayMessages: 0.1");
+
   session = StimulatedPlanningFactory.initializeSession(request, response);
   User user = (User)session.getAttribute("user");
   UserOnlineStatus userStatus = user.getOnlineStatus();
@@ -19,10 +21,11 @@
   
 	String roonName = null;
 	String nickname = user.getName();
+	String userId = user.getId();
 	//String nickname = (String)session.getAttribute("nickname");
 	ChatRoomList roomList = null;
 	ChatRoom chatRoom = null;
-	Chatter chatter = null;
+	User chatter = null;
 	Message[] messages = null;
 
 	if (nickname != null)
@@ -30,21 +33,21 @@
 		try
 		{
 			roomList = StimulatedPlanningFactory.getChatRoomListForUser(user);
-			roonName = roomList.getRoomOfChatter(nickname).getName();
+			roonName = roomList.getRoomOfChatter(userId).getName();
 			if (roonName != null && roonName != "")
 			{
 				chatRoom = roomList.getRoom(roonName);
-				chatter = chatRoom.getChatter(nickname);
+				chatter = chatRoom.getChatter(userId);
 				if (chatRoom != null)
 				{
-					long enteredAt = chatter.getEnteredInRoomAt();
+					long enteredAt = 0; //chatter.getEnteredInRoomAt();
 					if (enteredAt != -1)
 					{
 						messages = chatRoom.getMessages(enteredAt);					
 					}
 					else
 					{
-						messages = chatRoom.getMessages(chatter.getLoginTime());
+						//messages = chatRoom.getMessages(chatter.getLoginTime());
 					}
 
 				}
@@ -109,9 +112,12 @@ function winopen(path)
 <td>
 <h3><i><%=(String)session.getAttribute("nickname")%></i> you are in room <b><%=roonName%></b></h3>
 <%
+
+	System.out.println("displayMessages: 1");
 	
 	if(messages != null && messages.length > 0)
 	{
+		System.out.println("displayMessages: 2");
 		for (int i = 0; i < messages.length; i++)
 		{
 			Message message = (Message)messages[i];
@@ -137,8 +143,10 @@ function winopen(path)
 	}
 	else
 	{
+		System.out.println("displayMessages: 2");
 		out.write("<font color=\"red\" face=\"Arial\" size=\"2\">There are currently no messages in this room</font>");
 	}
+	System.out.println("displayMessages: 3");
 	out.write("<a name=\"current\"></a>");
 	%>
 </td>
@@ -157,12 +165,14 @@ function winopen(path)
 	</tr>
 	</table>
 	<%
-	Chatter[] chatters = chatRoom.getChattersArray();
+	System.out.println("displayMessages: 4");
+	User[] chatters = chatRoom.getChattersArray();
 	String currentUserId = "";
 	for(int i = 0; i < chatters.length; i++)
 	{
-  		currentUserId = "user"+chatters[i].getUser().getId();
-  		session.setAttribute(currentUserId, chatters[i].getUser());
+		System.out.println("displayMessages: 5 "+chatters[i].getName());
+  		currentUserId = "user"+chatters[i].getId();
+  		session.setAttribute(currentUserId, chatters[i]);
   		%><jsp:include page="/UserIconDisplay.jsp" >
 			<jsp:param name="userId" value="<%= currentUserId %>" />
 		 </jsp:include>
@@ -171,6 +181,7 @@ function winopen(path)
 }
 else
 {
+	System.out.println("displayMessages: 6");
 	response.sendRedirect("login.jsp");
 }
 %>

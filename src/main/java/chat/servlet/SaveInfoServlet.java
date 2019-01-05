@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import chat.*;
+import stimulatedplanning.User;
 
 /**
 Allows users to save their personal information.
@@ -17,6 +18,7 @@ Allows users to save their personal information.
 public class SaveInfoServlet extends HttpServlet
 {
 	String nickname = null;
+	String userId = null;
 	int age = -1;
 	String email = null;
 	String comment = null;
@@ -26,6 +28,7 @@ public class SaveInfoServlet extends HttpServlet
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
 	{
 		nickname = request.getParameter("nickname");
+		userId = request.getParameter("userId");
 		contextPath = request.getContextPath();
 		try
 		{
@@ -47,10 +50,13 @@ public class SaveInfoServlet extends HttpServlet
 			
 			if (chatRoom != null)
 			{
-				Chatter chatter = chatRoom.getChatter(nickname);
-				chatter.setAge(age);
-				chatter.setEmail(email);
-				chatter.setComment(comment);
+				User chatter = chatRoom.getChatter(nickname);
+				if (chatter == null) {
+					chatter = chatRoom.getChatter(userId);
+				}
+				//chatter.setAge(age);
+				//chatter.setEmail(email);
+				//chatter.setComment(comment);
 				response.setContentType("text/html");
 				PrintWriter out = response.getWriter();
 				out.write("<html>\n<head>\n<title>Information Saved</title>\n</head>\n<body>\n");

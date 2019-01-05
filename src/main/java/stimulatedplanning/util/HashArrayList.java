@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 import stimulatedplanning.GenericDescriptor;
 
-public class HashArrayList<T extends GenericDescriptor> implements Iterable<T>, Serializable {
+public class HashArrayList<T extends IObjectWithId> implements Iterable<T>, Serializable {
 	
 	private ArrayList<T> arrayList;
 	private HashMap<String, T> hashMap;

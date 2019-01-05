@@ -33,6 +33,7 @@ public class LoginServlet extends HttpServlet
 		contextPath = request.getContextPath();		
 		//String nickname = request.getParameter("nickname");
 		String nickname = user.getName();
+		String userId = user.getId();
 		//nickname = nickname.trim().toLowerCase();
 //		String sex = request.getParameter("sex");
 //		if (sex.length() > 0)
@@ -43,46 +44,20 @@ public class LoginServlet extends HttpServlet
 		{
 			try
 			{
-				//ChatRoomList roomlist = (ChatRoomList)getServletContext().getAttribute("chatroomlist");
 				ChatRoomList roomlist = StimulatedPlanningFactory.getChatRoomListForUser(user);
-				boolean chatterexists = roomlist.chatterExists(nickname);
+				boolean chatterexists = roomlist.chatterExists(userId);
 				if (chatterexists)
 				{
 					response.sendRedirect(contextPath + "/chat/login.jsp?d=t&n="+nickname);
 				}
 				else
 				{
-					//HttpSession session = request.getSession(true);
-//					int timeout = 1800; // 30 minutes
-//					String t = getServletContext().getInitParameter("sessionTimeout"); // gets Minutes
-//					if (t != null)
-//					{
-//						try
-//						{
-//							timeout = Integer.parseInt(t);
-//							timeout = timeout * 60;
-//						}
-//						catch (NumberFormatException nfe)
-//						{							
-//						}
-//					}
-//					session.setMaxInactiveInterval(timeout);
 					session.setAttribute("nickname", nickname);
 					// Because Chatter objects are stored in room.
 					// So before user selects any room he is added to a temporary room "StartUp"
 					ChatRoom chatRoom = roomlist.getRoom("StartUp"); 
 					//nickname = nickname.toLowerCase();
-					Chatter chatter = null;
-//					if ("m".equals(sex))
-//					{
-//						sex = "Male";
-//					}
-//					else
-//					{
-//						sex = "Female";
-//					}
-					chatter = new Chatter(nickname, user.getAvatarUrl(), new java.util.Date().getTime(), user);
-					chatRoom.addChatter(chatter);
+					chatRoom.addChatter(user);
 					response.sendRedirect(contextPath + "/chat/listrooms.jsp");
 
 				}

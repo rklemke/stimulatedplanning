@@ -9,6 +9,9 @@ import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Set;
 
+import stimulatedplanning.User;
+import stimulatedplanning.util.HashArrayList;
+
 /** This class represents a chat room in the Chat System
 */
 public class ChatRoom
@@ -26,7 +29,7 @@ public class ChatRoom
 	/*
 	* Map to store Chatter objects
 	*/
-	private Map chatters = new HashMap();
+	private HashArrayList<User> users = new HashArrayList<>();
 	/*
 	* Linked list to store Message object
 	*/
@@ -68,42 +71,42 @@ public class ChatRoom
 	
 	/**
 	* adds a Chatter object to list of Chatters
-	* @param chatter Chatter object
+	* @param user User object
 	* @return void
 	*/
-	public synchronized void addChatter(Chatter chatter)
+	public synchronized void addChatter(User user)
 	{
-		chatters.put(chatter.getName(), chatter);
+		users.add(user);
 	}
 	/**
 	* removes a Chatter object from list of Chatters
-	* @param chatterName name of the chatter.
+	* @param userId name of the chatter.
 	* @return void
 	*/
-	public synchronized Object removeChatter(String chatterName)
+	public synchronized void removeChatter(String userId)
 	{
-		return chatters.remove(chatterName);
+		users.remove(users.get(userId));
 	}
 	
 	/**
 	* returns a Chatter object from chatters list.
-	* @param chatterName name of the chatter
+	* @param userId name of the chatter
 	* @return chat.Chatter
 	*/
-	public Chatter getChatter(String chatterName)
+	public User getChatter(String userId)
 	{
-		return (Chatter)chatters.get(chatterName);
+		return users.get(userId);
 	}
 	
 	/**
 	* checks whether a chatter exists or not
-	* @param chatterName name of the chatter to check
+	* @param userId name of the chatter to check
 	* @return boolean
 	*/
 	
-	public boolean chatterExists(String chatterName)
+	public boolean chatterExists(String userId)
 	{
-		return chatters.containsKey(chatterName);
+		return users.containsKey(userId);
 	}
 	
 	/**
@@ -112,32 +115,21 @@ public class ChatRoom
 	*/
 	public int getNoOfChatters()
 	{
-		return chatters.size();
-	}
-	
-	/**
-	* returns a Set containing all the Chatters in the room
-	* @return java.util.Set
-	*/
-	public Set getChatters()
-	{
-		return chatters.entrySet();
+		return users.size();
 	}
 	
 	/** returns an array containing all Chatter objects
 	* @return chat.Chatter[]
 	*/
-	public Chatter[] getChattersArray()
+	public User[] getChattersArray()
 	{
-		Chatter[] chattersArray = new Chatter[chatters.size()];
-		Set chatters = getChatters();
-		Iterator chattersit = chatters.iterator();
+		User[] chattersArray = new User[users.size()];
+		Iterator<User> chattersit = users.iterator();
 		int i = 0;
 		while(chattersit.hasNext())
 		{
-			Map.Entry me = (Map.Entry)chattersit.next();
-			String key = (String) me.getKey();
-			chattersArray[i] = (Chatter)me.getValue();
+			User user = chattersit.next();
+			chattersArray[i] = user;
 			i++;
 		}
 		return chattersArray;

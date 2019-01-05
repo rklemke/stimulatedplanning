@@ -19,6 +19,7 @@
   
 //String nickname = (String)session.getAttribute("nickname");
 String nickname = user.getName();
+String userId = user.getId();
 if (nickname == null)
 {
 	out.write("<font color=\"red\" size=\"+1\">You have not logged in.</font>");
@@ -29,7 +30,7 @@ ChatRoomList roomList = StimulatedPlanningFactory.getChatRoomListForUser(user);
 ChatRoom chatRoom = roomList.getRoomOfChatter(nickname);
 if (chatRoom != null)
 {
-	Chatter chatter = chatRoom.getChatter(nickname);
+	User chatter = chatRoom.getChatter(userId);
 %>
 <HTML>
 <HEAD>
@@ -52,13 +53,13 @@ if (chatRoom != null)
     </TR>
     <TR>
       <TD valign="top"><h4>Icon:</h4></TD>
-      <TD valign="top"><%= chatter.getIconUrl() %></TD>
+      <TD valign="top"><%= chatter.getAvatarUrl() %></TD>
     </TR>
     <TR>
       <TD valign="top"><h4>Age:</h4></TD>
       <TD valign="top">
 		<% String temp;
-		int age = chatter.getAge();
+		int age = 18; //chatter.getAge();
 		if(age == -1)
 			temp = "";
 		else
@@ -71,7 +72,7 @@ if (chatRoom != null)
       <TD valign="top"><h4>Email:</h4></TD>
       <TD valign="top">
 		<%
-			temp = chatter.getEmail();
+			temp = null; //chatter.getEmail();
 			if(temp == null)
 				temp = "Not Specified";			
 		%>
@@ -82,7 +83,7 @@ if (chatRoom != null)
       <TD valign="top"><h4>Comment:</h4></TD>
       <TD valign="top">
 		<% 
-			temp = chatter.getComment();
+			temp = null; // chatter.getComment();
 			if(temp==null)
 				temp = "Not Specified";		
 		%>

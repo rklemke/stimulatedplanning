@@ -38,6 +38,7 @@
 
 //String nickname = (String)session.getAttribute("nickname");
 String nickname = user.getName();
+String userId = user.getId();
 if (nickname == null || nickname == "")
 {
 	response.sendRedirect("/chat/login.jsp");
@@ -74,7 +75,7 @@ else
 			ChatRoom[] chatrooms = roomlist.getRoomListArray();
 			if(roomname == null)
 			{
-				ChatRoom room = roomlist.getRoomOfChatter(nickname);
+				ChatRoom room = roomlist.getRoomOfChatter(userId);
 				if (room != null) {
 					roomname = room.getName();	
 				} else {

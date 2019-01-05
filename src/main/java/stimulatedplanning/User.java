@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 import senseofcommunity.Clan;
 import senseofcommunity.UserOnlineStatus;
+import stimulatedplanning.util.IObjectWithId;
 
-public class User implements Serializable {
+public class User implements Serializable, IObjectWithId {
 
 	protected String name;
 	public String getName() {

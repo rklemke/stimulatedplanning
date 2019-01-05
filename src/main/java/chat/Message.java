@@ -1,5 +1,7 @@
 package chat;
 
+import stimulatedplanning.User;
+
 /**
 Represents a Message sent by a user.
 */
@@ -8,7 +10,7 @@ public class Message
 	/**
 	* String used to store the name of a chatter
 	*/
-	private String chatterName = null;
+	private User user = null;
 	/**
 	* String containing message
 	*/
@@ -24,9 +26,9 @@ public class Message
 	* @param message message of the chatter
 	* @param timeStamp time of the message
 	*/
-	public Message(String name, String message, long timeStamp)
+	public Message(User user, String message, long timeStamp)
 	{
-		this.chatterName = name;
+		this.user = user;
 		this.message= message;
 		this.timeStamp = timeStamp;
 	}
@@ -35,9 +37,21 @@ public class Message
 	* Returns name of the Chatter
 	* @return String
 	*/
+	public User getUser()
+	{
+		return user;
+	}
+	
+	/**
+	* Returns name of the Chatter
+	* @return String
+	*/
 	public String getChatterName()
 	{
-		return chatterName;
+		if (user == null) {
+			return "system";
+		}
+		return user.getName();
 	}
 	
 	/**

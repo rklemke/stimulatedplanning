@@ -2,8 +2,9 @@ package stimulatedplanning;
 
 import java.io.Serializable;
 import java.util.logging.Logger;
+import stimulatedplanning.util.IObjectWithId;
 
-public class GenericDescriptor implements Serializable {
+public class GenericDescriptor implements Serializable, IObjectWithId {
 	private static final Logger log = Logger.getLogger(GenericDescriptor.class.getName());   
 	
 	protected String id;

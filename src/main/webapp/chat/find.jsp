@@ -36,13 +36,14 @@
 	{
 		//String nickname = request.getParameter("nickname");
 		String nickname = user.getName();
+		String userId = user.getId();
 		String roomName = null;
 		if (nickname != null && nickname.length() > 0)
 		{
 			try
 			{
 				ChatRoomList roomList = StimulatedPlanningFactory.getChatRoomListForUser(user);
-				ChatRoom chatRoom = roomList.getRoomOfChatter(nickname);
+				ChatRoom chatRoom = roomList.getRoomOfChatter(userId);
 				if (chatRoom != null)
 				{
 					roomName = chatRoom.getName();

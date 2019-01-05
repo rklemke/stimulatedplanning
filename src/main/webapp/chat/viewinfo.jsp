@@ -37,7 +37,7 @@ if (nickname != null)
 ChatRoom chatRoom = roomList.getRoomOfChatter(nickname);
 if (chatRoom != null)
 {
-Chatter chatter = chatRoom.getChatter(nickname);
+User chatter = chatRoom.getChatter(nickname);
 %>
 <div align="center">
 <center>
@@ -46,7 +46,7 @@ Chatter chatter = chatRoom.getChatter(nickname);
 	<TD valign="top"><h4>Nickname: </h4></td><TD valign="top"><%=nickname%></td>
 </tr>
 <tr>
-<TD valign="top"><h4>Age: </h4></td><TD valign="top"><% int age = chatter.getAge();
+<TD valign="top"><h4>Age: </h4></td><TD valign="top"><% int age = 18; //chatter.getAge();
 		if(age == -1)
 		out.write("Not specified");
 		else
@@ -54,7 +54,7 @@ Chatter chatter = chatRoom.getChatter(nickname);
 		%></td>
 </tr>
 <tr>
-	<TD valign="top"><h4>Email: </h4></td><TD valign="top"><% String email = chatter.getEmail();
+	<TD valign="top"><h4>Email: </h4></td><TD valign="top"><% String email = null; // chatter.getEmail();
 			 if (email != null && email.length() >0)
 			  	 out.write(email);
 			 else
@@ -63,7 +63,7 @@ Chatter chatter = chatRoom.getChatter(nickname);
 </tr>
 <tr>
 <TD valign="top"><H4>Comment: </h4></td><TD valign="top"><%
-				String comment = chatter.getComment();
+				String comment = null; // chatter.getComment();
 				if (comment != null && comment.length() >0)
 					out.write(comment);
 				else

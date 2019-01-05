@@ -22,6 +22,7 @@
 	String roomname = request.getParameter("rn");
 	//String nickname = (String)session.getAttribute("nickname");
 	String nickname = user.getName();
+	String userId = user.getId();
 	//ChatRoomList roomlist = (ChatRoomList) application.getAttribute("chatroomlist");
 	ChatRoomList roomlist = StimulatedPlanningFactory.getChatRoomListForUser(user);
 	if (nickname == null)
@@ -45,28 +46,29 @@
 			return;
 		}
 		System.out.println("start.jsp: 5 "+ nickname);
-		ChatRoom chatRoomOld = roomlist.getRoomOfChatter(nickname);
+		ChatRoom chatRoomOld = roomlist.getRoomOfChatter(userId);
 		if (chatRoomOld != null && chatRoom != null)
 		{
 			System.out.println("start.jsp: 6");
-			Chatter chatter = chatRoomOld.getChatter(nickname);
+			User chatter = chatRoomOld.getChatter(userId);
 			
 			if (!chatRoomOld.getName().equals(chatRoom.getName()))
 			{
-				chatRoomOld.removeChatter(nickname);
+				chatRoomOld.removeChatter(userId);
 				chatRoom.addChatter(chatter);
 				if (!chatRoomOld.getName().equalsIgnoreCase("StartUp"))
 				{
-					chatRoomOld.addMessage(new Message("system", nickname + " has left and joined " + 	chatRoom.getName() + ".", new java.util.Date().getTime()));
+					chatRoomOld.addMessage(new Message(null, nickname + " has left and joined " + 	chatRoom.getName() + ".", new java.util.Date().getTime()));
 				}
-				chatRoom.addMessage(new Message("system", nickname + " has joined.", new java.util.Date().getTime()));
-				chatter.setEnteredInRoomAt(new java.util.Date().getTime());
+				chatRoom.addMessage(new Message(null, nickname + " has joined.", new java.util.Date().getTime()));
+				//chatter.setEnteredInRoomAt(new java.util.Date().getTime());
 
 			}
 
 			if (session.getAttribute("nickname") == null)
 			{
 				session.setAttribute("nickname", nickname);
+				//session.setAttribute("userId", userId);
 			}
 			response.sendRedirect("chat.jsp");
 		}

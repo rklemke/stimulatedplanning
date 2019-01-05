@@ -19,16 +19,17 @@
   
 	//String nickname = (String)session.getAttribute("nickname");
 	String nickname = user.getName();
+	String userId = user.getId();
 	if (nickname != null && nickname.length() > 0)
 	{
 		ChatRoomList roomList = StimulatedPlanningFactory.getChatRoomListForUser(user);
-		ChatRoom room = roomList.getRoomOfChatter(nickname);
+		ChatRoom room = roomList.getRoomOfChatter(userId);
 		String roomname = room.getName();
 %>
 	
 <HTML>
 <HEAD>
-<TITLE>S2R Chat - <%=nickname%> (<%=roomname%>) </TITLE>
+<TITLE>Cryptography Chat - <%=nickname%> (<%=roomname%>) </TITLE>
 </HEAD>
 <!-- TODO: replace with iframes? -->
 <FRAMESET rows="80%,20%">

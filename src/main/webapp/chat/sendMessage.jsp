@@ -19,12 +19,13 @@
   
 	//String nickname = (String)session.getAttribute("nickname");
 	String nickname = user.getName();
+	String userId = user.getId();
 	
 	if (nickname != null && nickname.length() > 0)
 	{
 		//ChatRoomList roomList = (ChatRoomList)application.getAttribute("chatroomlist");
 		ChatRoomList roomList = StimulatedPlanningFactory.getChatRoomListForUser(user);
-		ChatRoom chatRoom = roomList.getRoomOfChatter(nickname);
+		ChatRoom chatRoom = roomList.getRoomOfChatter(userId);
 		if ( chatRoom != null)
 		{
 			String msg = request.getParameter("messagebox");
@@ -32,7 +33,7 @@
 			if ( msg != null && msg.length() > 0)
 			{
 				msg = msg.trim();
-				chatRoom.addMessage(new Message(nickname, msg, new java.util.Date().getTime()));
+				chatRoom.addMessage(new Message(user, msg, new java.util.Date().getTime()));
 			}
 	
 %>
@@ -78,26 +79,11 @@ function winopen(path)
 							<INPUT name="ChangeRoom" type="submit" id="ChangeRoom" value="Change Room">
 						</TD>
 					</FORM>
-					<FORM name="editinfo" action="editinfo" method="post">
-						<TD width="20%"> 
-							<INPUT type="button" value="Edit Profile" onClick='winopen("editInfo.jsp")'>
-						</TD>
-					</FORM>
-					<FORM name="find">
-						<TD width="10%"> 
-							<INPUT type="button" value="Find" onClick='winopen("find.jsp")'>
-						</TD>
-					</FORM>
 				</TR>
 				<TR align="left" valign="top"> 
 					<FORM name="refresh">
 						<TD> 
 							<INPUT type="Button" value="Refresh" onClick="top.frames[0].location.reload()">
-						</TD>
-					</FORM>
-					<FORM name="logout" action="logout.jsp" method="post" target="_top">
-						<TD width="10%"> 
-							<INPUT type="Submit" value="Logout">
 						</TD>
 					</FORM>
 					<TD>&nbsp;</TD>

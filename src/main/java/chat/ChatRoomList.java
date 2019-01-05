@@ -99,16 +99,16 @@ public class ChatRoomList
 	
 	/**
 	* searches each ChatRoom for existance of a chatter.
-	* @param nickname Name of the chatter to find.
+	* @param userId Name of the chatter to find.
 	* @return boolean
 	*/
-	public boolean chatterExists(String nickname)
+	public boolean chatterExists(String userId)
 	{
 		boolean chatterexists = false;
 		ChatRoom[] rooms = this.getRoomListArray();
 		for (int i = 0; i < rooms.length; i++)
 		{
-			chatterexists = rooms[i].chatterExists(nickname);
+			chatterexists = rooms[i].chatterExists(userId);
 			if (chatterexists)
 			{
 				break;
