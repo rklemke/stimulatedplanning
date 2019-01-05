@@ -40,6 +40,28 @@ public class HashArrayList<T extends GenericDescriptor> implements Iterable<T>, 
 		}
 	}
 	
+	public void addOrReplace(T t) {
+		if (t != null) {
+			if (containsKey(t.getId())) {
+				T t_old = hashMap.get(t.getId());
+				if (t_old == t) {
+					return;
+				} else {
+					hashMap.remove(t.getId());
+					hashMap.put(t.getId(), t);
+					int idx = arrayList.indexOf(t_old);
+					if (idx > -1) {
+						arrayList.set(idx, t);
+					} else {
+						arrayList.add(t);
+					}
+				}
+			} else {
+				add(t);
+			}
+		}
+	}
+	
 	public T get(int index) {
 		return arrayList.get(index);
 	}

@@ -31,12 +31,14 @@ public class User implements Serializable {
 		this.treatmentGroup = treatmentGroup;
 	}
 	
-	protected Clan clan;
+	//protected Clan clan;
+	protected String clanId;
 	public Clan getClan() {
-		return clan;
+		//return clan;
+		return StimulatedPlanningFactory.getClan(clanId);
 	}
 	public void setClan(Clan clan) {
-		this.clan = clan;
+		this.clanId = clan.getId();
 	}
 	
 	protected UserOnlineStatus onlineStatus;
