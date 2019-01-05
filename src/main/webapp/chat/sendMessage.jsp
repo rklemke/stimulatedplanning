@@ -54,58 +54,38 @@ function winopen(path)
 </SCRIPT>
 </HEAD>
 <BODY onLoad="document.msg.messagebox.focus();" bgcolor="#FFFFFF">
-<TABLE width="100%" cellpadding="3" cellspacing="0">
-	<TR> 
-		<TD width="50%" align="left" valign="top"> 
-			<TABLE>
-				<TR> 
-					<FORM name="msg" action="sendMessage.jsp" method="post">
-						<TD width="100%"> 
-							<INPUT type="text" name="messagebox" maxlength="300" size="35">
-							<INPUT type="hidden" name="nickname" value="<%=session.getAttribute("nickname")%>">
-							<INPUT name="submit" type="submit" value="Send">
-						</TD>
-					</FORM>
-				</TR>
-			</TABLE>
-		</TD>
-		<TD width="50%"> 
-			<TABLE border="1" cellpadding="3" cellspacing="0" class="panel">
-				<TR align="left" valign="top"> 
-					<FORM name="changeRoom" method="post" action="listrooms.jsp">
-						<TD width="15%"> 
-							<INPUT type="hidden" name="n" value="<%=nickname%>">
-							<INPUT name="ChangeRoom" type="submit" id="ChangeRoom" value="Change Room">
-						</TD>
-					</FORM>
-					<FORM name="editinfo" action="editinfo" method="post">
-						<TD width="20%"> 
-							<INPUT type="button" value="Edit Profile" onClick='winopen("editInfo.jsp")'>
-						</TD>
-					</FORM>
-					<FORM name="find">
-						<TD width="10%"> 
-							<INPUT type="button" value="Find" onClick='winopen("find.jsp")'>
-						</TD>
-					</FORM>
-				</TR>
-				<TR align="left" valign="top"> 
-					<FORM name="refresh">
-						<TD> 
-							<INPUT type="Button" value="Refresh" onClick="top.frames[0].location.reload()">
-						</TD>
-					</FORM>
-					<FORM name="logout" action="logout.jsp" method="post" target="_top">
-						<TD width="10%"> 
-							<INPUT type="Submit" value="Logout">
-						</TD>
-					</FORM>
-					<TD>&nbsp;</TD>
-				</TR>
-			</TABLE>
-		</TD>
-	</TR>
-</TABLE>
+
+<div class="container">
+
+<div class = "column" id= "columnOne_sendMessage">
+<FORM name="msg" action="sendMessage.jsp" method="post">
+<INPUT type="text" name="messagebox" maxlength="300"  />
+<INPUT type="hidden" name="nickname" value="<%=session.getAttribute("nickname")%>"/>
+<INPUT name="submit" type="submit" value="Send"/>
+</FORM>
+</div> <!-- columnOnesendMessage-->
+
+<div class="column" id="columnTwo_sendMessage">
+<FORM name="editinfo" action="editinfo" method="post">
+<INPUT type="button" value="Edit Profile" onClick='winopen("editInfo.jsp")'>
+</FORM>
+
+<FORM name="find">
+<INPUT type="button" value="Find" onClick='winopen("find.jsp")'>
+</FORM>
+
+<FORM name="refresh">
+<INPUT type="Button" value="Refresh" onClick="top.frames[0].location.reload()">
+</FORM>
+
+<FORM name="logout" action="logout.jsp" method="post" target="_top">
+<INPUT type="Submit" value="Logout">
+</FORM>
+
+</div><!--columnTwosendMessage-->
+
+</div><!-- container -->
+
 </BODY>
 </HTML>
 <%

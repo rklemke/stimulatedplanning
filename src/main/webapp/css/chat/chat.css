@@ -54,3 +54,124 @@ h2 {
 }
 h3 { font-size: 110%; color:#009966 }
 h4 { font-size: 100%; color:#330099 }
+
+.container {
+    width:99%;
+    height: 99%;
+	/*border: 2.5px Solid #808080;*/
+	/*overflow:hidden;*/
+	word-wrap:break-word;
+}
+
+.column{
+	display: block;
+	float: left;
+	text-align: left;
+	padding: 0.2em;
+}
+
+#columnOne {
+	width: 62%;
+	height: 96%;
+	/*border: 2.5px Solid #808080;*/
+}
+
+#headerHolder{
+text-align: center;
+background: skyblue;
+font-size: 1.5em;
+color: #ffffff;
+}
+
+#userName{
+padding: 0.2em;
+}
+
+#userName span{
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 1em;
+}
+
+#ClanLogo{
+vertical-align: middle;
+width: 2em;
+height: 2em;
+}
+
+#messageDisplayBox{
+	font-size: 1em;
+	text-align:left;
+	background: lightblue;
+	height: 85%;
+	}
+	
+#columnTwo {
+	width: 34%;
+	height: 96%;
+	/*border: 2.5px Solid #808080;*/
+}
+
+#roomSelection label{
+	width: 85%;
+	margin: 0.2em;
+	text-align: left;
+	}
+	
+#roomSelection span{
+	float: right;
+	}
+#chatters{
+	padding: 0.2em;
+	width: 98%;
+	background: white;
+}
+
+#columnOne_sendMessage{
+	width: 62%;
+	height:98%;
+	padding: 0.2em;
+	/*border: 2.5px Solid #808080;*/
+}
+
+#columnOne_sendMessage form{
+	width: 99%;
+	height:99%;
+}
+
+#columnOne_sendMessage form Input[type="text"]{
+	font-size:1em;
+	width: 84%;
+	height:98%;
+}
+
+#columnOne_sendMessage form Input[type="submit"]{
+	font-size:1em;
+	width: 14%;
+	height:94%;
+}
+
+
+#columnTwo_sendMessage{
+	font-size:1em;
+	padding: 0.2em;
+	width: 34%;
+	height:94%;
+	/*border: 2.5px Solid #808080;*/
+}
+
+#columnTwo_sendMessage form{
+	width:46%;
+	position: relative;
+	float: left;
+    margin-bottom: 5px;
+    margin-left: 10px;
+	/*border: 2.5px Solid #808080;*/
+	
+}
+#columnTwo_sendMessage input[type="button"]{
+	width:98%;
+}
+#columnTwo_sendMessage input[type="submit"]{
+	width: 98%;
+}

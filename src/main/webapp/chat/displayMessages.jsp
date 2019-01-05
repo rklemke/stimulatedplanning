@@ -63,9 +63,21 @@
 	
 %>
 <HTML>
+
 <HEAD>
 <!--<meta http-equiv="refresh" content="10">-->
 <link rel="stylesheet" type="text/css" href="/css/chat/chat.css">
+<link rel="stylesheet" type="text/css" href="/jquery/jquery-ui.css">
+<script  type="text/javascript" src="/jquery/external/jquery/jquery.js"></script>
+<script  type="text/javascript" src="/jquery/jquery-ui.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function () {
+	//alert("WTF");
+	 $( "input" ).checkboxradio({
+	      icon: false
+	    });
+	})
 <%
 	int refreshAfter = 5000; // 5 seconds
 	String t = application.getInitParameter("refreshAfter"); // gets seconds
@@ -81,12 +93,12 @@
 		}
 	}
 %>
-<script language="JavaScript" type="text/javascript">
-<!--
+
 function reload()
 {
 	window.location.reload();
 }
+
 
 setInterval('reload()', <%=refreshAfter%>);
 
@@ -95,19 +107,26 @@ function winopen(path)
 	chatterinfo = window.open(path,"chatterwin","scrollbars=no,resizable=yes, width=400, height=300, location=no, toolbar=no, status=no");
 	chatterinfo.focus();
 }
-//-->
+
 </script>
+
 </HEAD>
 <BODY onLoad="window.location.hash='#current'" bgcolor="#FFFFFF">
 
-<table width="100%" border="0">
-<tr>
-<td width="70%" valign="top">
+<div class = "container">
+
+<div class="column" id="columnOne">
+
+<div id="headerHolder">
 <%@ include file="header.jsp" %>
-<table>
-<tr>
-<td>
-<h3><i><%=(String)session.getAttribute("nickname")%></i> you are in room <b><%=roonName%></b></h3>
+</div><!-- headerholder -->
+
+<div id="userName">
+<img id  = "ClanLogo" src="${pageContext.request.contextPath}/img/clan/DefaultClan.png"/> 
+<span>Welcome, <i><%=(String)session.getAttribute("nickname")%> </i></span>
+</div><!-- userName -->
+
+<div id="messageDisplayBox">
 <%
 	
 	if(messages != null && messages.length > 0)
@@ -141,22 +160,30 @@ function winopen(path)
 	}
 	out.write("<a name=\"current\"></a>");
 	%>
-</td>
-</tr>
-</table>
-	</td>
-	<td width="30%" valign="top">
-	<table width="100%" border="1" cellpadding="2" cellspacing="0">
-		<tr>
-			<td>
-			<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#2C259C">
-		<tr>
-			<td>
-	<span class="white"><%=chatRoom.getNoOfChatters()%> people in this room</span><br>
-	</td>
-	</tr>
-	</table>
-	<%
+</div><!-- messageDisplayBox -->
+</div><!-- columnOne -->
+
+<div class="column" id="columnTwo">
+<div id="roomSelection">
+ 
+ <fieldset>
+    <legend>Select a Room: [Population]</legend>
+    <label for="room-1">Need a challenge <span>[<%=chatRoom.getNoOfChatters()%>]</span> </label>
+    <input type="radio" name="room" id="room-1">
+    <label for="room-2">Just chat <span>[<%=chatRoom.getNoOfChatters()%>]</span></label>
+    <input type="radio" name="room" id="room-2">
+    <label for="room-3">Need a teacher <span>[<%=chatRoom.getNoOfChatters()%>]</span> </label>
+    <input type="radio" name="room" id="room-3">
+    <label for="room-4">Need help <span>[<%=chatRoom.getNoOfChatters()%>]</span> </label>
+    <input type="radio" name="room" id="room-4">
+ </fieldset>
+
+</div><!-- roomSelection -->
+
+<div id="chatters">
+<fieldset>
+    <legend>In the room</legend>
+<%
 	Chatter[] chatters = chatRoom.getChattersArray();
 	String currentUserId = "";
 	for(int i = 0; i < chatters.length; i++)
@@ -174,11 +201,11 @@ else
 	response.sendRedirect("login.jsp");
 }
 %>
-		</td>
-	</tr>
-</table>
-</td>
-</tr>
-</table>
+</fieldset>
+</div><!-- chatters -->
+</div><!-- ColumnTwo -->
+
+</div><!-- container -->
+
 </BODY>
 </HTML>
