@@ -15,6 +15,7 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.SortDirection;
 
 import senseofcommunity.Clan;
 import senseofcommunity.InformationObject;
@@ -90,7 +91,8 @@ public class PersistentStore {
 				user.setTreatmentGroup(readBooleanProperty(userEntity, "treatmentGroup", StimulatedPlanningFactory.random.nextBoolean()));
 				if (user.isTreatmentGroup()) {
 					//Clan clan = (Clan)StimulatedPlanningFactory.getObject(readStringProperty(userEntity, "clan", null));
-					Clan clan = (Clan)readDescriptor(Clan.class.getName(), readStringProperty(userEntity, "clan", null), cache, null);
+					//Clan clan = (Clan)readDescriptor(Clan.class.getName(), readStringProperty(userEntity, "clan", null), cache, null);
+					Clan clan = StimulatedPlanningFactory.getClan(readStringProperty(userEntity, "clan", null));
 					user.setClan(clan);
 				}
 				UserOnlineStatus onlineStatus = (UserOnlineStatus)readUserOnlineStatus(readStringProperty(userEntity, "onlineStatus", null), user, cache);
@@ -949,10 +951,10 @@ public class PersistentStore {
 				readStringProperty(genericEntity, "url", null));
 			cache.put(clan.getId(), clan);
 			clan.setClanLogo(readStringProperty(genericEntity, "clanLogo", null));
-			relationList = readToManyRelation(clan, "userStati", UserOnlineStatus.class.getName(), true, cache);
-			for (GenericDescriptor generic : relationList) {
-				clan.addUserOnlineStatus((UserOnlineStatus)generic);
-			}
+			//relationList = readToManyRelation(clan, "userStati", UserOnlineStatus.class.getName(), true, cache);
+			//for (GenericDescriptor generic : relationList) {
+			//	clan.addUserOnlineStatus((UserOnlineStatus)generic);
+			//}
 		}
 		return clan;
 
@@ -1389,30 +1391,27 @@ public class PersistentStore {
 
 	}
 
-	protected static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget, HashMap<String, Object> cache) throws Exception {
+	public static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget, HashMap<String, Object> cache) throws Exception {
 		log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Entity entity = null;
+		//Entity entity = null;
 		
 		ArrayList<GenericDescriptor> arrayList = new ArrayList<GenericDescriptor>();
 
 		if (source == null || relation == null) {
+			log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass+", size: "+arrayList.size());
 			return arrayList;
 		}
-
+		
+		String key = source.getClass().getName() + "_" + relation + "_" + targetClass;
+		Filter sourceFilter = new FilterPredicate("source", FilterOperator.EQUAL, source.getId());
 		long l = 0;
 		long size = 1; // a relation must have at least one element, otherwise wouldn't have been written. If the first element is not found, an empty array will be returned
 		
-		while (l < size) {
-			String key = source.getClass().getName() + "_" + relation + "_" + targetClass;
-			String id = source.getId() + "_" + relation + "_" + l;
+		Query q = new Query(key).setFilter(sourceFilter).addSort("order", SortDirection.ASCENDING);
+		PreparedQuery pq = datastore.prepare(q);
 
-			try {
-				entity = datastore.get(KeyFactory.createKey(key, id));
-			} catch (Exception e) {
-				//e.printStackTrace();
-				entity = null;
-			}
+		for (Entity entity : pq.asIterable()) {
 			if (entity != null) {
 				String targetId = (String)entity.getProperty("target");
 				long order = (long)entity.getProperty("order");
@@ -1431,6 +1430,21 @@ public class PersistentStore {
 			}
 			l++;		
 		}
+
+
+//		while (l < size) {
+//			String key = source.getClass().getName() + "_" + relation + "_" + targetClass;
+//			String id = source.getId() + "_" + relation + "_" + l;
+//
+//			try {
+//				entity = datastore.get(KeyFactory.createKey(key, id));
+//			} catch (Exception e) {
+//				//e.printStackTrace();
+//				entity = null;
+//			}
+//		}
+
+		log.info("readToManyRelation: "+source.getClass().getName()+" ["+source.getId()+"], "+relation+", "+targetClass+", size: "+arrayList.size());
 		return arrayList;
 	}
 

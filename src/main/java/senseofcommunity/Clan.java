@@ -1,10 +1,14 @@
 package senseofcommunity;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.ListIterator;
 
+import stimulatedplanning.GenericDescriptor;
 import stimulatedplanning.LessonDescriptor;
+import stimulatedplanning.PersistentStore;
 import stimulatedplanning.StimulatedPlanningFactory;
 import stimulatedplanning.User;
 import stimulatedplanning.util.HashArrayList;
@@ -16,13 +20,11 @@ public class Clan extends InformationObject {
 
 	public Clan() {
 		// TODO Auto-generated constructor stub
-		userStati = new HashArrayList<UserOnlineStatus>();
 	}
 
 	public Clan(String id, String title, String description, String url) {
 		super(id, title, description, url);
 		// TODO Auto-generated constructor stub
-		userStati = new HashArrayList<UserOnlineStatus>();
 	}
 
 	protected String clanLogo;
@@ -36,26 +38,45 @@ public class Clan extends InformationObject {
 		this.clanLogo = clanLogo;
 	}
 	
-	protected HashArrayList<UserOnlineStatus> userStati;
+	protected HashArrayList<UserOnlineStatus> userStati = null;
+	private void ensureUserStati() {
+		if (userStati == null) {
+			userStati = new HashArrayList<UserOnlineStatus>();
+			ArrayList<GenericDescriptor> relationList;
+			try {
+				relationList = PersistentStore.readToManyRelation(this, "userStati", UserOnlineStatus.class.getName(), true, new HashMap<String, Object>());
+				for (GenericDescriptor generic : relationList) {
+					userStati.add((UserOnlineStatus)generic);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	public void addUser(User user) {
+		ensureUserStati();
 //		UserOnlineStatus onlineStatus = StimulatedPlanningFactory.getUserOnlineStatus(user);
 		UserOnlineStatus onlineStatus = user.getOnlineStatus();
 		userStati.add(onlineStatus);
 	}
 
 	public void addUserOnlineStatus(UserOnlineStatus status) {
+		ensureUserStati();
 		userStati.add(status);
 	}
 
 	public void updateUserOnlineStatus(UserOnlineStatus status) {
+		ensureUserStati();
 		userStati.addOrReplace(status);
 	}
 
 	public ListIterator<UserOnlineStatus> getUserOnlineStatus() {
+		ensureUserStati();
 		return userStati.listIterator();
 	}
 	
 	public int userCount() {
+		ensureUserStati();
 		return userStati.size();
 	}
 
@@ -69,6 +90,7 @@ public class Clan extends InformationObject {
 	 * @return
 	 */
 	private HashArrayList<UserOnlineStatus> getUsersInTimeframe(int maxSecondsAgo, int minSecondsAgo) {
+		ensureUserStati();
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);

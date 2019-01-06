@@ -104,6 +104,7 @@ height: 2em;
 	text-align:left;
 	background: lightblue;
 	height: 85%;
+	overflow: scroll;
 	}
 	
 #columnTwo {

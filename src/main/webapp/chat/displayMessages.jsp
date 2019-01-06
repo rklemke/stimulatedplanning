@@ -1,7 +1,5 @@
 <%@ page isErrorPage="false" errorPage="error.jsp" import="java.text.DateFormat,chat.*, stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*" %>
 <%
-	System.out.println("displayMessages: 0.1");
-
   session = StimulatedPlanningFactory.initializeSession(request, response);
   User user = (User)session.getAttribute("user");
   UserOnlineStatus userStatus = user.getOnlineStatus();
@@ -69,6 +67,7 @@
 
 <HEAD>
 <!--<meta http-equiv="refresh" content="10">-->
+<link rel="stylesheet" href="/css/ClanMembersStyling.css">
 <link rel="stylesheet" type="text/css" href="/css/chat/chat.css">
 <link rel="stylesheet" type="text/css" href="/jquery/jquery-ui.css">
 <script  type="text/javascript" src="/jquery/external/jquery/jquery.js"></script>
@@ -76,7 +75,11 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
-	//alert("WTF");
+	$(document).tooltip({
+		content: function() {
+			return $(this).prop('title');
+		}
+	});
 	 $( "input" ).checkboxradio({
 	      icon: false
 	    });
@@ -132,40 +135,20 @@ function winopen(path)
 <div id="messageDisplayBox">
 <%
 
-	System.out.println("displayMessages: 1");
-	
 	if(messages != null && messages.length > 0)
 	{
-		System.out.println("displayMessages: 2");
 		for (int i = 0; i < messages.length; i++)
 		{
 			Message message = (Message)messages[i];
-			String chatterName = message.getChatterName();
-			String strmsg = message.getMessage();
-			long time = message.getTimeStamp();
-			Date date = new Date(time);
-
-			if (chatterName.equalsIgnoreCase((String)session.getAttribute("nickname")))
-			{
-				out.write("<font face=\"Arial\" size=\"2\" color=\"blue\"><b>" + chatterName + " ("+ DateFormat.getTimeInstance().format(date)+ ")&gt;</b></font> " + strmsg+"<br>\n");
-			}
-			else if (chatterName.equalsIgnoreCase("system"))
-			{
-				out.write("<span class=\"error\">" + strmsg+"</span><br>\n");
-			}
-			else
-			{
-				out.write("<font face=\"Arial\" size=\"2\"><b>"+chatterName + " ("+ DateFormat.getTimeInstance().format(date)+ ")&gt;</b></font> " + strmsg + "<br>\n");
-			}			
+			session.setAttribute("currentMessage", message);
+			%><jsp:include page="SingleMessage.jsp" /><%
 		}
 		out.write("<a name=\"current\"></a>");
 	}
 	else
 	{
-		System.out.println("displayMessages: 2");
 		out.write("<font color=\"red\" face=\"Arial\" size=\"2\">There are currently no messages in this room</font>");
 	}
-	System.out.println("displayMessages: 3");
 	out.write("<a name=\"current\"></a>");
 	%>
 </div><!-- messageDisplayBox -->
@@ -191,6 +174,7 @@ function winopen(path)
 <div id="chatters">
 <fieldset>
     <legend>In the room</legend>
+    <div class="container">
 <%
 	User[] chatters = chatRoom.getChattersArray();
 	String currentUserId = "";
@@ -211,6 +195,7 @@ else
 	response.sendRedirect("login.jsp");
 }
 %>
+	</div><!-- container -->
 </fieldset>
 </div><!-- chatters -->
 </div><!-- ColumnTwo -->

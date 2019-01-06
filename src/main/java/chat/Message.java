@@ -1,12 +1,18 @@
 package chat;
 
+import java.io.Serializable;
+
 import stimulatedplanning.User;
 
 /**
 Represents a Message sent by a user.
 */
-public class Message
+public class Message implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2348925488118290085L;
 	/**
 	* String used to store the name of a chatter
 	*/

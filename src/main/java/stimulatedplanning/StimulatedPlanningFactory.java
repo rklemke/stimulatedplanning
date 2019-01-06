@@ -675,31 +675,31 @@ public class StimulatedPlanningFactory {
 		
 		SelectionOption option = new SelectionOption(getUUID(), 
 				"We got you", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"We are after you", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"You will never be able to read this", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"You should be warned", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"Read carefully!", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
@@ -716,25 +716,25 @@ public class StimulatedPlanningFactory {
 		
 		SelectionOption option = new SelectionOption(getUUID(), 
 				"Caesar moved by 5", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"Caesar moved by 12", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
-				"Caesar with reverse key", 
-				"<long text>", 
+				"Caesar moved by 17", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
-				"Caesar with random key", 
-				"<long text>", 
+				"Caesar moved by 22", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
@@ -752,31 +752,31 @@ public class StimulatedPlanningFactory {
 		
 		SelectionOption option = new SelectionOption(getUUID(), 
 				"We got you", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"We are after you", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"You will never be able to read this", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"You should be warned", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"Read carefully!", 
-				"<long text>", 
+				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.addOption(option);
 		

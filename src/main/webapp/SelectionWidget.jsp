@@ -59,13 +59,18 @@
     <title>Selection Widget</title>
     <link rel="stylesheet" href="css/SelectionWidgetStyling.css">
     <link rel="stylesheet" href="css/ClanMembersStyling.css">
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <!-- link rel="stylesheet" href="css/jquery-ui.css"  -->
+    <!--  link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" -->
+    <link rel="stylesheet" href="css/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
 	$(document).ready(function () {
-		  $(".selectionOption").checkboxRadio();
+  	    $(document).tooltip({
+	    	content: function() {
+	    		return $(this).prop('title');
+	    	}
+	    });
+		$(".selectionOption").checkboxRadio();
 	});
 
 	</script>
@@ -125,18 +130,32 @@
     		<% if (isSelected) { %>checked <% } %> 
     		<% if (isExpired) { %>disabled <% } %> 
     	>
-    	<label for="so-<%= option.getId() %>"><% if (currentSelectionObject.isAvatarPurpose()) { %>
+    	<label 
+    		for="so-<%= option.getId() %>"
+			<% if (currentSelectionObject.isAvatarPurpose()) { %>
+    		title="<img src='<%= option.getUrl() %>' width='75' height='75'>"
+    	<% } else { %>
+    		title="<%= option.getDescription() %>"
+	  	<% } %>
+	  	   ><% if (currentSelectionObject.isAvatarPurpose()) { %>
     	<img src="<%= option.getUrl() %>" width="25" height="25">
     	<% } else { %>
 	  	<%= option.getTitle() %>
 	  	<% } %></label><%
 		if (user.isTreatmentGroup() && currentSelectionObject.isClan()) {
-			for (UserSelectedOption selectedOption: selectedOptions) { 
-	      		currentUserId = "user"+selectedOption.getUser().getId();
-	      		session.setAttribute(currentUserId, selectedOption.getUser());
-			%><jsp:include page="UserIconDisplay.jsp" >
-    			<jsp:param name="userId" value="<%= currentUserId %>" />
-			 </jsp:include><%
+			int count = 0;
+			for (UserSelectedOption selectedOption: selectedOptions) {
+				count++;
+				if (count <=5) {
+		      		currentUserId = "user"+selectedOption.getUser().getId();
+		      		session.setAttribute(currentUserId, selectedOption.getUser());
+				%><jsp:include page="UserIconDisplay.jsp" >
+    				<jsp:param name="userId" value="<%= currentUserId %>" />
+			 	</jsp:include><%
+				} else {
+					%> ... [<%= selectedOptions.size() %>] <%
+					break;
+				}
 	        } 
 		 } 
 		 %></li>

@@ -44,6 +44,10 @@ public class Test_UserSelectionServlet_SoC extends HttpServlet {
 //			nextServlet = "/Test_LearningProgress.jsp";
 		}
 		
+		if (request.getParameter("userid") == null || request.getParameter("userid").equals("unknown")) {
+			nextServlet = "/Test_UserSelection_SoC.jsp";
+		}
+		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextServlet);
 		dispatcher.forward(request,response);
 	}
