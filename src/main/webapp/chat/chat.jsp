@@ -160,6 +160,7 @@ $(document).ready(function () {
 					$( '#messageDisplayBox' ).html(result);
 					$( '#messageDisplayBox').animate({ scrollTop: $('#messageDisplayBox').prop("scrollHeight")}, 1000);
 					$( '#messagebox' ).val('');
+					$( '#messagebox' ).focus('');
 				},
 				complete: function() {
 					// Schedule the next request when the current one's complete
