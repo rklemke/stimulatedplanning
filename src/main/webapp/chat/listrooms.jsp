@@ -1,144 +1,76 @@
 <%@ page session="true" errorPage="error.jsp" import="stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*,chat.*"%>
 <%
-  session = StimulatedPlanningFactory.initializeSession(request, response);
-  User user = (User)session.getAttribute("user");
-  UserOnlineStatus userStatus = user.getOnlineStatus();
-  CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
-  UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
-  Clan userClan = null;
 
-  HashArrayList<UserOnlineStatus> onlineUsers = new HashArrayList<>();
-  HashArrayList<UserOnlineStatus> recentUsers = new HashArrayList<>();
-  HashArrayList<UserOnlineStatus> offlineUsers = new HashArrayList<>();
-  if (user.isTreatmentGroup()) {
-	  userClan = user.getClan();
-	  onlineUsers = userClan.getOnlineUsersSorted(userStatus);
-	  recentUsers = userClan.getRecentUsersSorted(userStatus);
-	  offlineUsers = userClan.getOfflineUsersSorted(userStatus);
-  }
-  
-%>
-<HTML>
-<HEAD>
-<TITLE>SS Chat - Room List</TITLE>
-<LINK rel="stylesheet" type="text/css" href="/css/chat/chat.css">
-<SCRIPT language="JavaScript">
-//	 <!--
-//	 if(window.top != window.self)
-//	 {
-//		 window.top.location = window.location;
-//	 }
-//	 //-->
-</SCRIPT>
-</HEAD>
+	session = request.getSession();
+	User user = (User)session.getAttribute("user");
 
-<BODY bgcolor="#FFFFFF">
-<%
+	String roomName = null;
+	String userId = user.getId();
+	String nickname = user.getName();
+	ChatRoomList roomList = null;
+	ChatRoom room = null;
 
-
-//String nickname = (String)session.getAttribute("nickname");
-String nickname = user.getName();
-String userId = user.getId();
-if (nickname == null || nickname == "")
-{
-	response.sendRedirect("/chat/login.jsp");
-	//System.out.println("Redirecting");
-}
-else
-{
-	String roomname = request.getParameter("rn");	
-	String descr = request.getParameter("sd");
-	boolean see = false;
-	if (descr != null && descr.equals("y"))
+	try
 	{
-		see = true;
-	}
-%>
-<%@ include file="header.jsp" %>
-<TABLE width="80%" align="center">	
-	<tr>
-		<td class="normal">Welcome <span class="chattername"><%=nickname%></span></td>
-	</tr>
-	<TR>
-		<TD width="100%">Select the room you want to enter or click view description to view description
-			 about the room.
-		</TD>
-	</TR>
-</TABLE>
-<BR>
-	<%
-				
+		roomList = StimulatedPlanningFactory.getChatRoomListForUser(user);
+		room = roomList.getRoomOfChatter(userId);
+		roomName = room.getName();
 		
-		try
+		String newRoom = request.getParameter("room");
+		if ( newRoom != null && newRoom.length() > 0)
 		{
-			ChatRoomList roomlist = StimulatedPlanningFactory.getChatRoomListForUser(user);
-			ChatRoom[] chatrooms = roomlist.getRoomListArray();
-			if(roomname == null)
+			ChatRoom newChatRoom = roomList.getRoom(newRoom);
+			
+			if (room != null && newChatRoom != null)
 			{
-				ChatRoom room = roomlist.getRoomOfChatter(userId);
-				if (room != null) {
-					roomname = room.getName();	
-				} else {
-					roomname = "StartUp";
-				}
-			}
-			roomname = roomname.trim();
+				if (!room.getName().equals(newChatRoom.getName()))
+				{
+					room.removeChatter(userId);
+					newChatRoom.addChatter(user);
+					if (!room.getName().equalsIgnoreCase("StartUp"))
+					{
+						room.addMessage(new Message(null, nickname + " has left and joined " + 	newChatRoom.getName() + ".", new java.util.Date().getTime()));
+					}
+					newChatRoom.addMessage(new Message(null, nickname + " has joined.", new java.util.Date().getTime()));
+					//chatter.setEnteredInRoomAt(new java.util.Date().getTime());
 
-	%>
-<DIV align="center">
-<CENTER>
-	<FORM name="chatrooms" action="/chat/start.jsp" method="post">
-	<TABLE width="80%" border="1" cellspacing="1" cellpadding="1" align="center">
-	<TR>
-	<TD colspan="2" class="pagetitle">Room List</TD>
-	</TR>
-	<%
-			for (int i = 0; i < chatrooms.length; i++)
-			{
-				if (chatrooms[i].getName().equalsIgnoreCase("StartUp"))
-					continue;
-	%>
-		<TR>
-		<TD width="50%">
-		<INPUT type=radio name="rn" value="<%=chatrooms[i].getName()%>"
-		<%if (chatrooms[i].getName().equals(roomname))
-			out.write("checked");%>><%=chatrooms[i].getName()%></A>
-		</TD>
-	<%
-				if (see == true && chatrooms[i].getName().equals(roomname))
-				{
-	%>	
-			<TD width="50%"><%=chatrooms[i].getDescription()%></TD>
-	<%
 				}
-				else
+
+				if (session.getAttribute("nickname") == null)
 				{
-	%>
-			<TD width="50%"><A href="/chat/listrooms.jsp?rn=<%=chatrooms[i].getName()%>&sd=y">View Description</A></TD>
-	<%
+					session.setAttribute("nickname", nickname);
+					//session.setAttribute("userId", userId);
 				}
-	%>
-		</TR>
-	<%
 			}
+			
 		}
-		catch (Exception e)
-		{
-			System.out.println("Unable to get handle to Servlet Context: " + e.getMessage());
-			e.printStackTrace();
-		}
-%>
-<TR>
-	<TD>&nbsp;<A href="/chat/addRoom.jsp" title="Add new Room">Add new Room</A></TD>
-	<TD><INPUT type="Submit" value="Start"></TD>
-</TR>
-</TABLE>
-</FORM>
-</CENTER>
-</DIV>
-<%
+
+		
 	}
+	catch(Exception e)
+	{
+		System.out.println("Exception: "+ e.getMessage());
+		throw new ServletException("Unable to get handle to ServletContext");
+	}		
+ 
 %>
-<%@ include file="footer.jsp"%>
-</BODY>
-</HTML>
+ <fieldset>
+    <legend>Select a Room: [Population]</legend>
+    <% for (ChatRoom otherRoom: roomList.getRoomListArray()) { 
+    		if (!"startup".equalsIgnoreCase(otherRoom.getName())) { 
+    			boolean isSelected = room.getName().equals(otherRoom.getName()); 
+    %>
+    <label 
+    	for="<%= otherRoom.getName() %>"
+    	title="<%= otherRoom.getDescription() %>"
+    ><%= otherRoom.getName() %> <span>[<%=otherRoom.getNoOfChatters()%>]</span> </label>
+    <input 
+    	type="radio" 
+    	name="room" 
+    	id="<%= otherRoom.getName() %>"
+    	value="<%= otherRoom.getName() %>"
+    	<% if (isSelected) { %>checked <% } %> 
+    >
+	<% 		}
+    	} %>
+ </fieldset>

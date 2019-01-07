@@ -1,3 +1,3 @@
 <div align="center">
-Crypto Chat
+CryptoMOOC Chat Tool
 </div>

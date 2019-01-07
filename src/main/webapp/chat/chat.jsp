@@ -90,12 +90,28 @@ $(document).ready(function () {
 	$( "#roomSelection input" ).checkboxradio({
 	    icon: false
 	});
-	setTimeout(messages_tickerRequest, messages_timeoutInterval);
+    $( "[name='room']").on( "change", chat_changeRoom );
+	$( "#sendMessageBtn" ).click(function() {
+		chat_sendMessage();
+	});
+	$('#messagebox').on('keypress', function (e) {
+        if(e.which === 13){
+
+           //Disable textbox to prevent multiple submit
+           $(this).attr("disabled", "disabled");
+
+           chat_sendMessage();
+
+           //Enable the textbox again if needed.
+           $(this).removeAttr("disabled");
+        }
+    });	
+	setInterval(chat_tickerRequest, chat_timeoutInterval);
 })
 
-		var messages_timeoutInterval = 5000;
+		var chat_timeoutInterval = 5000;
 		
-		function messages_tickerRequest() {
+		function chat_tickerRequest() {
 			$.ajax({
 				url: 'displayMessages.jsp',
 				success: function(result) {
@@ -103,7 +119,73 @@ $(document).ready(function () {
 				},
 				complete: function() {
 					// Schedule the next request when the current one's complete
-					setTimeout(messages_tickerRequest, messages_timeoutInterval);
+					//setTimeout(messages_tickerRequest, messages_timeoutInterval);
+				}
+			});
+			$.ajax({
+				url: 'listrooms.jsp',
+				success: function(result) {
+					$( '#roomSelection' ).html(result);
+					$( "#roomSelection input" ).checkboxradio({
+					    icon: false
+					});
+				    $( "[name='room']").on( "change", chat_changeRoom );
+				},
+				complete: function() {
+					// Schedule the next request when the current one's complete
+					//setTimeout(messages_tickerRequest, messages_timeoutInterval);
+				}
+			});
+			$.ajax({
+				url: 'listChatters.jsp',
+				success: function(result) {
+					$( '#chatters' ).html(result);
+				},
+				complete: function() {
+					// Schedule the next request when the current one's complete
+					//setTimeout(messages_tickerRequest, messages_timeoutInterval);
+				}
+			});
+		}
+
+		function chat_sendMessage() {
+			msgText = $( '#messagebox' ).val()
+			$.ajax({
+				url: 'displayMessages.jsp',
+			    method: 'POST',
+			    data: {
+			    	messagebox: msgText
+			    }, 
+				success: function(result) {
+					$( '#messageDisplayBox' ).html(result);
+					$( '#messageDisplayBox').animate({ scrollTop: $('#messageDisplayBox').prop("scrollHeight")}, 1000);
+					$( '#messagebox' ).val('');
+				},
+				complete: function() {
+					// Schedule the next request when the current one's complete
+					//setTimeout(messages_tickerRequest, messages_timeoutInterval);
+				}
+			});
+		}
+
+	    function chat_changeRoom( e ) {
+	    	alert("change room: "+$( e.target ).val());
+			$.ajax({
+				url: 'listrooms.jsp',
+			    method: 'POST',
+			    data: {
+			    	room: $( e.target ).val()
+			    }, 
+				success: function(result) {
+					$( '#roomSelection' ).html(result);
+					$( "#roomSelection input" ).checkboxradio({
+					    icon: false
+					});
+				    $( "[name='room']").on( "change", chat_changeRoom );
+				},
+				complete: function() {
+					// Schedule the next request when the current one's complete
+					//setTimeout(messages_tickerRequest, messages_timeoutInterval);
 				}
 			});
 		}
@@ -131,59 +213,30 @@ $(document).ready(function () {
 </div><!-- messageDisplayBox -->
 </div><!-- column One -->
 <div class="column" id="columnTwo">
+
 <div id="roomSelection">
- 
- <fieldset>
-    <legend>Select a Room: [Population]</legend>
-    <label for="room-1">Need a challenge <span>[<%=room.getNoOfChatters()%>]</span> </label>
-    <input type="radio" name="room" id="room-1">
-    <label for="room-2">Just chat <span>[<%=room.getNoOfChatters()%>]</span></label>
-    <input type="radio" name="room" id="room-2">
-    <label for="room-3">Need a teacher <span>[<%=room.getNoOfChatters()%>]</span> </label>
-    <input type="radio" name="room" id="room-3">
-    <label for="room-4">Need help <span>[<%=room.getNoOfChatters()%>]</span> </label>
-    <input type="radio" name="room" id="room-4">
- </fieldset>
-
+<jsp:include page="listrooms.jsp" />
 </div><!-- roomSelection -->
+
 <div id="chatters">
-
-<fieldset>
-    <legend>In the room</legend>
-<%
-	User[] chatters = room.getChattersArray();
-	String currentUserId = "";
-	for(int i = 0; i < chatters.length; i++)
-	{
-		System.out.println("displayMessages: 5 "+chatters[i].getName());
-  		currentUserId = "user"+chatters[i].getId();
-  		session.setAttribute(currentUserId, chatters[i]);
-  		%> 
-  		<jsp:include page="/UserIconDisplay.jsp" >
-  		<jsp:param name="userId" value="<%= currentUserId %>" />
-  		</jsp:include>
-  		
-   	<% } %>
-</fieldset>
-
+<jsp:include page="listChatters.jsp" />
 </div><!-- chatters -->
+
 </div><!-- columnTwo -->
 </div><!-- row one -->
 
 <div class="row">
 
-<FORM name="msg" action="chat.jsp" method="post">
 <div class="column" id="sendText">
-<INPUT type="text" name="messagebox" maxlength="300"  />
+<INPUT type="text" name="messagebox" id="messagebox" maxlength="300"  />
 <INPUT type="hidden" name="nickname" value="<%=session.getAttribute("nickname")%>"/>
 
 </div><!-- sendText -->
 <div class="column" id="submitButton">
 
-<INPUT name="submit" type="submit" value="Send"/>
+<INPUT name="sendMessageBtn" id="sendMessageBtn" type="button" value="Send" />
 
 </div><!-- submitbutton -->
-</FORM>
 </div><!-- row two -->
 
 </div><!-- container -->

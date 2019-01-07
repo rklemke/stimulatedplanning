@@ -3,6 +3,9 @@ package chat;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
+
+import stimulatedplanning.util.HashArrayList;
+
 import java.util.Iterator;
 
 /**
@@ -15,12 +18,12 @@ public class ChatRoomList
 	/**
 	* Stores all the ChatRoom objects
 	*/
-	private Map roomList;
+	private HashArrayList<ChatRoom> roomList;
 	/**
 	*/
 	public ChatRoomList()
 	{
-		roomList = new HashMap();
+		roomList = new HashArrayList<>();
 	}
 	/**
 	* adds new chat room object to a list of Rooms.
@@ -29,7 +32,7 @@ public class ChatRoomList
 	*/
 	public synchronized void addRoom(ChatRoom room)
 	{
-		roomList.put(room.getName(), room);
+		roomList.add(room);
 	}
 	
 	/**
@@ -41,7 +44,7 @@ public class ChatRoomList
 	*/
 	public synchronized void removeRoom(String name)
 	{
-		roomList.remove(name);
+		roomList.removeById(name);
 	}
 	
 	/** Returns a ChatRoom object
@@ -59,24 +62,24 @@ public class ChatRoomList
 	public ChatRoom getRoomOfChatter(String name)
 	{
 		ChatRoom[] rooms = this.getRoomListArray();
-		for (int i = 0; i < rooms.length; i++)
+		for (ChatRoom room : roomList)
 		{
-			boolean chatterexists = rooms[i].chatterExists(name);
+			boolean chatterexists = room.chatterExists(name);
 			if (chatterexists)
 			{
-				return rooms[i];
+				return room;
 			}
 		}
 		return null;
 	}
+
 	/** Returns a Set containing all the ChatRoom objects
 	* @return Set
 	*/
-	
-	public Set getRoomList()
-	{
-		return roomList.entrySet();
-	}
+//	public Set getRoomList()
+//	{
+//		return roomList.entrySet();
+//	}
 	
 	/** returns an array containing all ChatRoom objects
 	* @return chat.ChatRoom[]
@@ -84,16 +87,7 @@ public class ChatRoomList
 	public ChatRoom[] getRoomListArray()
 	{
 		ChatRoom[] roomListArray = new ChatRoom[roomList.size()];
-		Set roomlist = getRoomList();
-		Iterator roomlistit = roomlist.iterator();
-		int i = 0;
-		while(roomlistit.hasNext())
-		{
-			Map.Entry me = (Map.Entry)roomlistit.next();
-			String key = (String) me.getKey();
-			roomListArray[i] = (ChatRoom)me.getValue();
-			i++;
-		}
+		roomListArray = roomList.arrayList().toArray(roomListArray);
 		return roomListArray;
 	}
 	

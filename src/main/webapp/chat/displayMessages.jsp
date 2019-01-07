@@ -26,6 +26,14 @@
 				chatRoom = roomList.getRoom(roonName);
 				if (chatRoom != null)
 				{
+					String msg = request.getParameter("messagebox");
+					
+					if ( msg != null && msg.length() > 0)
+					{
+						msg = msg.trim();
+						chatRoom.addMessage(new Message(user, msg, new java.util.Date().getTime()));
+					}
+
 					long enteredAt = 0; //chatter.getEnteredInRoomAt();
 					if (enteredAt != -1)
 					{

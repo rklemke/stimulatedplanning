@@ -45,22 +45,16 @@ public class LoginServlet extends HttpServlet
 			try
 			{
 				ChatRoomList roomlist = StimulatedPlanningFactory.getChatRoomListForUser(user);
-				boolean chatterexists = roomlist.chatterExists(userId);
-				if (chatterexists)
+				ChatRoom chatRoom = roomlist.getRoomOfChatter(userId);
+				if (chatRoom == null || "StartUp".equalsIgnoreCase(chatRoom.getName()))
 				{
-					response.sendRedirect(contextPath + "/chat/login.jsp?d=t&n="+nickname);
+					chatRoom = roomlist.getRoomListArray()[0];
 				}
-				else
-				{
-					session.setAttribute("nickname", nickname);
-					// Because Chatter objects are stored in room.
-					// So before user selects any room he is added to a temporary room "StartUp"
-					ChatRoom chatRoom = roomlist.getRoom("StartUp"); 
-					//nickname = nickname.toLowerCase();
+				session.setAttribute("nickname", nickname);
+				if (!chatRoom.chatterExists(nickname)) {
 					chatRoom.addChatter(user);
-					response.sendRedirect(contextPath + "/chat/listrooms.jsp");
-
 				}
+				response.sendRedirect(contextPath + "/chat/chat.jsp");
 			}
 			catch(Exception exception)
 			{

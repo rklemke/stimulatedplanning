@@ -40,6 +40,16 @@ public class HashArrayList<T extends IObjectWithId> implements Iterable<T>, Seri
 		}
 	}
 	
+	public void removeById(String id) {
+		if (id != null) {
+			T t = hashMap.get(id);
+			if (t != null) {
+				arrayList.remove(t);
+				hashMap.remove(t.getId());
+			}
+		}
+	}
+	
 	public void addOrReplace(T t) {
 		if (t != null) {
 			if (containsKey(t.getId())) {

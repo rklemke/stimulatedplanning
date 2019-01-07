@@ -11,10 +11,11 @@ import java.util.Set;
 
 import stimulatedplanning.User;
 import stimulatedplanning.util.HashArrayList;
+import stimulatedplanning.util.IObjectWithId;
 
 /** This class represents a chat room in the Chat System
 */
-public class ChatRoom
+public class ChatRoom implements IObjectWithId
 {
 	/*
 	* used to stroe name of the room
@@ -58,6 +59,15 @@ public class ChatRoom
 	public String getName()
 	{
 		return name;
+	}
+	
+	/**
+	* Returns id of the room, which is the name. Used for compliance with IObjectWithId interface.
+	* @return java.lang.String
+	*/
+	public String getId()
+	{
+		return getName();
 	}
 	
 	/**
