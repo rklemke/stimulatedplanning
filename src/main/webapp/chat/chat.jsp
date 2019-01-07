@@ -87,39 +87,26 @@ $(document).ready(function () {
 			return $(this).prop('title');
 		}
 	});
-	 $( "#roomSelection input" ).checkboxradio({
-	      icon: false
-	    });
-	})
-<%
-	int refreshAfter = 5000; // 5 seconds
-	String t = application.getInitParameter("refreshAfter"); // gets seconds
-	if (t != null)
-	{
-		try
-		{
-			refreshAfter = Integer.parseInt(t);
-			refreshAfter = refreshAfter * 1000; // convert to mili seconds
+	$( "#roomSelection input" ).checkboxradio({
+	    icon: false
+	});
+	setTimeout(messages_tickerRequest, messages_timeoutInterval);
+})
+
+		var messages_timeoutInterval = 5000;
+		
+		function messages_tickerRequest() {
+			$.ajax({
+				url: 'displayMessages.jsp',
+				success: function(result) {
+					$( '#messageDisplayBox' ).html(result);
+				},
+				complete: function() {
+					// Schedule the next request when the current one's complete
+					setTimeout(messages_tickerRequest, messages_timeoutInterval);
+				}
+			});
 		}
-		catch (NumberFormatException nfe)
-		{							
-		}
-	}
-%>
-
-function reload()
-{
-	window.location.reload();
-}
-
-
-setInterval('reload()', <%=refreshAfter%>);
-
-function winopen(path)
-{
-	chatterinfo = window.open(path,"chatterwin","scrollbars=no,resizable=yes, width=400, height=300, location=no, toolbar=no, status=no");
-	chatterinfo.focus();
-}
 
 </script>
 </HEAD>
@@ -140,26 +127,7 @@ function winopen(path)
 </div><!-- userName -->
 
 <div id="messageDisplayBox">
-<%
-
-	if(messages != null && messages.length > 0)
-	{
-		for (int i = 0; i < messages.length; i++)
-		{
-			Message message = (Message)messages[i];
-			session.setAttribute("currentMessage", message);
-			%>
-			<jsp:include page="SingleMessage.jsp" />
-			<%
-		}
-		out.write("<a name=\"current\"></a>");
-	}
-	else
-	{
-		out.write("<font color=\"red\" face=\"Arial\" size=\"2\">There are currently no messages in this room</font>");
-	}
-	out.write("<a name=\"current\"></a>");
-%>
+<jsp:include page="displayMessages.jsp" />
 </div><!-- messageDisplayBox -->
 </div><!-- column One -->
 <div class="column" id="columnTwo">
