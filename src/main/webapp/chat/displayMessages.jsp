@@ -63,9 +63,12 @@
 		}	
 	
 %>
+
+<!DOCTYPE html>
 <HTML>
 
 <HEAD>
+<meta charset="UTF-8">
 <!--<meta http-equiv="refresh" content="10">-->
 <link rel="stylesheet" href="/css/ClanMembersStyling.css">
 <link rel="stylesheet" type="text/css" href="/css/chat/chat.css">
@@ -174,7 +177,6 @@ function winopen(path)
 <div id="chatters">
 <fieldset>
     <legend>In the room</legend>
-    <div class="container">
 <%
 	User[] chatters = chatRoom.getChattersArray();
 	String currentUserId = "";
@@ -195,7 +197,6 @@ else
 	response.sendRedirect("login.jsp");
 }
 %>
-	</div><!-- container -->
 </fieldset>
 </div><!-- chatters -->
 </div><!-- ColumnTwo -->

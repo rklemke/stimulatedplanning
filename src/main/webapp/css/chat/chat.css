@@ -55,36 +55,96 @@ h2 {
 h3 { font-size: 110%; color:#009966 }
 h4 { font-size: 100%; color:#330099 }
 
-.container {
-    width:99%;
-    height: 99%;
+*{
 	/*border: 2.5px Solid #808080;*/
-	/*overflow:hidden;*/
-	word-wrap:break-word;
+}
+div.container {
+	position: absolute;
 }
 
-.column{
-	display: block;
-	float: left;
-	text-align: left;
+div.row{
+	position: reltaive;
+}
+
+div.column{
+	position: reltaive;
 	padding: 0.2em;
 }
 
-#columnOne {
-	width: 62%;
-	height: 96%;
+div#columnOne {
+	position: absolute;
+	left:0px;
+	width: 58%;
+	height: 76%;
 	/*border: 2.5px Solid #808080;*/
 }
 
-#headerHolder{
-text-align: center;
-background: skyblue;
-font-size: 1.5em;
-color: #ffffff;
+div#columnTwo {
+	position: absolute;
+	right:0px;
+	width: 38%;
+	height: 76%;
+	/*border: 2.5px Solid #808080;*/
 }
 
-#userName{
-padding: 0.2em;
+div#sendText{
+	position:absolute;
+	bottom:0px;
+	left:0px;
+	width:60%;
+	height:14%;
+	padding: 0.2em;
+	/*border: 2.5px Solid #808080;*/
+	}
+	
+div#submitButton{
+	position:absolute;
+	bottom:0px;
+	right:0px;
+	float: right;
+	width:36%;
+	height:14%;
+	padding: 0.2em;
+	text-align:center;
+	vertical-align: middle;
+	/*border: 2.5px Solid #808080;*/
+	}
+	
+	
+div#sendText  Input[type="text"]{
+	font-size:1em;
+	display: inline-block;
+	float: left;
+	width: 98%;
+	height:80%;
+}
+
+div#submitButton  Input[type="submit"]{
+	font-size:1em;
+	display: inline-block;
+	float: right;
+	width: 98%;
+	height:84%;
+	margin-left: 0.5em;
+}
+
+div#headerHolder{
+	display:inline-block;
+	float:left;
+	width: 98%;
+	height: 10.5%;
+	text-align: center;
+	background: skyblue;
+	font-size: 1.5em;
+	color: #ffffff;
+}
+
+div#userName{
+	display:inline-block;
+	float:left;
+	width: 98%;
+	height: 10.5%;
+	padding: 0.2em;
 }
 
 #userName span{
@@ -99,69 +159,56 @@ width: 2em;
 height: 2em;
 }
 
-#messageDisplayBox{
+div#messageDisplayBox{
+	display:inline-block;
+	float:left;
+	width: 98%;
+	height: 79.5%;
 	font-size: 1em;
 	text-align:left;
 	background: lightblue;
-	height: 85%;
 	overflow: scroll;
 	}
-	
-#columnTwo {
-	width: 34%;
-	height: 96%;
-	/*border: 2.5px Solid #808080;*/
-}
 
-#roomSelection label{
+div#roomSelection label{
+	display:inline-block;
+	float: left;
 	width: 85%;
+	height: 45%;
 	margin: 0.2em;
 	text-align: left;
 	}
 	
-#roomSelection span{
+div#roomSelection span{
 	float: right;
 	}
-#chatters{
+	
+div#chatters{
+	display:inline-block;
+	float: left;
 	padding: 0.2em;
 	width: 98%;
 	background: white;
 }
 
-#columnOne_sendMessage{
-	width: 62%;
-	height:98%;
-	padding: 0.2em;
-	/*border: 2.5px Solid #808080;*/
-}
-
-#columnOne_sendMessage form{
+div#columnOne form{
 	width: 99%;
 	height:99%;
 }
 
-#columnOne_sendMessage form Input[type="text"]{
+div#columnOne form Input[type="text"]{
 	font-size:1em;
 	width: 84%;
 	height:98%;
 }
 
-#columnOne_sendMessage form Input[type="submit"]{
+div#columnOne form Input[type="submit"]{
 	font-size:1em;
 	width: 14%;
 	height:94%;
 }
 
-
-#columnTwo_sendMessage{
-	font-size:1em;
-	padding: 0.2em;
-	width: 34%;
-	height:94%;
-	/*border: 2.5px Solid #808080;*/
-}
-
-#columnTwo_sendMessage form{
+div#columnTwo form{
 	width:46%;
 	position: relative;
 	float: left;
@@ -169,10 +216,4 @@ height: 2em;
     margin-left: 10px;
 	/*border: 2.5px Solid #808080;*/
 	
-}
-#columnTwo_sendMessage input[type="button"]{
-	width:98%;
-}
-#columnTwo_sendMessage input[type="submit"]{
-	width: 98%;
 }
