@@ -37,8 +37,10 @@
 			}
 	
 %>
+<!DOCTYPE html>
 <HTML>
 <HEAD>
+<meta charset="UTF-8">
 <LINK rel="stylesheet" type="text/css" href="/css/chat/chat.css">
 <META http-equiv="pragma" content="no-cache">
 <SCRIPT language="JavaScript" type="text/javascript">
@@ -65,9 +67,6 @@ function winopen(path)
 <INPUT name="submit" type="submit" value="Send"/>
 </FORM>
 </div> <!-- columnOnesendMessage-->
-
-<div class="column" id="columnTwo_sendMessage">
-</div><!--columnTwosendMessage-->
 
 </div><!-- container -->
 

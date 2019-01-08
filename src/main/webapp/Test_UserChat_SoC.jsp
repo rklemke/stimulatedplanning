@@ -39,17 +39,20 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Test User Navigation</title>
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/chat/chat.css">
+<script type="text/javascript">
+  function resizeIframe(iframe) {
+    iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";
+  }
+</script>   
 </head>
 <body>
 
 <H2>Welcome, <%= user.getName() %></H2>
 <a href="Test_UserSelection_SoC.jsp">Change user</a>
-
-<iframe id="contentFrame" style="width:860px; height:480px;" src="/chat/servlet/LoginServlet"></iframe>
+<iframe id="contentFrame" onload="resizeIframe(this)" src="/chat/servlet/LoginServlet" 
+style="width:50em; height:25em; position: relative;" frameborder="0">
+</iframe>
 
 </body>
 </html>
