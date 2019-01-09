@@ -21,6 +21,42 @@ public class Message implements Serializable
 	* String containing message
 	*/
 	private String message = null;
+	
+	public static final String emojiPre = "<img src=\"/img/chat/emojis/";
+	public static final String emojiMiddle = ".png\" title=\"(";
+	public static final String emojiPost = ")\" width=\"24\" height=\"24\">";
+	public static final CharSequence[] emojis = {
+			"like",
+			"dislike",
+			"smile",
+			"smiling",
+			"laughing",
+			"cool",
+			"grinning",
+			"angry",
+			"anguish",
+			"confused",
+			"crying",
+			"curious",
+			"dead",
+			"devil",
+			"ghost",
+			"heart",
+			"in-love",
+			"muted",
+			"nerd",
+			"ninja",
+			"sad",
+			"scared",
+			"secret",
+			"shocked",
+			"shocked-2",
+			"skull",
+			"sleeping",
+			"tired",
+			"tongue",
+			"wink"	
+	};
 
 	/**
 	* long containing the time when message was delivered
@@ -68,6 +104,18 @@ public class Message implements Serializable
 	{
 		return message;
 	}
+	
+	
+	public String getDisplayMessage() {
+		String tempMsg = getMessage();
+		if (tempMsg != null && tempMsg.length()>0) {
+			for (CharSequence emoji : emojis) {
+				tempMsg = tempMsg.replace("("+emoji+")", emojiPre+emoji+emojiMiddle+emoji+emojiPost);
+			}
+		}
+		return tempMsg;
+	}
+
 	/**
 	* Returns time of the message
 	* @return long

@@ -171,7 +171,6 @@ $(document).ready(function () {
 		}
 
 	    function chat_changeRoom( e ) {
-	    	alert("change room: "+$( e.target ).val());
 			$.ajax({
 				url: 'listrooms.jsp',
 			    method: 'POST',

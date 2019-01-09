@@ -11,7 +11,7 @@
 	User chatter = message.getUser();
   
 	String chatterName = message.getChatterName();
-	String strmsg = message.getMessage();
+	String strmsg = message.getDisplayMessage();
 	long time = message.getTimeStamp();
 	Date date = new Date(time);
 	String currentUserId = "";
