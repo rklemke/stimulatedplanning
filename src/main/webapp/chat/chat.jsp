@@ -45,6 +45,7 @@
 					{
 						msg = msg.trim();
 						room.addMessage(new Message(user, msg, new java.util.Date().getTime()));
+						StimulatedPlanningFactory.trackAndLogEvent(request, response, "chat.message");
 					}
 					
 					long enteredAt = 0; //chatter.getEnteredInRoomAt();

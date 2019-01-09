@@ -33,6 +33,7 @@
 					}
 					newChatRoom.addMessage(new Message(null, nickname + " has joined.", new java.util.Date().getTime()));
 					//chatter.setEnteredInRoomAt(new java.util.Date().getTime());
+					StimulatedPlanningFactory.trackAndLogEvent(request, response, "chat.room.change");
 
 				}
 

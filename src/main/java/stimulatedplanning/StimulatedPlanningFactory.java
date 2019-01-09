@@ -270,10 +270,18 @@ public class StimulatedPlanningFactory {
 		content.addInformationObject(sele);
 		
 		info = new InformationObject(getUUID(), 
-				"Additional text", 
-				"Additional text", 
+				"Clan rules", 
+				"Clan rules", 
 				testCourseBaseURL+"courseware/4cb17259b1024410901476642c28df19/1ff9b47cae3b4d51bbfa22b458c4a25d/");
 		content.addInformationObject(info);
+		info.setContent("<OL>"+
+			"<LI>Do not use the chat or other tools provided in the course to harm or hurt others (such as the members of your clan and or/and the other clan).</LI>"+
+			"<LI>Respect other opinion.</LI>"+
+			"<LI>Contributions within the clan must be civil and tasteful.</LI>"+
+			"<LI>No disruptive, offensive or abusive behaviour: contributions must be constructive and polite, not mean-spirited or contributed with the intention of causing trouble.</LI>"+
+			"<LI>No spamming or off-topic material can be shared.</LI>"+
+			"<LI>On a more Safety level: We advise that you never reveal any personal information about yourself or anyone else (for example: telephone number, home address or email address).</LI>"+
+			"</OL>");
 
 		// Goal for Module 1
 		
@@ -555,24 +563,24 @@ public class StimulatedPlanningFactory {
 
 	protected static SelectionObject generateUserIdentitySelection() {
 		String[] userTitles = {
-				"Astro-Hacker",
-				"White Collar Hacker",
-				"Helping Hand",
-				"Challenger",
-				"Mysterious Mister"
+				"Leader",
+				"Fuel",
+				"Moderator",
+				"Buddy",
+				"Member"
 			};
 		
 		String[] userDescriptions = {
-				"Chase me through space and time",
-				"You wouldn’t believe",
-				"You need information? I have it!",
-				"No limit!",
-				"You’ll never guess, what I am up to!"
+				"By leading by example you make all the other follow you.",
+				"You are the energiser of the group, you keep all engaged.",
+				"You take care that the communication within the clan flows and go smooth without conflicts.",
+				"Do you need help in understanding or find something in the course? I am your guy, we can do together.",
+				"You don’t have any active role but this will not stop you in participating."
 			};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
-				"Select your personal identity within your clan", 
-				"Select your personal identity within your clan", 
+				"Hello there! Please select one of the roles you want to cover in your clan:", 
+				"Hello there! Please select one of the roles you want to cover in your clan:", 
 				testCourseBaseURL+"courseware/651e1c7c25404fe0b445da92d7f76aba/5141a1c901e842f8bfb186a365cef36b/");
 		sele.setType(SelectionObjectType.SINGLE_USER_SELECTION);
 		sele.setPurpose(SelectionObjectPurpose.USER_IDENTITY);

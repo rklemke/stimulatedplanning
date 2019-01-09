@@ -53,6 +53,11 @@ public class LoginServlet extends HttpServlet
 				session.setAttribute("nickname", nickname);
 				if (!chatRoom.chatterExists(nickname)) {
 					chatRoom.addChatter(user);
+					chatRoom.addMessage(new Message(null, nickname + " has joined.", new java.util.Date().getTime()));
+					//chatter.setEnteredInRoomAt(new java.util.Date().getTime());
+					StimulatedPlanningFactory.trackAndLogEvent(request, response, "chat.room.enter");
+				} else {
+					StimulatedPlanningFactory.trackAndLogEvent(request, response, "chat.room.re-enter");
 				}
 				response.sendRedirect(contextPath + "/chat/chat.jsp");
 			}
