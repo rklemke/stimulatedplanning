@@ -33,9 +33,7 @@
 	  otherClanOffline = otherClan.getOfflineUsers().size();
   }
   
-  
 %>
-
 
 <!DOCTYPE html>
 <html>
@@ -59,58 +57,73 @@
                 value: <%= 100*otherClanOffline/otherClanSize %>
             });
         	$(document).tooltip();
-	
 		})
     </script>
 </head>
 <body>
 
     <div class="container">
-	
-        <div class="column" id="GridOne">
-			<div class="imgHolder"><img src = "<%= userClan.getClanLogo() %>"/></div>
-			<div class="headerText"><%= userClan.getTitle() %> [<%= user.getName() %>]</div>
-			<iframe id="AW_frameHolder"></iframe>
-		</div><!--columnOne-->
-		
-        <div class="column" id="GridTwo">
-			<div class="imgHolder"><img src = "<%= otherClan.getClanLogo() %>"/></div>
-			<div class="headerText"><%= otherClan.getTitle() %></div>
+    
+    <div class="row" id="RowOne">
+    <div class="column" id="RowOneColumnOne">
+    
+    <img src = "<%= userClan.getClanLogo() %>" class="imgHolder" />
+    <div class="headerText"><%= userClan.getTitle() %> [<%= user.getName() %>]</div>
+    
+    </div><!-- column  -->
+    <div class="column" id="RowOneColumnTwo">
+    
+    <img src = "<%= otherClan.getClanLogo() %>" class="imgHolder"/>
+    <div class="headerText"><%= otherClan.getTitle() %></div>
+    
+    </div><!-- column -->
+    </div><!-- row One -->
+    
+    <div class="row" id="RowTwo">
+    <div class="column" id="RowTwoColumnOne">
+    
+    <fieldset>
+    <legend>Clan Members</legend>
+    <iframe id="AW_frameHolder" frameBorder="0" style="position: relative; height: 98%; width: 98%;"></iframe>
+    </fieldset>
 			
-            <div style="display: block; margin-top: 2%; padding: 1%"><Strong>Online members: </strong></div>
-			<div id="AW_OtherClanOnline"></div>
-            <div style="display: block; margin-top: 2%; padding: 1%"><Strong>Offline members: </strong></div>
-			<div id="AW_OtherClanOffline"></div>
-        </div><!--columnTwo-->
-		
-		<div class="column" id="GridThree">
-		<div class="ledger">
-		<svg> <rect style="fill: green;"></rect></svg>
-		<strong style="color: green; margin: 0.25em;"> Online in your page</strong>
-		</div>
-		
-		<div class = "ledger">
-		<svg> <rect style="fill: blue;" /> </svg>
-		<strong style="color: blue; margin: 0.25em;"> Online in other pages</strong>
-		</div>
-		
-        <div class = "ledger">
-		<svg><rect style="fill: orange;" /></svg>
-		<strong style="color: orange;margin: 0.25em;"> Recently Online </strong>
-		</div>
-		
-		<div class = "ledger">
-		<svg><rect style="fill: grey;" /></svg>
-		<strong style="color: grey; margin: 0.25em;"> Offline </strong>
-		</div><!--ledger-->
-		
-		</div><!--GridThree-->
-		
+	</div><!--columnOne-->
+	
+	<div class="column" id="RowTwoColumnTwo">
+	
+	<Strong>Online members: </strong>
+	<div id="AW_OtherClanOnline"></div>
+	
+    <Strong>Offline members: </strong>
+	<div id="AW_OtherClanOffline"></div>
+	
+	<fieldset>
+    <legend>Legend</legend>
+	<strong style="color: green; margin: 0.25em;"> 
+	<svg> <rect width="15" height="15" style="fill:green;" /></svg> 
+	Online in your page</strong>
+	
+	<strong style="color: blue; margin: 0.25em;">
+	<svg> <rect width="15" height="15" style="fill:blue;" /> </svg> 
+	Online in other pages</strong>
+	
+	<strong style="color: orange;margin: 0.25em;"> 
+	<svg><rect width="15" height="15" style="fill:orange;"/></svg> 
+	Recently Online </strong>
+	
+	<strong style="color: grey; margin: 0.25em;"> 
+	<svg><rect width="15" height="15" style="fill:grey;"/></svg> 
+	Offline </strong>
+	</fieldset>
+			
+	</div><!-- columnTwo -->
+    </div><!-- rowTwo -->
+    
+    <div class="clear"></div>
     </div><!--container-->
 
-
-
 </body>
+
 <% } %>
 
 </html>

@@ -1,135 +1,124 @@
-.container {
+*{
+	/*border: 1px Solid #808080;*/
+}
+div.container {
+	position: relative;
+	width:50em; 
+	height:25em;
 	margin-right: auto;
     margin-left: auto;
-    padding: 0.2em;
-    width:48em;
-    height: 24em;
-	border: 2.5px Solid #808080;
-	/*overflow:hidden;*/
 	word-wrap:break-word;
+	/*background-color: #666699;*/
 }
 
-.column {
-    display: block;
-	float: left;
-    margin: 0.2em;
+.clear { clear:both; }
+
+div.row{
+	position: absolute;
+	padding: 0.2em;
+}
+div#RowOne{
+	display:block;
+	top:0;
+	width: 99%;
+	height: 20%;
+	/*background-color: #666666;*/
+}
+div#RowTwo{
+	display:block;
+	bottom:0;
+	width: 99%;
+	height: 76%;
+	/*background-color: #666699;*/
+}
+div.column {
+	position: absolute;
     padding: 0.2em;
-	/*border: 2.5px Solid #808080;*/
 }
-
-#GridOne{
-	width: 27em;
-	height: 23em;
+div#RowOneColumnOne{
+	left: 0px;
+	width: 50%;
+	height:18%;
 	padding: 0.2em;
-	margin: 0.2em;
+}
+div#RowOneColumnTwo{
+	right: 0px;
+	width: 45%;
+	height:18%;
+	padding: 0.2em;
 }
 
-.imgHolder {
-	display: block;
+img.imgHolder {
+	position:relative;
+	display: inline;
 	float: left;
-	width: 4em;
-	height: 4em;
-	margin: 0.2em;
-	padding: 0.2em;
-	/*border: 2.5px Solid #808080;*/
+	width: 2.5em;
+	height: 2.5em;
+	/*border: 1px Solid #808080;*/
+}
+div.headerText{ 
+	position:relative;
+	display: inline;
+	float:left;
+	font-size: 1.5em;
+	vertical-align: middle;
+	/*border: 1px Solid #808080;*/
 }
 
-.imgHolder img{
+div#RowTwoColumnOne{
+	display:inline;
+	left:0px;
+	width:50%;
+	height:96%;
+	padding: 0.2em;
+	/*background-color: #666688;*/
+}
+div#RowTwoColumnOne fieldset{
+	position: relative;
+	width:96%;
+	height: 96%;
+}
+iframe#AW_frameHolder{
+	display: block;
+}
+
+div#RowTwoColumnTwo{
+	right:0px;
+	width:45%;
+	height:96%;
+	padding: 0.2em;
+}
+
+div#AW_OtherClanOnline{
+	position: relative;
+	display: block;
 	width: 98%;
-	height: 98%;
+	height: 5%;
+	margin-bottom: 0.5em;
 }
 
-.headerText{ 
-display: inline-block;
-width: 9.5em;
-height: 1.75em;
-font-weight: bold;
-font-size: 2em;
-margin: 0.2em;
-padding: 0.2em;
-/*border: 2.5px Solid #808080;*/
-}
-
-#AW_frameHolder{
+div#AW_OtherClanOffline{
+	position: relative;
 	display: block;
-	float: left;
-    width: 26.25em;
-    height: 17em;
-	margin: 0.2em;
-
+	width: 98%;
+	height: 5%;
+	margin-bottom: 0.5em;
 }
-
-#GridTwo{
-    width:18.5em;
-	height: 13.5em;
-	padding: 0.2em;
-}
-
-#GridTwo .imgHolder{
+div#RowTwoColumnTwo strong{
 	display: block;
-	float: left;
-	width: 4em;
-	height: 4em;
-	margin: 0.2em;
-	padding: 0.2em;
-	/*border: 2.5px Solid #808080;*/
+	width: 98%;
+	font-size: 1em;
 }
 
-#GridTwo .headerText{
-display: inline-block;
-width: 5.5em;
-height: 1.75em;
-font-weight: bold;
-font-size: 2em;
-margin: 0.2em;
-padding: 0.2em;
-/*border: 2.5px Solid #808080;*/
+div#RowTwoColumnTwo fieldset{
+	position: absolute;
+	width:96%;
+	bottom:5px;
 }
 
-#AW_OtherClanOnline{
-	display: block;
-	float: left;
-	width: 17.5em;
-	height: 2em;
-	border: 2.5px Solid #808080;
-	
-}
-
-#AW_OtherClanOffline{
-	display: block;
-	float: left;
-	width: 17.5em;
-	height: 2em;
-	border: 2.5px Solid #808080;
-}
-
-#GridThree{
-    width:18.5em;
-	height: 8.5em;
-	padding: 0.2em;
-}
-
-#GridThree .ledger {
-	display: block;
-	float: left;
-	width: 17.5em;
-    height: 1em;
-	margin: 0.2em;
-	padding: 0.2em;
-	/*border: 2.5px Solid #808080;*/
-}
-#GridThree svg {
+div#RowTwoColumnTwo svg {
 	display: inline-block;
 	float: left;
-	width: 0.75em;
-	height: 0.75em;
-	margin-top:0.25em;
-}
-
-#GridThree svg rect {
-	display: inline-block;
-	width: 0.75em;
-	height: 0.75em;
-	stroke-width: 1px;
-	stroke: rgb(0,0,0);
+	width: 1em;
+	height: 1em;
 }
