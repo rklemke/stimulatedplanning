@@ -86,7 +86,6 @@
 	<iframe id="AW_frameHolder"></iframe>
 	
 	</div><!--columnOne-->
-
 	
 	<div class="columnTwo">
 	<iframe id="Selection_frameHolder"></iframe>
