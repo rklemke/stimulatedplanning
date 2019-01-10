@@ -1,10 +1,14 @@
 package chat;
 
 import java.util.Map;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import stimulatedplanning.PersistentStore;
 import stimulatedplanning.util.HashArrayList;
+import stimulatedplanning.util.IObjectWithId;
 
 import java.util.Iterator;
 
@@ -13,18 +17,31 @@ import java.util.Iterator;
 * It provides methods to store and retrieve ChatRoom objects
 * in this <code>ChatRoomList</code>.
 */
-public class ChatRoomList
+public class ChatRoomList implements IObjectWithId, Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 849470430196780881L;
+
 	/**
 	* Stores all the ChatRoom objects
 	*/
 	private HashArrayList<ChatRoom> roomList;
+	
+	private String id = null;
 	/**
 	*/
-	public ChatRoomList()
+	public ChatRoomList(String id)
 	{
+		this.id = id;
 		roomList = new HashArrayList<>();
 	}
+	
+	public String getId() {
+		return id;
+	}
+	
 	/**
 	* adds new chat room object to a list of Rooms.
 	* @param room ChatRoom object
@@ -33,6 +50,10 @@ public class ChatRoomList
 	public synchronized void addRoom(ChatRoom room)
 	{
 		roomList.add(room);
+		ArrayList<Message> arrayList = PersistentStore.readMessagesForChat(this, room);
+		for (Message msg : arrayList) {
+			room.addMessage(msg);
+		}
 	}
 	
 	/**

@@ -2,6 +2,7 @@ package chat;
 
 import java.util.Map;
 import java.util.LinkedList;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -15,12 +16,16 @@ import stimulatedplanning.util.IObjectWithId;
 
 /** This class represents a chat room in the Chat System
 */
-public class ChatRoom implements IObjectWithId
+public class ChatRoom implements IObjectWithId, Serializable
 {
-	/*
-	* used to stroe name of the room
-	*/
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5881629834245237107L;
+	/*
+	* used to store name of the room
+	*/
 	private String name = null;
 	/*
 	* used to store description of the room

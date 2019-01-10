@@ -2,12 +2,14 @@ package chat;
 
 import java.io.Serializable;
 
+import stimulatedplanning.StimulatedPlanningFactory;
 import stimulatedplanning.User;
+import stimulatedplanning.util.IObjectWithId;
 
 /**
 Represents a Message sent by a user.
 */
-public class Message implements Serializable
+public class Message implements Serializable, IObjectWithId
 {
 	/**
 	 * 
@@ -18,9 +20,30 @@ public class Message implements Serializable
 	*/
 	private User user = null;
 	/**
+	* String used to store the name of a chatter
+	*/
+	private ChatRoom room = null;
+	public ChatRoom getRoom() {
+		return room;
+	}
+
+	/**
+	* String used to store the name of a chatter
+	*/
+	private ChatRoomList roomList = null;
+	public ChatRoomList getRoomList() {
+		return roomList;
+	}
+
+	/**
 	* String containing message
 	*/
 	private String message = null;
+
+	/**
+	 * identifier for database purposes
+	 */
+	private String id = null;
 	
 	public static final String emojiPre = "<img src=\"/img/chat/emojis/";
 	public static final String emojiMiddle = ".png\" title=\"(";
@@ -62,17 +85,25 @@ public class Message implements Serializable
 	* long containing the time when message was delivered
 	*/
 	private long timeStamp;
+	
 	/**
-	* This constructor accepts a name of the chatterand the message.
+	* This constructor accepts a name of the chatter and the message.
 	* @param name Name of the chatter
 	* @param message message of the chatter
 	* @param timeStamp time of the message
 	*/
-	public Message(User user, String message, long timeStamp)
+	public Message(User user, String message, long timeStamp, ChatRoom room, ChatRoomList roomList, String id)
 	{
+		this.id = id;
 		this.user = user;
 		this.message= message;
 		this.timeStamp = timeStamp;
+		this.room = room;
+		this.roomList = roomList;
+	}
+	
+	public String getId() {
+		return id;
 	}
 	
 	/**
@@ -108,6 +139,24 @@ public class Message implements Serializable
 	
 	public String getDisplayMessage() {
 		String tempMsg = getMessage();
+		tempMsg = tempMsg.replace(":-)","(smile)");
+		tempMsg = tempMsg.replace(":)","(smile)");
+		tempMsg = tempMsg.replace(";-)","(wink)");
+		tempMsg = tempMsg.replace(";)","(wink)");
+		tempMsg = tempMsg.replace(":-D","(smiling)");
+		tempMsg = tempMsg.replace(":D","(smiling)");
+		tempMsg = tempMsg.replace(":P","(tongue)");
+		tempMsg = tempMsg.replace(":-P","(tongue)");
+		tempMsg = tempMsg.replace(":p","(tongue)");
+		tempMsg = tempMsg.replace(":-p","(tongue)");
+		tempMsg = tempMsg.replace(":-|","(scared)");
+		tempMsg = tempMsg.replace(":|","(scared)");
+		tempMsg = tempMsg.replace(":-(","(sad)");
+		tempMsg = tempMsg.replace(":(","(sad)");
+		tempMsg = tempMsg.replace("8-)","(nerd)");
+		tempMsg = tempMsg.replace("8)","(nerd)");
+		tempMsg = tempMsg.replace("XD","(dead)");
+		tempMsg = tempMsg.replace("<3","(heart)");
 		if (tempMsg != null && tempMsg.length()>0) {
 			for (CharSequence emoji : emojis) {
 				tempMsg = tempMsg.replace("("+emoji+")", emojiPre+emoji+emojiMiddle+emoji+emojiPost);

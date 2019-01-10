@@ -1496,7 +1496,7 @@ public class StimulatedPlanningFactory {
 			list = instance.chatRoomListMap.get(clanId);
 			if (list == null) {
 				log.info("create new chat room list for: "+clanId);
-				list = new ChatRoomList();
+				list = new ChatRoomList(clanId);
 				list.addRoom(new ChatRoom("I need help", "Ask your peers for help."));
 				list.addRoom(new ChatRoom("I need a challenge", "Tackle challenges together"));
 				list.addRoom(new ChatRoom("I need a teacher", "Ask your teacher for support"));
@@ -1509,7 +1509,7 @@ public class StimulatedPlanningFactory {
 			list = instance.chatRoomListMap.get(clanId);
 			if (list == null) {
 				log.info("create new chat room list for: "+clanId);
-				list = new ChatRoomList();
+				list = new ChatRoomList(clanId);
 				list.addRoom(new ChatRoom("I need help", "Ask your peers for help."));
 				list.addRoom(new ChatRoom("I need a teacher", "Ask your teacher for support"));
 				list.addRoom(new ChatRoom("Just want to chat", "Open chat, but follow the rules"));
@@ -1518,6 +1518,13 @@ public class StimulatedPlanningFactory {
 			}
 		}
 		return list;
+	}
+	
+	
+	public static Message createMessage(User user, String message, long timeStamp, ChatRoom room, ChatRoomList roomList) {
+		Message chatMessage = new Message(user, message, timeStamp, room, roomList, getUUID());
+		PersistentStore.writeMessage(chatMessage);
+		return chatMessage;
 	}
 
 	

@@ -33,7 +33,7 @@
 			if ( msg != null && msg.length() > 0)
 			{
 				msg = msg.trim();
-				chatRoom.addMessage(new Message(user, msg, new java.util.Date().getTime()));
+				chatRoom.addMessage(StimulatedPlanningFactory.createMessage(user, msg, new java.util.Date().getTime(), chatRoom, roomList));
 			}
 	
 %>

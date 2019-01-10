@@ -23,7 +23,7 @@ import chat.*;
 @WebServlet("/chat/servlet/ManageChatServlet")
 public class ManageChatServlet extends HttpServlet
 {
-	ChatRoomList rooms = new ChatRoomList();
+	ChatRoomList rooms = new ChatRoomList("default");
 	Properties props = null;
 	/** Reads chat.properties file creates an object of ChatRoomList and stores it in ServletContext
 	*/

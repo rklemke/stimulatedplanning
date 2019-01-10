@@ -44,7 +44,7 @@
 					if ( msg != null && msg.length() > 0)
 					{
 						msg = msg.trim();
-						room.addMessage(new Message(user, msg, new java.util.Date().getTime()));
+						room.addMessage(StimulatedPlanningFactory.createMessage(user, msg, new java.util.Date().getTime(), room, roomList));
 						StimulatedPlanningFactory.trackAndLogEvent(request, response, "chat.message");
 					}
 					

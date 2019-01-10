@@ -58,9 +58,9 @@
 				chatRoom.addChatter(chatter);
 				if (!chatRoomOld.getName().equalsIgnoreCase("StartUp"))
 				{
-					chatRoomOld.addMessage(new Message(null, nickname + " has left and joined " + 	chatRoom.getName() + ".", new java.util.Date().getTime()));
+					chatRoomOld.addMessage(StimulatedPlanningFactory.createMessage(null, nickname + " has left and joined " + 	chatRoom.getName() + ".", new java.util.Date().getTime(), chatRoomOld, roomlist));
 				}
-				chatRoom.addMessage(new Message(null, nickname + " has joined.", new java.util.Date().getTime()));
+				chatRoom.addMessage(StimulatedPlanningFactory.createMessage(null, nickname + " has joined.", new java.util.Date().getTime(), chatRoom, roomlist));
 				//chatter.setEnteredInRoomAt(new java.util.Date().getTime());
 
 			}

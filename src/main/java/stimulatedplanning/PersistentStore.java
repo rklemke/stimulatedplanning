@@ -29,6 +29,10 @@ import stimulatedplanning.util.HashArrayList;
 
 import com.google.appengine.api.datastore.Text;
 
+import chat.ChatRoom;
+import chat.ChatRoomList;
+import chat.Message;
+
 //import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 //import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import java.util.ArrayList;
@@ -1205,6 +1209,90 @@ public class PersistentStore {
 		}
 	
 	}
+	
+	
+	
+	public static void writeMessage(Message chatMessage) {
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+		Entity entity = null;
+		try {
+			entity = datastore.get(KeyFactory.createKey(chatMessage.getClass().getName(), chatMessage.getId()));
+		} catch (Exception e) {
+			//e.printStackTrace();
+			entity = null;
+		}
+		if (entity == null) {
+			entity = new Entity(chatMessage.getClass().getName(), chatMessage.getId());
+		}
+
+		entity.setProperty("uid", chatMessage.getId());
+		if (chatMessage.getUser() != null) {
+			entity.setProperty("user", chatMessage.getUser().getId());
+		} else {
+			entity.setProperty("user", null);
+		}
+		entity.setProperty("room", chatMessage.getRoom().getId());
+		entity.setProperty("roomList", chatMessage.getRoomList().getId());
+		entity.setProperty("message", chatMessage.getMessage());
+		entity.setProperty("timestamp", chatMessage.getTimeStamp());
+		
+		try {
+			datastore.put(entity);
+		} catch (Exception e1) {
+			log.info("FATAL: Writing message failed.");
+			e1.printStackTrace();
+	
+		}
+	}
+	
+
+	public static ArrayList<Message> readMessagesForChat(ChatRoomList roomlist, ChatRoom room) {
+		log.info("readMessagesForChat: "+roomlist.getId()+", "+room.getId());
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		//Entity entity = null;
+		
+		ArrayList<Message> arrayList = new ArrayList<Message>();
+
+		if (roomlist == null || room == null) {
+			return arrayList;
+		}
+		
+		Filter roomFilter = new FilterPredicate("room", FilterOperator.EQUAL, room.getId());
+		Filter roomListFilter = new FilterPredicate("roomList", FilterOperator.EQUAL, roomlist.getId());
+		CompositeFilter chatRoomFilter = CompositeFilterOperator.and(roomFilter, roomListFilter);
+
+		Query q = new Query(Message.class.getName()).setFilter(chatRoomFilter).addSort("timestamp", SortDirection.ASCENDING);
+		PreparedQuery pq = datastore.prepare(q);
+
+		for (Entity entity : pq.asIterable()) {
+			if (entity != null) {
+				Message message = readMessage(entity, roomlist, room);
+				if (message != null) {
+					arrayList.add(message);
+				}
+			}
+		}
+
+		return arrayList;
+	}
+	
+	
+	public static Message readMessage(Entity msgEntity, ChatRoomList roomlist, ChatRoom room) {
+		String id = readStringProperty(msgEntity, "uid", null);
+		String userId = readStringProperty(msgEntity, "user", null);
+		String message = readStringProperty(msgEntity, "message", null);
+		Date sTimeStamp = readDateProperty(msgEntity, "timestamp", null);
+		
+		User user = null;
+		if (userId != null) {
+			user = StimulatedPlanningFactory.getUser(userId, userId);
+		}
+		
+		Message msg = new Message(user, message, sTimeStamp.getTime(), room, roomlist, id);
+		return msg;
+	}
+	
 
 	protected static LessonStatus readStatus(Entity genericEntity) {
 		//log.info("readStatus 1: "+genericEntity.getProperties().toString());
