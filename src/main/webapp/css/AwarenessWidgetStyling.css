@@ -54,6 +54,7 @@ img.imgHolder {
 	float: left;
 	width: 2.5em;
 	height: 2.5em;
+	padding-right: 0.2em;
 	/*border: 1px Solid #808080;*/
 }
 div.headerText{ 

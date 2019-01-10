@@ -59,18 +59,23 @@
     <title>Selection Widget</title>
     <link rel="stylesheet" href="css/SelectionWidgetStyling.css">
     <link rel="stylesheet" href="css/ClanMembersStyling.css">
-    <!--  link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" -->
     <link rel="stylesheet" href="css/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script  type="text/javascript" src="/jquery/external/jquery/jquery.js"></script>
+<script  type="text/javascript" src="/jquery/jquery-ui.js"></script>
     <script type="text/javascript">
 	$(document).ready(function () {
+		
   	    $(document).tooltip({
 	    	content: function() {
 	    		return $(this).prop('title');
 	    	}
 	    });
-		$(".selectionOption").checkboxRadio();
+  	    
+  	  $("div#RowOne Input[type=<%= checkboxType %>]" ).checkboxradio({
+        icon: false
+  	    });
 	});
 
 	</script>
@@ -81,14 +86,12 @@
 	
 	<div class="container">
 	
-	<div style="display: inline-block; text-align: center; width: 98%; height: 10%">
-	<strong style=" font-size: 24px"><%= currentSelectionObject.getTitle() %></strong>
-	</div>
+	<div class="row" id="RowOne">
 	
-	<div class="column">
+	<fieldset>
+	<legend> <%= currentSelectionObject.getTitle() %> </legend>
 	<form id="selectionForm" method="POST" action="InformationObjectServlet_SoC">
 	<input type="hidden" id="submitIndicator" name="submitIndicator" value="true">
-	<ol id="selectable">
 	<% 
 	List<SelectionOption> options = currentSelectionObject.getOptionList();
 	if (currentSelectionObject.isClanIdentityPurpose()) {
@@ -120,7 +123,6 @@
 		}
 		
 	%>
-	  <li class="ui-widget-content" id="li-<%= option.getId() %>">
     	<input 
     		class="selectionOption" 
     		type="<%= checkboxType %>" 
@@ -138,7 +140,7 @@
     		title="<%= option.getDescription() %>"
 	  	<% } %>
 	  	   ><% if (currentSelectionObject.isAvatarPurpose()) { %>
-    	<img src="<%= option.getUrl() %>" width="25" height="25">
+    	<img style="width:1.5em; height:1.5em;" src="<%= option.getUrl() %>" >
     	<% } else { %>
 	  	<%= option.getTitle() %>
 	  	<% } %></label><%
@@ -158,13 +160,13 @@
 				}
 	        } 
 		 } 
-		 %></li>
+		 %> 
 	<% } %>
-	</ol>
 	</form>
+	</fieldset><!--  -->
 	
 	</div><!--column-->
-	
+	</div><!-- rowTwo -->
 	</div><!--container-->
 	
 	</body>
