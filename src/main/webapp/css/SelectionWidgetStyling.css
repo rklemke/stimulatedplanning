@@ -1,21 +1,62 @@
-
-.container {
-	margin-right: auto;
-    margin-left: auto;
-    padding: 2.5px;
-    width:98%;
-    height: 98%;
-	overflow:hidden; 
-	word-wrap:break-word
+*{
+	/*border: 1px Solid #808080;*/
 }
-.column {
-	width:98%;
-	height: 78%;
-    display:inline-block;
-    margin: 2.5px;
-    padding: 2.5px;
+div.container {
+	position: absolute;
+	width:98%; 
+	height:98%;
+	word-wrap:break-word;
+	/*background-color: #666699;*/
 }
 
+.clear { clear:both; }
+
+div.row{
+	position: relative;
+	padding: 0.2em;
+}
+
+div#RowOne{
+	display:block;
+	width: 98%;
+	height: 98%;
+	/*background-color: #666666;*/
+}
+
+div#RowOne form{
+	position: relative;
+	display:block;
+	widht: 98%;
+	height: 98%;
+	}
+	
+div#RowOne form label{
+	display:inline-block;
+	margin: 0.1em;
+	width: 1.5em;
+	height:1.5em;
+	}
+	
+.ui-button-selection {
+    padding: .5em;
+    display: inline-block;
+    position: relative;
+    line-height: normal;
+    margin-right: .1em;
+    cursor: pointer;
+    vertical-align: middle;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: visible;
+	}
+	
+.ui-checkboxradio-label.ui-corner-all.ui-button{
+    padding: .5em; !important;
+}
+	
 #buttonControl {
 	width:98%;
 	height: 10%;
@@ -27,9 +68,3 @@
 	margin-bottom: 2.5px;
     padding: 2.5px;
 }
-
-#feedback { font-size: 1.4em; }
-#selectable .ui-selecting { background: #FECA40; }
-#selectable .ui-selected { background: #F39814; color: white; }
-#selectable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
-#selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
