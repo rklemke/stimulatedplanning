@@ -44,6 +44,14 @@
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
+    function openChat() {
+        if ($( "#chatFrame" ).attr("src") == "") {
+            var src = "/chat/servlet/LoginServlet";
+  	        $( "#chatFrame" ).attr("src", src);
+        }
+    	$( "#chatDialog" ).dialog( "open" );
+    }
+    
     $( function() {
   	    var contentId = $( "#contentId" );
   	    var contentName = $( "#contentName" );
@@ -58,9 +66,24 @@
           pageurl.val(valUrl);
           contentName.val($( "#contentSelect option:selected" ).text());
           $("#contentFrame").attr("src", "GenericClanFrameServlet_SoC?contentId="+valId+"&contentName="+$( "#contentSelect option:selected" ).text()+"&pageurl="+valUrl);
+          //$("#contentFrame").attr("src", "GenericClanFrameServlet_SoC?pageurl="+valUrl);
         }
        });
-   
+
+	    $( "#chatDialog" ).dialog({
+	  	      autoOpen: false,
+	  	      width: 840,
+	  	      show: {
+	  	        effect: "blind",
+	  	        duration: 1000
+	  	      },
+	  	      hide: {
+	  	        effect: "blind",
+	  	        duration: 1000
+	  	      }
+	  	 });
+	  	 
+	  	 $( "#chatOpener" ).on( "click", openChat);
     } );
 	</script>
 </head>
@@ -86,6 +109,16 @@
 </form>
 
 <iframe id="contentFrame" style="width:860px; height:480px;"></iframe>
+
+<button id="chatOpener">Open Chat</button>
+<div id="chatDialog" title="chat tool">
+	<iframe 
+		id="chatFrame" 
+		src="" 
+		style="width:50em; height:25em; position: relative;" 
+		frameborder="0">
+	</iframe>
+</div>
 
 <div id="SP_ajaxresult">Loading content.</div>
 <script type="text/javascript">

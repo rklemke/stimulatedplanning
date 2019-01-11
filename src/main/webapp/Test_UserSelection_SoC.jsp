@@ -60,8 +60,8 @@
 <input type="hidden" value="unknown" id="userid" name="userid">
 <input type="hidden" value="Guest" id="userName" name="userName">
 <input type="submit" id="submitLogin" name="submitLogin" value="Login"></input>
-<input type="submit" id="submitClan" name="submitClan" value="Clan"></input>
-<input type="submit" id="submitChat" name="submitChat" value="Chat"></input>
+<!-- <input type="submit" id="submitClan" name="submitClan" value="Clan"></input>
+<input type="submit" id="submitChat" name="submitChat" value="Chat"></input>  -->
 </form>
 </body>
 </html>

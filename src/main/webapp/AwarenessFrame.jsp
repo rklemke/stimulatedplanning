@@ -57,7 +57,27 @@
                 value: <%= 100*otherClanOffline/otherClanSize %>
             });
         	$(document).tooltip();
-		})
+		});
+        
+    	function clan_tickerRequest() {
+  		  $.ajax({
+  		    dataType: 'jsonp',
+  		    url: '/ClanStatusServlet',
+  		    success: function(clan_data) {
+  	    	    $("#AW_OtherClanOnline").progressbar({
+  	                value: (100 * clan_data.otherClanOnline + 100 * clan_data.otherClanRecent)/clan_data.otherClanSize
+	            });
+  	        	$("#AW_OtherClanOffline").progressbar({
+  	                value: 100 * clan_data.otherClanOffline/clan_data.otherClanSize
+  	            });
+		    },
+		    complete: function() {
+ 		    }
+  		  });
+  		}
+  		
+  		setInterval(clan_tickerRequest, 30000);
+
     </script>
 </head>
 <body>

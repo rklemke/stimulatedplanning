@@ -48,11 +48,16 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 		
 		String contentId = request.getParameter("contentId");
 		String contentName = request.getParameter("contentName");
-		log.info("contentId "+contentId+" contentName "+contentName);
+		String pageurl = request.getParameter("pageurl");
+		log.info("contentId "+contentId+", contentName "+contentName+", pageurl "+pageurl);
 		ContentDescriptor contentDescriptor = null;
 		if (contentId != null) {
 			contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
-		} else {
+		} 
+		if (contentDescriptor == null && pageurl != null) {
+			contentDescriptor = course.getContentByUrl(pageurl);
+		} 
+		if (contentDescriptor == null) {
 			contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
 		}
 		List<InformationObject> informationObjectList = null;

@@ -27,9 +27,25 @@
 	  size = "25px";
   }
   
+  boolean allowChat = true;
+  String allowChatS = request.getParameter("allowChat");
+  if (allowChatS != null) {
+	  allowChat = Boolean.valueOf(allowChatS);
+  }
+  
+  if (allowChat) {
+%><script>
+$( function() {
+    $( "#userIcon_<%= user.getId() %>" ).on( "click", openChat );
+  } 
+);
+
+</script><%	  
+  }
 %><div class="profiles" style="border-color:<%=color%>; background-color:<%=color%>;">
 	<a 
 		href="#" 
+		id="userIcon_<%= user.getId() %>"
 		title= "<%= user.getName() %><br /><%= onlineStatus %><br /><img src='<%= user.getAvatarUrl() %>' width='75px' height='75px'>"
 	>
 		<img src="<%= user.getAvatarUrl() %>" width="<%= size %>" height="<%= size %>">
