@@ -78,7 +78,8 @@ public class Message implements Serializable, IObjectWithId
 			"sleeping",
 			"tired",
 			"tongue",
-			"wink"	
+			"wink",
+			"ale"
 	};
 
 	/**
@@ -145,7 +146,7 @@ public class Message implements Serializable, IObjectWithId
 		tempMsg = tempMsg.replace(";)","(wink)");
 		tempMsg = tempMsg.replace(":-D","(smiling)");
 		tempMsg = tempMsg.replace(":D","(smiling)");
-		tempMsg = tempMsg.replace(":P","(tongue)");
+		tempMsg = tempMsg.replace(":D","(tongue)");
 		tempMsg = tempMsg.replace(":-P","(tongue)");
 		tempMsg = tempMsg.replace(":p","(tongue)");
 		tempMsg = tempMsg.replace(":-p","(tongue)");

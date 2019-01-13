@@ -91,7 +91,7 @@ div#RowTwoColumnOne{
 	margin-top:0.2em;
 	width: 99%;
 	height:99%;
-	background-color: lightgrey;
+	background-color: lightblue;
 }
 
 div#buttonControl {
@@ -116,4 +116,3 @@ div#buttonSubmit{
 	display:inline-block;
 	margin-right: 0.2em;
 }
-
