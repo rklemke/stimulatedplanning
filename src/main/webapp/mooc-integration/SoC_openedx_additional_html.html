@@ -2,40 +2,52 @@
 Open EdX additional HTML content
 Login to Open EdX as author
 
+Preparation: for all pages, where you add the SoC tool you need to collect before changing the page:
+
+- the page url as visible to the end users of the course
+- the corresponding id and name of the content element in the SoC widget
+
+Before pasting, you need to adapt for each page the values of the contentId and contentName 
+hidden input fields in the snippet below.
+
 To add the planning tool:
 On  the selected page, where the planning tool should be add one content block raw html:
-1. paste the content of the section <Pages with Planning tool>
-2. paste the content of the section <pages with tracker / feedback / planning tool>
+1. adapt the hidden input fields as described above
+2. paste the content of the section below
 3. save the content block
 
-To add tracking to the content pages:
-On each content page: add a Raw HTML content block and paste the text from section <pages with tracker / feedback / planning tool>.
 
-
-WARNING: The section <pages with feedback> is currently not in use and should not be pasted anywhere.
+modify these two fields before copying, then start copying from below here to the end of the document: 
 -->
 
+<input type="hidden" value="" id="contentId" name="contentId">
+<input type="hidden" value="" id="contentName" name="contentName">
 
-<!-- script src="https://code.jquery.com/jquery-1.12.4.js"></script /-->
 
-<!-- Pages with Feedback -->
+<iframe id="contentFrame" style="width:860px; height:480px;"></iframe>
 
-<iframe width="1100" height="600" id="SP_feedbackFrame" src=""></iframe>
-
-<!-- Pages with Planning Tool -->
-
-<iframe width="1100" height="600" id="SP_stimulatedPlanningFrame" src=""></iframe>
-
-<!-- Pages with Tracker / Feedback / Planning Tool -->
+<button id="chatOpener">Chat</button>
+<div id="chatDialog" title="chat tool">
+	<iframe 
+		id="chatFrame" 
+		src="" 
+		style="width:50em; height:25em; position: relative;" 
+		frameborder="0">
+	</iframe>
+</div>
 
 <div id="SP_ajaxresult">Loading content.</div>
+
+
 <script type="text/javascript">
-	var SP_timeoutInterval = 30000;
+	var SoC_baseUrl = "https://senseofcommunity-225200.appspot.com";
+	var SP_timeoutInterval = 10000;
 	var SP_userNameDefault = "Guest";
 	var SP_userIdDefault = "unknown";
 	var SP_pageUrlDefault = window.location.href;
+
 	function SP_getUserName() {
-	  var tmpName = $('.label-username').html();
+	  var tmpName = $('.label-username-long').html();
 	  if (tmpName == null) {
 	    tmpName = $('.username').html();;
 	  }
@@ -44,9 +56,18 @@ WARNING: The section <pages with feedback> is currently not in use and should no
 	  }
 	  return tmpName;
 	}
+
 	function SP_getUserId() {
-	  return SP_getUserName();
+		  var tmpName = $('.label-username').html();
+		  if (tmpName == null) {
+		    tmpName = $('.username').html();;
+		  }
+		  if (tmpName == null) {
+		    tmpName = SP_userNameDefault;
+		  }
+		  return tmpName;
 	}
+
 	function SP_getPageUrl() {
 		var tmpId = $('#pageurl', window.parent.document).val();
 		if (tmpId == null) {
@@ -58,39 +79,72 @@ WARNING: The section <pages with feedback> is currently not in use and should no
 	function SP_tickerRequest() {
 		  var userName = SP_getUserName();
 		  var userId = SP_getUserId(); 
-		  var pageUrl = SP_getPageUrl(); 
-		  $.ajax({
-		    dataType: 'jsonp',
-		    url: 'https://stimulatedplanning.appspot.com/DataTrackerServlet',
-		    method: 'POST',
-		    data: {
-			userName: userName,
-			userid: userId,
-			page: pageUrl
-		    }, 
-		    success: function(SP_data) {
-		    	if ($('#SP_stimulatedPlanningFrame').length) {
-		    		$("#SP_stimulatedPlanningFrame").attr("src", "https://stimulatedplanning.appspot.com/GoalSettingServlet?userName="+userName+"&userid="+userId);
-					$( '#SP_ajaxresult' ).html('Connected. '+userName);
-		    	} else if ($('#SP_feedbackFrame').length) {
-		    		$("#SP_feedbackFrame").attr("src", "https://stimulatedplanning.appspot.com/FeedbackFrame.jsp");
-					$( '#SP_ajaxresult' ).html('Connected. '+userName);
-		    	} else {
-					var SP_datatxt = SP_data.feedbackFrame;
- //                   alert(SP_datatxt);
-					  $( '#SP_ajaxresult' ).html(SP_datatxt);
-		    	}
-		    },
-		    complete: function() {
-		      // Schedule the next request when the current one's complete
-		      
-		    	if (!$('#SP_stimulatedPlanningFrame').length && !$('#SP_feedbackFrame').length) {
-				      SP_timeoutInterval += SP_timeoutInterval; // get slower, when user just stays on page.
-				      setTimeout(SP_tickerRequest, SP_timeoutInterval);
-		    	}
-		    }
-		  });
+		  var pageUrl = SP_getPageUrl();
+		  if (userName != "Guest") {
+			  $.ajax({
+				    dataType: 'jsonp',
+				    url: SoC_baseUrl+'/DataTrackerServlet',
+				    method: 'POST',
+				    data: {
+					userName: userName,
+					userid: userId,
+					page: pageUrl,
+					logType: "trackClan"
+				    }, 
+				    success: function(SP_data) {
+				    	if ($('#contentFrame').length) {
+							$( '#SP_ajaxresult' ).html('Connected. '+userName+'. ');
+				      	    var contentId = $( "#contentId" ).val();
+				      	    var contentName = $( "#contentName" ).val();
+				            $("#contentFrame").attr("src", SoC_baseUrl+"/GenericClanFrameServlet_SoC?contentId="+contentId+"&contentName="+contentName+"&pageurl="+pageUrl+"&userId="+userId);
+				    	} else {
+							var SP_datatxt = SP_data.feedbackFrame;
+		 //                   alert(SP_datatxt);
+							  $( '#SP_ajaxresult' ).html(SP_datatxt);
+				    	}
+				    },
+				    complete: function() {
+						// Schedule the next request when the current one's complete
+						SP_timeoutInterval += SP_timeoutInterval; // get slower, when user just stays on page.
+						setTimeout(SP_tickerRequest, SP_timeoutInterval);
+				    }
+			  });
+			}
 		}
 		
-		setTimeout(SP_tickerRequest, 2000);
-</script>
+
+	function openChat() {
+        if ($( "#chatFrame" ).attr("src") == "") {
+            var src = SoC_baseUrl+"/chat/servlet/LoginServlet";
+  	        $( "#chatFrame" ).attr("src", src);
+        }
+        if ($( "#chatDialog" ).dialog( "isOpen" )) {
+        	$( "#chatDialog" ).dialog( "close" );
+        } else {
+        	$( "#chatDialog" ).dialog( "open" );
+        }
+    }
+    
+    $( function() {
+	    $( "#chatDialog" ).dialog({
+	  	      autoOpen: false,
+	  	      width: 840,
+	  	      show: {
+	  	        effect: "blind",
+	  	        duration: 500
+	  	      },
+	  	      hide: {
+	  	        effect: "blind",
+	  	        duration: 500
+	  		}
+	  	});
+	  	 
+	  	$( "#chatOpener" ).on( "click", openChat);
+	  	 
+		SP_tickerRequest();
+
+	  	 
+    } );
+	</script>
+
+<!--  copy until here -->
