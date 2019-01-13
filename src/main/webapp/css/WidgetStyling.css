@@ -3,12 +3,8 @@
 .container {
 	margin-right: auto;
     margin-left: auto;
-    padding: 5px;
-    width:800px;
-    height: 400px;
-	border: 2.5px Solid #808080;
-	overflow:hidden; 
-	word-wrap:break-word
+    width:98%;
+    height: 98%;
 }
 
 .column {
