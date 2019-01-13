@@ -155,4 +155,36 @@ public class CourseDescriptor extends GenericDescriptor {
 		return Math.abs(counter1-counter2);
 	}
 
+	public ContentDescriptor getContentByUrl(String url) {
+		if (url == null) {
+			return null;
+		}
+		int iend = url.indexOf("?"); 
+		if (iend != -1) {
+			url = url.substring(0 , iend);
+		}
+
+		for (ModuleDescriptor module: modules) {
+			for (LessonDescriptor lesson : module.lessons) {
+				for (ContentDescriptor content: lesson.contents) {
+					String curl = content.url;
+					if (curl != null) {
+						int iend3 = curl.indexOf("?");
+						if (iend3 != -1) {
+							curl = curl.substring(0 , iend3);
+						}
+						if (curl.endsWith("1") && iend3 > 0) {
+							curl = curl.substring(0 , iend3-1);
+						}
+					}
+					
+					if (url.equals(content.url)) {
+						return content;
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 }

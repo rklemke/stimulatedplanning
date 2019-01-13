@@ -52,30 +52,31 @@ public class PersistentStore {
 	private static final Logger log = Logger.getLogger(PersistentStore.class.getName());   
 
 	public static void writeUser(User user) throws Exception {
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		if (!StimulatedPlanningFactory.userGuest.equals(user.getName()) && !StimulatedPlanningFactory.userUnknown.equals(user.getId())) {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		Entity userEntity = null;
-		try {
-			userEntity = datastore.get(KeyFactory.createKey(user.getClass().getName(), user.getId()));
-		} catch (Exception e) {
-			log.info("User "+user.getId()+" does not exist yet. Creating it.");
-			userEntity = null;
+			Entity userEntity = null;
+			try {
+				userEntity = datastore.get(KeyFactory.createKey(user.getClass().getName(), user.getId()));
+			} catch (Exception e) {
+				log.info("User "+user.getId()+" does not exist yet. Creating it.");
+				userEntity = null;
+			}
+			if (userEntity == null) {
+				userEntity = new Entity(user.getClass().getName(), user.getId());
+			}
+
+			userEntity.setProperty("name", user.getName());
+			userEntity.setProperty("uid", user.getId());
+			userEntity.setProperty("treatmentGroup", user.isTreatmentGroup());
+			if (user.isTreatmentGroup()) {
+				userEntity.setProperty("clan", user.getClan().getId());
+			}
+			userEntity.setProperty("onlineStatus", user.getOnlineStatus().getId());
+			userEntity.setProperty("avatarUrl", user.getAvatarUrl());
+
+			datastore.put(userEntity);
 		}
-		if (userEntity == null) {
-			userEntity = new Entity(user.getClass().getName(), user.getId());
-		}
-
-		userEntity.setProperty("name", user.getName());
-		userEntity.setProperty("uid", user.getId());
-		userEntity.setProperty("treatmentGroup", user.isTreatmentGroup());
-		if (user.isTreatmentGroup()) {
-			userEntity.setProperty("clan", user.getClan().getId());
-		}
-		userEntity.setProperty("onlineStatus", user.getOnlineStatus().getId());
-		userEntity.setProperty("avatarUrl", user.getAvatarUrl());
-
-		datastore.put(userEntity);
-
 	}
 
 	public static User getUser(String userId, HashMap<String, Object> cache) throws Exception {
@@ -918,21 +919,21 @@ public class PersistentStore {
 	}
 
 	public static void writeDescriptor(UserOnlineStatus userOnlineStatus) throws Exception {
-		//log.info("writeDescriptor (UserOnlineStatus): "+userOnlineStatus.getUser().getName()+", "+userOnlineStatus.getClass().getName()+", "+userOnlineStatus.getId());
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		if (!StimulatedPlanningFactory.userGuest.equals(userOnlineStatus.getUser().getName()) && !StimulatedPlanningFactory.userUnknown.equals(userOnlineStatus.getUser().getId())) {
+			//log.info("writeDescriptor (UserOnlineStatus): "+userOnlineStatus.getUser().getName()+", "+userOnlineStatus.getClass().getName()+", "+userOnlineStatus.getId());
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-		try {
-			Entity userOnlineStatusEntity = createGenericUserEntity(userOnlineStatus);
-			userOnlineStatusEntity.setProperty("lastAccess", userOnlineStatus.getLastAccess().getTime());
-			userOnlineStatusEntity.setProperty("lastUrl", userOnlineStatus.getLastUrl());
+			try {
+				Entity userOnlineStatusEntity = createGenericUserEntity(userOnlineStatus);
+				userOnlineStatusEntity.setProperty("lastAccess", userOnlineStatus.getLastAccess().getTime());
+				userOnlineStatusEntity.setProperty("lastUrl", userOnlineStatus.getLastUrl());
 
-			datastore.put(userOnlineStatusEntity);
-		} catch (Exception e1) {
-			log.info("FATAL: Writing goal failed.");
-			e1.printStackTrace();
-
+				datastore.put(userOnlineStatusEntity);
+			} catch (Exception e1) {
+				log.info("FATAL: Writing goal failed.");
+				e1.printStackTrace();
+			}
 		}
-
 	}
 
 

@@ -40,19 +40,52 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Test User Navigation</title>
 <link rel="stylesheet" type="text/css" href="/css/chat/chat.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
-  function resizeIframe(iframe) {
-    iframe.height = iframe.contentWindow.document.body.scrollHeight + "px";
+  function openChat() {
+      var src = "/chat/servlet/LoginServlet";
+      if ($( "#chatFrame" ).attr("src") == "") {
+    	  //$( "#chatFrame" ).on("load", resizeChatFrame);
+	      $( "#chatFrame" ).attr("src", src);
+      }
+  	  $( "#chatDialog" ).dialog( "open" );
   }
+  
+  $( function() {
+	    $( "#chatDialog" ).dialog({
+	      autoOpen: false,
+	      width: 840,
+	      show: {
+	        effect: "blind",
+	        duration: 1000
+	      },
+	      hide: {
+	        effect: "blind",
+	        duration: 1000
+	      }
+	    });
+	 
+	    $( "#chatOpener" ).on( "click", openChat);
+	  } 
+  );
+
 </script>   
 </head>
 <body>
 
 <H2>Welcome, <%= user.getName() %></H2>
 <a href="Test_UserSelection_SoC.jsp">Change user</a>
-<iframe id="contentFrame" onload="resizeIframe(this)" src="/chat/servlet/LoginServlet" 
-style="width:50em; height:25em; position: relative;" frameborder="0">
-</iframe>
-
+<button id="chatOpener">Open Chat</button>
+<div id="chatDialog" title="chat tool">
+	<iframe 
+		id="chatFrame" 
+		src="" 
+		style="width:50em; height:25em; position: relative;" 
+		frameborder="0">
+	</iframe>
+</div>
 </body>
 </html>
