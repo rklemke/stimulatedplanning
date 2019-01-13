@@ -1,15 +1,17 @@
 *{
 	/*border: 1px Solid #808080;*/
 }
+
 div.container {
-	position: absolute;
+	/*making the position absolute 
+	will not allow iframe to scroll*/
 	width:98%; 
 	height:98%;
-	word-wrap:break-word;
 	/*background-color: #666699;*/
 }
 
-.clear { clear:both; }
+.clear { 
+	clear:both; }
 
 div.row{
 	position: relative;
@@ -18,6 +20,7 @@ div.row{
 
 div#RowOne{
 	display:block;
+	top:0px;
 	width: 98%;
 	height: 98%;
 	/*background-color: #666666;*/
@@ -33,38 +36,9 @@ div#RowOne form{
 div#RowOne form label{
 	display:inline-block;
 	margin: 0.1em;
-	width: 1.5em;
-	height:1.5em;
 	}
 	
-.ui-button-selection {
-    padding: .5em;
-    display: inline-block;
-    position: relative;
-    line-height: normal;
-    margin-right: .1em;
-    cursor: pointer;
-    vertical-align: middle;
-    text-align: center;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    overflow: visible;
-	}
 	
 .ui-checkboxradio-label.ui-corner-all.ui-button{
     padding: .5em; !important;
-}
-	
-#buttonControl {
-	width:98%;
-	height: 10%;
-    display:block;
-	text-align: center;
-    margin-top: 10px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 2.5px;
-    padding: 2.5px;
 }

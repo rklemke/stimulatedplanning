@@ -62,8 +62,6 @@
     <link rel="stylesheet" href="css/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script  type="text/javascript" src="/jquery/external/jquery/jquery.js"></script>
-<script  type="text/javascript" src="/jquery/jquery-ui.js"></script>
     <script type="text/javascript">
 	$(document).ready(function () {
 		
@@ -76,8 +74,15 @@
   	  $("div#RowOne Input[type=<%= checkboxType %>]" ).checkboxradio({
         icon: false
   	    });
+  	  
+  	  if(<%=user.isTreatmentGroup()%> && <%=currentSelectionObject.isClan()%>){
+  		  $("div#RowOne form label").css({
+  			"display":"block",
+  			"text-align":"left",
+  			"vertical-align": "middle"
+  		  });
+  	  }
 	});
-
 	</script>
 
 </head>
@@ -164,9 +169,8 @@
 	<% } %>
 	</form>
 	</fieldset><!--  -->
+	</div><!-- rowOne -->
 	
-	</div><!--column-->
-	</div><!-- rowTwo -->
 	</div><!--container-->
 	
 	</body>

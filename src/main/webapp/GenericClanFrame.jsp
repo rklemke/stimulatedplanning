@@ -48,7 +48,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Test User Navigation</title>
-    <link rel="stylesheet" href="css/IdentityWidgetStyling.css">
+    <link rel="stylesheet" href="css/GenericClanFrameStyling.css">
     <link rel="stylesheet" href="css/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -78,19 +78,23 @@
 <body>
 	<div class="container">
 	
-	<div class = "columnOne"  >
-<% if (user.isTreatmentGroup()) { %>	
-	<img id="ClanLogo"  src="<%= userClan.getClanLogo() %>"/>
-<% } %>	
+	<div class="row" id="RowOne">
 	
-	<iframe id="AW_frameHolder"></iframe>
+    <div class="column" id="RowOneColumnOne">
+    <% if (user.isTreatmentGroup()) { %>	
+	<img id="ClanLogo" src="<%= userClan.getClanLogo() %>"/>
 	
-	</div><!--columnOne-->
-	
-	<div class="columnTwo">
-	<iframe id="Selection_frameHolder"></iframe>
-	
-	<div id="buttonControl">
+	<img id="UserLogo" src="<%= user.getAvatarUrl() %>">
+	<% } %>	
+    </div><!-- RowOneColumnOne -->
+    
+    <div class="column" id="RowOneColumnTwo">
+    <div id="frameHolder">
+    <iframe id="Selection_frameHolder">
+    <p>Your browser does not support iframes.</p> 
+    </iframe>
+    </div>
+    <div id="buttonControl">
 	<form id="infoNavForm" method="POST" action="GenericClanFrameServlet_SoC">
 		<% if (informationObjectList != null) { %>
 		<%    if (currentInformationObjectIdx > 0) { %>
@@ -104,10 +108,18 @@
 	<%    if (currentInformationObject instanceof SelectionObject) { %>
 		<button id="buttonSubmit" class="ui-button ui-widget ui-corner-all">Submit</button>
 	<%    } %>
-	</div><!--button Control-->
 	
-	</div><!--columnTwo-->
-
+	</div><!--button Control-->
+    </div><!-- RowOneColumnTwo -->
+    
+    </div><!-- RowOne -->
+    
+    <div class="row" id="RowTwo">
+    <div class="column" id="RowTwoColumnOne">
+    	<iframe id="AW_frameHolder" style="position: relative; height: 99%; width: 99%;" frameBorder="0"></iframe>
+    </div><!-- RowTwoColumnOne -->
+    
+    </div><!-- RowTwo -->
 	</div><!--container-->
 
 </body>
