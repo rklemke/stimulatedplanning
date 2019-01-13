@@ -49,7 +49,11 @@
             var src = "/chat/servlet/LoginServlet";
   	        $( "#chatFrame" ).attr("src", src);
         }
-    	$( "#chatDialog" ).dialog( "open" );
+        if ($( "#chatDialog" ).dialog( "isOpen" )) {
+        	$( "#chatDialog" ).dialog( "close" );
+        } else {
+        	$( "#chatDialog" ).dialog( "open" );
+        }
     }
     
     $( function() {
@@ -75,11 +79,11 @@
 	  	      width: 840,
 	  	      show: {
 	  	        effect: "blind",
-	  	        duration: 1000
+	  	        duration: 500
 	  	      },
 	  	      hide: {
 	  	        effect: "blind",
-	  	        duration: 1000
+	  	        duration: 500
 	  	      }
 	  	 });
 	  	 
@@ -110,7 +114,7 @@
 
 <iframe id="contentFrame" style="width:860px; height:480px;"></iframe>
 
-<button id="chatOpener">Open Chat</button>
+<button id="chatOpener">Chat</button>
 <div id="chatDialog" title="chat tool">
 	<iframe 
 		id="chatFrame" 
