@@ -153,7 +153,8 @@ public class StimulatedPlanningFactory {
 	 * @return
 	 */
 	public static CourseDescriptor generateTestCourse() {
-		return generateDevTestCourse();
+		return generateAccTestCourse();
+		//return generateDevTestCourse();
 	}	
 
 	private static HashArrayList<Clan> getOrGenerateClans() {
@@ -240,33 +241,63 @@ public class StimulatedPlanningFactory {
 	
 	
 	protected static ModuleDescriptor generateAccWeek1(CourseDescriptor course) {
-		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
-				"Week 1", 
-				"Week 1 - Introduction", "");
+		ModuleDescriptor module = null;
+		LessonDescriptor lesson = null;
+		ContentDescriptor content = null;
+		InformationObject info = null;
+		SelectionObject sele = null;
+				
+		module = new ModuleDescriptor(getUUID(), 
+				"General Introduction", 
+				"General Introduction", "");
 		course.addModule(module);
-		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
-				"module1. lesson 1",
-				"module1. lesson 1","");
+
+
+		// Content		
+		lesson = new LessonDescriptor(getUUID() ,
+				"Welcome",
+				"Welcome","");
 		module.addLesson(lesson);	
-		ContentDescriptor content = new ContentDescriptor(getUUID(), 
-				"Week 1 content", 
-				"Week 1 content", 
-				testCourseBaseURL+"courseware/w1content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%4083d79097d5d94304a6fa9a5aed25dce3");
+
+		content = new ContentDescriptor("99afb1a25d4a4d4b87712f67fe313bde/50d96a7ac43243bba77b330f36e6c29b/", 
+				"Welcome", 
+				"Welcome", 
+				accCourseBaseURL+"99afb1a25d4a4d4b87712f67fe313bde/50d96a7ac43243bba77b330f36e6c29b/");
 		lesson.addContent(content);
 
-		content = new ContentDescriptor(getUUID(), 
-				"Week 1 challenge", 
-				"Week 1 challenge", 
-				testCourseBaseURL+"courseware/w1challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%4083d79097d5d94304a6fa9a5aed25dce3");
+		lesson = new LessonDescriptor(getUUID() ,
+				"The Origins",
+				"The Origins","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("99afb1a25d4a4d4b87712f67fe313bde/924936fcf16f4b319f2e7bdee9dd18f1/", 
+				"History and terminology", 
+				"History and terminology", 
+				accCourseBaseURL+"99afb1a25d4a4d4b87712f67fe313bde/924936fcf16f4b319f2e7bdee9dd18f1/");
 		lesson.addContent(content);
 
-		InformationObject info = new InformationObject(getUUID(), 
+
+		// Assignment
+		lesson = new LessonDescriptor(getUUID() ,
+				"Week 1 Assignment",
+				"Week 1 Assignment","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("99afb1a25d4a4d4b87712f67fe313bde/d51e8b0e73c147f0beca638a09c1b3da/", 
+				"Week 1 Assignment", 
+				"Week 1 Assignment", 
+				accCourseBaseURL+"99afb1a25d4a4d4b87712f67fe313bde/d51e8b0e73c147f0beca638a09c1b3da/");
+		lesson.addContent(content);
+
+
+		// Assignment content
+		info = new InformationObject(getUUID(), 
 				"Intro text", 
 				"Intro text", 
-				testCourseBaseURL+"courseware/w1challenge/");
+				"");
 		content.addInformationObject(info);
 
-		SelectionObject sele = generateUserAvatarSelection();
+		sele = generateUserAvatarSelection();
 		content.addInformationObject(sele);
 		
 		sele = generateClanLogoSelection();
@@ -281,7 +312,7 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Clan rules", 
 				"Clan rules", 
-				testCourseBaseURL+"courseware/w1challenge/");
+				"");
 		content.addInformationObject(info);
 		info.setContent("<OL>"+
 			"<LI>Do not use the chat or other tools provided in the course to harm or hurt others (such as the members of your clan and or/and the other clan).</LI>"+
@@ -305,44 +336,105 @@ public class StimulatedPlanningFactory {
 		
 		return module;
 	}
-	
+
 	protected static ModuleDescriptor generateAccWeek2(CourseDescriptor course) {
-		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
-				"Week2", 
-				"Week 2 - Tips on how to protect your computer", "");
+		ModuleDescriptor module = null;
+		LessonDescriptor lesson = null;
+		ContentDescriptor content = null;
+		InformationObject info = null;
+		SelectionObject sele = null;
+				
+		module = new ModuleDescriptor(getUUID(), 
+				"Symmetric Encryption", 
+				"Symmetric Encryption", "");
 		course.addModule(module);
-		
-		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
-				"Threats and attacks",
-				"Threats and attacks","");
-		module.addLesson(lesson);
-		
-		ContentDescriptor content = new ContentDescriptor(getUUID(), 
-				"Week 2 content", 
-				"Week 2 content", 
-				testCourseBaseURL+"courseware/w2content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+
+
+		// Content		
+		lesson = new LessonDescriptor(getUUID() ,
+				"Caesar and Cryptanalysis",
+				"Caesar and Cryptanalysis","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("8e4e29d1f93b459bb40d11f93f77a85a/657cb604d580479796cd253af89a809b/", 
+				"Caesar Cipher", 
+				"Caesar Cipher", 
+				accCourseBaseURL+"8e4e29d1f93b459bb40d11f93f77a85a/657cb604d580479796cd253af89a809b/");
 		lesson.addContent(content);
-		
-		content = new ContentDescriptor(getUUID(), 
-				"Week 2 challenge", 
-				"Week 2 challenge", 
-				testCourseBaseURL+"courseware/w2challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+
+		lesson = new LessonDescriptor(getUUID() ,
+				"Vigenère and cryptanalysis",
+				"Vigenère and cryptanalysis","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("8e4e29d1f93b459bb40d11f93f77a85a/13925f19c0644d6a80ed77c74b2c7505/", 
+				"Vigenère Part 1 and 2", 
+				"Vigenère Part 1 and 2", 
+				accCourseBaseURL+"8e4e29d1f93b459bb40d11f93f77a85a/13925f19c0644d6a80ed77c74b2c7505/");
 		lesson.addContent(content);
-		
-		InformationObject info = new InformationObject(getUUID(), 
+
+		lesson = new LessonDescriptor(getUUID() ,
+				"Playfair",
+				"Playfair","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("8e4e29d1f93b459bb40d11f93f77a85a/e8053ac8660340c4967a88b0381fe265/", 
+				"Playfair", 
+				"Playfair", 
+				accCourseBaseURL+"8e4e29d1f93b459bb40d11f93f77a85a/e8053ac8660340c4967a88b0381fe265/");
+		lesson.addContent(content);
+
+		lesson = new LessonDescriptor(getUUID() ,
+				"Unbreakable encryption: one time pad",
+				"Unbreakable encryption: one time pad","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("8e4e29d1f93b459bb40d11f93f77a85a/51532bfb08fa40d8a111af0d0630717e/", 
+				"Unbreakable Encryption: One Time Pad", 
+				"Unbreakable Encryption: One Time Pad", 
+				accCourseBaseURL+"8e4e29d1f93b459bb40d11f93f77a85a/51532bfb08fa40d8a111af0d0630717e/");
+		lesson.addContent(content);
+
+		lesson = new LessonDescriptor(getUUID() ,
+				"Modern Symmetric Cryptography",
+				"Modern Symmetric Cryptography","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("8e4e29d1f93b459bb40d11f93f77a85a/2a2dc9c5b4804017b6fb9b5c4a9d8f5b/", 
+				"Modern Symmetric Cryptography", 
+				"Modern Symmetric Cryptography", 
+				accCourseBaseURL+"8e4e29d1f93b459bb40d11f93f77a85a/2a2dc9c5b4804017b6fb9b5c4a9d8f5b/");
+		lesson.addContent(content);
+
+
+		// Assignment
+		lesson = new LessonDescriptor(getUUID() ,
+				"Week 2 Assignment",
+				"Week 2 Assignment","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("8e4e29d1f93b459bb40d11f93f77a85a/bfc34daba1ec4aa09dd4f88e00aa5cd0/", 
+				"Week 2 Assignment", 
+				"Week 2 Assignment", 
+				accCourseBaseURL+"8e4e29d1f93b459bb40d11f93f77a85a/bfc34daba1ec4aa09dd4f88e00aa5cd0/");
+		lesson.addContent(content);
+
+
+		// Assignment content
+		info = new InformationObject(getUUID(), 
 				"Communicate with the opponents", 
 				"Communicate with the opponents", 
-				testCourseBaseURL+"courseware/w2challenge/");
+				"");
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		SelectionObject sele = generateEncryptedMessageSelection();
+		sele = generateEncryptedMessageSelection();
 		content.addInformationObject(sele);
 		
 		info = new InformationObject(getUUID(), 
 				"Encrypt your message", 
 				"Communicate with the opponents", 
-				testCourseBaseURL+"courseware/w2challenge/");
+				"");
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -352,7 +444,7 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Encrypted Message received", 
 				"How do you decrypt it?", 
-				testCourseBaseURL+"courseware/w2challenge/");
+				"");
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -362,11 +454,12 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Clan challenge results", 
 				"How'd you do?", 
-				testCourseBaseURL+"courseware/w2challenge/");
+				"");
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		// Goal for module 2
+		
+		// Goal for Module 2
 		
 		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
 				"I intend to participate in the course activities to learn about "+module.getTitle(), "");
@@ -375,41 +468,103 @@ public class StimulatedPlanningFactory {
 			goal.addLesson(iterator.next());
 		}
 		course.addGoal(goal);
+
 		
 		return module;
 	}
-	
+
 	protected static ModuleDescriptor generateAccWeek3(CourseDescriptor course) {
-		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
-				"Week 3", 
-				"Week 3 - Tips on how to protect your computer", "");
+		ModuleDescriptor module = null;
+		LessonDescriptor lesson = null;
+		ContentDescriptor content = null;
+		InformationObject info = null;
+		SelectionObject sele = null;
+				
+		module = new ModuleDescriptor(getUUID(), 
+				"Asymmetric Encryption", 
+				"Asymmetric Encryption", "");
 		course.addModule(module);
-		
-		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
-				"Threats and attacks",
-				"Threats and attacks","");
-		module.addLesson(lesson);
-		
-		ContentDescriptor content = new ContentDescriptor(getUUID(), 
-				"Week 3 content", 
-				"Week 3 content", 
-				testCourseBaseURL+"courseware/w3content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
-		lesson.addContent(content);
-		
-		content = new ContentDescriptor(getUUID(), 
-				"Week 3 challenge", 
-				"Week 3 challenge", 
-				testCourseBaseURL+"courseware/w3challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+
+
+		// Content		
+		lesson = new LessonDescriptor(getUUID() ,
+				"Intro to week 3- Asymmetric Encryption",
+				"Intro to week 3- Asymmetric Encryption","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("085e5e7bbd294467a5dfc7adee0dc8e7/f075fc2c2e834471ac7c645fb2ff2ca2/", 
+				"Intro to Week 3", 
+				"Intro to Week 3", 
+				accCourseBaseURL+"085e5e7bbd294467a5dfc7adee0dc8e7/f075fc2c2e834471ac7c645fb2ff2ca2/");
 		lesson.addContent(content);
 
-		InformationObject info = new InformationObject(getUUID(), 
+		lesson = new LessonDescriptor(getUUID() ,
+				"Clock Arithmetic",
+				"Clock Arithmetic","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("085e5e7bbd294467a5dfc7adee0dc8e7/8abacf327658455abd7f6312250a5bcb/", 
+				"Counting with clocks", 
+				"Counting with clocks", 
+				accCourseBaseURL+"085e5e7bbd294467a5dfc7adee0dc8e7/8abacf327658455abd7f6312250a5bcb/");
+		lesson.addContent(content);
+
+		lesson = new LessonDescriptor(getUUID() ,
+				"RSA",
+				"RSA","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("085e5e7bbd294467a5dfc7adee0dc8e7/52dcb3e8bc3c4de1a3caa0873fa5e251/", 
+				"How to use it and proof of correctness", 
+				"How to use it and proof of correctness", 
+				accCourseBaseURL+"085e5e7bbd294467a5dfc7adee0dc8e7/52dcb3e8bc3c4de1a3caa0873fa5e251/");
+		lesson.addContent(content);
+
+		lesson = new LessonDescriptor(getUUID() ,
+				"Diffie-Hellman",
+				"Diffie-Hellman","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("085e5e7bbd294467a5dfc7adee0dc8e7/4b198ca8530d488eadef85cf1af008f1/", 
+				"(Exponential) arithmetic with letters and Diffie-Hellman key exchange", 
+				"(Exponential) arithmetic with letters and Diffie-Hellman key exchange", 
+				accCourseBaseURL+"085e5e7bbd294467a5dfc7adee0dc8e7/4b198ca8530d488eadef85cf1af008f1/");
+		lesson.addContent(content);
+
+		lesson = new LessonDescriptor(getUUID() ,
+				"ElGamal",
+				"ElGamal","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("085e5e7bbd294467a5dfc7adee0dc8e7/14df7edafc7e472a9fa455247159e227/", 
+				"ElGamal", 
+				"ElGamal", 
+				accCourseBaseURL+"085e5e7bbd294467a5dfc7adee0dc8e7/14df7edafc7e472a9fa455247159e227/");
+		lesson.addContent(content);
+
+
+		// Assignment
+		lesson = new LessonDescriptor(getUUID() ,
+				"Week 3 Assignment",
+				"Week 3 Assignment","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("085e5e7bbd294467a5dfc7adee0dc8e7/6778b583bc084d87824bf443a739f8e7/", 
+				"Week 3 Assignment", 
+				"Week 3 Assignment", 
+				accCourseBaseURL+"085e5e7bbd294467a5dfc7adee0dc8e7/6778b583bc084d87824bf443a739f8e7/");
+		lesson.addContent(content);
+
+
+		// Assignment content
+		info = new InformationObject(getUUID(), 
 				"Test your knowledge", 
 				"Test your knowledge", 
-				testCourseBaseURL+"courseware/w3challenge/");
+				"");
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		SelectionObject sele = generateKnowledgeTest1();
+		sele = generateKnowledgeTest1();
 		content.addInformationObject(sele);
 		
 		sele = generateKnowledgeTest2();
@@ -418,11 +573,12 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Your results", 
 				"Your results", 
-				testCourseBaseURL+"courseware/w3challenge/");
+				"");
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		// Goal for module 2
+
+		// Goal for Module 3
 		
 		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
 				"I intend to participate in the course activities to learn about "+module.getTitle(), "");
@@ -431,41 +587,104 @@ public class StimulatedPlanningFactory {
 			goal.addLesson(iterator.next());
 		}
 		course.addGoal(goal);
+
 		
 		return module;
 	}
-	
+
 	protected static ModuleDescriptor generateAccWeek4(CourseDescriptor course) {
-		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
-				"Week 4", 
-				"Week 4 - Tips on how to protect your computer", "");
+		ModuleDescriptor module = null;
+		LessonDescriptor lesson = null;
+		ContentDescriptor content = null;
+		InformationObject info = null;
+		SelectionObject sele = null;
+				
+		module = new ModuleDescriptor(getUUID(), 
+				"Using Cryptography", 
+				"Using Cryptography", "");
 		course.addModule(module);
-		
-		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
-				"Threats and attacks",
-				"Threats and attacks","");
-		module.addLesson(lesson);
-		
-		ContentDescriptor content = new ContentDescriptor(getUUID(), 
-				"Week 4 content", 
-				"Week 4 content", 
-				testCourseBaseURL+"courseware/w4content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
-		lesson.addContent(content);
-		
-		content = new ContentDescriptor(getUUID(), 
-				"Week 4 challenge", 
-				"Week 4 challenge", 
-				testCourseBaseURL+"courseware/w4challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+
+
+		// Content		
+		lesson = new LessonDescriptor(getUUID() ,
+				"Digital signatures",
+				"Digital signatures","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("f916b1af5d144670a980c5d5e0fee3a7/b2913720de144705ad1bd5a6e637cb9f/", 
+				"Digital signatures", 
+				"Digital signatures", 
+				accCourseBaseURL+"f916b1af5d144670a980c5d5e0fee3a7/b2913720de144705ad1bd5a6e637cb9f/");
 		lesson.addContent(content);
 
-		InformationObject info = new InformationObject(getUUID(), 
+		lesson = new LessonDescriptor(getUUID() ,
+				"PKI and certificate chains",
+				"PKI and certificate chains","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("f916b1af5d144670a980c5d5e0fee3a7/aa28fa12231d4cea8923564f63aeafcf/", 
+				"PKI and certificate chains", 
+				"PKI and certificate chains", 
+				accCourseBaseURL+"f916b1af5d144670a980c5d5e0fee3a7/aa28fa12231d4cea8923564f63aeafcf/");
+		lesson.addContent(content);
+
+		lesson = new LessonDescriptor(getUUID() ,
+				"Homomorphic cryptography",
+				"Homomorphic cryptography","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("f916b1af5d144670a980c5d5e0fee3a7/3b66d6481cd74e9e811cf6be9ed6a5de/", 
+				"Homomorphic cryptography", 
+				"Homomorphic cryptography", 
+				accCourseBaseURL+"f916b1af5d144670a980c5d5e0fee3a7/3b66d6481cd74e9e811cf6be9ed6a5de/");
+		lesson.addContent(content);
+
+		lesson = new LessonDescriptor(getUUID() ,
+				"mixnets",
+				"mixnets","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("f916b1af5d144670a980c5d5e0fee3a7/ebfa676671b94b518e1d525adfe4ddd0/", 
+				"mixnets", 
+				"mixnets", 
+				accCourseBaseURL+"f916b1af5d144670a980c5d5e0fee3a7/ebfa676671b94b518e1d525adfe4ddd0/");
+		lesson.addContent(content);
+
+		lesson = new LessonDescriptor(getUUID() ,
+				"hash chains and merkle trees",
+				"hash chains and merkle trees","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("f916b1af5d144670a980c5d5e0fee3a7/f903c3afa93f431cb5db9016c44712d7/", 
+				"hash chains and merkle trees", 
+				"hash chains and merkle trees", 
+				accCourseBaseURL+"f916b1af5d144670a980c5d5e0fee3a7/f903c3afa93f431cb5db9016c44712d7/");
+		lesson.addContent(content);
+
+
+		// Assignment
+		lesson = new LessonDescriptor(getUUID() ,
+				"Week 4 Assignment",
+				"Week 4 Assignment","");
+		module.addLesson(lesson);	
+
+		content = new ContentDescriptor("f916b1af5d144670a980c5d5e0fee3a7/f7e5d9bef8304d09bf28e5713b680466/", 
+				"Week 4 Assignment", 
+				"Week 4 Assignment", 
+				accCourseBaseURL+"f916b1af5d144670a980c5d5e0fee3a7/f7e5d9bef8304d09bf28e5713b680466/");
+		lesson.addContent(content);
+
+
+		// Assignment content
+		info = new InformationObject(getUUID(), 
 				"Discuss about cryptography", 
 				"Discuss about cryptography", 
 				testCourseBaseURL+"courseware/w4challenge/");
 		content.addInformationObject(info);
 		info.setContent("");
-		
-		// Goal for module 2
+
+
+		// Goal for Module 1
 		
 		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
 				"I intend to participate in the course activities to learn about "+module.getTitle(), "");
@@ -474,10 +693,15 @@ public class StimulatedPlanningFactory {
 			goal.addLesson(iterator.next());
 		}
 		course.addGoal(goal);
+
 		
 		return module;
 	}
 	
+
+
+
+
 
 
 	/**
