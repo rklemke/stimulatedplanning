@@ -84,32 +84,30 @@
 
     <div class="container">
     
-    <div class="row" id="RowOne">
-    <div class="column" id="RowOneColumnOne">
+    <div id="RowOneColumnOne">
     
     <img src = "<%= userClan.getClanLogo() %>" class="imgHolder" />
     <div class="headerText"><%= userClan.getTitle() %> [<%= user.getName() %>]</div>
     
-    </div><!-- column  -->
-    <div class="column" id="RowOneColumnTwo">
+    </div><!-- RowOneColumnOne  -->
+    
+    <div id="RowOneColumnTwo">
     
     <img src = "<%= otherClan.getClanLogo() %>" class="imgHolder"/>
     <div class="headerText"><%= otherClan.getTitle() %></div>
     
-    </div><!-- column -->
-    </div><!-- row One -->
-    
-    <div class="row" id="RowTwo">
-    <div class="column" id="RowTwoColumnOne">
+    </div><!-- RowOneColumnTwo -->
+
+    <div id="RowTwoColumnOne">
     
     <fieldset>
     <legend>Clan Members</legend>
-    <iframe id="AW_frameHolder" frameBorder="0" style="position: relative; height: 98%; width: 98%;"></iframe>
+    <iframe id="AW_frameHolder"></iframe>
     </fieldset>
 			
-	</div><!--columnOne-->
+	</div><!--RowTwoColumnOne-->
 	
-	<div class="column" id="RowTwoColumnTwo">
+	<div id="RowTwoColumnTwo">
 	
 	<Strong>Online members: </strong>
 	<div id="AW_OtherClanOnline"></div>
@@ -136,8 +134,7 @@
 	Offline </strong>
 	</fieldset>
 			
-	</div><!-- columnTwo -->
-    </div><!-- rowTwo -->
+	</div><!-- RowTwoColumnTwo -->
     
     <div class="clear"></div>
     </div><!--container-->

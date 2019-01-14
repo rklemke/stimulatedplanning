@@ -78,9 +78,7 @@
 <body>
 	<div class="container">
 	
-	<div class="row" id="RowOne">
-	
-    <div class="column" id="RowOneColumnOne">
+    <div id="RowOneColumnOne">
     <% if (user.isTreatmentGroup()) { %>	
 	<img id="ClanLogo" src="<%= userClan.getClanLogo() %>"/>
 	
@@ -88,7 +86,7 @@
 	<% } %>	
     </div><!-- RowOneColumnOne -->
     
-    <div class="column" id="RowOneColumnTwo">
+    <div id="RowOneColumnTwo">
     <div id="frameHolder">
     <iframe id="Selection_frameHolder">
     <p>Your browser does not support iframes.</p> 
@@ -112,14 +110,10 @@
 	</div><!--button Control-->
     </div><!-- RowOneColumnTwo -->
     
-    </div><!-- RowOne -->
-    
-    <div class="row" id="RowTwo">
-    <div class="column" id="RowTwoColumnOne">
+    <div id="RowTwoColumnOne">
     	<iframe id="AW_frameHolder" style="position: relative; height: 99%; width: 99%;" frameBorder="0"></iframe>
     </div><!-- RowTwoColumnOne -->
     
-    </div><!-- RowTwo -->
 	</div><!--container-->
 
 </body>
