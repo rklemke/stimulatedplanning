@@ -39,6 +39,59 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Test User Navigation</title>
+<style type="text/css">
+div.container {
+	position: relative;
+	width:100%; 
+	height:34em;
+	margin-right: auto;
+    margin-left: auto;
+	/*background-color: #666699;*/
+}
+
+div.row{
+	position: absolute;
+	padding: 0.2em;
+}
+div#RowOne{
+	display:block;
+	Top: 2px;
+	width: 99%;
+	height: 31.5em;
+	/*background: #666666;*/
+}
+div#RowTwo{
+	display:inline-table;
+	align-items : center;
+	bottom:2px;
+	width: 99%;
+	height: 1.5em;
+	vertical-align:middle;
+	background: skyblue;
+	color: white;
+}
+
+iframe#contentFrame{
+border:0;
+width: 100%;
+height: 100%;
+/*background-color: skyblue;*/
+}
+
+div#SP_ajaxresult{
+display: inline-table;
+}
+
+div#chatOpener{
+display: inline-table;
+}
+
+div#OUNL{
+display: inline-table;
+float: right;
+}
+
+</style>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -93,6 +146,8 @@
 </head>
 <body>
 
+
+<!-- removed in the upload -->
 <H2>Welcome, <%= user.getName() %></H2><span class="label-username-long"><%= user.getName() %></span><span class="label-username"><%= user.getId() %></span>
 <a href="Test_UserSelection_SoC.jsp">Change user</a>
 <form id="contentSelectForm">
@@ -112,9 +167,13 @@
 <input type="hidden" value="" id="pageurl" name="pageurl">
 </form>
 
-<iframe id="contentFrame" style="width:860px; height:480px;"></iframe>
+<!-- removed -->
+<div class="container">
+<div class="row" id="RowOne">
+<iframe id="contentFrame"></iframe>
+</div><!-- RowOne -->
 
-<button id="chatOpener">Chat</button>
+<div class="row" id="RowTwo">
 <div id="chatDialog" title="chat tool">
 	<iframe 
 		id="chatFrame" 
@@ -125,6 +184,10 @@
 </div>
 
 <div id="SP_ajaxresult">Loading content.</div>
+<button id="chatOpener" style="display:inline-block;">Chat</button>
+<div id="OUNL">Open University of Netherlands</div>
+</div><!-- RowTwo -->
+
 <script type="text/javascript">
 	var SP_timeoutInterval = 10000;
 	var SP_userNameDefault = "Guest";
@@ -202,5 +265,7 @@
 		
 		setTimeout(SP_tickerRequest, 2000);
 </script>
+
+</div><!-- container -->
 </body>
 </html>

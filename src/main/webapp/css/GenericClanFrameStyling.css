@@ -2,56 +2,45 @@
 	/*border: 1px Solid #808080;*/
 }
 
-div.container {
-	position: relative;
-	width:50em; 
-	height:25em;
-	word-wrap:break-word;
-}
-
-div.row{
-	position: absolute;
-	display: block;
-}
 
 .clear { clear:both; }
 
-div#RowOne{
-	top:0;
-	width: 99%;
-	height: 84%;
-	/*background-color: #666666;*/
-}
-div#RowTwo{
-	bottom:0;
-	width: 99%;
-	height: 16%;
+div.container {
+	position: absolute;
+	display: block;
+	width:100%; 
+	height:31em;
 	/*background-color: #666699;*/
 }
 
-div.column{
-	position: absolute;
-    padding: 0.2em;
-}
-
 div#RowOneColumnOne{
-	display:inline-box;
-	left: 0px;
+	display:inline-block;
+	float:left;
 	width: 10%;
-	height:99%;
+	height:25em;
+	text-align:center;
 	/*background-color: #666622;*/
 }
 
 div#RowOneColumnTwo{
+	display:inline-block;
+	float:right;
 	right: 0px;
-	text-align: center;
-	width: 88%;
-	height:99%;
+	width: 86%;
+	height:25em;
 	/*background-color: #666699;*/
 }
 
+div#RowTwoColumnOne{
+	display:inline-block;
+	float:left;
+	margin-top:0.2em;
+	width: 99%;
+	height:4.5em;
+	background-color: lightblue;
+}
+
 div#frameHolder{
-	position: absolute; 
 	top: 0px; 
 	right: 0px;
 	width: 100%;
@@ -66,36 +55,26 @@ div#frameHolder{
 }
 
 img#ClanLogo{
-	position: absolute;
 	display:block;
 	margin-left: auto;
 	margin-right: auto;
-	top:1.5em;
+	margin-top:1.5em;
 	width: 4.5em;
 	height: 4.5em;
 	/*border: 2.5px Solid #808080;*/
 }
 
 img#UserLogo{
-	position: absolute;
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
+	margin-top: 7.5em;
 	width: 4.5em;
 	height: 4.5em;
-	bottom: 2.5em;
 	/*border: 2.5px Solid #808080;*/
 }
 
-div#RowTwoColumnOne{
-	margin-top:0.2em;
-	width: 99%;
-	height:99%;
-	background-color: lightblue;
-}
-
 div#buttonControl {
-	position: absolute;
 	bottom:0px;
 	width:99%;
 	height: 10%;
