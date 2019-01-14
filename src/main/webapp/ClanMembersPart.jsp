@@ -3,7 +3,8 @@
 	pageEncoding="UTF-8"
 	import="stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*" 
 %><%
-  session = request.getSession();
+  //session = request.getSession();
+  session = StimulatedPlanningFactory.initializeSession(request, response);
 
   User user = (User)session.getAttribute("user");
   UserOnlineStatus userStatus = user.getOnlineStatus();

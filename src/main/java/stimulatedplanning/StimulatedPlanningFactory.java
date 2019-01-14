@@ -2166,9 +2166,9 @@ public class StimulatedPlanningFactory {
 		
 		String userNameR = request.getParameter("userName");
 		String useridR = request.getParameter("userid");
-		if (useridR == null) {
-			useridR = request.getParameter("userId");
-		}
+		//if (useridR == null) {
+		//	useridR = request.getParameter("userId");
+		//}
 
 		//log.info("init session 1: userNameR: "+userNameR+", useridR: "+useridR);
 		if (userNameR == null || useridR == null) {

@@ -1,5 +1,6 @@
 package chat.servlet;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -7,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.logging.Logger;
+
 import chat.*;
 import stimulatedplanning.StimulatedPlanningFactory;
 import stimulatedplanning.User;
@@ -14,6 +17,7 @@ import stimulatedplanning.User;
 @WebServlet("/chat/servlet/LoginServlet")
 public class LoginServlet extends HttpServlet
 {
+	private static final Logger log = Logger.getLogger(LoginServlet.class.getName());   
 	private String contextPath = "";
 	/** This method just redirects user to a login page.*/
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -42,8 +46,8 @@ public class LoginServlet extends HttpServlet
 //		}
 		if ((nickname != null && nickname.length() > 3))
 		{
-			try
-			{
+//			try
+//			{
 				ChatRoomList roomlist = StimulatedPlanningFactory.getChatRoomListForUser(user);
 				ChatRoom chatRoom = roomlist.getRoomOfChatter(userId);
 				if (chatRoom == null || "StartUp".equalsIgnoreCase(chatRoom.getName()))
@@ -59,18 +63,22 @@ public class LoginServlet extends HttpServlet
 				} else {
 					StimulatedPlanningFactory.trackAndLogEvent(request, response, "chat.room.re-enter");
 				}
-				response.sendRedirect(contextPath + "/chat/chat.jsp");
-			}
-			catch(Exception exception)
-			{
-				System.out.println("Exception thrown in LoginServlet: " + exception.getMessage());
-				exception.printStackTrace();
-				response.sendRedirect(contextPath + "/chat/error.jsp");
-			}
+				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/chat/chat.jsp");
+				dispatcher.forward(request,response);
+//			}
+//			catch(Exception exception)
+//			{
+//				log.info("Exception thrown in LoginServlet: " + exception.getMessage());
+//				
+//				RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/chat/error.jsp");
+//				dispatcher.forward(request,response);
+//			}
 		}
 		else
 		{
-			response.sendRedirect(contextPath + "/chat/login.jsp?ic=t");
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/chat/login.jsp?ic=t");
+			dispatcher.forward(request,response);
+			//response.sendRedirect(contextPath + "/chat/login.jsp?ic=t");
 		}
 	}
 }
