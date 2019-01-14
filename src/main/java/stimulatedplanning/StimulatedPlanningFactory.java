@@ -47,7 +47,7 @@ public class StimulatedPlanningFactory {
 	public static final String planningUrl = "https://localhost/courses/course-v1:DelftX+Sandbox_Welten+2018/courseware/ca508c0a998744d9baca503243547577/a42163024f11463eb492c34128bc859d/1?activate_block_id=block-v1%3ADelftX%2BSandbox_Welten%2B2018%2Btype%40vertical%2Bblock%4059532b2c3bf34650a960d73198deedb0";
 	//private static final String testCourseId = "ICS18";
 	//public static final String testCourseId = "SBW18";
-	public static final String testCourseId = "SoC18";
+	public static final String testCourseId = "TCC01";
 	//private static final String testCourseBaseURL = "https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/";
 	//public static final String testCourseBaseURL = "https://edge.edx.org/courses/course-v1:DelftX+Sandbox_Welten+2018/";
 	public static final String testCourseBaseURL = "https://localhost/courses/course-v1:DelftX+Sandbox_Welten+2018/";
@@ -2215,7 +2215,10 @@ public class StimulatedPlanningFactory {
 		
 		//log.info("init session 6: user.name(4): "+user.getName()+", user.id(4): "+user.getId());
 		loginData += " | user.name: "+user.getName()+", user.id: "+user.getId();
-		log.info("init session finally: user.name: "+user.getName()+", user.id: "+user.getId()+", trace:  "+loginData);
+		
+		if (userUnknown.equals(user.getId()) || userGuest.equals(user.getId()) || userUnknown.equals(user.getName()) || userGuest.equals(user.getName())) {
+			log.info("init session finally: user.name: "+user.getName()+", user.id: "+user.getId()+", trace:  "+loginData);
+		}
 
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
 		if (course == null) {
