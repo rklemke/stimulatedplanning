@@ -48,7 +48,7 @@
         //when the document has finished loading. "$" sign calls the jquery
         $(document).ready(function () {
 				//this is temp and the frameholder src should be replaced by the active link
-			$("#AW_frameHolder").attr("src","ClanMembers.jsp");
+			$("#AW_frameHolder").attr("src","ClanMembers.jsp?userid=<%= user.getId() %>&userName=<%= user.getName() %>");
 		
     	    $("#AW_OtherClanOnline").progressbar({
                 value: <%= 100*otherClanOnline/otherClanSize %>
@@ -62,7 +62,7 @@
     	function clan_tickerRequest() {
   		  $.ajax({
   		    dataType: 'jsonp',
-  		    url: '/ClanStatusServlet',
+  		    url: '/ClanStatusServlet?userid=<%= user.getId() %>&userName=<%= user.getName() %>',
   		    success: function(clan_data) {
   	    	    $("#AW_OtherClanOnline").progressbar({
   	                value: (100 * clan_data.otherClanOnline + 100 * clan_data.otherClanRecent)/clan_data.otherClanSize

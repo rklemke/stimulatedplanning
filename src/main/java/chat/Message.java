@@ -156,6 +156,8 @@ public class Message implements Serializable, IObjectWithId
 		tempMsg = tempMsg.replace(":(","(sad)");
 		tempMsg = tempMsg.replace("8-)","(nerd)");
 		tempMsg = tempMsg.replace("8)","(nerd)");
+		tempMsg = tempMsg.replace("B-)","(cool)");
+		tempMsg = tempMsg.replace("B)","(cool)");
 		tempMsg = tempMsg.replace("XD","(dead)");
 		tempMsg = tempMsg.replace("<3","(heart)");
 		if (tempMsg != null && tempMsg.length()>0) {
