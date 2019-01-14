@@ -30,8 +30,24 @@
 	  otherClanOffline = otherClan.getOfflineUsers().size()+1;
   }
   
-  ContentDescriptor contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
+	ContentDescriptor contentDescriptor = null;
+	String contentId = request.getParameter("contentId");
+	String contentName = request.getParameter("contentName");
+	String pageurl = request.getParameter("pageurl");
+	if (contentId != null) {
+		contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
+	} 
+	if (contentDescriptor == null && pageurl != null) {
+		contentDescriptor = course.getContentByUrl(pageurl);
+	} 
+	if (contentDescriptor == null) {
+		contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
+	}
+	
   List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
+	if (informationObjectList == null) {
+		informationObjectList = contentDescriptor.getAllInformationObjectList();
+	}
   InformationObject currentInformationObject = (InformationObject)session.getAttribute("currentInformationObject");
   int currentInformationObjectIdx = 0;
   Object idxS = (Object)session.getAttribute("currentInformationObjectIdx");
@@ -61,7 +77,7 @@
     	
 	    $(document).ready(function () {
 			//this is temp and the frameholder src should be replaced by the active link
-			$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC?userid=<%= user.getId() %>&userName=<%= user.getName() %>");
+			$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC?userid=<%= user.getId() %>&userName=<%= user.getName() %>&contentId=<%= contentId %>&currentInformationObjectIdx=<%= currentInformationObjectIdx %>");
 			$("#AW_frameHolder").attr("src","ClanMembers.jsp?userid=<%= user.getId() %>&userName=<%= user.getName() %>");
     		<% if (informationObjectList != null) { %>
     		<%    if (currentInformationObject instanceof SelectionObject) { %>
@@ -93,8 +109,12 @@
     </iframe>
     </div>
     <div id="buttonControl">
-	<form id="infoNavForm" method="POST" action="GenericClanFrameServlet_SoC">
+	<form id="infoNavForm" method="POST" action="/GenericClanFrameServlet_SoC">
+		<input type="hidden" id="userid" name="userid" value="<%= user.getId() %>"></input>
+		<input type="hidden" id="userName" name="userName" value="<%= user.getName() %>"></input>
+		<input type="hidden" id="contentId" name="contentId" value="<%= contentId %>"></input>
 		<% if (informationObjectList != null) { %>
+			<input type="hidden" id="currentInformationObjectIdx" name="currentInformationObjectIdx" value="<%= currentInformationObjectIdx %>"></input>
 		<%    if (currentInformationObjectIdx > 0) { %>
 			<input type="submit" id="buttonPrev" name="buttonPrev" class="ui-button ui-widget ui-corner-all" value="Prev"></input>
 		<%    } %>

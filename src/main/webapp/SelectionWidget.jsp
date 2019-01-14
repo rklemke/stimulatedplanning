@@ -34,14 +34,40 @@
 	  otherClanOffline = otherClan.getOfflineUsers().size()+1;
   }
   
-  ContentDescriptor contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
-  List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
-  SelectionObject currentSelectionObject = (SelectionObject)session.getAttribute("currentInformationObject");
-  int currentInformationObjectIdx = 0;
-  Object idxS = (Object)session.getAttribute("currentInformationObjectIdx");
-  if (idxS != null) {
-	  currentInformationObjectIdx = ((Integer)idxS).intValue();
-  }
+	ContentDescriptor contentDescriptor = null;
+	String contentId = request.getParameter("contentId");
+	String contentName = request.getParameter("contentName");
+	String pageurl = request.getParameter("pageurl");
+	if (contentId != null) {
+		contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
+	} 
+	if (contentDescriptor == null && pageurl != null) {
+		contentDescriptor = course.getContentByUrl(pageurl);
+	} 
+	if (contentDescriptor == null) {
+		contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
+	}
+	
+	List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
+	if (informationObjectList == null && contentDescriptor != null) {
+		informationObjectList = contentDescriptor.getAllInformationObjectList();
+	}
+
+	int currentInformationObjectIdx = 0;
+	Object idxS = session.getAttribute("currentInformationObjectIdx");
+	if (idxS == null) {
+		idxS = request.getParameter("currentInformationObjectIdx");
+	}
+	if (idxS != null) {
+		currentInformationObjectIdx = Integer.valueOf(idxS.toString());
+	}
+
+	//InformationObject currentInformationObject = (InformationObject)session.getAttribute("currentInformationObject");
+    SelectionObject currentSelectionObject = (SelectionObject)session.getAttribute("currentInformationObject");
+	if (currentSelectionObject == null && informationObjectList != null && informationObjectList.size() > currentInformationObjectIdx) {
+		currentSelectionObject = (SelectionObject)informationObjectList.get(currentInformationObjectIdx);
+	}
+
 
 	String checkboxType = "radio";
 	if (currentSelectionObject.isMultipleChoiceTest() || currentSelectionObject.isMultiVoting()) {

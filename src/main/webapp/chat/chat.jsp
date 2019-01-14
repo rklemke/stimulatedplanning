@@ -82,6 +82,10 @@
 <script  type="text/javascript" src="/jquery/external/jquery/jquery.js"></script>
 <script  type="text/javascript" src="/jquery/jquery-ui.js"></script>
 <script type="text/javascript">
+var userid = "<%= user.getId() %>";
+var userName = "<%= user.getName() %>";
+
+
 $(document).ready(function () {
 	$(".emoji").on("click", function() {
 		var emoText = $("#messagebox").val() +" "+ $(this).attr("alt") +" ";
@@ -119,7 +123,7 @@ $(document).ready(function () {
 		
 		function chat_tickerRequest() {
 			$.ajax({
-				url: 'displayMessages.jsp',
+				url: '/chat/displayMessages.jsp?userid='+userid+'&userName='+userName,
 				success: function(result) {
 					$( '#messageDisplayBox' ).html(result);
 				},
@@ -129,7 +133,7 @@ $(document).ready(function () {
 				}
 			});
 			$.ajax({
-				url: 'listrooms.jsp',
+				url: '/chat/listrooms.jsp?userid='+userid+'&userName='+userName,
 				success: function(result) {
 					$( '#roomSelection' ).html(result);
 					$( "#roomSelection input" ).checkboxradio({
@@ -143,7 +147,7 @@ $(document).ready(function () {
 				}
 			});
 			$.ajax({
-				url: 'listChatters.jsp',
+				url: '/chat/listChatters.jsp?userid='+userid+'&userName='+userName,
 				success: function(result) {
 					$( '#chatters' ).html(result);
 				},
@@ -155,14 +159,17 @@ $(document).ready(function () {
 		}
 
 		function chat_sendMessage() {
-			msgText = $( '#messagebox' ).val()
+			msgText = $( '#messagebox' ).val();
 			$.ajax({
-				url: 'displayMessages.jsp',
+				url: '/chat/displayMessages.jsp',
 			    method: 'POST',
 			    data: {
-			    	messagebox: msgText
+			    	messagebox: msgText,
+			    	userid: userid,
+			    	userName: userName
 			    }, 
 				success: function(result) {
+					alert("send: "+msgText);
 					$( '#messageDisplayBox' ).html(result);
 					$( '#messageDisplayBox').animate({ scrollTop: $('#messageDisplayBox').prop("scrollHeight")}, 1000);
 					$( '#messagebox' ).val('');
@@ -177,12 +184,15 @@ $(document).ready(function () {
 
 	    function chat_changeRoom( e ) {
 			$.ajax({
-				url: 'listrooms.jsp',
+				url: '/chat/listrooms.jsp',
 			    method: 'POST',
 			    data: {
-			    	room: $( e.target ).val()
+			    	room: $( e.target ).val(),
+			    	userid: userid,
+			    	userName: userName
 			    }, 
 				success: function(result) {
+					alert("change room");
 					$( '#roomSelection' ).html(result);
 					$( "#roomSelection input" ).checkboxradio({
 					    icon: false
@@ -234,6 +244,8 @@ $(document).ready(function () {
 <div class="row">
 
 <div class="column" id="sendText">
+		<input type="hidden" id="userid" name="userid" value="<%= user.getId() %>"></input>
+		<input type="hidden" id="userName" name="userName" value="<%= user.getName() %>"></input>
 <INPUT type="text" name="messagebox" id="messagebox" maxlength="300"  />
 <INPUT type="hidden" name="nickname" value="<%=session.getAttribute("nickname")%>"/>
 <INPUT name="sendMessageBtn" id="sendMessageBtn" type="button" value="Send" />

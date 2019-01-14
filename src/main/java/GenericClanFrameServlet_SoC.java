@@ -60,35 +60,41 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 		if (contentDescriptor == null) {
 			contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
 		}
+		
 		List<InformationObject> informationObjectList = null;
 		InformationObject currentInformationObject = null;
 		int currentInformationObjectIdx = 0;
 
-		if (request.getParameter("buttonPrev") != null) {
-			contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
+		if (contentDescriptor != null) {
 			informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
-			currentInformationObjectIdx = (Integer)session.getAttribute("currentInformationObjectIdx");
-			currentInformationObjectIdx--;
-			currentInformationObject = informationObjectList.get(currentInformationObjectIdx);
-			session.setAttribute("currentInformationObject", currentInformationObject);
-			session.setAttribute("currentInformationObjectIdx", currentInformationObjectIdx);
-			
-		} else if (request.getParameter("buttonNext") != null) {
-			contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
-			informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
-			currentInformationObjectIdx = (Integer)session.getAttribute("currentInformationObjectIdx");
-			currentInformationObjectIdx++;
-			currentInformationObject = informationObjectList.get(currentInformationObjectIdx);
-			session.setAttribute("currentInformationObject", currentInformationObject);
-			session.setAttribute("currentInformationObjectIdx", currentInformationObjectIdx);
-			
-		} else {
-			session.setAttribute("contentDescriptor", null);
-			session.setAttribute("informationObjectList", null);
-			session.setAttribute("currentInformationObject", null);
-			session.setAttribute("currentInformationObjectIdx", 0);
+			if (informationObjectList == null) {
+				informationObjectList = contentDescriptor.getAllInformationObjectList();
+			}
+			Object cioi = request.getParameter("currentInformationObjectIdx");
+			if (cioi != null) {
+				currentInformationObjectIdx = Integer.valueOf((String)cioi);
+			}
 
-			if (contentDescriptor != null) {
+			if (request.getParameter("buttonPrev") != null) {
+				//contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
+				currentInformationObjectIdx--;
+				currentInformationObject = informationObjectList.get(currentInformationObjectIdx);
+				session.setAttribute("currentInformationObject", currentInformationObject);
+				session.setAttribute("currentInformationObjectIdx", currentInformationObjectIdx);
+				
+			} else if (request.getParameter("buttonNext") != null) {
+				//contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
+				currentInformationObjectIdx++;
+				currentInformationObject = informationObjectList.get(currentInformationObjectIdx);
+				session.setAttribute("currentInformationObject", currentInformationObject);
+				session.setAttribute("currentInformationObjectIdx", currentInformationObjectIdx);
+				
+			} else {
+				session.setAttribute("contentDescriptor", null);
+				session.setAttribute("informationObjectList", null);
+				session.setAttribute("currentInformationObject", null);
+				session.setAttribute("currentInformationObjectIdx", 0);
+
 				session.setAttribute("contentDescriptor", contentDescriptor);
 				informationObjectList = contentDescriptor.getAllInformationObjectList();
 				if (informationObjectList != null) {
@@ -100,9 +106,7 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 					}
 				}
 			}
-
 		}
-
 
 		String nextServlet = "/GenericClanFrame.jsp";
 		if (currentInformationObject == null) {

@@ -52,21 +52,48 @@ public class InformationObjectServlet_SoC extends HttpServlet {
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
 		UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
 		
+		ContentDescriptor contentDescriptor = null;
 		String contentId = request.getParameter("contentId");
 		String contentName = request.getParameter("contentName");
-		
-		ContentDescriptor contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
-		List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
-		InformationObject currentInformationObject = (InformationObject)session.getAttribute("currentInformationObject");
-		int currentInformationObjectIdx = 0;
-
-		Object idxS = (Object)session.getAttribute("currentInformationObjectIdx");
-		if (idxS != null) {
-			currentInformationObjectIdx = ((Integer)idxS).intValue();
+		String pageurl = request.getParameter("pageurl");
+		if (contentId != null) {
+			contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
+		} 
+		if (contentDescriptor == null && pageurl != null) {
+			contentDescriptor = course.getContentByUrl(pageurl);
+		} 
+		if (contentDescriptor == null) {
+			contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
 		}
-			
-		String submitIndicator = request.getParameter("submitIndicator");
-		log.info("submitIndicator: "+submitIndicator);
+		
+	  List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
+		if (informationObjectList == null && contentDescriptor != null) {
+			informationObjectList = contentDescriptor.getAllInformationObjectList();
+		}
+
+		int currentInformationObjectIdx = 0;
+	  Object idxS = session.getAttribute("currentInformationObjectIdx");
+	  if (idxS == null) {
+		  idxS = request.getParameter("currentInformationObjectIdx");
+	  }
+	  if (idxS != null) {
+		  currentInformationObjectIdx = Integer.valueOf(idxS.toString());
+	  }
+	  
+	  InformationObject currentInformationObject = (InformationObject)session.getAttribute("currentInformationObject");
+	  if (currentInformationObject == null && informationObjectList != null && informationObjectList.size() > currentInformationObjectIdx) {
+		  currentInformationObject = informationObjectList.get(currentInformationObjectIdx);
+	  }
+
+	  String submitIndicator = request.getParameter("submitIndicator");
+
+	  String logString = "contentDescriptor: "+(contentDescriptor==null?"null":contentDescriptor.getId());
+	  logString += ", informationObjectList: "+(informationObjectList==null?"null":informationObjectList.size());
+	  logString += ", contentId: "+contentId;
+	  logString += ", currentInformationObjectIdx: "+currentInformationObjectIdx;
+	  logString += ", submitIndicator: "+submitIndicator;
+	  log.info(logString);
+	  
 		if (submitIndicator != null && currentInformationObject != null && currentInformationObject instanceof SelectionObject) { // we handle a form submission
 			SelectionObject currentSelectionObject = (SelectionObject)currentInformationObject;
 			String[] selectedOptionIds = request.getParameterValues("selectionRadio");
