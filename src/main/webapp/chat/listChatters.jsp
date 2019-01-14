@@ -1,7 +1,8 @@
 <%@ page session="true" errorPage="error.jsp" import="stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*,chat.*"%>
 <%
 
-	session = request.getSession();
+	session = StimulatedPlanningFactory.initializeSession(request, response);
+	// request.getSession();
 	User user = (User)session.getAttribute("user");
 
 	String userId = user.getId();

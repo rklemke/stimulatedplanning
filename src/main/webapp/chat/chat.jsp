@@ -123,7 +123,7 @@ $(document).ready(function () {
 		
 		function chat_tickerRequest() {
 			$.ajax({
-				url: '/chat/displayMessages.jsp?userid='+userid+'&userName='+userName,
+				url: '<%= StimulatedPlanningFactory.applicationHome %>/chat/displayMessages.jsp?userid='+userid+'&userName='+userName,
 				success: function(result) {
 					$( '#messageDisplayBox' ).html(result);
 				},
@@ -133,7 +133,7 @@ $(document).ready(function () {
 				}
 			});
 			$.ajax({
-				url: '/chat/listrooms.jsp?userid='+userid+'&userName='+userName,
+				url: '<%= StimulatedPlanningFactory.applicationHome %>/chat/listrooms.jsp?userid='+userid+'&userName='+userName,
 				success: function(result) {
 					$( '#roomSelection' ).html(result);
 					$( "#roomSelection input" ).checkboxradio({
@@ -147,7 +147,7 @@ $(document).ready(function () {
 				}
 			});
 			$.ajax({
-				url: '/chat/listChatters.jsp?userid='+userid+'&userName='+userName,
+				url: '<%= StimulatedPlanningFactory.applicationHome %>/chat/listChatters.jsp?userid='+userid+'&userName='+userName,
 				success: function(result) {
 					$( '#chatters' ).html(result);
 				},
@@ -161,7 +161,7 @@ $(document).ready(function () {
 		function chat_sendMessage() {
 			msgText = $( '#messagebox' ).val();
 			$.ajax({
-				url: '/chat/displayMessages.jsp',
+				url: '<%= StimulatedPlanningFactory.applicationHome %>/chat/displayMessages.jsp',
 			    method: 'POST',
 			    data: {
 			    	messagebox: msgText,
@@ -169,7 +169,6 @@ $(document).ready(function () {
 			    	userName: userName
 			    }, 
 				success: function(result) {
-					alert("send: "+msgText);
 					$( '#messageDisplayBox' ).html(result);
 					$( '#messageDisplayBox').animate({ scrollTop: $('#messageDisplayBox').prop("scrollHeight")}, 1000);
 					$( '#messagebox' ).val('');
@@ -184,7 +183,7 @@ $(document).ready(function () {
 
 	    function chat_changeRoom( e ) {
 			$.ajax({
-				url: '/chat/listrooms.jsp',
+				url: '<%= StimulatedPlanningFactory.applicationHome %>/chat/listrooms.jsp',
 			    method: 'POST',
 			    data: {
 			    	room: $( e.target ).val(),
@@ -192,7 +191,6 @@ $(document).ready(function () {
 			    	userName: userName
 			    }, 
 				success: function(result) {
-					alert("change room");
 					$( '#roomSelection' ).html(result);
 					$( "#roomSelection input" ).checkboxradio({
 					    icon: false

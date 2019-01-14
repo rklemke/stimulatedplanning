@@ -4,7 +4,8 @@
 	import="java.text.DateFormat,chat.*, stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*" 
 %>
 <%
-	session = request.getSession();
+	session = StimulatedPlanningFactory.initializeSession(request, response);
+	// request.getSession();
 	User user = (User)session.getAttribute("user");
   
 	String roonName = null;

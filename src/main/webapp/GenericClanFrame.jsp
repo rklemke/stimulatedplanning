@@ -71,14 +71,14 @@
     <script type="text/javascript">
     
     	function SoC_updateClan() {
-			$("#AW_frameHolder").attr("src","ClanMembers.jsp?userid=<%= user.getId() %>&userName=<%= user.getName() %>");
+			$("#AW_frameHolder").attr("src","<%= StimulatedPlanningFactory.applicationHome %>/ClanMembers.jsp?userid=<%= user.getId() %>&userName=<%= user.getName() %>");
     		//setTimeout(SoC_updateClan, 5000);    		
     	}
     	
 	    $(document).ready(function () {
 			//this is temp and the frameholder src should be replaced by the active link
-			$("#Selection_frameHolder").attr("src","InformationObjectServlet_SoC?userid=<%= user.getId() %>&userName=<%= user.getName() %>&contentId=<%= contentId %>&currentInformationObjectIdx=<%= currentInformationObjectIdx %>");
-			$("#AW_frameHolder").attr("src","ClanMembers.jsp?userid=<%= user.getId() %>&userName=<%= user.getName() %>");
+			$("#Selection_frameHolder").attr("src","<%= StimulatedPlanningFactory.applicationHome %>/InformationObjectServlet_SoC?userid=<%= user.getId() %>&userName=<%= user.getName() %>&contentId=<%= contentId %>&currentInformationObjectIdx=<%= currentInformationObjectIdx %>");
+			$("#AW_frameHolder").attr("src","<%= StimulatedPlanningFactory.applicationHome %>/ClanMembers.jsp?userid=<%= user.getId() %>&userName=<%= user.getName() %>");
     		<% if (informationObjectList != null) { %>
     		<%    if (currentInformationObject instanceof SelectionObject) { %>
 				$("#buttonSubmit").on("click", function() {

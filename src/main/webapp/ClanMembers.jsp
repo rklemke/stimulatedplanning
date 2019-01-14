@@ -31,7 +31,7 @@
 		
 		function clan_tickerRequest() {
 			$.ajax({
-				url: '/ClanMembersPart.jsp?userid=<%= user.getId() %>&userName=<%= user.getName() %>',
+				url: '<%= StimulatedPlanningFactory.applicationHome %>/ClanMembersPart.jsp?userid=<%= user.getId() %>&userName=<%= user.getName() %>',
 				success: function(result) {
 					$( '#AW_myClanFrame' ).html(result);
 				},
