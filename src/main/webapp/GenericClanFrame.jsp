@@ -49,11 +49,16 @@
 		informationObjectList = contentDescriptor.getAllInformationObjectList();
 	}
   InformationObject currentInformationObject = (InformationObject)session.getAttribute("currentInformationObject");
-  int currentInformationObjectIdx = 0;
-  Object idxS = (Object)session.getAttribute("currentInformationObjectIdx");
-  if (idxS != null) {
-	  currentInformationObjectIdx = ((Integer)idxS).intValue();
-  }
+
+	int currentInformationObjectIdx = 0;
+	Object idxS = session.getAttribute("currentInformationObjectIdx");
+	if (idxS == null) {
+		idxS = request.getParameter("currentInformationObjectIdx");
+	}
+	if (idxS != null) {
+		currentInformationObjectIdx = Integer.valueOf(idxS.toString());
+	}
+
   
   
 %>
@@ -70,15 +75,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
     
-    	function SoC_updateClan() {
-			$("#AW_frameHolder").attr("src","<%= StimulatedPlanningFactory.applicationHome %>/ClanMembers.jsp?userid=<%= user.getId() %>&userName=<%= user.getName() %>");
-    		//setTimeout(SoC_updateClan, 5000);    		
-    	}
-    	
 	    $(document).ready(function () {
-			//this is temp and the frameholder src should be replaced by the active link
-			$("#Selection_frameHolder").attr("src","<%= StimulatedPlanningFactory.applicationHome %>/InformationObjectServlet_SoC?userid=<%= user.getId() %>&userName=<%= user.getName() %>&contentId=<%= contentId %>&currentInformationObjectIdx=<%= currentInformationObjectIdx %>");
-			$("#AW_frameHolder").attr("src","<%= StimulatedPlanningFactory.applicationHome %>/ClanMembers.jsp?userid=<%= user.getId() %>&userName=<%= user.getName() %>");
     		<% if (informationObjectList != null) { %>
     		<%    if (currentInformationObject instanceof SelectionObject) { %>
 				$("#buttonSubmit").on("click", function() {
@@ -87,7 +84,6 @@
     		<%    } %>
     		<% } %>
     	    $(document).tooltip();
-    		//setTimeout(SoC_updateClan, 5000);
 		});
 	</script>
 </head>
@@ -104,9 +100,23 @@
     
     <div id="RowOneColumnTwo">
     <div id="frameHolder">
-    <iframe id="Selection_frameHolder">
-    <p>Your browser does not support iframes.</p> 
-    </iframe>
+    <div id="Selection_frameHolder">
+	<%    if (currentInformationObject instanceof SelectionObject) { %>
+   		<jsp:include page="SelectionWidget.jsp">
+			<jsp:param name="userid" value="<%= user.getId() %>" />
+			<jsp:param name="userName" value="<%= user.getName() %>" />
+			<jsp:param name="contentId" value="<%= contentId %>" />
+			<jsp:param name="currentInformationObjectIdx" value="<%= currentInformationObjectIdx %>" />
+   		</jsp:include>
+	<%    } else { %>
+   		<jsp:include page="InformationWidget.jsp">
+			<jsp:param name="userid" value="<%= user.getId() %>" />
+			<jsp:param name="userName" value="<%= user.getName() %>" />
+			<jsp:param name="contentId" value="<%= contentId %>" />
+			<jsp:param name="currentInformationObjectIdx" value="<%= currentInformationObjectIdx %>" />
+   		</jsp:include>
+	<%    } %>
+    </div>
     </div>
     <div id="buttonControl">
 	<form id="infoNavForm" method="POST" action="/GenericClanFrameServlet_SoC">
@@ -131,7 +141,12 @@
     </div><!-- RowOneColumnTwo -->
     
     <div id="RowTwoColumnOne">
-    	<iframe id="AW_frameHolder" style="position: relative; height: 99%; width: 99%;" frameBorder="0"></iframe>
+    	<div id="AW_frameHolder" style="position: relative; height: 99%; width: 99%;" frameBorder="0">
+    		<jsp:include page="ClanMembers.jsp">
+				<jsp:param name="userid" value="<%= user.getId() %>" />
+				<jsp:param name="userName" value="<%= user.getName() %>" />
+    		</jsp:include>
+    	</div>
     </div><!-- RowTwoColumnOne -->
     
 	</div><!--container-->

@@ -64,6 +64,8 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 		List<InformationObject> informationObjectList = null;
 		InformationObject currentInformationObject = null;
 		int currentInformationObjectIdx = 0;
+		
+		String submitForward = (String)request.getAttribute("selectionSubmitForward");
 
 		if (contentDescriptor != null) {
 			informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
@@ -89,6 +91,17 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 				session.setAttribute("currentInformationObject", currentInformationObject);
 				session.setAttribute("currentInformationObjectIdx", currentInformationObjectIdx);
 				
+			} else if (submitForward != null) {
+				session.setAttribute("contentDescriptor", contentDescriptor);
+				informationObjectList = contentDescriptor.getAllInformationObjectList();
+				if (informationObjectList != null) {
+					session.setAttribute("informationObjectList", informationObjectList);
+					if (informationObjectList.size()>0) {
+						currentInformationObject = informationObjectList.get(currentInformationObjectIdx);
+						session.setAttribute("currentInformationObject", currentInformationObject);
+						session.setAttribute("currentInformationObjectIdx", currentInformationObjectIdx);
+					}
+				}
 			} else {
 				session.setAttribute("contentDescriptor", null);
 				session.setAttribute("informationObjectList", null);

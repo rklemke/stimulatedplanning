@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*" %>
+<%@ page import="stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*, java.util.logging.Logger" %>
+<%! static Logger log = Logger.getLogger("InformationWidget_jsp"); %>
 <%
   session = StimulatedPlanningFactory.initializeSession(request, response);
 
@@ -8,6 +9,7 @@
   UserOnlineStatus userStatus = user.getOnlineStatus();
   CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
   UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
+
   Clan userClan = null;
   Clan otherClan = null;
   int otherClanSize = 1;
@@ -63,7 +65,12 @@
 		currentInformationObject = informationObjectList.get(currentInformationObjectIdx);
 	}
 
-
+	  String logString = "contentDescriptor: "+(contentDescriptor==null?"null":contentDescriptor.getId());
+	  logString += ", informationObjectList: "+(informationObjectList==null?"null":informationObjectList.size());
+	  logString += ", contentId: "+contentId;
+	  logString += ", currentInformationObjectIdx: "+currentInformationObjectIdx;
+	  log.info(logString);
+	  
   
 %>
 
