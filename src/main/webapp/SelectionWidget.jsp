@@ -170,17 +170,6 @@
 		}
 
 %>
-
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Selection Widget</title>
-    <link rel="stylesheet" href="css/SelectionWidgetStyling.css">
-    <link rel="stylesheet" href="css/ClanMembersStyling.css">
-    <link rel="stylesheet" href="css/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
 	$(document).ready(function () {
 		
@@ -203,11 +192,6 @@
   	  }
 	});
 	</script>
-
-</head>
-
-	<body>
-	
 	<div class="container">
 	
 	<div class="row" id="RowOne">
@@ -295,7 +279,3 @@
 	</div><!-- rowOne -->
 	
 	</div><!--container-->
-	
-	</body>
-
-</html>

@@ -70,6 +70,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Test User Navigation</title>
     <link rel="stylesheet" href="css/GenericClanFrameStyling.css">
+    <link rel="stylesheet" href="css/WidgetStyling.css">
+    <link rel="stylesheet" href="css/SelectionWidgetStyling.css">
+    <link rel="stylesheet" href="css/ClanMembersStyling.css">
     <link rel="stylesheet" href="css/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
