@@ -35,7 +35,9 @@ div#RowOne form{
 	
 div#RowOne form label{
 	display:inline-block;
+	height:2.5em;
 	margin: 0.1em;
+	line-height:2.5em;
 	}
 	
 	
