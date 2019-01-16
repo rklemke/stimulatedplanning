@@ -41,6 +41,7 @@
 <head>
     <title>Awareness Widget</title>
     <link rel="stylesheet" href="css/AwarenessWidgetStyling.css">
+    <link rel="stylesheet" href="css/ClanMembersStyling.css">
     <link rel="stylesheet" href="css/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -48,8 +49,6 @@
         //when the document has finished loading. "$" sign calls the jquery
         $(document).ready(function () {
 				//this is temp and the frameholder src should be replaced by the active link
-			$("#AW_frameHolder").attr("src","<%= StimulatedPlanningFactory.applicationHome %>/ClanMembers.jsp?userid=<%= user.getId() %>&userName=<%= user.getName() %>");
-		
     	    $("#AW_OtherClanOnline").progressbar({
                 value: <%= 100*otherClanOnline/otherClanSize %>
             });
@@ -102,7 +101,10 @@
     
     <fieldset>
     <legend>Clan Members</legend>
-    <iframe id="AW_frameHolder"></iframe>
+   		<jsp:include page="ClanMembers.jsp">
+			<jsp:param name="userid" value="<%= user.getId() %>" />
+			<jsp:param name="userName" value="<%= user.getName() %>" />
+   		</jsp:include>
     </fieldset>
 			
 	</div><!--RowTwoColumnOne-->
