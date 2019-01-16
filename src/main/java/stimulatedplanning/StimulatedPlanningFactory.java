@@ -201,10 +201,10 @@ public class StimulatedPlanningFactory {
 	public static CourseDescriptor generateAccTestCourse() {
 		getOrGenerateClans();
 		
-		week1deadline = new GregorianCalendar(2019, 1, 27, 12, 0).getTime();
-		week2deadline = new GregorianCalendar(2019, 2, 3, 12, 0).getTime();
-		week3deadline = new GregorianCalendar(2019, 2, 10, 12, 0).getTime();
-		week4deadline = new GregorianCalendar(2019, 2, 17, 12, 0).getTime();
+		week1deadline = new GregorianCalendar(2019, 0, 27, 12, 0).getTime();
+		week2deadline = new GregorianCalendar(2019, 1, 3, 12, 0).getTime();
+		week3deadline = new GregorianCalendar(2019, 1, 10, 12, 0).getTime();
+		week4deadline = new GregorianCalendar(2019, 1, 17, 12, 0).getTime();
 		
 		CourseDescriptor course = instance.retrieveTestCourse();
 		if (course == null) {
