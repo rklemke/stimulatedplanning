@@ -332,10 +332,12 @@ public class StimulatedPlanningFactory {
 		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
-		info = generateClanARulesSelection();
+		sele = generateClanARulesSelection();
+		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
-		info = generateClanARulesSelection();
+		sele = generateClanBRulesSelection();
+		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
 		info = generateTreatmentWeek1TestIntroduction();
