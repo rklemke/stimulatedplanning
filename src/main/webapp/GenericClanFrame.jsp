@@ -144,7 +144,7 @@
     </div><!-- RowOneColumnTwo -->
     
     <div id="RowTwoColumnOne">
-    	<div id="AW_frameHolder" style="position: relative; height: 99%; width: 99%;" frameBorder="0">
+    	<div id="AW_frameHolder">
     		<jsp:include page="ClanMembers.jsp">
 				<jsp:param name="userid" value="<%= user.getId() %>" />
 				<jsp:param name="userName" value="<%= user.getName() %>" />

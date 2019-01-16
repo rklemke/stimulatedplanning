@@ -34,7 +34,7 @@
 		}
 			
 	</script>
-	<div class="container" id="AW_myClanFrame">
+	<div id="AW_myClanFrame" style="width:100%;">
 		<jsp:include page="ClanMembersPart.jsp" />
 	</div>
  <% } %>

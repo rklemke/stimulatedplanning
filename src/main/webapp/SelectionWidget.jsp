@@ -192,7 +192,6 @@
   	  }
 	});
 	</script>
-	<div class="container">
 	
 	<div class="row" id="RowOne">
 	
@@ -278,5 +277,4 @@
 	</fieldset><!--  -->
 	</div><!-- rowOne -->
 	
-	</div><!--container-->
 <% } %>
