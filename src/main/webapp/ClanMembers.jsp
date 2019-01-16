@@ -6,16 +6,7 @@
   User user = (User)session.getAttribute("user");
     
 %>
-
-
-<!DOCTYPE html>
-<html>
 <% if (user.isTreatmentGroup()) { %>
-<head>
-    <link rel="stylesheet" href="css/ClanMembersStyling.css">
-    <link rel="stylesheet" href="css/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
     
 	    $(document).ready(function () {
@@ -43,11 +34,7 @@
 		}
 			
 	</script>
-</head>
-<body>
 	<div class="container" id="AW_myClanFrame">
 		<jsp:include page="ClanMembersPart.jsp" />
 	</div>
-</body>
  <% } %>
-</html>
