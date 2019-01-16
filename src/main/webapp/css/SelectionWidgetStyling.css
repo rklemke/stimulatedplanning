@@ -13,6 +13,14 @@ div.container {
 .clear { 
 	clear:both; }
 
+#headerHolder{
+border: 2.5px Solid #ff0000;
+text-align: center;
+background: #440000;
+color: #ffffff;
+width: 100%;
+}
+
 div.row{
 	position: relative;
 	padding: 0.2em;
@@ -35,7 +43,6 @@ div#RowOne form{
 	
 div#RowOne form label{
 	display:inline-block;
-	height:2.5em;
 	margin: 0.1em;
 	line-height:2.5em;
 	}
@@ -43,4 +50,9 @@ div#RowOne form label{
 	
 .ui-checkboxradio-label.ui-corner-all.ui-button{
     padding: .5em; !important;
+}
+
+.ui-checkboxradio-label.ui-corner-all.ui-button.ui-widget.ui-checkboxradio-checked.ui-state-active{
+	background: skyblue;
+	border: 1px solid skyblue;
 }

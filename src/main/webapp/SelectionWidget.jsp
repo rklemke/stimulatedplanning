@@ -194,7 +194,9 @@
 	</script>
 	
 	<div class="row" id="RowOne">
-	
+	<div id=headerHolder>
+	<strong>Voting is open only until xx.yy.2019</strong>
+	</div>
 	<fieldset>
 	<legend> <%= currentSelectionObject.getTitle() %> </legend>
 	<form id="selectionForm" method="POST" action="InformationObjectServlet_SoC">
