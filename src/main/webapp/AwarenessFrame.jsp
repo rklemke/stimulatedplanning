@@ -119,11 +119,7 @@
     <legend>Legend</legend>
 	<strong style="color: green; margin: 0.25em;"> 
 	<svg> <rect width="15" height="15" style="fill:green;" /></svg> 
-	Online in your page</strong>
-	
-	<strong style="color: blue; margin: 0.25em;">
-	<svg> <rect width="15" height="15" style="fill:blue;" /> </svg> 
-	Online in other pages</strong>
+	Online</strong>
 	
 	<strong style="color: orange;margin: 0.25em;"> 
 	<svg><rect width="15" height="15" style="fill:orange;"/></svg> 

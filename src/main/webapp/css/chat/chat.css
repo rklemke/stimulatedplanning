@@ -56,44 +56,120 @@ h3 { font-size: 110%; color:#009966 }
 h4 { font-size: 100%; color:#330099 }
 
 *{
-	/*border: 2.5px Solid #808080;*/
+	/*border: 1px Solid #808080;*/
 }
+
+
+.clear { clear:both; }
+
 div.container {
 	position: absolute;
+	display: block;
+	width:50em; 
+	height:25em;
+	/*background-color: #666699;*/
 }
 
-div.row{
-	position: reltaive;
+div#RowOneColumnOne{
+	display:inline-block;
+	float:left;
+	top:0px;
+	width: 48%;
+	height:20em;
+}
+div#RowOneColumnTwo{
+	display:inline-block;
+	float:left;
+	margin-right:0.5em;
+	width: 48%;
+	height:20em;
+	margin-right: 0.5em;
 }
 
-div.column{
-	position: absolute;
-	padding: 0.2em;
-}
-
-div#columnOne {
-	left:0px;
-	width: 58%;
-	height: 76%;
-	/*border: 2.5px Solid #808080;*/
-}
-
-div#columnTwo {
-	right:0px;
-	width: 38%;
-	height: 76%;
-	/*border: 2.5px Solid #808080;*/
-}
-
-div#sendText{
-	display:inline-table;
-	bottom:0px;
-	left:0px;
-	width:58%;
-	height:16%;
+div#RowTwoColumnOne{
+	display:inline-block;
+	float:left;
+	margin-top:0.5em;
+	width:48%;
+	height:3em;
 	/*border: 2.5px Solid #808080;*/
 	}
 	
+div#RowTwoColumnTwo {
+	display:inline-block;
+	float:left;
+	margin-top:0.5em;
+	margin-left:0.5em;
+	width:48%;
+	height:3em;
+	/*border: 2.5px Solid #808080;*/
+   }
+	
+div#headerHolder{
+	display:inline-block;
+	float:left;
+	width: 100%;
+	height: 10%;
+	text-align: center;
+	background: skyblue;
+	font-size: 1.5em;
+	color: #ffffff;
+}
+
+div#userName{
+	display:inline-block;
+	float:left;
+	width: 99%;
+	height: 10%;
+	padding: 0.2em;
+}
+
+img#ClanLogo{
+vertical-align: middle;
+width: 2em;
+height: 2em;
+}
+
+div#userName span{
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 1em;
+}
+
+div#messageDisplayBox{
+	display:inline-block;
+	float:left;
+	width: 100%;
+	height: 80%;
+	font-size: 1em;
+	text-align:left;
+	background: lightblue;
+	overflow: scroll;
+	}
+	
+div#RoomSelection{
+	display:inline-block;
+	width:100%;
+	max-height:45%;
+	overflow-y:scroll;
+}
+
+div#roomSelection label{
+	display:inline-block;
+	float: left;
+	width: 85%;
+	height: 50%;
+	margin: 0.2em;
+	text-align: left;
+	}
+
+div#chatters{
+	display:inline-block;
+	width: 99%;
+	margin-top:0.5em;
+	max-height:45%;
+    overflow-y:scroll;
+}
 	
 input#messagebox{
 	font-size:1em;
@@ -112,89 +188,12 @@ input#sendMessageBtn{
 	background: skyblue;
 }
 
-div#headerHolder{
-	display:inline-block;
-	float:left;
-	width: 98%;
-	height: 10.5%;
-	text-align: center;
-	background: skyblue;
-	font-size: 1.5em;
-	color: #ffffff;
-}
-
-div#userName{
-	display:inline-block;
-	float:left;
-	width: 98%;
-	height: 10.5%;
-	padding: 0.2em;
-}
-
-#userName span{
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 1em;
-}
-
-#ClanLogo{
-vertical-align: middle;
-width: 2em;
-height: 2em;
-}
-
-div#messageDisplayBox{
-	display:inline-block;
-	float:left;
-	width: 98%;
-	height: 79.5%;
-	font-size: 1em;
-	text-align:left;
-	background: lightblue;
-	overflow: scroll;
-	}
-
-div#roomSelection label{
-	display:inline-block;
-	float: left;
-	width: 85%;
-	height: 50%;
-	margin: 0.2em;
-	text-align: left;
-	}
 	
 div#roomSelection span{
 	float: right;
 	}
 	
-div#chatters{
-	display:inline-block;
-	float: left;
-	padding: 0.2em;
-	width: 98%;
-	background: white;
-	max-height:45%;
-    overflow-y:scroll;
-}
-
-div#columnOne form{
-	width: 99%;
-	height:99%;
-}
-
-div#columnOne form Input[type="text"]{
-	font-size:1em;
-	width: 84%;
-	height:98%;
-}
-
-div#columnOne form Input[type="submit"]{
-	font-size:1em;
-	width: 14%;
-	height:94%;
-}
-
-div#columnTwo form{
+div#RoomTwoColumnOne form{
 	width:46%;
 	position: relative;
 	float: left;
@@ -204,22 +203,24 @@ div#columnTwo form{
 	
 }
 
-div#emoji-picker {
-	bottom:0px;
-	right:0px;
-	float: right;
-	width:38%;
-	height:16%;
-	vertical-align: middle;
-	/*border: 2.5px Solid #808080;*/
-   }
-   
+div#RoomTwoColumnOne form Input[type="text"]{
+	font-size:1em;
+	width: 84%;
+	height:98%;
+}
+
+div#RoomTwoColumnOne form Input[type="submit"]{
+	font-size:1em;
+	width: 14%;
+	height:94%;
+}
+
 img.emoji{
    display: inline-block;
    width: 1.5em;
    height: 1.5em;
    }
    
-   img.emoji:hover {
+img.emoji:hover {
    background: lightblue;
    }

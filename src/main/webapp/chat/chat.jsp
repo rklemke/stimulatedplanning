@@ -211,8 +211,7 @@ $(document).ready(function () {
 
 <div class = "container">
 
-<div class="row">
-<div class="column" id="columnOne">
+<div  id="RowOneColumnOne">
 <div id="headerHolder">
 <%@ include file="header.jsp" %>
 </div><!-- headerholder -->
@@ -225,8 +224,9 @@ $(document).ready(function () {
 <div id="messageDisplayBox">
 <jsp:include page="displayMessages.jsp" />
 </div><!-- messageDisplayBox -->
-</div><!-- column One -->
-<div class="column" id="columnTwo">
+</div><!-- RowOnecolumn One -->
+
+<div id="RowOneColumnTwo">
 
 <div id="roomSelection">
 <jsp:include page="listrooms.jsp" />
@@ -236,12 +236,10 @@ $(document).ready(function () {
 <jsp:include page="listChatters.jsp" />
 </div><!-- chatters -->
 
-</div><!-- columnTwo -->
-</div><!-- row one -->
+</div><!-- RowTwoColumnTwo -->
 
-<div class="row">
 
-<div class="column" id="sendText">
+<div id="RowTwoColumnOne">
 		<input type="hidden" id="userid" name="userid" value="<%= user.getId() %>"></input>
 		<input type="hidden" id="userName" name="userName" value="<%= user.getName() %>"></input>
 <INPUT type="text" name="messagebox" id="messagebox" maxlength="300"  />
@@ -249,11 +247,11 @@ $(document).ready(function () {
 <INPUT name="sendMessageBtn" id="sendMessageBtn" type="button" value="Send" />
 </div><!-- sendText -->
 
-<div class="column" id="emoji-picker">
+<div id="RowTwoColumnTwo">
 <img class= "emoji" title ="smile" alt= "(smile)" src="${pageContext.request.contextPath}/img/chat/emojis/smile.png"/> 
 <img class= "emoji" title ="wink" alt ="(wink)" src="${pageContext.request.contextPath}/img/chat/emojis/wink.png"/> 
 <img class= "emoji" title ="grin" alt ="(grinning)" src="${pageContext.request.contextPath}/img/chat/emojis/grinning.png"/> 
-<img class= "emoji" title ="cheeky" alt ="(tongue)" src="${pageContext.request.contextPath}/img/chat/emojis/tongue.png"/> 
+<img class= "emoji" title ="secret" alt ="(secret)" src="${pageContext.request.contextPath}/img/chat/emojis/secret.png"/> 
 <img class= "emoji" title ="scared" alt ="(scared)" src="${pageContext.request.contextPath}/img/chat/emojis/scared.png"/> 
 <img class= "emoji" title ="sad" alt ="(sad)" src="${pageContext.request.contextPath}/img/chat/emojis/sad.png"/> 
 <img class= "emoji" title ="cool" alt ="(cool)" src="${pageContext.request.contextPath}/img/chat/emojis/cool.png"/> 
@@ -261,15 +259,21 @@ $(document).ready(function () {
 <img class= "emoji" title ="shocked" alt ="(shocked)" src="${pageContext.request.contextPath}/img/chat/emojis/shocked.png"/> 
 <img class= "emoji" title ="like" alt ="(like)" src="${pageContext.request.contextPath}/img/chat/emojis/like.png"/> 
 <img class= "emoji" title ="dislike" alt ="(dislike)" src="${pageContext.request.contextPath}/img/chat/emojis/dislike.png"/> 
-<img class= "emoji" title ="ale" alt ="(ale)" src="${pageContext.request.contextPath}/img/chat/emojis/ale.png"/>
 <img class= "emoji" title ="devil" alt ="(devil)" src="${pageContext.request.contextPath}/img/chat/emojis/devil.png"/> 
 <img class= "emoji" title ="curious" alt ="(curious)" src="${pageContext.request.contextPath}/img/chat/emojis/curious.png"/> 
 <img class= "emoji" title ="crying" alt ="(crying)" src="${pageContext.request.contextPath}/img/chat/emojis/crying.png"/> 
 <img class= "emoji" title ="nerd" alt ="(nerd)" src="${pageContext.request.contextPath}/img/chat/emojis/nerd.png"/> 
-<img class= "emoji" title ="in-love" alt ="(in-love)" src="${pageContext.request.contextPath}/img/chat/emojis/in-love.png"/> 
+<img class= "emoji" title ="confused" alt ="(confused)" src="${pageContext.request.contextPath}/img/chat/emojis/confused.png"/> 
 <img class= "emoji" title ="skull" alt ="(skull)" src="${pageContext.request.contextPath}/img/chat/emojis/skull.png"/> 
 <img class= "emoji" title ="tired" alt ="(tired)" src="${pageContext.request.contextPath}/img/chat/emojis/tired.png"/> 
-<img class= "emoji" title ="heart" alt ="(heart)" src="${pageContext.request.contextPath}/img/chat/emojis/heart.png"/>  
+<img class= "emoji" title ="sleeping" alt ="(sleeping)" src="${pageContext.request.contextPath}/img/chat/emojis/sleeping.png"/> 
+<img class= "emoji" title ="ghost" alt ="(ghost)" src="${pageContext.request.contextPath}/img/chat/emojis/ghost.png"/> 
+<img class= "emoji" title ="ninja" alt ="(ninja)" src="${pageContext.request.contextPath}/img/chat/emojis/ninja.png"/> 
+<img class= "emoji" title ="laughing" alt ="(laughing)" src="${pageContext.request.contextPath}/img/chat/emojis/laughing.png"/> 
+<img class= "emoji" title ="muted" alt ="(muted)" src="${pageContext.request.contextPath}/img/chat/emojis/muted.png"/>
+<img class= "emoji" title ="tongue" alt ="(tongue)" src="${pageContext.request.contextPath}/img/chat/emojis/tongue.png"/> 
+<img class= "emoji" title ="in-love" alt ="(in-love)" src="${pageContext.request.contextPath}/img/chat/emojis/in-love.png"/> 
+<img class= "emoji" title ="anguish" alt ="(anguish)" src="${pageContext.request.contextPath}/img/chat/emojis/anguish.png"/>    
 </div>
 </div><!-- row two -->
 

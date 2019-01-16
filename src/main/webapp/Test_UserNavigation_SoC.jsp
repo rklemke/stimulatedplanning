@@ -178,7 +178,7 @@ float: right;
 	<iframe 
 		id="chatFrame" 
 		src="" 
-		style="width:50em; height:25em; position: relative;" 
+		style="width:52em; height:26em;" 
 		frameborder="0">
 	</iframe>
 </div>

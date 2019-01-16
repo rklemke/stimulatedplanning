@@ -9,7 +9,7 @@ div.container {
 	position: absolute;
 	display: block;
 	width:100%; 
-	height:31em;
+	height:32em;
 	/*background-color: #666699;*/
 }
 
@@ -22,25 +22,27 @@ div#RowOneColumnOne{
 }
 div#RowOneColumnTwo{
 	display:inline-block;
-	float:right;
+	float:left;
 	width: 48%;
+	margin-right:0.5em;
 	height:6em;
 }
 
 div#RowTwoColumnOne{
+	margin-top:0.5em;
 	display:inline-block;
 	float:left;
-	bottom:0px;
 	width:48%;
 	height:25em;
 	/*background-color: #666688;*/
 }
 
 div#RowTwoColumnTwo{
+	margin-top:0.5em;
 	display:inline-block;
-	right:5px;
-	bottom:5px;
+	float:left;
 	width:48%;
+	margin-right:0.5em
 	height:25em;
 }
 
@@ -56,46 +58,29 @@ div.headerText{
 	/*border: 1px Solid #808080;*/
 }
 
-
-
-div#RowTwoColumnOne fieldset{
-	width:90%;
-	height:24em;
-}
-
 iframe#AW_frameHolder{
 	border:0;
 	width:99%;
-	height:23em;
 	/*background:azure;*/
 }
 
-
 div#AW_OtherClanOnline{
 	display: block;
-	width: 92%;
 	height: 2em;
 	margin-bottom: 0.5em;
 }
 
 div#AW_OtherClanOffline{
 	display: block;
-	width: 92%;
 	height: 2em;
 	margin-bottom: 0.5em;
 }
-
 
 
 div#RowTwoColumnTwo strong{
 	display: block;
 	width: 46%;
 	font-size: 1em;
-}
-
-div#RowTwoColumnTwo fieldset{
-	width:90%;
-	height: 10em;
 }
 
 div#RowTwoColumnTwo svg {

@@ -171,10 +171,10 @@
     		title="<%= option.getDescription() %>"
 	  	<% } %>
 	  	   ><% if (currentSelectionObject.isAvatarPurpose()) { %>
-    	<img style="width:1.5em; height:1.5em;" src="<%= option.getUrl() %>" >
+    	<img style="width:2em; height:2em; vertical-align:middle;" src="<%= option.getUrl() %>" >
     	<% } else { %>
 	  	<%= option.getTitle() %>
-	  	<% } %></label><%
+	  	<% } 
 		if (user.isTreatmentGroup() && currentSelectionObject.isClan()) {
 			int count = 0;
 			for (UserSelectedOption selectedOption: selectedOptions) {
@@ -182,16 +182,16 @@
 				if (count <=5) {
 		      		currentUserId = "user"+selectedOption.getUser().getId();
 		      		session.setAttribute(currentUserId, selectedOption.getUser());
-				%><jsp:include page="UserIconDisplay.jsp" >
+				%><div style="float:right;vertical-align:middle;"><jsp:include page="UserIconDisplay.jsp" >
     				<jsp:param name="userId" value="<%= currentUserId %>" />
-			 	</jsp:include><%
+			 	</jsp:include></div><%
 				} else {
 					%> ... [<%= selectedOptions.size() %>] <%
 					break;
 				}
 	        } 
 		 } 
-		 %> 
+		 %></label>
 	<% } %>
 	</form>
 	</fieldset><!--  -->
