@@ -167,7 +167,7 @@
 			RequestDispatcher rd = request.getRequestDispatcher("/GenericClanFrameServlet_SoC");
 			request.setAttribute("selectionSubmitForward", "true");
 			rd.forward(request, response);			
-		}
+		} else {
 
 %>
     <script type="text/javascript">
@@ -199,7 +199,7 @@
 	</div>
 	<fieldset>
 	<legend> <%= currentSelectionObject.getTitle() %> </legend>
-	<form id="selectionForm" method="POST" action="InformationObjectServlet_SoC">
+	<form id="selectionForm" method="POST" action="/SelectionWidget.jsp">
 		<input type="hidden" id="submitIndicator" name="submitIndicator" value="true">
 		<input type="hidden" id="userid" name="userid" value="<%= user.getId() %>"></input>
 		<input type="hidden" id="userName" name="userName" value="<%= user.getName() %>"></input>
@@ -278,3 +278,5 @@
 	</form>
 	</fieldset><!--  -->
 	</div><!-- rowOne -->
+	
+<% } %>
