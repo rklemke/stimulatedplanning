@@ -1,6 +1,7 @@
 package stimulatedplanning;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -298,7 +299,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Intro text", 
 				"Intro text", 
-				"");
+				"",
+				false, true, true);
 		content.addInformationObject(info);
 
 		sele = generateUserAvatarSelection();
@@ -316,7 +318,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Clan rules", 
 				"Clan rules", 
-				"");
+				"",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("<OL>"+
 			"<LI>Do not use the chat or other tools provided in the course to harm or hurt others (such as the members of your clan and or/and the other clan).</LI>"+
@@ -428,7 +431,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Communicate with the opponents", 
 				"Communicate with the opponents", 
-				"");
+				"",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -438,7 +442,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Encrypt your message", 
 				"Communicate with the opponents", 
-				"");
+				"",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -448,7 +453,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Encrypted Message received", 
 				"How do you decrypt it?", 
-				"");
+				"",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -458,7 +464,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Clan challenge results", 
 				"How'd you do?", 
-				"");
+				"",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -564,7 +571,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Test your knowledge", 
 				"Test your knowledge", 
-				"");
+				"",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -577,7 +585,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Your results", 
 				"Your results", 
-				"");
+				"",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -683,7 +692,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Discuss about cryptography", 
 				"Discuss about cryptography", 
-				testCourseBaseURL+"courseware/w4challenge/");
+				testCourseBaseURL+"courseware/w4challenge/",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 
@@ -793,7 +803,8 @@ public class StimulatedPlanningFactory {
 		InformationObject info = new InformationObject(getUUID(), 
 				"Intro text", 
 				"Intro text", 
-				testCourseBaseURL+"courseware/w1challenge/");
+				testCourseBaseURL+"courseware/w1challenge/",
+				true, true, true);
 		content.addInformationObject(info);
 
 		SelectionObject sele = generateUserAvatarSelection();
@@ -811,7 +822,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Clan rules", 
 				"Clan rules", 
-				testCourseBaseURL+"courseware/w1challenge/");
+				testCourseBaseURL+"courseware/w1challenge/",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("<OL>"+
 			"<LI>Do not use the chat or other tools provided in the course to harm or hurt others (such as the members of your clan and or/and the other clan).</LI>"+
@@ -862,7 +874,8 @@ public class StimulatedPlanningFactory {
 		InformationObject info = new InformationObject(getUUID(), 
 				"Communicate with the opponents", 
 				"Communicate with the opponents", 
-				testCourseBaseURL+"courseware/w2challenge/");
+				testCourseBaseURL+"courseware/w2challenge/",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -872,7 +885,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Encrypt your message", 
 				"Communicate with the opponents", 
-				testCourseBaseURL+"courseware/w2challenge/");
+				testCourseBaseURL+"courseware/w2challenge/",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -882,7 +896,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Encrypted Message received", 
 				"How do you decrypt it?", 
-				testCourseBaseURL+"courseware/w2challenge/");
+				testCourseBaseURL+"courseware/w2challenge/",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -892,7 +907,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Clan challenge results", 
 				"How'd you do?", 
-				testCourseBaseURL+"courseware/w2challenge/");
+				testCourseBaseURL+"courseware/w2challenge/",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -935,7 +951,8 @@ public class StimulatedPlanningFactory {
 		InformationObject info = new InformationObject(getUUID(), 
 				"Test your knowledge", 
 				"Test your knowledge", 
-				testCourseBaseURL+"courseware/w3challenge/");
+				testCourseBaseURL+"courseware/w3challenge/",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -948,7 +965,8 @@ public class StimulatedPlanningFactory {
 		info = new InformationObject(getUUID(), 
 				"Your results", 
 				"Your results", 
-				testCourseBaseURL+"courseware/w3challenge/");
+				testCourseBaseURL+"courseware/w3challenge/",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -991,7 +1009,8 @@ public class StimulatedPlanningFactory {
 		InformationObject info = new InformationObject(getUUID(), 
 				"Discuss about cryptography", 
 				"Discuss about cryptography", 
-				testCourseBaseURL+"courseware/w4challenge/");
+				testCourseBaseURL+"courseware/w4challenge/",
+				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -1102,7 +1121,8 @@ public class StimulatedPlanningFactory {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Select your avatar", 
 				"Select your avatar", 
-				"");
+				"",
+				false, true, true);
 		sele.setType(SelectionObjectType.SINGLE_USER_SELECTION);
 		sele.setPurpose(SelectionObjectPurpose.USER_AVATAR);
 		
@@ -1138,7 +1158,8 @@ public class StimulatedPlanningFactory {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Hello there! Please select one of the roles you want to cover in your clan:", 
 				"Hello there! Please select one of the roles you want to cover in your clan:", 
-				"");
+				"",
+				false, true, true);
 		sele.setType(SelectionObjectType.SINGLE_USER_SELECTION);
 		sele.setPurpose(SelectionObjectPurpose.USER_IDENTITY);
 		
@@ -1156,22 +1177,33 @@ public class StimulatedPlanningFactory {
 
 	protected static SelectionObject generateClanLogoSelection() {
 		String[] clanLogoFiles = {
-				"001-hacker.png",
-				"003-smartphone.png",
-				"006-cctv.png",
-				"009-email.png",
-				"011-fingerprint-scan.png",
-				"012-bitcoin.png",
-				"017-hacker-1.png",
-				"018-hacker-2.png",
-				"032-server.png",
-				"035-pendrive.png"
-			};
+				"defender/broken-zone.png",
+				"defender/lock.png",
+				"defender/lock1.png",
+				"defender/security.png",
+				"defender/server.png",
+				"defender/settings.png",
+				"defender/shield.png",
+				"defender/shield1.png",
+				"defender/spyware.png",
+				"defender/vpn.png",
+				"hacker/browser.png",
+				"hacker/coding.png",
+				"hacker/hacker.png",
+				"hacker/hacker1.png",
+				"hacker/hacker2.png",
+				"hacker/hacker3.png",
+				"hacker/hacking.png",
+				"hacker/key.png",
+				"hacker/padlock.png",
+				"hacker/web-security.png"
+		};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Select your clan logo", 
 				"Select your clan logo", 
-				"");
+				"",
+				false, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
 		sele.setPurpose(SelectionObjectPurpose.CLAN_AVATAR);
 		
@@ -1213,7 +1245,8 @@ public class StimulatedPlanningFactory {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Select your clan identity", 
 				"Select your clan identity", 
-				"");
+				"",
+				false, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
 		sele.setPurpose(SelectionObjectPurpose.CLAN_IDENTITY);
 		
@@ -1234,7 +1267,8 @@ public class StimulatedPlanningFactory {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Send an encrypted message!", 
 				"decide your plaintext/ the message", 
-				"");
+				"",
+				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
 		sele.setPurpose(SelectionObjectPurpose.CLAN_VOTING);
 		
@@ -1275,7 +1309,8 @@ public class StimulatedPlanningFactory {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Send an encrypted message!", 
 				"decide your encryption mechanism", 
-				"");
+				"",
+				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
 		sele.setPurpose(SelectionObjectPurpose.CLAN_VOTING);
 		
@@ -1310,7 +1345,8 @@ public class StimulatedPlanningFactory {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"You received a secret message! It is encrypted? What does it mean?", 
 				"Decide on the meaning of this message", 
-				"");
+				"",
+				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
 		sele.setPurpose(SelectionObjectPurpose.CLAN_VOTING);
 		sele.setContent("");
@@ -1353,7 +1389,8 @@ public class StimulatedPlanningFactory {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Test", 
 				"Which is correct?", 
-				"");
+				"",
+				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 		sele.setPurpose(SelectionObjectPurpose.TEST);
 		
@@ -1391,7 +1428,8 @@ public class StimulatedPlanningFactory {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Test", 
 				"Which are also correct?", 
-				"");
+				"",
+				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_MULTI_TEST);
 		sele.setPurpose(SelectionObjectPurpose.TEST);
 		
@@ -1901,6 +1939,74 @@ public class StimulatedPlanningFactory {
 		return user;
 		
 	}
+
+	
+	/**
+	 * Retrieves all users of the clan, that have been active in the given time interval.
+	 * if maxSecondsAgo == 0, every activity earlier than minSeconds ago is counted.
+	 * if minSecondsAgo == 0, every activity later than maxSeconds ago is counted.
+	 * @param maxSecondsAgo positive amount of seconds or 0 to ignore border
+	 * @param minSecondsAgo positive amount of seconds or 0 to ignore border
+	 * @return
+	 */
+	protected static HashArrayList<UserOnlineStatus> getControlUsersInTimeframe(int maxSecondsAgo, int minSecondsAgo) {
+		HashArrayList<User> users = PersistentStore.readAllControlUsers();
+		Date now = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.SECOND, -maxSecondsAgo);
+		Date max = cal.getTime();
+		cal.setTime(now);
+		cal.add(Calendar.SECOND, -minSecondsAgo);
+		Date min = cal.getTime();
+		HashArrayList<UserOnlineStatus> recentUsers = new HashArrayList<>();
+		for (User user: users) {
+			UserOnlineStatus status = user.getOnlineStatus();
+			if ((maxSecondsAgo == 0 || status.getLastAccess().after(max)) 
+					&& (minSecondsAgo == 0 || status.getLastAccess().before(min))) {
+				recentUsers.add(status);
+			}
+		}
+		return recentUsers;
+	}
+	
+	public static HashArrayList<UserOnlineStatus> getOnlineControlUsers() {
+		return getControlUsersInTimeframe(UserOnlineStatus.ONLINE_SECONDS, 0);
+	}
+
+	public static HashArrayList<UserOnlineStatus> getRecentControlUsers() {
+		return getControlUsersInTimeframe(UserOnlineStatus.RECENT_SECONDS, UserOnlineStatus.ONLINE_SECONDS);
+	}
+
+	public static HashArrayList<UserOnlineStatus> getOfflineControlUsers() {
+		return getControlUsersInTimeframe(0, UserOnlineStatus.RECENT_SECONDS);
+	}
+
+	public static HashArrayList<UserOnlineStatus> getOnlineControlUsersSorted(UserOnlineStatus userStatus) {
+		HashArrayList<UserOnlineStatus> sorted = getOnlineControlUsers();
+		if (userStatus != null && sorted != null) {
+			sorted.sort(userStatus.relativeComparator());
+		}
+		return sorted;
+	}
+
+	public static HashArrayList<UserOnlineStatus> getRecentControlUsersSorted(UserOnlineStatus userStatus) {
+		HashArrayList<UserOnlineStatus> sorted = getRecentControlUsers();
+		if (userStatus != null && sorted != null) {
+			sorted.sort(userStatus.relativeComparator());
+		}
+		return sorted;
+	}
+
+	public static HashArrayList<UserOnlineStatus> getOfflineControlUsersSorted(UserOnlineStatus userStatus) {
+		HashArrayList<UserOnlineStatus> sorted = getOfflineControlUsers();
+		if (userStatus != null && sorted != null) {
+			sorted.sort(userStatus.relativeComparator());
+		}
+		return sorted;
+	}
+
+	
 	
 	
 	public static ArrayList<UserProfile> getUserProfiles() {

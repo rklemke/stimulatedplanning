@@ -20,15 +20,33 @@ public class InformationObject extends GenericDescriptor {
 	public void setSequence(int sequence) {
 		this.sequence = sequence;
 	}
-
 	
+	private boolean isControlGroupVisible = true;
+	private boolean isClanAVisible = true;
+	private boolean isClanBVisible = true;
+	public boolean isControlGroupVisible() {
+		return isControlGroupVisible;
+	}
+	public boolean isTreatmentGroupVisible() {
+		return isClanAVisible || isClanBVisible;
+	}
+	public boolean isClanAVisible() {
+		return isClanAVisible;
+	}
+	public boolean isClanBVisible() {
+		return isClanBVisible;
+	}
+
 	public InformationObject() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public InformationObject(String id, String title, String description, String url) {
+	public InformationObject(String id, String title, String description, String url, boolean isControlGroupVisible, boolean isClanAVisible, boolean isClanBVisible) {
 		super(id, title, description, url);
 		// TODO Auto-generated constructor stub
+		this.isControlGroupVisible = isControlGroupVisible;
+		this.isClanAVisible = isClanAVisible;
+		this.isClanBVisible = isClanBVisible;
 	}
 
 }

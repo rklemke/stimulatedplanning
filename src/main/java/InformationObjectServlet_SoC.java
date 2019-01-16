@@ -66,9 +66,18 @@ public class InformationObjectServlet_SoC extends HttpServlet {
 			contentDescriptor = (ContentDescriptor)session.getAttribute("contentDescriptor");
 		}
 		
+		boolean isControl = !user.isTreatmentGroup();
+		boolean isClanA = false;
+		boolean isClanB = false;
+		if (!isControl) {
+			isClanA = user.getClan() != null && Clan.CLAN_1_ID.equals(user.getClan().getId());
+			isClanB = user.getClan() != null && Clan.CLAN_2_ID.equals(user.getClan().getId());
+		}
+		
 	  List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
 		if (informationObjectList == null && contentDescriptor != null) {
-			informationObjectList = contentDescriptor.getAllInformationObjectList();
+			//informationObjectList = contentDescriptor.getAllInformationObjectList();
+			informationObjectList = contentDescriptor.getFilteredInformationObjectList(isControl, isClanA, isClanB);
 		}
 
 		int currentInformationObjectIdx = 0;

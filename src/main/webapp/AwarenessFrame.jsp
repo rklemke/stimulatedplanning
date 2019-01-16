@@ -37,7 +37,6 @@
 
 <!DOCTYPE html>
 <html>
-<% if (user.isTreatmentGroup()) { %>
 <head>
     <title>Awareness Widget</title>
     <link rel="stylesheet" href="css/AwarenessWidgetStyling.css">
@@ -49,15 +48,18 @@
         //when the document has finished loading. "$" sign calls the jquery
         $(document).ready(function () {
 				//this is temp and the frameholder src should be replaced by the active link
+<% if (user.isTreatmentGroup()) { %>
     	    $("#AW_OtherClanOnline").progressbar({
                 value: <%= 100*otherClanOnline/otherClanSize %>
             });
         	$("#AW_OtherClanOffline").progressbar({
                 value: <%= 100*otherClanOffline/otherClanSize %>
             });
+<% } %>
         	$(document).tooltip();
 		});
         
+<% if (user.isTreatmentGroup()) { %>
     	function clan_tickerRequest() {
   		  $.ajax({
   		    dataType: 'jsonp',
@@ -76,10 +78,12 @@
   		}
   		
   		setInterval(clan_tickerRequest, 30000);
+<% } %>
 
     </script>
 </head>
 <body>
+<% if (user.isTreatmentGroup()) { %>
 
     <div class="container">
     
@@ -96,11 +100,15 @@
     <div class="headerText"><%= otherClan.getTitle() %></div>
     
     </div><!-- RowOneColumnTwo -->
-
+<% } %>
     <div id="RowTwoColumnOne">
     
     <fieldset>
+<% if (user.isTreatmentGroup()) { %>
     <legend>Clan Members</legend>
+<% } else { %>
+    <legend>Other Users</legend>
+<% } %>
    		<jsp:include page="ClanMembers.jsp">
 			<jsp:param name="userid" value="<%= user.getId() %>" />
 			<jsp:param name="userName" value="<%= user.getName() %>" />
@@ -110,12 +118,14 @@
 	</div><!--RowTwoColumnOne-->
 	
 	<div id="RowTwoColumnTwo">
+<% if (user.isTreatmentGroup()) { %>
 	
 	<Strong>Online members: </strong>
 	<div id="AW_OtherClanOnline"></div>
 	
     <Strong>Offline members: </strong>
 	<div id="AW_OtherClanOffline"></div>
+<% } %>
 	
 	<fieldset>
     <legend>Legend</legend>
@@ -138,7 +148,5 @@
     </div><!--container-->
 
 </body>
-
-<% } %>
 
 </html>

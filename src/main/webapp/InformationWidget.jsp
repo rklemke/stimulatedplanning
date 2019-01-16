@@ -16,6 +16,15 @@
   int otherClanOnline = 0;
   int otherClanRecent = 0;
   int otherClanOffline = 0;
+
+	boolean isControl = !user.isTreatmentGroup();
+	boolean isClanA = false;
+	boolean isClanB = false;
+	if (!isControl) {
+		isClanA = user.getClan() != null && Clan.CLAN_1_ID.equals(user.getClan().getId());
+		isClanB = user.getClan() != null && Clan.CLAN_2_ID.equals(user.getClan().getId());
+	}
+	
   
   HashArrayList<UserOnlineStatus> onlineUsers = new HashArrayList<>();
   HashArrayList<UserOnlineStatus> recentUsers = new HashArrayList<>();
@@ -48,7 +57,8 @@
 	
 	List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
 	if (informationObjectList == null && contentDescriptor != null) {
-		informationObjectList = contentDescriptor.getAllInformationObjectList();
+		//informationObjectList = contentDescriptor.getAllInformationObjectList();
+		informationObjectList = contentDescriptor.getFilteredInformationObjectList(isControl, isClanA, isClanB);
 	}
 
 	int currentInformationObjectIdx = 0;

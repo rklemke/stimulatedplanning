@@ -1,5 +1,6 @@
 package stimulatedplanning;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -39,6 +40,22 @@ public class ContentDescriptor extends GenericDescriptor {
 
 	public ListIterator<SelectionObject> getSelectionObjects() {
 		return selectionObjects.listIterator();
+	}
+	
+	public List<InformationObject> getFilteredInformationObjectList(boolean control, boolean clanA, boolean clanB) {
+		ArrayList<InformationObject> filteredList = new ArrayList<>();
+		for (InformationObject info : getAllInformationObjectList()) {
+			if ((info.isControlGroupVisible() && control) 
+					|| (info.isClanAVisible() && clanA) 
+					|| (info.isClanBVisible() && clanB)) {
+				filteredList.add(info);
+			}
+		}
+		return filteredList;
+	}
+	
+	public ListIterator<InformationObject> getFilteredInformationObjects(boolean control, boolean clanA, boolean clanB) {
+		return getFilteredInformationObjectList(control, clanA, clanB).listIterator();
 	}
 	
 	public ContentDescriptor() {

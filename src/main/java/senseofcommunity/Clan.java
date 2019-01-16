@@ -23,7 +23,7 @@ public class Clan extends InformationObject {
 	}
 
 	public Clan(String id, String title, String description, String url) {
-		super(id, title, description, url);
+		super(id, title, description, url, true, true, true);
 		// TODO Auto-generated constructor stub
 	}
 

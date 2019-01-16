@@ -79,7 +79,7 @@ public class PersistentStore {
 		}
 	}
 
-	public static User getUser(String userId, HashMap<String, Object> cache) throws Exception {
+	public static User getUser(String userId, Entity userEntity, HashMap<String, Object> cache) throws Exception {
 		User user = null;
 		try {
 			user = (User)cache.get(userId);
@@ -87,16 +87,11 @@ public class PersistentStore {
 			exc.printStackTrace();
 		}
 		if (user == null) {
-			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-	
-			Entity userEntity = datastore.get(KeyFactory.createKey(User.class.getName(), userId));
 			if (userEntity != null) {
 				user = new User((String) userEntity.getProperty("name"), userId);
 				cache.put(user.getId(), user);
 				user.setTreatmentGroup(readBooleanProperty(userEntity, "treatmentGroup", StimulatedPlanningFactory.random.nextBoolean()));
 				if (user.isTreatmentGroup()) {
-					//Clan clan = (Clan)StimulatedPlanningFactory.getObject(readStringProperty(userEntity, "clan", null));
-					//Clan clan = (Clan)readDescriptor(Clan.class.getName(), readStringProperty(userEntity, "clan", null), cache, null);
 					Clan clan = StimulatedPlanningFactory.getClan(readStringProperty(userEntity, "clan", null));
 					user.setClan(clan);
 				}
@@ -111,6 +106,51 @@ public class PersistentStore {
 		return user;
 	}
 
+	public static User getUser(String userId, HashMap<String, Object> cache) throws Exception {
+		User user = null;
+		try {
+			user = (User)cache.get(userId);
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		if (user == null) {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+	
+			Entity userEntity = datastore.get(KeyFactory.createKey(User.class.getName(), userId));
+			if (userEntity != null) {
+				return getUser(userId, userEntity, cache);
+			}
+		}
+		return user;
+	}
+
+	public static HashArrayList<User> readAllControlUsers() {
+		HashArrayList<User> users = new HashArrayList<User>();
+		User user = null;
+		try {
+			log.info("readAllControlUsers: start");
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			Filter controlFilter = new FilterPredicate("treatmentGroup", FilterOperator.EQUAL, false);
+
+			Query q = new Query(User.class.getName()).setFilter(controlFilter);
+			
+			PreparedQuery pq = datastore.prepare(q);
+
+			for (Entity result : pq.asIterable()) {
+				String id = (String) result.getProperty("uid");
+				log.info("readAllControlUsers: "+id);
+				user = (User)getUser(id, result, new HashMap<String, Object>());
+				users.add(user);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return users;
+	}
+
+
+	
 	protected static Entity createGenericEntity(GenericDescriptor generic) {
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -162,6 +202,9 @@ public class PersistentStore {
 
 			entity.setProperty("content", generic.getContent());
 			entity.setProperty("sequence", generic.getSequence());
+			entity.setProperty("isControlGroupVisible", generic.isControlGroupVisible());
+			entity.setProperty("isClanAVisible", generic.isClanAVisible());
+			entity.setProperty("isClanBVisible", generic.isClanBVisible());
 			
 		} catch (Exception e1) {
 			log.info("FATAL: Writing generic user entity failed.");
@@ -1018,8 +1061,13 @@ public class PersistentStore {
 		if (selectionObject == null) {
 			ArrayList<GenericDescriptor> relationList = null;
 			selectionObject = new SelectionObject(readStringProperty(genericEntity, "uid", null),
-					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-					readStringProperty(genericEntity, "url", null));
+					readStringProperty(genericEntity, "title", null), 
+					readStringProperty(genericEntity, "description", null),
+					readStringProperty(genericEntity, "url", null), 
+					readBooleanProperty(genericEntity, "isControlGroupVisible", true),
+					readBooleanProperty(genericEntity, "isClanAVisible", true),
+					readBooleanProperty(genericEntity, "isClanBVisible", true)
+			);
 			cache.put(selectionObject.getId(), selectionObject);
 			selectionObject.setContent(readStringProperty(genericEntity, "content", null));
 			selectionObject.setSequence(Integer.valueOf(readStringProperty(genericEntity, "sequence", null)));
@@ -1187,8 +1235,13 @@ public class PersistentStore {
 		}
 		if (informationObject == null) {
 			informationObject = new InformationObject(readStringProperty(genericEntity, "uid", null),
-					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
-					readStringProperty(genericEntity, "url", null));
+					readStringProperty(genericEntity, "title", null), 
+					readStringProperty(genericEntity, "description", null),
+					readStringProperty(genericEntity, "url", null), 
+					readBooleanProperty(genericEntity, "isControlGroupVisible", true),
+					readBooleanProperty(genericEntity, "isClanAVisible", true),
+					readBooleanProperty(genericEntity, "isClanBVisible", true)
+			);
 			informationObject.setContent(readStringProperty(genericEntity, "content", null));
 			informationObject.setSequence(Integer.valueOf(readStringProperty(genericEntity, "sequence", null)));
 		}

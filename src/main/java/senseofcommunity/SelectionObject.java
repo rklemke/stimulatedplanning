@@ -17,8 +17,8 @@ public class SelectionObject extends InformationObject {
 		options = new HashArrayList<>();
 	}
 
-	public SelectionObject(String id, String title, String description, String url) {
-		super(id, title, description, url);
+	public SelectionObject(String id, String title, String description, String url, boolean isControlGroupVisible, boolean isClanAVisible, boolean isClanBVisible) {
+		super(id, title, description, url, isControlGroupVisible, isClanAVisible, isClanBVisible);
 		// TODO Auto-generated constructor stub
 		options = new HashArrayList<>();
 	}

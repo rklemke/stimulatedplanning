@@ -19,7 +19,16 @@
   int otherClanOffline = 0;
   
   String currentUserId = "";
-  
+
+	boolean isControl = !user.isTreatmentGroup();
+	boolean isClanA = false;
+	boolean isClanB = false;
+	if (!isControl) {
+		isClanA = user.getClan() != null && Clan.CLAN_1_ID.equals(user.getClan().getId());
+		isClanB = user.getClan() != null && Clan.CLAN_2_ID.equals(user.getClan().getId());
+	}
+	
+
   HashArrayList<UserOnlineStatus> onlineUsers = new HashArrayList<>();
   HashArrayList<UserOnlineStatus> recentUsers = new HashArrayList<>();
   HashArrayList<UserOnlineStatus> offlineUsers = new HashArrayList<>();
@@ -51,7 +60,8 @@
 	
 	List<InformationObject> informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
 	if (informationObjectList == null && contentDescriptor != null) {
-		informationObjectList = contentDescriptor.getAllInformationObjectList();
+		//informationObjectList = contentDescriptor.getAllInformationObjectList();
+		informationObjectList = contentDescriptor.getFilteredInformationObjectList(isControl, isClanA, isClanB);
 	}
 
 	int currentInformationObjectIdx = 0;
@@ -205,7 +215,7 @@
 		<input type="hidden" id="currentInformationObjectIdx" name="currentInformationObjectIdx" value="<%= currentInformationObjectIdx %>"></input>
 	<% 
 	List<SelectionOption> options = currentSelectionObject.getOptionList();
-	if (currentSelectionObject.isClanIdentityPurpose()) {
+	if (currentSelectionObject.isClanIdentityPurpose() || currentSelectionObject.isClanAvatarPurpose()) {
 		ArrayList<SelectionOption> temp = new ArrayList<>();
 		if (userClan != null) {
 			if (Clan.CLAN_1_ID.equals(userClan.getId())) {

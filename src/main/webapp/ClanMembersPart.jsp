@@ -18,6 +18,10 @@
 	  onlineUsers = userClan.getOnlineUsersSorted(userStatus);
 	  recentUsers = userClan.getRecentUsersSorted(userStatus);
 	  offlineUsers = userClan.getOfflineUsersSorted(userStatus);
+  } else {
+	  onlineUsers = StimulatedPlanningFactory.getOnlineControlUsersSorted(userStatus);
+	  recentUsers = StimulatedPlanningFactory.getRecentControlUsersSorted(userStatus);
+	  offlineUsers = StimulatedPlanningFactory.getOfflineControlUsersSorted(userStatus);
   }
   
   boolean excludeSelf = true;
@@ -29,7 +33,6 @@
   
   String currentUserId ="";
   
-  if (user.isTreatmentGroup()) {
 	for (UserOnlineStatus status: onlineUsers) {
 		if (!excludeSelf || !(user.getId().equals(status.getUser().getId()))) {
 			currentUserId = "user"+status.getUser().getId();
@@ -56,6 +59,5 @@
 			<jsp:param name="userId" value="<%= currentUserId %>" />
 			</jsp:include><% 
 		}
-	}
   }
 %>

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import senseofcommunity.Clan;
 import senseofcommunity.InformationObject;
 import stimulatedplanning.ContentDescriptor;
 import stimulatedplanning.CourseDescriptor;
@@ -46,6 +47,14 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 		CourseDescriptor course = (CourseDescriptor)session.getAttribute("course");
 		UserPlan userPlan = (UserPlan)session.getAttribute("userPlan");
 		
+		boolean isControl = !user.isTreatmentGroup();
+		boolean isClanA = false;
+		boolean isClanB = false;
+		if (!isControl) {
+			isClanA = user.getClan() != null && Clan.CLAN_1_ID.equals(user.getClan().getId());
+			isClanB = user.getClan() != null && Clan.CLAN_2_ID.equals(user.getClan().getId());
+		}
+		
 		String contentId = request.getParameter("contentId");
 		String contentName = request.getParameter("contentName");
 		String pageurl = request.getParameter("pageurl");
@@ -70,7 +79,8 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 		if (contentDescriptor != null) {
 			informationObjectList = (List<InformationObject>)session.getAttribute("informationObjectList");
 			if (informationObjectList == null) {
-				informationObjectList = contentDescriptor.getAllInformationObjectList();
+				//informationObjectList = contentDescriptor.getAllInformationObjectList();
+				informationObjectList = contentDescriptor.getFilteredInformationObjectList(isControl, isClanA, isClanB);
 			}
 			Object cioi = request.getParameter("currentInformationObjectIdx");
 			if (cioi != null) {
@@ -93,7 +103,8 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 				
 			} else if (submitForward != null) {
 				session.setAttribute("contentDescriptor", contentDescriptor);
-				informationObjectList = contentDescriptor.getAllInformationObjectList();
+				//informationObjectList = contentDescriptor.getAllInformationObjectList();
+				informationObjectList = contentDescriptor.getFilteredInformationObjectList(isControl, isClanA, isClanB);
 				if (informationObjectList != null) {
 					session.setAttribute("informationObjectList", informationObjectList);
 					if (informationObjectList.size()>0) {
@@ -109,7 +120,8 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 				session.setAttribute("currentInformationObjectIdx", 0);
 
 				session.setAttribute("contentDescriptor", contentDescriptor);
-				informationObjectList = contentDescriptor.getAllInformationObjectList();
+				//informationObjectList = contentDescriptor.getAllInformationObjectList();
+				informationObjectList = contentDescriptor.getFilteredInformationObjectList(isControl, isClanA, isClanB);
 				if (informationObjectList != null) {
 					session.setAttribute("informationObjectList", informationObjectList);
 					if (informationObjectList.size()>0) {
