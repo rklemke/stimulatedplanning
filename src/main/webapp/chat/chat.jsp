@@ -97,6 +97,7 @@ $(document).ready(function () {
 			return $(this).prop('title');
 		}
 	});
+	
 	$( "#roomSelection input" ).checkboxradio({
 	    icon: false
 	});
@@ -104,6 +105,10 @@ $(document).ready(function () {
 	$( "#sendMessageBtn" ).click(function() {
 		chat_sendMessage();
 	});
+	$( "#rules" ).on( "click", function() {
+		$( "#dialog" ).dialog( "open" );
+	});
+	
 	$('#messagebox').on('keypress', function (e) {
         if(e.which === 13){
 
@@ -118,6 +123,18 @@ $(document).ready(function () {
     });	
 	setInterval(chat_tickerRequest, chat_timeoutInterval);
 })
+	$( function() {
+	    $( "#dialog" ).dialog({
+			autoOpen: false,
+			draggable: false,
+			height:300,
+			width:600,
+			modal: true,
+			resizable: false
+	    })
+	    });
+	    
+
 
 		var chat_timeoutInterval = 5000;
 		
@@ -274,9 +291,20 @@ $(document).ready(function () {
 <img class= "emoji" title ="tongue" alt ="(tongue)" src="${pageContext.request.contextPath}/img/chat/emojis/tongue.png"/> 
 <img class= "emoji" title ="in-love" alt ="(in-love)" src="${pageContext.request.contextPath}/img/chat/emojis/in-love.png"/> 
 <img class= "emoji" title ="anguish" alt ="(anguish)" src="${pageContext.request.contextPath}/img/chat/emojis/anguish.png"/>    
-</div>
-</div><!-- row two -->
+</div><!-- row two column one-->
 
+<div style="display: block;width: 100%; float:left;"><strong>Please follow the Chat <a id="rules">rules</a>.</strong></div>
+<div id="dialog" title="General Chat Rules">
+  <ol>
+  <li>Do not use the chat (or other tools provided in the course) to harm or hurt others fellow students</li>
+  <li>Respect others opinion</li>
+  <li>Contributions within the chat must be civil and tasteful</li>
+  <li>No disruptive, offensive or abusive behaviour: contributions must be constructive and polite, not mean-spirited or contributed with the intention of causing trouble</li>
+  <li>No spaming or off-topic material can be shared</li>
+  <li>On a more Safety level: We advise that you never reveal any personal information about yourself or anyone else (for example: telephone number, home address or email address)</li>
+  
+  </ol>
+</div><!-- dialog-->
 </div><!-- container -->
 
 </BODY>
