@@ -55,7 +55,7 @@ public class User implements Serializable, IObjectWithId {
 		if (avatarUrl != null && avatarUrl.length()>0) {
 			return avatarUrl;
 		}
-		return "/img/profile/avatar.png";
+		return "/img/profile/user.png";
 	}
 	public void setAvatarUrl(String avatarUrl) {
 		this.avatarUrl = avatarUrl;

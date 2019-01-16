@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Map;
@@ -186,12 +187,25 @@ public class StimulatedPlanningFactory {
 		return instance.clans;
 	}
 
+	protected static Date week1deadline;
+	protected static Date week2deadline;
+	protected static Date week3deadline;
+	protected static Date week4deadline;
+
+
+	
 	/**
 	 * generate the structure for the course to be used according to the acc staging platform test structure.
 	 * @return
 	 */
 	public static CourseDescriptor generateAccTestCourse() {
 		getOrGenerateClans();
+		
+		week1deadline = new GregorianCalendar(2019, 1, 27, 12, 0).getTime();
+		week2deadline = new GregorianCalendar(2019, 2, 3, 12, 0).getTime();
+		week3deadline = new GregorianCalendar(2019, 2, 10, 12, 0).getTime();
+		week4deadline = new GregorianCalendar(2019, 2, 17, 12, 0).getTime();
+		
 		CourseDescriptor course = instance.retrieveTestCourse();
 		if (course == null) {
 			
@@ -296,40 +310,48 @@ public class StimulatedPlanningFactory {
 
 
 		// Assignment content
-		info = new InformationObject(getUUID(), 
-				"Intro text", 
-				"Intro text", 
-				"",
-				false, true, true);
+		info = generateControlWeek1IntroductionText();
+		content.addInformationObject(info);
+
+		info = generateTreatmentWeek1IntroductionText();
 		content.addInformationObject(info);
 
 		sele = generateUserAvatarSelection();
+		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
 		sele = generateClanLogoSelection();
+		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
 		sele = generateClanIdentitySelection();
+		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
 		sele = generateUserIdentitySelection();
+		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
-		info = new InformationObject(getUUID(), 
-				"Clan rules", 
-				"Clan rules", 
-				"",
-				true, true, true);
+		info = generateClanARulesSelection();
+		content.addInformationObject(sele);
+		
+		info = generateClanARulesSelection();
+		content.addInformationObject(sele);
+		
+		info = generateTreatmentWeek1TestIntroduction();
 		content.addInformationObject(info);
-		info.setContent("<OL>"+
-			"<LI>Do not use the chat or other tools provided in the course to harm or hurt others (such as the members of your clan and or/and the other clan).</LI>"+
-			"<LI>Respect other opinion.</LI>"+
-			"<LI>Contributions within the clan must be civil and tasteful.</LI>"+
-			"<LI>No disruptive, offensive or abusive behaviour: contributions must be constructive and polite, not mean-spirited or contributed with the intention of causing trouble.</LI>"+
-			"<LI>No spamming or off-topic material can be shared.</LI>"+
-			"<LI>On a more Safety level: We advise that you never reveal any personal information about yourself or anyone else (for example: telephone number, home address or email address).</LI>"+
-			"</OL>");
+		
+		sele = generateWeek1KnowledgeTest1();
+		sele.setDeadline(week1deadline);
+		content.addInformationObject(sele);
 
+		sele = generateWeek1KnowledgeTest2();
+		sele.setDeadline(week1deadline);
+		content.addInformationObject(sele);
+
+		info = generateWeek1TestConclusion();
+		content.addInformationObject(info);
+		
 		// Goal for Module 1
 		
 		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
@@ -437,6 +459,7 @@ public class StimulatedPlanningFactory {
 		info.setContent("");
 		
 		sele = generateEncryptedMessageSelection();
+		sele.setDeadline(week2deadline);
 		content.addInformationObject(sele);
 		
 		info = new InformationObject(getUUID(), 
@@ -448,6 +471,7 @@ public class StimulatedPlanningFactory {
 		info.setContent("");
 		
 		sele = generateEncryptionMethodSelection();
+		sele.setDeadline(week2deadline);
 		content.addInformationObject(sele);
 		
 		info = new InformationObject(getUUID(), 
@@ -459,6 +483,7 @@ public class StimulatedPlanningFactory {
 		info.setContent("");
 		
 		sele = generateDecryptionSelection();
+		sele.setDeadline(week2deadline);
 		content.addInformationObject(sele);
 		
 		info = new InformationObject(getUUID(), 
@@ -576,10 +601,12 @@ public class StimulatedPlanningFactory {
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		sele = generateKnowledgeTest1();
+		sele = generateWeek2KnowledgeTest1();
+		sele.setDeadline(week3deadline);
 		content.addInformationObject(sele);
 		
-		sele = generateKnowledgeTest2();
+		sele = generateWeek2KnowledgeTest2();
+		sele.setDeadline(week3deadline);
 		content.addInformationObject(sele);
 				
 		info = new InformationObject(getUUID(), 
@@ -717,7 +744,6 @@ public class StimulatedPlanningFactory {
 
 
 
-
 	/**
 	 * generate the structure for the course to be used according to dev test structure.
 	 * @return
@@ -800,11 +826,10 @@ public class StimulatedPlanningFactory {
 				testCourseBaseURL+"courseware/w1challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%4083d79097d5d94304a6fa9a5aed25dce3");
 		lesson.addContent(content);
 
-		InformationObject info = new InformationObject(getUUID(), 
-				"Intro text", 
-				"Intro text", 
-				testCourseBaseURL+"courseware/w1challenge/",
-				true, true, true);
+		InformationObject info = generateControlWeek1IntroductionText();
+		content.addInformationObject(info);
+
+		info = generateTreatmentWeek1IntroductionText();
 		content.addInformationObject(info);
 
 		SelectionObject sele = generateUserAvatarSelection();
@@ -823,7 +848,7 @@ public class StimulatedPlanningFactory {
 				"Clan rules", 
 				"Clan rules", 
 				testCourseBaseURL+"courseware/w1challenge/",
-				true, true, true);
+				false, true, true);
 		content.addInformationObject(info);
 		info.setContent("<OL>"+
 			"<LI>Do not use the chat or other tools provided in the course to harm or hurt others (such as the members of your clan and or/and the other clan).</LI>"+
@@ -833,6 +858,10 @@ public class StimulatedPlanningFactory {
 			"<LI>No spamming or off-topic material can be shared.</LI>"+
 			"<LI>On a more Safety level: We advise that you never reveal any personal information about yourself or anyone else (for example: telephone number, home address or email address).</LI>"+
 			"</OL>");
+		
+		info = generateTreatmentWeek1TestIntroduction();
+		content.addInformationObject(info);
+
 
 		// Goal for Module 1
 		
@@ -956,10 +985,10 @@ public class StimulatedPlanningFactory {
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		SelectionObject sele = generateKnowledgeTest1();
+		SelectionObject sele = generateWeek2KnowledgeTest1();
 		content.addInformationObject(sele);
 		
-		sele = generateKnowledgeTest2();
+		sele = generateWeek2KnowledgeTest2();
 		content.addInformationObject(sele);
 				
 		info = new InformationObject(getUUID(), 
@@ -1025,6 +1054,51 @@ public class StimulatedPlanningFactory {
 		course.addGoal(goal);
 		
 		return module;
+	}
+
+	
+	// WEEK 1 INTERACTIVE ELEMENTS
+	
+	protected static InformationObject generateControlWeek1IntroductionText() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"Test your knowledge!", 
+				"Hello, there!", 
+				"",
+				true, false, false);
+
+		info.setContent("Welcome😊 to the first week assignment, click on next 👉🏽 to take the test.<BR>" + 
+				"<BR>" + 
+				"Thank you in advance!<BR>" + 
+				"<BR>" + 
+				"The OUNL Team<BR>" + 
+				"(Alessandra, Hugo and Roland)<BR>" + 
+				"");
+		
+		return info;
+	}
+	
+	
+	protected static InformationObject generateTreatmentWeek1IntroductionText() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"Explore your clan!", 
+				"Hello, there!", 
+				"",
+				false, true, true);
+
+		info.setContent("You have been selected among the participants of this course to join our clan 😊<BR>" + 
+				"You will decide to which degree you would like to be involved.<BR>" + 
+				"<BR>" + 
+				"At the moment we do not have a name and neither a logo that define who we are. It is our task this week to agree on these and define as well as our rules.<BR>" + 
+				"<BR>" + 
+				"Be aware that there will be another clan, they will act against us, we need to act together for defeating them. <BR>" + 
+				"<BR>" + 
+				"Are you ready? Let’s do this 💪🏽<BR>" + 
+				"<BR>" + 
+				"The OUNL Team<BR>" + 
+				"(Alessandra, Hugo and Roland)<BR>" + 
+				"");
+		
+		return info;
 	}
 	
 	
@@ -1115,7 +1189,8 @@ public class StimulatedPlanningFactory {
 				"033-boy.png",
 				"034-woman-2.png",
 				"035-woman-1.png",
-				"036-woman.png"
+				"036-woman.png",
+				"user.png"
 			};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
@@ -1200,8 +1275,8 @@ public class StimulatedPlanningFactory {
 		};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
-				"Select your clan logo", 
-				"Select your clan logo", 
+				"Vote for your preferred clan logos", 
+				"Vote for your preferred clan logos", 
 				"",
 				false, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
@@ -1243,8 +1318,8 @@ public class StimulatedPlanningFactory {
 			};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
-				"Select your clan identity", 
-				"Select your clan identity", 
+				"Vote for your preferred clan names", 
+				"Vote for your preferred clan names", 
 				"",
 				false, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
@@ -1261,6 +1336,214 @@ public class StimulatedPlanningFactory {
 		
 		return sele;
 	}
+
+
+	protected static SelectionObject generateClanARulesSelection() {
+		String[] clanTitles = {
+				"Our mission is to make the Internet a secure place for everyone (bad and good guys).", 
+				"We defend all secrets shared on the Internet, whether good or bad.",
+				"Our common purpose is to to defend users’ information independently from their nature.",
+				"We act in solo missions pursuing the common purpose.",
+				"Our common purpose is to present hackers to harm people or create damage in general.",
+				"We work together as a group.", 
+				"Our strength is our knowledge.",
+				"Our mission is to make the Internet a secure and ethical place."
+			};
+		
+		String[] clanDescriptions = {
+				"Our mission is to make the Internet a secure place for everyone (bad and good guys).", 
+				"We defend all secrets shared on the Internet, whether good or bad.",
+				"Our common purpose is to to defend users’ information independently from their nature.",
+				"We act in solo missions pursuing the common purpose.",
+				"Our common purpose is to present hackers to harm people or create damage in general.",
+				"We work together as a group.", 
+				"Our strength is our knowledge.",
+				"Our mission is to make the Internet a secure and ethical place."
+			};
+		
+		SelectionObject sele = new SelectionObject(getUUID(), 
+				"Vote for your preferred clan rules", 
+				"Vote for your preferred clan rules", 
+				"",
+				false, true, false);
+		sele.setType(SelectionObjectType.CLAN_SELECTION);
+		sele.setPurpose(SelectionObjectPurpose.CLAN_VOTING);
+		
+		SelectionOption option = null;
+		for (int i=0; i<clanTitles.length; i++) {
+			option = new SelectionOption(getUUID(), 
+					clanTitles[i], 
+					clanDescriptions[i], 
+					"");
+			sele.addOption(option);
+		}
+		
+		return sele;
+	}
+
+
+	protected static SelectionObject generateClanBRulesSelection() {
+		String[] clanTitles = {
+				"We are ethical hackers, we use our knowledge to disable the “real” hackers from harming people or creating damage, in general.", 
+				"We want to do whatever we want on the Internet without caring of the ethical issues.", 
+				"We steal information from the bad guys to protect the good, like Robin Hood.", 
+				"Our identities are anonymous. ",
+				"We work together as a group. ", 
+				"Our common purpose is to find the flaws in the information systems before the real hackers.",
+				"Our common purpose is to create chaos on the Internet.",
+				"We act in solo missions pursuing the common purpose."
+			};
+		
+		String[] clanDescriptions = {
+				"We are ethical hackers, we use our knowledge to disable the “real” hackers from harming people or creating damage, in general.", 
+				"We want to do whatever we want on the Internet without caring of the ethical issues.", 
+				"We steal information from the bad guys to protect the good, like Robin Hood.", 
+				"Our identities are anonymous. ",
+				"We work together as a group. ", 
+				"Our common purpose is to find the flaws in the information systems before the real hackers.",
+				"Our common purpose is to create chaos on the Internet.",
+				"We act in solo missions pursuing the common purpose."
+			};
+		
+		SelectionObject sele = new SelectionObject(getUUID(), 
+				"Vote for your preferred clan rules", 
+				"Vote for your preferred clan rules", 
+				"",
+				false, false, true);
+		sele.setType(SelectionObjectType.CLAN_SELECTION);
+		sele.setPurpose(SelectionObjectPurpose.CLAN_VOTING);
+		
+		SelectionOption option = null;
+		for (int i=0; i<clanTitles.length; i++) {
+			option = new SelectionOption(getUUID(), 
+					clanTitles[i], 
+					clanDescriptions[i], 
+					"");
+			sele.addOption(option);
+		}
+		
+		return sele;
+	}
+
+
+	protected static InformationObject generateTreatmentWeek1TestIntroduction() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"Let’s now challenge your ability to work together!", 
+				"Hello, there!", 
+				"",
+				false, true, true);
+
+		info.setContent("Your mission is to solve the following knowledge test!<BR>" + 
+				"Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
+				"<BR>" + 
+				"Work well on this simple test because we are going to level up in the next one<BR>" + 
+				"<BR>" + 
+				"The OUNL team<BR>" + 
+				"");
+		
+		return info;
+	}
+	
+	
+	protected static InformationObject generateWeek1TestConclusion() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"We have saved your answers!", 
+				"Hello, there!", 
+				"",
+				true, true, true);
+
+		info.setContent("Are you curious to know how did you perform?<BR> "
+				+ "If yes check out the “Result page week 1”  that will visible from next Monday morning.<BR> "
+				+ "<BR>"
+				+ "The OUNL team\n" + 
+				"");
+		
+		return info;
+	}
+	
+	
+	protected static SelectionObject generateWeek1KnowledgeTest1() {
+		SelectionObject sele = new SelectionObject(getUUID(), 
+				"Test", 
+				"Which is correct?", 
+				"",
+				true, true, true);
+		sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
+		sele.setPurpose(SelectionObjectPurpose.TEST);
+		
+		SelectionOption option = new SelectionOption(getUUID(), 
+				"Option a", 
+				"Option a", 
+				"");
+		option.setCorrect(false);
+		sele.addOption(option);
+		
+		option = new SelectionOption(getUUID(), 
+				"Option b", 
+				"Option b", 
+				"");
+		option.setCorrect(true);
+		sele.addOption(option);
+		
+		option = new SelectionOption(getUUID(), 
+				"Option c", 
+				"Option c", 
+				"");
+		option.setCorrect(false);
+		sele.addOption(option);
+
+		option = new SelectionOption(getUUID(), 
+				"Option d", 
+				"Option d", 
+				"");
+		option.setCorrect(true);
+		sele.addOption(option);
+				
+		return sele;
+	}
+	
+	protected static SelectionObject generateWeek1KnowledgeTest2() {
+		SelectionObject sele = new SelectionObject(getUUID(), 
+				"Test", 
+				"Which are also correct?", 
+				"",
+				true, true, true);
+		sele.setType(SelectionObjectType.CLAN_MULTI_TEST);
+		sele.setPurpose(SelectionObjectPurpose.TEST);
+		
+		SelectionOption option = new SelectionOption(getUUID(), 
+				"Option e", 
+				"Option e", 
+				"");
+		option.setCorrect(false);
+		sele.addOption(option);
+		
+		option = new SelectionOption(getUUID(), 
+				"Option f", 
+				"Option f", 
+				"");
+		option.setCorrect(true);
+		sele.addOption(option);
+		
+		option = new SelectionOption(getUUID(), 
+				"Option g", 
+				"Option g", 
+				"");
+		option.setCorrect(false);
+		sele.addOption(option);
+		
+		option = new SelectionOption(getUUID(), 
+				"Option h", 
+				"Option h", 
+				"");
+		option.setCorrect(true);
+		sele.addOption(option);
+				
+		return sele;
+	}
+	
+	
+	// WEEK 2 interactive elements
 
 
 	protected static SelectionObject generateEncryptedMessageSelection() {
@@ -1385,7 +1668,7 @@ public class StimulatedPlanningFactory {
 	}
 	
 
-	protected static SelectionObject generateKnowledgeTest1() {
+	protected static SelectionObject generateWeek2KnowledgeTest1() {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Test", 
 				"Which is correct?", 
@@ -1424,7 +1707,7 @@ public class StimulatedPlanningFactory {
 				
 		return sele;
 	}
-	protected static SelectionObject generateKnowledgeTest2() {
+	protected static SelectionObject generateWeek2KnowledgeTest2() {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Test", 
 				"Which are also correct?", 

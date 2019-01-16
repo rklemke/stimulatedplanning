@@ -204,9 +204,11 @@
 	</script>
 	
 	<div class="row" id="RowOne">
+	<% if (currentSelectionObject.hasDeadline()) { %>
 	<div id=headerHolder>
-	<strong>Voting is open only until xx.yy.2019</strong>
+	<strong>Voting is open only until <%= currentSelectionObject.getDeadline() %></strong>
 	</div>
+	<% } %>
 	<fieldset>
 	<legend> <%= currentSelectionObject.getTitle() %> </legend>
 	<form id="selectionForm" method="POST" action="/SelectionWidget.jsp">
