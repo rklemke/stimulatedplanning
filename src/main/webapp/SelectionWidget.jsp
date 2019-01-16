@@ -167,7 +167,7 @@
 			RequestDispatcher rd = request.getRequestDispatcher("/GenericClanFrameServlet_SoC");
 			request.setAttribute("selectionSubmitForward", "true");
 			rd.forward(request, response);			
-		}
+		} else {
 
 %>
     <script type="text/javascript">
@@ -279,3 +279,4 @@
 	</div><!-- rowOne -->
 	
 	</div><!--container-->
+<% } %>
