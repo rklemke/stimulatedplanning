@@ -83,26 +83,16 @@
     </script>
 </head>
 <body>
-<% if (user.isTreatmentGroup()) { %>
+<div class="container">
 
-    <div class="container">
-    
-    <div id="RowOneColumnOne">
-    
+<% if (user.isTreatmentGroup()) { %>
+    <div id="RowYourClan">
     <img src = "<%= userClan.getClanLogo() %>" class="imgHolder" />
     <div class="headerText"><%= userClan.getTitle() %> [<%= user.getName() %>]</div>
-    
-    </div><!-- RowOneColumnOne  -->
-    
-    <div id="RowOneColumnTwo">
-    
-    <img src = "<%= otherClan.getClanLogo() %>" class="imgHolder"/>
-    <div class="headerText"><%= otherClan.getTitle() %></div>
-    
-    </div><!-- RowOneColumnTwo -->
+    </div><!-- rowYourClan -->
 <% } %>
-    <div id="RowTwoColumnOne">
-    
+
+    <div id="RowClanMembers">
     <fieldset>
 <% if (user.isTreatmentGroup()) { %>
     <legend>Clan Members</legend>
@@ -113,11 +103,32 @@
 			<jsp:param name="userid" value="<%= user.getId() %>" />
 			<jsp:param name="userName" value="<%= user.getName() %>" />
    		</jsp:include>
-    </fieldset>
-			
-	</div><!--RowTwoColumnOne-->
+    </fieldset>	
+	</div><!--rowClanMembers-->
 	
-	<div id="RowTwoColumnTwo">
+	<div id="RowLegend">
+	<fieldset>
+    <legend>Legend</legend>
+	
+	<svg> <rect width="15" height="15" style="fill:green;" /></svg> 
+	<strong style="color: green;"> Online</strong>
+	
+	<svg><rect width="15" height="15" style="fill:orange;"/></svg> 
+	<strong style="color: orange;"> Recently Online </strong>
+	
+	<svg><rect width="15" height="15" style="fill:grey;"/></svg> 
+	<strong style="color: grey;"> Offline </strong>
+	</fieldset>
+			
+	</div><!-- rowLegend -->
+	
+	<div id="RowOtherClan">
+    <img src = "<%= otherClan.getClanLogo() %>" class="imgHolder"/>
+    <div class="headerText"><%= otherClan.getTitle() %></div>
+    </div><!-- RowThree -->
+    
+	<div id="RowOtherClanMembers">
+	
 <% if (user.isTreatmentGroup()) { %>
 	
 	<Strong>Online members: </strong>
@@ -126,24 +137,8 @@
     <Strong>Offline members: </strong>
 	<div id="AW_OtherClanOffline"></div>
 <% } %>
-	
-	<fieldset>
-    <legend>Legend</legend>
-	<strong style="color: green; margin: 0.25em;"> 
-	<svg> <rect width="15" height="15" style="fill:green;" /></svg> 
-	Online</strong>
-	
-	<strong style="color: orange;margin: 0.25em;"> 
-	<svg><rect width="15" height="15" style="fill:orange;"/></svg> 
-	Recently Online </strong>
-	
-	<strong style="color: grey; margin: 0.25em;"> 
-	<svg><rect width="15" height="15" style="fill:grey;"/></svg> 
-	Offline </strong>
-	</fieldset>
-			
-	</div><!-- RowTwoColumnTwo -->
-    
+	</div><!-- RowThree -->
+
     <div class="clear"></div>
     </div><!--container-->
 

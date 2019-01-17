@@ -9,43 +9,48 @@ div.container {
 	position: absolute;
 	display: block;
 	width:100%; 
-	height:32em;
+	min-height:20em;
+	max-height:31em;
+	overflow-y: scroll;
 	/*background-color: #666699;*/
 }
 
-
-div#RowOneColumnOne{
-	display:inline-block;
-	float:left;
-	width: 48%;
-	height:6em;
-}
-div#RowOneColumnTwo{
-	display:inline-block;
-	float:left;
-	width: 48%;
-	margin-right:0.5em;
-	height:6em;
+div#RowYourClan{
+	display:block;
+	width: 100%;
+	height:2.5em;
+	
 }
 
-div#RowTwoColumnOne{
+div#RowClanMembers{
 	margin-top:0.5em;
-	display:inline-block;
-	float:left;
-	width:48%;
-	height:25em;
+	display:block;
+	width:100%;
+	min-height:5em;
+	max-height:15em;
+	overflow-y: scroll;
 	/*background-color: #666688;*/
 }
 
-div#RowTwoColumnTwo{
-	margin-top:0.5em;
-	display:inline-block;
-	float:left;
-	width:48%;
-	margin-right:0.5em
-	height:25em;
+div#RowOtherClan{
+	display:block;
+	width:100%;
+	height:2.5em;
 }
 
+div#RowOtherClanMembers{
+	display:block;
+	width:100%;
+	margin-top:0.5em;
+	height:7em;
+}
+
+div#RowLegend{
+	display:block;
+	width:100%;
+	margin-top:0.5em;
+	height:4em;
+}
 img.imgHolder {
 	float:left;
 	width: 2.5em;
@@ -58,34 +63,39 @@ div.headerText{
 	/*border: 1px Solid #808080;*/
 }
 
-iframe#AW_frameHolder{
-	border:0;
-	width:99%;
-	/*background:azure;*/
-}
-
 div#AW_OtherClanOnline{
 	display: block;
-	height: 2em;
+	height: 1.5em;
 	margin-bottom: 0.5em;
 }
 
 div#AW_OtherClanOffline{
 	display: block;
-	height: 2em;
+	height: 1.5em;
 	margin-bottom: 0.5em;
 }
 
 
-div#RowTwoColumnTwo strong{
-	display: block;
-	width: 46%;
+div#RowLegend strong{
+	display: inline-block;
+	float:left;
 	font-size: 1em;
+	margin-right:1em;
+	
 }
 
-div#RowTwoColumnTwo svg {
+div#RowLegend svg {
 	display: inline-block;
 	float: left;
 	width: 1em;
 	height: 1em;
+	text-align:center;
+	line-height:0.5em;
+	margin-right:0.25em;
 }
+
+div#RowLegend svg rect {
+	display:inline-block;
+	vertical-align: middle;
+
+	}
