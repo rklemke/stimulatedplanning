@@ -45,6 +45,7 @@ div#RowOne form label{
 	display:inline-block;
 	margin: 0.1em;
 	line-height:2.5em;
+	overflow:hidden;
 	}
 	
 	
