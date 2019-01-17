@@ -131,13 +131,13 @@
 	
 <% if (user.isTreatmentGroup()) { %>
 	
-	<Strong>Online members: </strong>
+	<span>Online members: </span>
 	<div id="AW_OtherClanOnline"></div>
 	
-    <Strong>Offline members: </strong>
+    <span>Offline members: </span>
 	<div id="AW_OtherClanOffline"></div>
 <% } %>
-	</div><!-- RowThree -->
+	</div><!-- Row other clan -->
 
     <div class="clear"></div>
     </div><!--container-->

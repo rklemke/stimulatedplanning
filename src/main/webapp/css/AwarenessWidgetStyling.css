@@ -42,7 +42,8 @@ div#RowOtherClanMembers{
 	display:block;
 	width:100%;
 	margin-top:0.5em;
-	height:7em;
+	height:3.5em;
+	line-height: 1.75em;
 }
 
 div#RowLegend{
@@ -63,16 +64,26 @@ div.headerText{
 	/*border: 1px Solid #808080;*/
 }
 
+div#RowOtherClanMembers span{
+	display:inline-block;
+	text-align:center;
+	vertical-align:middle;
+	width:15%;
+}
 div#AW_OtherClanOnline{
-	display: block;
+	display: inline-block;
 	height: 1.5em;
-	margin-bottom: 0.5em;
+	width:33%;
+	margin-right: 0.5em;
+	vertical-align:middle;
 }
 
 div#AW_OtherClanOffline{
-	display: block;
+	display: inline-block;
+	width:33%;
 	height: 1.5em;
-	margin-bottom: 0.5em;
+	margin-right: 0.5em;
+	vertical-align:middle;
 }
 
 
