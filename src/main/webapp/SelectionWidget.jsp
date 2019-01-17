@@ -211,6 +211,10 @@
 	<% } %>
 	<fieldset>
 	<legend> <%= currentSelectionObject.getTitle() %> </legend>
+	<div style="display:inline-block; width: 100%;">
+		<%= currentSelectionObject.getDescription()+"<BR>" %>
+		<%= currentSelectionObject.getContent() != null?currentSelectionObject.getContent()+"<BR>":"" %>
+	</div>
 	<form id="selectionForm" method="POST" action="/SelectionWidget.jsp">
 		<input type="hidden" id="submitIndicator" name="submitIndicator" value="true">
 		<input type="hidden" id="userid" name="userid" value="<%= user.getId() %>"></input>
