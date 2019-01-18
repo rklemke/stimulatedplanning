@@ -223,19 +223,19 @@
         icon: false
   	    });
   	  
-//  	  if(<%=user.isTreatmentGroup()%> && <%=currentSelectionObject.isClan()%>){
-// 		  $("div#RowOne form label").css({
-//  			"display":"block",
-//  			"text-align":"left",
-//  			"vertical-align": "middle"
-//  		  });
+  	  if(<%=user.isTreatmentGroup()%> && <%=currentSelectionObject.isClan()%>){
+ 		  $("div#RowOne form label").css({
+  			"display":"block",
+  			"text-align":"left",
+  			"vertical-align": "middle"
+  		  });
 //  		  
 //  		  $("PercentBar").css({
 //  			  "width":"50%"  		  
 //  			  });
 //  		  
 //  		$(document).tooltip("disable");
-//  	  }
+  	  }
 	});
 	</script>
 	
