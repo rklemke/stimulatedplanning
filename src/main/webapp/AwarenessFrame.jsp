@@ -122,6 +122,7 @@
 			
 	</div><!-- rowLegend -->
 	
+<% if (user.isTreatmentGroup()) { %>
 	<div id="RowOtherClan">
     <img src = "<%= otherClan.getClanLogo() %>" class="imgHolder"/>
     <div class="headerText"><%= otherClan.getTitle() %></div>
@@ -129,15 +130,13 @@
     
 	<div id="RowOtherClanMembers">
 	
-<% if (user.isTreatmentGroup()) { %>
-	
 	<span>Online members: </span>
 	<div id="AW_OtherClanOnline"></div>
 	
     <span>Offline members: </span>
 	<div id="AW_OtherClanOffline"></div>
-<% } %>
 	</div><!-- Row other clan -->
+<% } %>
 
     <div class="clear"></div>
     </div><!--container-->

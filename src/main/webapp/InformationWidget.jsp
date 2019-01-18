@@ -81,6 +81,7 @@
 	  logString += ", currentInformationObjectIdx: "+currentInformationObjectIdx;
 	  log.info(logString);
 	  
+		StimulatedPlanningFactory.trackAndLogEvent(request, response, "view.info");
   
 %>
 <% if (currentInformationObject != null) { %>	
