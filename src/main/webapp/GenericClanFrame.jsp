@@ -1,6 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*" %>
+<%@ page 
+	language="java" 
+	contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"
+    import="stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*" %>
 <%
   session = StimulatedPlanningFactory.initializeSession(request, response);
 
@@ -142,14 +144,30 @@
 			<input type="hidden" id="currentInformationObjectIdx" name="currentInformationObjectIdx" value="<%= currentInformationObjectIdx %>"></input>
 		<%    if (currentInformationObjectIdx > 0) { %>
 			<input type="submit" id="buttonPrev" name="buttonPrev" class="ui-button ui-widget ui-corner-all" value="Prev"></input>
+		<%    } else {%>
+			<input type="button" value="Prev" class="ui-button ui-widget ui-corner-all ui-state-disabled" disabled></input>
 		<%    } %>
-		<%    if (/*!(currentInformationObject instanceof SelectionObject) && */currentInformationObjectIdx < informationObjectList.size()-1) { %>
+		<%    if (currentInformationObjectIdx < informationObjectList.size()-1
+				&& !(currentInformationObject instanceof SelectionObject)) { %>
 			<input type="submit" id="buttonNext" name="buttonNext" class="ui-button ui-widget ui-corner-all" value="Next"></input>
+		<%    } else  if (currentInformationObjectIdx < informationObjectList.size()-1
+				&& (currentInformationObject instanceof SelectionObject
+					&& (((SelectionObject)currentInformationObject).hasSelectionForUser(user) 
+						|| 	"true".equals(request.getAttribute("selectionSubmitForward"))))) { %>
+			<input type="submit" id="buttonNext" name="buttonNext" class="ui-button ui-widget ui-corner-all" value="Next"></input>
+		<%    } else {%>
+		<%	    if (currentInformationObjectIdx == informationObjectList.size()-1) { %>
+			<span title="You reached the end of this sequence. Use the navigation buttons at the end of this page to move forward."><input type="button" value="Next" class="ui-button ui-widget ui-corner-all ui-state-disabled" disabled></input></span>
+		<%  	  } else { %>
+			<span title="Please submit your selection before you can move on."><input type="button" value="Next" class="ui-button ui-widget ui-corner-all ui-state-disabled" disabled></input></span>
+		<%	    } %>
 		<%    } %>
 		<% } %>
 	</form>
 	<%    if (currentInformationObject instanceof SelectionObject) { %>
 		<button id="buttonSubmit" class="ui-button ui-widget ui-corner-all">Submit</button>
+	<%    } else {%>
+		<button id="buttonSubmit" class="ui-button ui-widget ui-corner-all ui-state-disabled" disabled>Submit</button>
 	<%    } %>
 	
 	</div><!--button Control-->

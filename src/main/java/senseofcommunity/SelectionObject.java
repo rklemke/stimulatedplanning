@@ -127,6 +127,20 @@ public class SelectionObject extends InformationObject {
 		return hasDeadline() && new Date().after(deadline);
 	}
 
+	public boolean hasSelectionForUser(User user) {
+		boolean hasOption = false;
+		UserSelectedOption selectedOption;
+		for (SelectionOption option : options) {
+			selectedOption = PersistentStore.readUserSelectionOption(user, this, option);
+			if (selectedOption != null) {
+				hasOption = true;
+			}
+			//PersistentStore.deleteGenericEntity(selectedOption);
+		}
+		return hasOption;
+	}
+
+
 	public void clearSelectionForUser(User user) {
 		UserSelectedOption selectedOption;
 		for (SelectionOption option : options) {
