@@ -46,7 +46,7 @@ $( function() {
 	<a 
 		href="#" 
 		id="userIcon_<%= user.getId() %>"
-		title= "<%= user.getName() %><br /><%= onlineStatus %><br /><img src='<%= user.getAvatarUrl() %>' width='75px' height='75px'>"
+		title= "<%= user.getName() %><br /><%= onlineStatus %><br /><img src='<%= user.getAvatarUrl() %>' width='75px' height='75px'><br /><%= user.getOnlineStatus().getTitle() %>"
 	>
 		<img src="<%= user.getAvatarUrl() %>" width="<%= size %>" height="<%= size %>">
 	</a>

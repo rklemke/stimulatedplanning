@@ -187,6 +187,345 @@ public class StimulatedPlanningFactory {
 		return instance.clans;
 	}
 
+	/**
+	 * generate the structure for the course to be used according to dev test structure.
+	 * @return
+	 */
+	public static CourseDescriptor generateDevTestCourse() {
+		getOrGenerateClans();
+		CourseDescriptor course = instance.retrieveTestCourse();
+		if (course == null) {
+			
+			// Course
+			
+			course = new CourseDescriptor(instance.testCourseId, 
+					"Security Dev Test Course", 
+					"Security Dev Test Course", 
+					testCourseBaseURL+"course/");
+	
+			//
+			// Week 1
+			//
+			
+			generateWeek1(course);
+			
+			//
+			// Module 2
+			//
+			
+			generateWeek2(course);
+			
+			//
+			// Module 3
+			//
+			
+			generateWeek3(course);
+			
+			//
+			// Module 4
+			//
+			
+			generateWeek4(course);
+			
+			//
+			// Goal
+			//
+			
+			GoalDescriptor goal = new GoalDescriptor(getUUID(), "Browsing the Course", "I intend to browse around", "");
+			goal.addCompletionGoal("100", "all materials (100%)");
+			goal.addCompletionGoal("70", "most materials (70%)");
+			goal.addCompletionGoal("40", "some materials (40%)");
+			goal.addCompletionGoal("10", "less than 10%");
+			goal.addCompletionGoal("0", "I have not decided yet");
+			course.addGoal(goal);
+			
+			instance.storeTestCourse(course);
+		}
+	
+		// Browsing goal for course
+	
+		return course;
+	}
+
+	protected static ModuleDescriptor generateWeek1(CourseDescriptor course) {
+		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
+				"Week 1", 
+				"Week 1 - Introduction", "");
+		course.addModule(module);
+		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
+				"module1. lesson 1",
+				"module1. lesson 1","");
+		module.addLesson(lesson);	
+		ContentDescriptor content = new ContentDescriptor(getUUID(), 
+				"Week 1 content", 
+				"Week 1 content", 
+				testCourseBaseURL+"courseware/w1content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%4083d79097d5d94304a6fa9a5aed25dce3");
+		lesson.addContent(content);
+	
+		content = new ContentDescriptor(getUUID(), 
+				"Week 1 challenge", 
+				"Week 1 challenge", 
+				testCourseBaseURL+"courseware/w1challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%4083d79097d5d94304a6fa9a5aed25dce3");
+		lesson.addContent(content);
+	
+		InformationObject info = generateWeek1ControlIntroductionText();
+		content.addInformationObject(info);
+	
+		info = generateWeek1TreatmentIntroductionText();
+		content.addInformationObject(info);
+	
+		SelectionObject sele = generateWeek1UserAvatarSelection();
+		content.addInformationObject(sele);
+		
+		sele = generateWeek1ClanLogoSelection();
+		content.addInformationObject(sele);
+		
+		sele = generateWeek1ClanIdentitySelection();
+		content.addInformationObject(sele);
+		
+		sele = generateWeek1UserIdentitySelection();
+		content.addInformationObject(sele);
+		
+		info = new InformationObject(getUUID(), 
+				"Clan rules", 
+				"Clan rules", 
+				testCourseBaseURL+"courseware/w1challenge/",
+				false, true, true);
+		content.addInformationObject(info);
+		info.setContent("<OL>"+
+			"<LI>Do not use the chat or other tools provided in the course to harm or hurt others (such as the members of your clan and or/and the other clan).</LI>"+
+			"<LI>Respect other opinion.</LI>"+
+			"<LI>Contributions within the clan must be civil and tasteful.</LI>"+
+			"<LI>No disruptive, offensive or abusive behaviour: contributions must be constructive and polite, not mean-spirited or contributed with the intention of causing trouble.</LI>"+
+			"<LI>No spamming or off-topic material can be shared.</LI>"+
+			"<LI>On a more Safety level: We advise that you never reveal any personal information about yourself or anyone else (for example: telephone number, home address or email address).</LI>"+
+			"</OL>");
+		
+		info = generateWeek1TreatmentTestIntroduction();
+		content.addInformationObject(info);
+	
+	
+		// Goal for Module 1
+		
+		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
+				"I intend to participate in the course activities to learn about "+module.getTitle(), "");
+		ListIterator<LessonDescriptor> iterator = module.getLessons();
+		while (iterator.hasNext()) {
+			goal.addLesson(iterator.next());
+		}
+		course.addGoal(goal);
+	
+		
+		return module;
+	}
+
+	protected static ModuleDescriptor generateWeek2(CourseDescriptor course) {
+		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
+				"Week2", 
+				"Week 2 - Tips on how to protect your computer", "");
+		course.addModule(module);
+		
+		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
+				"Threats and attacks",
+				"Threats and attacks","");
+		module.addLesson(lesson);
+		
+		ContentDescriptor content = new ContentDescriptor(getUUID(), 
+				"Week 2 content", 
+				"Week 2 content", 
+				testCourseBaseURL+"courseware/w2content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+		lesson.addContent(content);
+		
+		content = new ContentDescriptor(getUUID(), 
+				"Week 2 challenge", 
+				"Week 2 challenge", 
+				testCourseBaseURL+"courseware/w2challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+		lesson.addContent(content);
+		
+		InformationObject info = new InformationObject(getUUID(), 
+				"Communicate with the opponents", 
+				"Communicate with the opponents", 
+				testCourseBaseURL+"courseware/w2challenge/",
+				true, true, true);
+		content.addInformationObject(info);
+		info.setContent("");
+		
+		info = new InformationObject(getUUID(), 
+				"Encrypt your message", 
+				"Communicate with the opponents", 
+				testCourseBaseURL+"courseware/w2challenge/",
+				true, true, true);
+		content.addInformationObject(info);
+		info.setContent("");
+		
+		info = new InformationObject(getUUID(), 
+				"Encrypted Message received", 
+				"How do you decrypt it?", 
+				testCourseBaseURL+"courseware/w2challenge/",
+				true, true, true);
+		content.addInformationObject(info);
+		info.setContent("");
+		
+		SelectionObject sele = generateWeek2DecryptionSelection();
+		content.addInformationObject(sele);
+		
+		info = new InformationObject(getUUID(), 
+				"Clan challenge results", 
+				"How'd you do?", 
+				testCourseBaseURL+"courseware/w2challenge/",
+				true, true, true);
+		content.addInformationObject(info);
+		info.setContent("");
+		
+		// Goal for module 2
+		
+		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
+				"I intend to participate in the course activities to learn about "+module.getTitle(), "");
+		ListIterator<LessonDescriptor> iterator = module.getLessons();
+		while (iterator.hasNext()) {
+			goal.addLesson(iterator.next());
+		}
+		course.addGoal(goal);
+		
+		return module;
+	}
+
+	protected static ModuleDescriptor generateWeek3(CourseDescriptor course) {
+		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
+				"Week 3", 
+				"Week 3 - Tips on how to protect your computer", "");
+		course.addModule(module);
+		
+		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
+				"Threats and attacks",
+				"Threats and attacks","");
+		module.addLesson(lesson);
+		
+		ContentDescriptor content = new ContentDescriptor(getUUID(), 
+				"Week 3 content", 
+				"Week 3 content", 
+				testCourseBaseURL+"courseware/w3content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+		lesson.addContent(content);
+		
+		content = new ContentDescriptor(getUUID(), 
+				"Week 3 challenge", 
+				"Week 3 challenge", 
+				testCourseBaseURL+"courseware/w3challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+		lesson.addContent(content);
+	
+		InformationObject info = generateWeek2TreatmentTestIntroduction();
+		content.addInformationObject(info);
+		info.setContent("");
+		
+		info = generateWeek2ControlTestIntroduction();
+		content.addInformationObject(info);
+		info.setContent("");
+
+		SelectionObject sele = generateWeek2KnowledgeTest1();
+		content.addInformationObject(sele);
+		sele.setDeadline(week2deadline);
+		
+		sele = generateWeek2KnowledgeTest2();
+		content.addInformationObject(sele);
+		sele.setDeadline(week2deadline);
+				
+		sele = generateWeek2KnowledgeTest3();
+		content.addInformationObject(sele);
+		sele.setDeadline(week2deadline);
+				
+		sele = generateWeek2KnowledgeTest4();
+		content.addInformationObject(sele);
+		sele.setDeadline(week2deadline);
+				
+		sele = generateWeek2KnowledgeTest5();
+		content.addInformationObject(sele);
+		sele.setDeadline(week2deadline);
+				
+		sele = generateWeek2KnowledgeTest6();
+		content.addInformationObject(sele);
+		sele.setDeadline(week2deadline);
+				
+		sele = generateWeek2KnowledgeTest7();
+		content.addInformationObject(sele);
+		sele.setDeadline(week2deadline);
+				
+		sele = generateWeek2KnowledgeTest8();
+		content.addInformationObject(sele);
+		sele.setDeadline(week2deadline);
+				
+		sele = generateWeek2KnowledgeTest9();
+		content.addInformationObject(sele);
+		sele.setDeadline(week2deadline);
+				
+		sele = generateWeek2KnowledgeTest10();
+		content.addInformationObject(sele);
+		sele.setDeadline(week2deadline);
+				
+		info = new InformationObject(getUUID(), 
+				"Your results", 
+				"Your results", 
+				testCourseBaseURL+"courseware/w3challenge/",
+				true, true, true);
+		content.addInformationObject(info);
+		info.setContent("");
+		
+		// Goal for module 2
+		
+		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
+				"I intend to participate in the course activities to learn about "+module.getTitle(), "");
+		ListIterator<LessonDescriptor> iterator = module.getLessons();
+		while (iterator.hasNext()) {
+			goal.addLesson(iterator.next());
+		}
+		course.addGoal(goal);
+		
+		return module;
+	}
+
+	protected static ModuleDescriptor generateWeek4(CourseDescriptor course) {
+		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
+				"Week 4", 
+				"Week 4 - Tips on how to protect your computer", "");
+		course.addModule(module);
+		
+		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
+				"Threats and attacks",
+				"Threats and attacks","");
+		module.addLesson(lesson);
+		
+		ContentDescriptor content = new ContentDescriptor(getUUID(), 
+				"Week 4 content", 
+				"Week 4 content", 
+				testCourseBaseURL+"courseware/w4content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+		lesson.addContent(content);
+		
+		content = new ContentDescriptor(getUUID(), 
+				"Week 4 challenge", 
+				"Week 4 challenge", 
+				testCourseBaseURL+"courseware/w4challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
+		lesson.addContent(content);
+	
+		InformationObject info = new InformationObject(getUUID(), 
+				"Discuss about cryptography", 
+				"Discuss about cryptography", 
+				testCourseBaseURL+"courseware/w4challenge/",
+				true, true, true);
+		content.addInformationObject(info);
+		info.setContent("");
+		
+		// Goal for module 2
+		
+		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
+				"I intend to participate in the course activities to learn about "+module.getTitle(), "");
+		ListIterator<LessonDescriptor> iterator = module.getLessons();
+		while (iterator.hasNext()) {
+			goal.addLesson(iterator.next());
+		}
+		course.addGoal(goal);
+		
+		return module;
+	}
+
 	protected static Date week1deadline;
 	protected static Date week2deadline;
 	protected static Date week3deadline;
@@ -310,37 +649,37 @@ public class StimulatedPlanningFactory {
 
 
 		// Assignment content
-		info = generateControlWeek1IntroductionText();
+		info = generateWeek1ControlIntroductionText();
 		content.addInformationObject(info);
 
-		info = generateTreatmentWeek1IntroductionText();
+		info = generateWeek1TreatmentIntroductionText();
 		content.addInformationObject(info);
 
-		sele = generateUserAvatarSelection();
+		sele = generateWeek1UserAvatarSelection();
 		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
-		sele = generateClanLogoSelection();
+		sele = generateWeek1ClanLogoSelection();
 		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
-		sele = generateClanIdentitySelection();
+		sele = generateWeek1ClanIdentitySelection();
 		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
-		sele = generateUserIdentitySelection();
+		sele = generateWeek1UserIdentitySelection();
 		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
-		sele = generateClanARulesSelection();
+		sele = generateWeek1ClanARulesSelection();
 		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
-		sele = generateClanBRulesSelection();
+		sele = generateWeek1ClanBRulesSelection();
 		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
-		info = generateTreatmentWeek1TestIntroduction();
+		info = generateWeek1TreatmentTestIntroduction();
 		content.addInformationObject(info);
 		
 		sele = generateWeek1KnowledgeTest1();
@@ -476,7 +815,7 @@ public class StimulatedPlanningFactory {
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		sele = generateEncryptedMessageSelection();
+		sele = generateWeek2EncryptedMessageSelection();
 		sele.setDeadline(week2deadline);
 		content.addInformationObject(sele);
 		
@@ -488,11 +827,11 @@ public class StimulatedPlanningFactory {
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		sele = generateEncryptionMethodSelectionClan1();
+		sele = generateWeek2EncryptionMethodSelectionClan1();
 		sele.setDeadline(week2deadline);
 		content.addInformationObject(sele);
 		
-		sele = generateEncryptionMethodSelectionClan2();
+		sele = generateWeek2EncryptionMethodSelectionClan2();
 		sele.setDeadline(week2deadline);
 		content.addInformationObject(sele);
 		
@@ -504,7 +843,7 @@ public class StimulatedPlanningFactory {
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		sele = generateDecryptionSelection();
+		sele = generateWeek2DecryptionSelection();
 		sele.setDeadline(week2deadline);
 		content.addInformationObject(sele);
 		
@@ -516,6 +855,14 @@ public class StimulatedPlanningFactory {
 		content.addInformationObject(info);
 		info.setContent("");
 		
+		info = generateWeek2TreatmentTestIntroduction();
+		content.addInformationObject(info);
+		info.setContent("");
+		
+		info = generateWeek2ControlTestIntroduction();
+		content.addInformationObject(info);
+		info.setContent("");
+
 		sele = generateWeek2KnowledgeTest1();
 		content.addInformationObject(sele);
 		sele.setDeadline(week2deadline);
@@ -556,6 +903,10 @@ public class StimulatedPlanningFactory {
 		content.addInformationObject(sele);
 		sele.setDeadline(week2deadline);
 				
+		info = generateWeek2TestConclusion();
+		content.addInformationObject(info);
+		info.setContent("");
+
 		
 		// Goal for Module 2
 		
@@ -655,13 +1006,14 @@ public class StimulatedPlanningFactory {
 
 
 		// Assignment content
-		info = new InformationObject(getUUID(), 
-				"Test your knowledge", 
-				"Test your knowledge", 
-				"",
-				true, true, true);
+		info = generateWeek3TreatmentTestIntroduction();
 		content.addInformationObject(info);
 		info.setContent("");
+		
+		info = generateWeek3ControlTestIntroduction();
+		content.addInformationObject(info);
+		info.setContent("");
+
 		
 		sele = generateWeek3KnowledgeTest1();
 		sele.setDeadline(week3deadline);
@@ -687,15 +1039,11 @@ public class StimulatedPlanningFactory {
 		sele.setDeadline(week3deadline);
 		content.addInformationObject(sele);
 				
-		info = new InformationObject(getUUID(), 
-				"Your results", 
-				"Your results", 
-				"",
-				true, true, true);
+		info = generateWeek3TestConclusion();
 		content.addInformationObject(info);
 		info.setContent("");
-		
 
+		
 		// Goal for Module 3
 		
 		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
@@ -802,6 +1150,14 @@ public class StimulatedPlanningFactory {
 		content.addInformationObject(info);
 		info.setContent("");
 
+		info = generateWeek4TreatmentTestIntroduction();
+		content.addInformationObject(info);
+		info.setContent("");
+		
+		info = generateWeek4ControlTestIntroduction();
+		content.addInformationObject(info);
+		info.setContent("");
+
 		sele = generateWeek4KnowledgeTest1();
 		sele.setDeadline(week4deadline);
 		content.addInformationObject(sele);
@@ -842,6 +1198,9 @@ public class StimulatedPlanningFactory {
 		sele.setDeadline(week4deadline);
 		content.addInformationObject(sele);
 				
+		info = generateWeek4TestConclusion();
+		content.addInformationObject(info);
+		info.setContent("");
 
 		// Goal for Module 1
 		
@@ -862,350 +1221,12 @@ public class StimulatedPlanningFactory {
 
 
 
-	/**
-	 * generate the structure for the course to be used according to dev test structure.
-	 * @return
-	 */
-	public static CourseDescriptor generateDevTestCourse() {
-		getOrGenerateClans();
-		CourseDescriptor course = instance.retrieveTestCourse();
-		if (course == null) {
-			
-			// Course
-			
-			course = new CourseDescriptor(instance.testCourseId, 
-					"Security Dev Test Course", 
-					"Security Dev Test Course", 
-					testCourseBaseURL+"course/");
-
-			//
-			// Week 1
-			//
-			
-			generateWeek1(course);
-			
-			//
-			// Module 2
-			//
-			
-			generateWeek2(course);
-			
-			//
-			// Module 3
-			//
-			
-			generateWeek3(course);
-			
-			//
-			// Module 4
-			//
-			
-			generateWeek4(course);
-			
-			//
-			// Goal
-			//
-			
-			GoalDescriptor goal = new GoalDescriptor(getUUID(), "Browsing the Course", "I intend to browse around", "");
-			goal.addCompletionGoal("100", "all materials (100%)");
-			goal.addCompletionGoal("70", "most materials (70%)");
-			goal.addCompletionGoal("40", "some materials (40%)");
-			goal.addCompletionGoal("10", "less than 10%");
-			goal.addCompletionGoal("0", "I have not decided yet");
-			course.addGoal(goal);
-			
-			instance.storeTestCourse(course);
-		}
-
-		// Browsing goal for course
-
-		return course;
-	}
 	
-	
-	protected static ModuleDescriptor generateWeek1(CourseDescriptor course) {
-		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
-				"Week 1", 
-				"Week 1 - Introduction", "");
-		course.addModule(module);
-		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
-				"module1. lesson 1",
-				"module1. lesson 1","");
-		module.addLesson(lesson);	
-		ContentDescriptor content = new ContentDescriptor(getUUID(), 
-				"Week 1 content", 
-				"Week 1 content", 
-				testCourseBaseURL+"courseware/w1content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%4083d79097d5d94304a6fa9a5aed25dce3");
-		lesson.addContent(content);
-
-		content = new ContentDescriptor(getUUID(), 
-				"Week 1 challenge", 
-				"Week 1 challenge", 
-				testCourseBaseURL+"courseware/w1challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%4083d79097d5d94304a6fa9a5aed25dce3");
-		lesson.addContent(content);
-
-		InformationObject info = generateControlWeek1IntroductionText();
-		content.addInformationObject(info);
-
-		info = generateTreatmentWeek1IntroductionText();
-		content.addInformationObject(info);
-
-		SelectionObject sele = generateUserAvatarSelection();
-		content.addInformationObject(sele);
-		
-		sele = generateClanLogoSelection();
-		content.addInformationObject(sele);
-		
-		sele = generateClanIdentitySelection();
-		content.addInformationObject(sele);
-		
-		sele = generateUserIdentitySelection();
-		content.addInformationObject(sele);
-		
-		info = new InformationObject(getUUID(), 
-				"Clan rules", 
-				"Clan rules", 
-				testCourseBaseURL+"courseware/w1challenge/",
-				false, true, true);
-		content.addInformationObject(info);
-		info.setContent("<OL>"+
-			"<LI>Do not use the chat or other tools provided in the course to harm or hurt others (such as the members of your clan and or/and the other clan).</LI>"+
-			"<LI>Respect other opinion.</LI>"+
-			"<LI>Contributions within the clan must be civil and tasteful.</LI>"+
-			"<LI>No disruptive, offensive or abusive behaviour: contributions must be constructive and polite, not mean-spirited or contributed with the intention of causing trouble.</LI>"+
-			"<LI>No spamming or off-topic material can be shared.</LI>"+
-			"<LI>On a more Safety level: We advise that you never reveal any personal information about yourself or anyone else (for example: telephone number, home address or email address).</LI>"+
-			"</OL>");
-		
-		info = generateTreatmentWeek1TestIntroduction();
-		content.addInformationObject(info);
-
-
-		// Goal for Module 1
-		
-		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
-				"I intend to participate in the course activities to learn about "+module.getTitle(), "");
-		ListIterator<LessonDescriptor> iterator = module.getLessons();
-		while (iterator.hasNext()) {
-			goal.addLesson(iterator.next());
-		}
-		course.addGoal(goal);
-
-		
-		return module;
-	}
-	
-	protected static ModuleDescriptor generateWeek2(CourseDescriptor course) {
-		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
-				"Week2", 
-				"Week 2 - Tips on how to protect your computer", "");
-		course.addModule(module);
-		
-		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
-				"Threats and attacks",
-				"Threats and attacks","");
-		module.addLesson(lesson);
-		
-		ContentDescriptor content = new ContentDescriptor(getUUID(), 
-				"Week 2 content", 
-				"Week 2 content", 
-				testCourseBaseURL+"courseware/w2content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
-		lesson.addContent(content);
-		
-		content = new ContentDescriptor(getUUID(), 
-				"Week 2 challenge", 
-				"Week 2 challenge", 
-				testCourseBaseURL+"courseware/w2challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
-		lesson.addContent(content);
-		
-		InformationObject info = new InformationObject(getUUID(), 
-				"Communicate with the opponents", 
-				"Communicate with the opponents", 
-				testCourseBaseURL+"courseware/w2challenge/",
-				true, true, true);
-		content.addInformationObject(info);
-		info.setContent("");
-		
-		info = new InformationObject(getUUID(), 
-				"Encrypt your message", 
-				"Communicate with the opponents", 
-				testCourseBaseURL+"courseware/w2challenge/",
-				true, true, true);
-		content.addInformationObject(info);
-		info.setContent("");
-		
-		info = new InformationObject(getUUID(), 
-				"Encrypted Message received", 
-				"How do you decrypt it?", 
-				testCourseBaseURL+"courseware/w2challenge/",
-				true, true, true);
-		content.addInformationObject(info);
-		info.setContent("");
-		
-		SelectionObject sele = generateDecryptionSelection();
-		content.addInformationObject(sele);
-		
-		info = new InformationObject(getUUID(), 
-				"Clan challenge results", 
-				"How'd you do?", 
-				testCourseBaseURL+"courseware/w2challenge/",
-				true, true, true);
-		content.addInformationObject(info);
-		info.setContent("");
-		
-		// Goal for module 2
-		
-		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
-				"I intend to participate in the course activities to learn about "+module.getTitle(), "");
-		ListIterator<LessonDescriptor> iterator = module.getLessons();
-		while (iterator.hasNext()) {
-			goal.addLesson(iterator.next());
-		}
-		course.addGoal(goal);
-		
-		return module;
-	}
-	
-	protected static ModuleDescriptor generateWeek3(CourseDescriptor course) {
-		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
-				"Week 3", 
-				"Week 3 - Tips on how to protect your computer", "");
-		course.addModule(module);
-		
-		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
-				"Threats and attacks",
-				"Threats and attacks","");
-		module.addLesson(lesson);
-		
-		ContentDescriptor content = new ContentDescriptor(getUUID(), 
-				"Week 3 content", 
-				"Week 3 content", 
-				testCourseBaseURL+"courseware/w3content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
-		lesson.addContent(content);
-		
-		content = new ContentDescriptor(getUUID(), 
-				"Week 3 challenge", 
-				"Week 3 challenge", 
-				testCourseBaseURL+"courseware/w3challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
-		lesson.addContent(content);
-
-		InformationObject info = new InformationObject(getUUID(), 
-				"Test your knowledge", 
-				"Test your knowledge", 
-				testCourseBaseURL+"courseware/w3challenge/",
-				true, true, true);
-		content.addInformationObject(info);
-		info.setContent("");
-		
-		SelectionObject sele = generateWeek2KnowledgeTest1();
-		content.addInformationObject(sele);
-		sele.setDeadline(week2deadline);
-		
-		sele = generateWeek2KnowledgeTest2();
-		content.addInformationObject(sele);
-		sele.setDeadline(week2deadline);
-				
-		sele = generateWeek2KnowledgeTest3();
-		content.addInformationObject(sele);
-		sele.setDeadline(week2deadline);
-				
-		sele = generateWeek2KnowledgeTest4();
-		content.addInformationObject(sele);
-		sele.setDeadline(week2deadline);
-				
-		sele = generateWeek2KnowledgeTest5();
-		content.addInformationObject(sele);
-		sele.setDeadline(week2deadline);
-				
-		sele = generateWeek2KnowledgeTest6();
-		content.addInformationObject(sele);
-		sele.setDeadline(week2deadline);
-				
-		sele = generateWeek2KnowledgeTest7();
-		content.addInformationObject(sele);
-		sele.setDeadline(week2deadline);
-				
-		sele = generateWeek2KnowledgeTest8();
-		content.addInformationObject(sele);
-		sele.setDeadline(week2deadline);
-				
-		sele = generateWeek2KnowledgeTest9();
-		content.addInformationObject(sele);
-		sele.setDeadline(week2deadline);
-				
-		sele = generateWeek2KnowledgeTest10();
-		content.addInformationObject(sele);
-		sele.setDeadline(week2deadline);
-				
-		info = new InformationObject(getUUID(), 
-				"Your results", 
-				"Your results", 
-				testCourseBaseURL+"courseware/w3challenge/",
-				true, true, true);
-		content.addInformationObject(info);
-		info.setContent("");
-		
-		// Goal for module 2
-		
-		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
-				"I intend to participate in the course activities to learn about "+module.getTitle(), "");
-		ListIterator<LessonDescriptor> iterator = module.getLessons();
-		while (iterator.hasNext()) {
-			goal.addLesson(iterator.next());
-		}
-		course.addGoal(goal);
-		
-		return module;
-	}
-	
-	protected static ModuleDescriptor generateWeek4(CourseDescriptor course) {
-		ModuleDescriptor module = new ModuleDescriptor(getUUID(), 
-				"Week 4", 
-				"Week 4 - Tips on how to protect your computer", "");
-		course.addModule(module);
-		
-		LessonDescriptor lesson = new LessonDescriptor(getUUID() ,
-				"Threats and attacks",
-				"Threats and attacks","");
-		module.addLesson(lesson);
-		
-		ContentDescriptor content = new ContentDescriptor(getUUID(), 
-				"Week 4 content", 
-				"Week 4 content", 
-				testCourseBaseURL+"courseware/w4content/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
-		lesson.addContent(content);
-		
-		content = new ContentDescriptor(getUUID(), 
-				"Week 4 challenge", 
-				"Week 4 challenge", 
-				testCourseBaseURL+"courseware/w4challenge/"); //?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%400b957f040f954b6ab1f4e64b533ba65b");
-		lesson.addContent(content);
-
-		InformationObject info = new InformationObject(getUUID(), 
-				"Discuss about cryptography", 
-				"Discuss about cryptography", 
-				testCourseBaseURL+"courseware/w4challenge/",
-				true, true, true);
-		content.addInformationObject(info);
-		info.setContent("");
-		
-		// Goal for module 2
-		
-		GoalDescriptor goal = new GoalDescriptor(getUUID(), module.getTitle(), 
-				"I intend to participate in the course activities to learn about "+module.getTitle(), "");
-		ListIterator<LessonDescriptor> iterator = module.getLessons();
-		while (iterator.hasNext()) {
-			goal.addLesson(iterator.next());
-		}
-		course.addGoal(goal);
-		
-		return module;
-	}
 
 	
 	// WEEK 1 INTERACTIVE ELEMENTS
 	
-	protected static InformationObject generateControlWeek1IntroductionText() {
+	protected static InformationObject generateWeek1ControlIntroductionText() {
 		InformationObject info = new InformationObject(getUUID(), 
 				"Test your knowledge!", 
 				"Hello, there!", 
@@ -1224,7 +1245,7 @@ public class StimulatedPlanningFactory {
 	}
 	
 	
-	protected static InformationObject generateTreatmentWeek1IntroductionText() {
+	protected static InformationObject generateWeek1TreatmentIntroductionText() {
 		InformationObject info = new InformationObject(getUUID(), 
 				"Explore your clan!", 
 				"Hello, there!", 
@@ -1248,7 +1269,7 @@ public class StimulatedPlanningFactory {
 	}
 	
 	
-	protected static SelectionObject generateUserAvatarSelection() {
+	protected static SelectionObject generateWeek1UserAvatarSelection() {
 		String[] userIconFiles = {
 				"001-boy.png",
 				"002-girl.png",
@@ -1359,7 +1380,7 @@ public class StimulatedPlanningFactory {
 		return sele;
 	}
 
-	protected static SelectionObject generateUserIdentitySelection() {
+	protected static SelectionObject generateWeek1UserIdentitySelection() {
 		String[] userTitles = {
 				"Leader",
 				"Fuel",
@@ -1378,7 +1399,7 @@ public class StimulatedPlanningFactory {
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Your choice", 
-				"Hello there! Please select one of the roles you want to cover in your clan:", 
+				"Which role would you like to play in our clan?", 
 				"",
 				false, true, true);
 		sele.setType(SelectionObjectType.SINGLE_USER_SELECTION);
@@ -1396,7 +1417,7 @@ public class StimulatedPlanningFactory {
 		return sele;
 	}
 
-	protected static SelectionObject generateClanLogoSelection() {
+	protected static SelectionObject generateWeek1ClanLogoSelection() {
 		String[] clanLogoFiles = {
 				"defender/broken-zone.png",
 				"defender/lock.png",
@@ -1440,7 +1461,7 @@ public class StimulatedPlanningFactory {
 		return sele;
 	}
 
-	protected static SelectionObject generateClanIdentitySelection() {
+	protected static SelectionObject generateWeek1ClanIdentitySelection() {
 		String[] clanTitles = {
 				"The Guardians", 
 				"Legion of CODEfenders", 
@@ -1484,7 +1505,7 @@ public class StimulatedPlanningFactory {
 	}
 
 
-	protected static SelectionObject generateClanARulesSelection() {
+	protected static SelectionObject generateWeek1ClanARulesSelection() {
 		String[] clanTitles = {
 				"Our mission is to make the Internet a secure place for everyone (bad and good guys).", 
 				"We defend all secrets shared on the Internet, whether good or bad.",
@@ -1528,7 +1549,7 @@ public class StimulatedPlanningFactory {
 	}
 
 
-	protected static SelectionObject generateClanBRulesSelection() {
+	protected static SelectionObject generateWeek1ClanBRulesSelection() {
 		String[] clanTitles = {
 				"We are ethical hackers, we use our knowledge to disable the â€œrealâ€� hackers from harming people or creating damage, in general.", 
 				"We want to do whatever we want on the Internet without caring of the ethical issues.", 
@@ -1572,15 +1593,14 @@ public class StimulatedPlanningFactory {
 	}
 
 
-	protected static InformationObject generateTreatmentWeek1TestIntroduction() {
+	protected static InformationObject generateWeek1TreatmentTestIntroduction() {
 		InformationObject info = new InformationObject(getUUID(), 
 				"Letâ€™s now challenge your ability to work together!", 
-				"Hello, there!", 
+				"Your mission is to solve the following knowledge test!<BR>", 
 				"",
 				false, true, true);
 
-		info.setContent("Your mission is to solve the following knowledge test!<BR>" + 
-				"Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
+		info.setContent("Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
 				"<BR>" + 
 				"Work well on this simple test because we are going to level up in the next one<BR>" + 
 				"<BR>" + 
@@ -1856,7 +1876,7 @@ public class StimulatedPlanningFactory {
 	// WEEK 2 interactive elements
 
 
-	protected static SelectionObject generateEncryptedMessageSelection() {
+	protected static SelectionObject generateWeek2EncryptedMessageSelection() {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"Send an encrypted message!", 
 				"decide your plaintext/ the message", 
@@ -1896,7 +1916,7 @@ public class StimulatedPlanningFactory {
 		return sele;
 	}
 	
-	protected static SelectionObject generateEncryptionMethodSelectionClan1() {
+	protected static SelectionObject generateWeek2EncryptionMethodSelectionClan1() {
 		SelectionObject sele = new SelectionObject("encryptionMethod-"+Clan.CLAN_1_ID, 
 				"Send an encrypted message!", 
 				"decide your encryption mechanism", 
@@ -1935,7 +1955,7 @@ public class StimulatedPlanningFactory {
 		return sele;
 	}
 	
-	protected static SelectionObject generateEncryptionMethodSelectionClan2() {
+	protected static SelectionObject generateWeek2EncryptionMethodSelectionClan2() {
 		SelectionObject sele = new SelectionObject("encryptionMethod-"+Clan.CLAN_2_ID, 
 				"Send an encrypted message!", 
 				"decide your encryption mechanism", 
@@ -1974,7 +1994,7 @@ public class StimulatedPlanningFactory {
 		return sele;
 	}
 	
-	protected static SelectionObject generateDecryptionSelection() {
+	protected static SelectionObject generateWeek2DecryptionSelection() {
 		SelectionObject sele = new SelectionObject(getUUID(), 
 				"You received a secret message! It is encrypted? What does it mean?", 
 				"Decide on the meaning of this message", 
@@ -2016,6 +2036,45 @@ public class StimulatedPlanningFactory {
 		
 		return sele;
 	}
+
+	
+	protected static InformationObject generateWeek2TreatmentTestIntroduction() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"Letâ€™s again challenge your ability to work together!", 
+				"Your mission is to solve the following knowledge test!<BR>", 
+				"",
+				false, true, true);
+
+		info.setContent("Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
+				"<BR>" + 
+				"Work well on this simple test because we are going to level up in the next one<BR>" + 
+				"<BR>" + 
+				"The OUNL team<BR>" + 
+				"");
+		
+		return info;
+	}
+	
+	
+	protected static InformationObject generateWeek2ControlTestIntroduction() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"Test your knowledge!", 
+				"Hello, there!", 
+				"",
+				true, false, false);
+
+		info.setContent("WelcomeðŸ˜Š to the second week assignment, click on next ðŸ‘‰ðŸ�½ to take the test.<BR>" + 
+				"<BR>" + 
+				"Thank you in advance!<BR>" + 
+				"<BR>" + 
+				"The OUNL Team<BR>" + 
+				"(Alessandra, Hugo and Roland)<BR>" + 
+				"");
+		
+		return info;
+	}
+	
+	
 	
 /*
 1. Which of the below statements is correct?
@@ -2427,6 +2486,61 @@ Yes, unless the key is completely random.
 		return sele;
 	}
 
+	protected static InformationObject generateWeek2TestConclusion() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"We have saved your answers!", 
+				"Hello, there!", 
+				"",
+				true, true, true);
+
+		info.setContent("Are you curious to know how you performed?<BR> "
+				+ "If yes check out the â€œResult page week 2â€�  that will visible from next Monday morning.<BR> "
+				+ "<BR>"
+				+ "The OUNL team\n" + 
+				"");
+		
+		return info;
+	}
+	
+
+	protected static InformationObject generateWeek3TreatmentTestIntroduction() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"Letâ€™s again challenge your ability to work together!", 
+				"Your mission is to solve the following knowledge test!<BR>", 
+				"",
+				false, true, true);
+
+		info.setContent("Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
+				"<BR>" + 
+				"Work well on this simple test because we are going to level up in the next one<BR>" + 
+				"<BR>" + 
+				"The OUNL team<BR>" + 
+				"");
+		
+		return info;
+	}
+	
+	
+	protected static InformationObject generateWeek3ControlTestIntroduction() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"Test your knowledge!", 
+				"Hello, there!", 
+				"",
+				true, false, false);
+
+		info.setContent("WelcomeðŸ˜Š to the third week assignment, click on next ðŸ‘‰ðŸ�½ to take the test.<BR>" + 
+				"<BR>" + 
+				"Thank you in advance!<BR>" + 
+				"<BR>" + 
+				"The OUNL Team<BR>" + 
+				"(Alessandra, Hugo and Roland)<BR>" + 
+				"");
+		
+		return info;
+	}
+	
+	
+
 /*
 1. What is 5 * 17 mod 13?
 a. 5
@@ -2669,6 +2783,60 @@ Euler’s generalisation of Fermat’s little theorem
 		return sele;
 	}
 
+	protected static InformationObject generateWeek3TestConclusion() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"We have saved your answers!", 
+				"Hello, there!", 
+				"",
+				true, true, true);
+
+		info.setContent("Are you curious to know how you performed?<BR> "
+				+ "If yes check out the â€œResult page week 3â€�  that will visible from next Monday morning.<BR> "
+				+ "<BR>"
+				+ "The OUNL team\n" + 
+				"");
+		
+		return info;
+	}
+	
+
+	protected static InformationObject generateWeek4TreatmentTestIntroduction() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"Letâ€™s again challenge your ability to work together!", 
+				"Your mission is to solve the following knowledge test!<BR>", 
+				"",
+				false, true, true);
+
+		info.setContent("Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
+				"<BR>" + 
+				"Work well on this simple test because we are going to level up in the next one<BR>" + 
+				"<BR>" + 
+				"The OUNL team<BR>" + 
+				"");
+		
+		return info;
+	}
+	
+	
+	protected static InformationObject generateWeek4ControlTestIntroduction() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"Test your knowledge!", 
+				"Hello, there!", 
+				"",
+				true, false, false);
+
+		info.setContent("WelcomeðŸ˜Š to the fourth week assignment, click on next ðŸ‘‰ðŸ�½ to take the test.<BR>" + 
+				"<BR>" + 
+				"Thank you in advance!<BR>" + 
+				"<BR>" + 
+				"The OUNL Team<BR>" + 
+				"(Alessandra, Hugo and Roland)<BR>" + 
+				"");
+		
+		return info;
+	}
+	
+	
 
 /*
 1. When is authenticity satisfied?
@@ -3072,6 +3240,24 @@ Computationally secure cryptosystems may be broken by advances in theory.
 				
 		return sele;
 	}
+
+	protected static InformationObject generateWeek4TestConclusion() {
+		InformationObject info = new InformationObject(getUUID(), 
+				"We have saved your answers!", 
+				"Hello, there!", 
+				"",
+				true, true, true);
+
+		info.setContent("Are you curious to know how you performed?<BR> "
+				+ "If yes check out the â€œResult page week 4â€�  that will visible from next Monday morning.<BR> "
+				+ "<BR>"
+				+ "The OUNL team\n" + 
+				"");
+		
+		return info;
+	}
+	
+
 
 	/**
 	 * generate the structure for the course to be used according to Sandbox structure.
