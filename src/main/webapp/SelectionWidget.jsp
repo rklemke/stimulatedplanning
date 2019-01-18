@@ -98,6 +98,7 @@
 	  log.info(logString);
 	  
 		if (submitIndicator != null && submitForward == null) { // we handle a form submission
+			StimulatedPlanningFactory.trackAndLogEvent(request, response, "submit."+currentSelectionObject.getPurpose());
 			String[] selectedOptionIds = request.getParameterValues("selectionRadio");
 			for (SelectionOption option : currentSelectionObject.getOptionList()) {
 				UserSelectedOption userOption = PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
@@ -172,12 +173,41 @@
 							}
 						}
 					}
+				} else if (currentSelectionObject.isClanMessagePurpose()) {
+					if (user.isTreatmentGroup()) {
+						Clan clan = user.getClan();
+						SelectionObject encryption = (SelectionObject)StimulatedPlanningFactory.getObject("encryptionMethod-"+clan.getId());
+						SelectionOption preferredOption = currentSelectionObject.getClanPreferredOption(clan);
+						if (preferredOption != null) {
+							log.info("clan encryption messages for clan "+clan.getTitle()+" will be updated to "+preferredOption.getTitle());
+							String encOptionText = preferredOption.getDescription();
+							String[] encryptedS = {
+									Cipher.encode(encOptionText, 5),
+									Cipher.encode(encOptionText, 12),
+									Cipher.encode(encOptionText, 17),
+									Cipher.encode(encOptionText, 22)
+							};
+							encryption.getOptionList().get(0).setDescription(encryptedS[0]);
+							encryption.getOptionList().get(1).setDescription(encryptedS[0]);
+							encryption.getOptionList().get(2).setDescription(encryptedS[0]);
+							encryption.getOptionList().get(3).setDescription(encryptedS[0]);
+							try {
+								PersistentStore.writeDescriptor(encryption.getOptionList().get(0));
+								PersistentStore.writeDescriptor(encryption.getOptionList().get(1));
+								PersistentStore.writeDescriptor(encryption.getOptionList().get(2));
+								PersistentStore.writeDescriptor(encryption.getOptionList().get(3));
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
 				}
 			}
 			RequestDispatcher rd = request.getRequestDispatcher("/GenericClanFrameServlet_SoC");
 			request.setAttribute("selectionSubmitForward", "true");
 			rd.forward(request, response);			
 		} else {
+			StimulatedPlanningFactory.trackAndLogEvent(request, response, "view."+currentSelectionObject.getPurpose());
 
 %>
     <script type="text/javascript">

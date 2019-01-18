@@ -1863,32 +1863,32 @@ public class StimulatedPlanningFactory {
 				"",
 				false, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
-		sele.setPurpose(SelectionObjectPurpose.CLAN_VOTING);
+		sele.setPurpose(SelectionObjectPurpose.CLAN_MESSAGE);
 		
 		SelectionOption option = new SelectionOption(getUUID(), 
 				"Make them aware ...", 
-				"“One of the most singular characteristics of the art of deciphering is the strong conviction possessed by every person, even moderately acquainted with it, that he is able to construct a cipher which nobody else can decipher. I have also observed that the cleverer the person, the more intimate is his conviction.” <BR>\n" + 
+				"“One of the most singular characteristics of the art of deciphering is the strong conviction possessed by every person, even moderately acquainted with it, that he is able to construct a cipher which nobody else can decipher. I have also observed that the cleverer the person, the more intimate is his conviction.”" + 
 				"― Charles Babbage", 
 				"");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"Whisper...", 
-				"In this age of communications that span both distance and time, the only tool we have that approximates a 'whisper' is encryption. When I cannot whisper in my wife's ear or the ears of my business partners, and have to communicate electronically, then encryption is our tool to keep our secrets secret. <BR>"
+				"In this age of communications that span both distance and time, the only tool we have that approximates a 'whisper' is encryption. When I cannot whisper in my wife's ear or the ears of my business partners, and have to communicate electronically, then encryption is our tool to keep our secrets secret."
 				+ "― John McAfee", 
 				"");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"Give them a good advice...", 
-				"“Cybercriminals can use personal details, such as your favorite color, the last four digits of your credit card and your email addresses, to make educated guesses about your sign-in credentials. They might contact a service provider posing as a user, provide identifying details and gain even greater access to accounts. This is why it is so important to prevent your security credentials from becoming stagnant. Rotate your password every few months and consider using new security questions and answers, too.” <BR>\n"
+				"“Cybercriminals can use personal details, such as your favorite color, the last four digits of your credit card and your email addresses, to make educated guesses about your sign-in credentials. They might contact a service provider posing as a user, provide identifying details and gain even greater access to accounts. This is why it is so important to prevent your security credentials from becoming stagnant. Rotate your password every few months and consider using new security questions and answers, too.”"
 				+ "– Larry Alton", 
 				"");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
 				"Tease them...", 
-				"“All warfare is based on deception. Hence, when we are able to attack, we must seem unable; when using our forces, we must appear inactive; when we are near, we must make the enemy believe we are far away; when far away, we must make him believe we are near.” <BR>\n" + 
+				"“All warfare is based on deception. Hence, when we are able to attack, we must seem unable; when using our forces, we must appear inactive; when we are near, we must make the enemy believe we are far away; when far away, we must make him believe we are near.”" + 
 				"― Sun tzu, The Art of War", 
 				"");
 		sele.addOption(option);
@@ -3811,6 +3811,10 @@ Computationally secure cryptosystems may be broken by advances in theory.
 		logParameters.put("userPlan", new String[] {userPlan.getId()});
 		logParameters.put("logType", new String[] {logType});
 		logParameters.put("timestamp", new String[] {(new Date()).toString()});
+		logParameters.put("treatment", new String[] {String.valueOf(user.isTreatmentGroup())});
+		if (user.isTreatmentGroup()) {
+			logParameters.put("clan", new String[] {user.getClan().getId()});
+		}
 		
 		logParameters.putAll(request.getParameterMap());
 		

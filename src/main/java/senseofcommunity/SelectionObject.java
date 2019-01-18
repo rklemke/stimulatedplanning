@@ -108,6 +108,9 @@ public class SelectionObject extends InformationObject {
 	public boolean isClanVotingPurpose() {
 		return purpose == SelectionObjectPurpose.CLAN_VOTING;
 	}
+	public boolean isClanMessagePurpose() {
+		return purpose == SelectionObjectPurpose.CLAN_MESSAGE;
+	}
 	
 	
 	protected Date deadline;
