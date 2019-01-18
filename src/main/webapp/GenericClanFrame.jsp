@@ -157,9 +157,13 @@
 			<input type="submit" id="buttonNext" name="buttonNext" class="ui-button ui-widget ui-corner-all" value="Next"></input>
 		<%    } else {%>
 		<%	    if (currentInformationObjectIdx == informationObjectList.size()-1) { %>
-			<span title="You reached the end of this sequence. Use the navigation buttons at the end of this page to move forward."><input type="button" value="Next" class="ui-button ui-widget ui-corner-all ui-state-disabled" disabled></input></span>
-		<%  	  } else { %>
-			<span title="Please submit your selection before you can move on."><input type="button" value="Next" class="ui-button ui-widget ui-corner-all ui-state-disabled" disabled></input></span>
+			<span title="You reached the end of this sequence. Use the navigation buttons at the end of this page to move forward.">
+				<input type="button" value="Next" class="ui-button ui-widget ui-corner-all ui-state-disabled" disabled></input>
+			</span>
+		<%  	} else { %>
+			<span title="Please submit your selection before moving on.">
+				<input type="button" value="Next" class="ui-button ui-widget ui-corner-all ui-state-disabled" disabled></input>
+			</span>
 		<%	    } %>
 		<%    } %>
 		<% } %>
