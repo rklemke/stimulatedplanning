@@ -108,7 +108,8 @@
 	<img id="ClanLogo" src="<%= userClan.getClanLogo() %>"/>
 	<span><%=user.getClan().getTitle()%></span>
 	<img id="UserLogo" src="<%= user.getAvatarUrl() %>">
-	<span><%=user.getName()%></span>
+	<span style="display:block;"><%=user.getName()%></span>
+	<span style="display:block;"><%= user.getOnlineStatus().getTitle()%></span>
 	<% } %>	
     </div><!-- RowOneColumnOne -->
     
