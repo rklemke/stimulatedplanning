@@ -9,4 +9,8 @@
         <property name="source" direction="asc"/>
         <property name="order" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="stimulatedplanning.CourseDescriptor_modules_stimulatedplanning.ModuleDescriptor" ancestor="false" source="manual">
+        <property name="source" direction="asc"/>
+        <property name="order" direction="asc"/>
+    </datastore-index>
 </datastore-indexes>

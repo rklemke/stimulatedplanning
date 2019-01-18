@@ -58,8 +58,8 @@ public class StimulatedPlanningFactory {
 	public static final String accCourseId = "TCC01";
 	public static final String accCourseBaseURL = "https://ou.acc.edia.nl/courses/course-v1:OUNL+TCC01+2019_01/courseware/";
 	
-	public static final String applicationHome = "http://localhost:8080";
-	//public static final String applicationHome = "https://senseofcommunity-225200.appspot.com";
+	//public static final String applicationHome = "http://localhost:8080";
+	public static final String applicationHome = "https://senseofcommunity-225200.appspot.com";
 	
 	public static final String userUnknown = "unknown";
 	public static final String userGuest = "Guest";
@@ -472,7 +472,7 @@ public class StimulatedPlanningFactory {
 				"Communicate with the opponents", 
 				"Communicate with the opponents", 
 				"",
-				true, true, true);
+				false, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -484,11 +484,15 @@ public class StimulatedPlanningFactory {
 				"Encrypt your message", 
 				"Communicate with the opponents", 
 				"",
-				true, true, true);
+				false, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		sele = generateEncryptionMethodSelection();
+		sele = generateEncryptionMethodSelectionClan1();
+		sele.setDeadline(week2deadline);
+		content.addInformationObject(sele);
+		
+		sele = generateEncryptionMethodSelectionClan2();
 		sele.setDeadline(week2deadline);
 		content.addInformationObject(sele);
 		
@@ -496,7 +500,7 @@ public class StimulatedPlanningFactory {
 				"Encrypted Message received", 
 				"How do you decrypt it?", 
 				"",
-				true, true, true);
+				false, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -508,7 +512,7 @@ public class StimulatedPlanningFactory {
 				"Clan challenge results", 
 				"How'd you do?", 
 				"",
-				true, true, true);
+				false, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
 		
@@ -1022,9 +1026,6 @@ public class StimulatedPlanningFactory {
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		SelectionObject sele = generateEncryptedMessageSelection();
-		content.addInformationObject(sele);
-		
 		info = new InformationObject(getUUID(), 
 				"Encrypt your message", 
 				"Communicate with the opponents", 
@@ -1032,9 +1033,6 @@ public class StimulatedPlanningFactory {
 				true, true, true);
 		content.addInformationObject(info);
 		info.setContent("");
-		
-		sele = generateEncryptionMethodSelection();
-		content.addInformationObject(sele);
 		
 		info = new InformationObject(getUUID(), 
 				"Encrypted Message received", 
@@ -1044,7 +1042,7 @@ public class StimulatedPlanningFactory {
 		content.addInformationObject(info);
 		info.setContent("");
 		
-		sele = generateDecryptionSelection();
+		SelectionObject sele = generateDecryptionSelection();
 		content.addInformationObject(sele);
 		
 		info = new InformationObject(getUUID(), 
@@ -1342,7 +1340,7 @@ public class StimulatedPlanningFactory {
 			};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
-				"Select your avatar", 
+				"Your choice", 
 				"Select your avatar", 
 				"",
 				false, true, true);
@@ -1379,7 +1377,7 @@ public class StimulatedPlanningFactory {
 			};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
-				"Hello there! Please select one of the roles you want to cover in your clan:", 
+				"Your choice", 
 				"Hello there! Please select one of the roles you want to cover in your clan:", 
 				"",
 				false, true, true);
@@ -1423,7 +1421,7 @@ public class StimulatedPlanningFactory {
 		};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
-				"Vote for your preferred clan logos", 
+				"Clan vote", 
 				"Vote for your preferred clan logos", 
 				"",
 				false, true, true);
@@ -1466,7 +1464,7 @@ public class StimulatedPlanningFactory {
 			};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
-				"Vote for your preferred clan names", 
+				"Clan vote", 
 				"Vote for your preferred clan names", 
 				"",
 				false, true, true);
@@ -1510,7 +1508,7 @@ public class StimulatedPlanningFactory {
 			};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
-				"Vote for your preferred clan rules", 
+				"Clan vote", 
 				"Vote for your preferred clan rules", 
 				"",
 				false, true, false);
@@ -1554,7 +1552,7 @@ public class StimulatedPlanningFactory {
 			};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
-				"Vote for your preferred clan rules", 
+				"Clan vote", 
 				"Vote for your preferred clan rules", 
 				"",
 				false, false, true);
@@ -1863,73 +1861,113 @@ public class StimulatedPlanningFactory {
 				"Send an encrypted message!", 
 				"decide your plaintext/ the message", 
 				"",
-				true, true, true);
+				false, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
 		sele.setPurpose(SelectionObjectPurpose.CLAN_VOTING);
 		
 		SelectionOption option = new SelectionOption(getUUID(), 
-				"We got you", 
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
+				"Make them aware ...", 
+				"“One of the most singular characteristics of the art of deciphering is the strong conviction possessed by every person, even moderately acquainted with it, that he is able to construct a cipher which nobody else can decipher. I have also observed that the cleverer the person, the more intimate is his conviction.” <BR>\n" + 
+				"― Charles Babbage", 
 				"");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
-				"We are after you", 
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
+				"Whisper...", 
+				"In this age of communications that span both distance and time, the only tool we have that approximates a 'whisper' is encryption. When I cannot whisper in my wife's ear or the ears of my business partners, and have to communicate electronically, then encryption is our tool to keep our secrets secret. <BR>"
+				+ "― John McAfee", 
 				"");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
-				"You will never be able to read this", 
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
+				"Give them a good advice...", 
+				"“Cybercriminals can use personal details, such as your favorite color, the last four digits of your credit card and your email addresses, to make educated guesses about your sign-in credentials. They might contact a service provider posing as a user, provide identifying details and gain even greater access to accounts. This is why it is so important to prevent your security credentials from becoming stagnant. Rotate your password every few months and consider using new security questions and answers, too.” <BR>\n"
+				+ "– Larry Alton", 
 				"");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
-				"You should be warned", 
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
-				"");
-		sele.addOption(option);
-		
-		option = new SelectionOption(getUUID(), 
-				"Read carefully!", 
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
+				"Tease them...", 
+				"“All warfare is based on deception. Hence, when we are able to attack, we must seem unable; when using our forces, we must appear inactive; when we are near, we must make the enemy believe we are far away; when far away, we must make him believe we are near.” <BR>\n" + 
+				"― Sun tzu, The Art of War", 
 				"");
 		sele.addOption(option);
 		
 		return sele;
 	}
 	
-	protected static SelectionObject generateEncryptionMethodSelection() {
-		SelectionObject sele = new SelectionObject(getUUID(), 
+	protected static SelectionObject generateEncryptionMethodSelectionClan1() {
+		SelectionObject sele = new SelectionObject("encryptionMethod-"+Clan.CLAN_1_ID, 
 				"Send an encrypted message!", 
 				"decide your encryption mechanism", 
 				"",
-				true, true, true);
+				false, true, false);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
 		sele.setPurpose(SelectionObjectPurpose.CLAN_VOTING);
 		
 		SelectionOption option = new SelectionOption(getUUID(), 
-				"Caesar moved by 5", 
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
+				"Caesar shift of 5", 
+				"tsj tk ymj rtxy xnslzqfw hmfwfhyjwnxynhx tk ymj fwy tk ijhnumjwnsl nx ymj xywtsl htsanhynts utxxjxxji gd jajwd ujwxts, jajs rtijwfyjqd fhvzfnsyji bnym ny, ymfy mj nx fgqj yt htsxywzhy f hnumjw bmnhm stgtid jqxj hfs ijhnumjw. n mfaj fqxt tgxjwaji ymfy ymj hqjajwjw ymj ujwxts, ymj rtwj nsynrfyj nx mnx htsanhynts ― hmfwqjx gfggflj", 
 				"");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
-				"Caesar moved by 12", 
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
+				"Caesar shift of 12", 
+				"azq ar ftq yaef euzsgxmd otmdmofqduefuoe ar ftq mdf ar pqoubtqduzs ue ftq efdazs oazhuofuaz baeeqeeqp nk qhqdk bqdeaz, qhqz yapqdmfqxk mocgmuzfqp iuft uf, ftmf tq ue mnxq fa oazefdgof m oubtqd ituot zanapk qxeq omz pqoubtqd. u tmhq mxea aneqdhqp ftmf ftq oxqhqdqd ftq bqdeaz, ftq yadq uzfuymfq ue tue oazhuofuaz \n" + 
+				"― otmdxqe nmnnmsq", 
 				"");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
-				"Caesar moved by 17", 
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
+				"Caesar shift of 17", 
+				"fev fw kyv dfjk jzexlcri tyrirtkvizjkztj fw kyv rik fw uvtzgyvizex zj kyv jkifex tfemztkzfe gfjjvjjvu sp vmvip gvijfe, vmve dfuvirkvcp rthlrzekvu nzky zk, kyrk yv zj rscv kf tfejkiltk r tzgyvi nyzty efsfup vcjv tre uvtzgyvi. z yrmv rcjf fsjvimvu kyrk kyv tcvmvivi kyv gvijfe, kyv dfiv zekzdrkv zj yzj tfemztkzfe \n" + 
+				"― tyricvj srssrxv", 
 				"");
 		sele.addOption(option);
 		
 		option = new SelectionOption(getUUID(), 
-				"Caesar moved by 22", 
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nisl urna, tempus non congue eu, vulputate at nibh. Nullam maximus, ex ac aliquet eleifend, odio libero mollis est, ut vulputate.", 
+				"Caesar shift of 22", 
+				"kja kb pda ikop oejcqhwn ydwnwypaneopeyo kb pda wnp kb zayeldanejc eo pda opnkjc ykjreypekj lkooaooaz xu aranu lanokj, araj ikzanwpahu wymqwejpaz sepd ep, pdwp da eo wxha pk ykjopnqyp w yeldan sdeyd jkxkzu ahoa ywj zayeldan. e dwra whok kxoanraz pdwp pda yharanan pda lanokj, pda ikna ejpeiwpa eo deo ykjreypekj \n" + 
+				"― ydwnhao xwxxwca", 
+				"");
+		sele.addOption(option);
+		
+		return sele;
+	}
+	
+	protected static SelectionObject generateEncryptionMethodSelectionClan2() {
+		SelectionObject sele = new SelectionObject("encryptionMethod-"+Clan.CLAN_2_ID, 
+				"Send an encrypted message!", 
+				"decide your encryption mechanism", 
+				"",
+				false, false, true);
+		sele.setType(SelectionObjectType.CLAN_SELECTION);
+		sele.setPurpose(SelectionObjectPurpose.CLAN_VOTING);
+		
+		SelectionOption option = new SelectionOption(getUUID(), 
+				"Caesar shift of 5", 
+				"tsj tk ymj rtxy xnslzqfw hmfwfhyjwnxynhx tk ymj fwy tk ijhnumjwnsl nx ymj xywtsl htsanhynts utxxjxxji gd jajwd ujwxts, jajs rtijwfyjqd fhvzfnsyji bnym ny, ymfy mj nx fgqj yt htsxywzhy f hnumjw bmnhm stgtid jqxj hfs ijhnumjw. n mfaj fqxt tgxjwaji ymfy ymj hqjajwjw ymj ujwxts, ymj rtwj nsynrfyj nx mnx htsanhynts ― hmfwqjx gfggflj", 
+				"");
+		sele.addOption(option);
+		
+		option = new SelectionOption(getUUID(), 
+				"Caesar shift of 12", 
+				"azq ar ftq yaef euzsgxmd otmdmofqduefuoe ar ftq mdf ar pqoubtqduzs ue ftq efdazs oazhuofuaz baeeqeeqp nk qhqdk bqdeaz, qhqz yapqdmfqxk mocgmuzfqp iuft uf, ftmf tq ue mnxq fa oazefdgof m oubtqd ituot zanapk qxeq omz pqoubtqd. u tmhq mxea aneqdhqp ftmf ftq oxqhqdqd ftq bqdeaz, ftq yadq uzfuymfq ue tue oazhuofuaz \n" + 
+				"― otmdxqe nmnnmsq", 
+				"");
+		sele.addOption(option);
+		
+		option = new SelectionOption(getUUID(), 
+				"Caesar shift of 17", 
+				"fev fw kyv dfjk jzexlcri tyrirtkvizjkztj fw kyv rik fw uvtzgyvizex zj kyv jkifex tfemztkzfe gfjjvjjvu sp vmvip gvijfe, vmve dfuvirkvcp rthlrzekvu nzky zk, kyrk yv zj rscv kf tfejkiltk r tzgyvi nyzty efsfup vcjv tre uvtzgyvi. z yrmv rcjf fsjvimvu kyrk kyv tcvmvivi kyv gvijfe, kyv dfiv zekzdrkv zj yzj tfemztkzfe \n" + 
+				"― tyricvj srssrxv", 
+				"");
+		sele.addOption(option);
+		
+		option = new SelectionOption(getUUID(), 
+				"Caesar shift of 22", 
+				"kja kb pda ikop oejcqhwn ydwnwypaneopeyo kb pda wnp kb zayeldanejc eo pda opnkjc ykjreypekj lkooaooaz xu aranu lanokj, araj ikzanwpahu wymqwejpaz sepd ep, pdwp da eo wxha pk ykjopnqyp w yeldan sdeyd jkxkzu ahoa ywj zayeldan. e dwra whok kxoanraz pdwp pda yharanan pda lanokj, pda ikna ejpeiwpa eo deo ykjreypekj \n" + 
+				"― ydwnhao xwxxwca", 
 				"");
 		sele.addOption(option);
 		
@@ -1941,7 +1979,7 @@ public class StimulatedPlanningFactory {
 				"You received a secret message! It is encrypted? What does it mean?", 
 				"Decide on the meaning of this message", 
 				"",
-				true, true, true);
+				false, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
 		sele.setPurpose(SelectionObjectPurpose.CLAN_VOTING);
 		sele.setContent("");
