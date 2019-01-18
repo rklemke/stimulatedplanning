@@ -233,6 +233,8 @@
   		  $("PercentBar").css({
   			  "width":"50%"  		  
   			  });
+  		  
+  		$(document).tooltip("disable");
   	  }
 	});
 	</script>
