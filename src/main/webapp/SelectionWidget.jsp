@@ -199,6 +199,10 @@
   			"text-align":"left",
   			"vertical-align": "middle"
   		  });
+  		  
+  		  $("PercentBar").css({
+  			  "width":"50%"  		  
+  			  });
   	  }
 	});
 	</script>
@@ -285,7 +289,7 @@
 				}
 	        } 
 		 } 
-		 %></label>
+		 %><div id="PercentBar"></div></label>
 	<% } %>
 	</form>
 	</fieldset><!--  -->

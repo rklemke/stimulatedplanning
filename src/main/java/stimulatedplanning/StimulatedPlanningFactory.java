@@ -394,13 +394,13 @@ public class StimulatedPlanningFactory {
 		lesson.addContent(content);
 
 		lesson = new LessonDescriptor(getUUID() ,
-				"Vigenère and cryptanalysis",
-				"Vigenère and cryptanalysis","");
+				"VigenÃ¨re and cryptanalysis",
+				"VigenÃ¨re and cryptanalysis","");
 		module.addLesson(lesson);	
 
 		content = new ContentDescriptor("8e4e29d1f93b459bb40d11f93f77a85a/13925f19c0644d6a80ed77c74b2c7505/", 
-				"Vigenère Part 1 and 2", 
-				"Vigenère Part 1 and 2", 
+				"VigenÃ¨re Part 1 and 2", 
+				"VigenÃ¨re Part 1 and 2", 
 				accCourseBaseURL+"8e4e29d1f93b459bb40d11f93f77a85a/13925f19c0644d6a80ed77c74b2c7505/");
 		lesson.addContent(content);
 
@@ -1068,7 +1068,7 @@ public class StimulatedPlanningFactory {
 				"",
 				true, false, false);
 
-		info.setContent("Welcome😊 to the first week assignment, click on next 👉🏽 to take the test.<BR>" + 
+		info.setContent("WelcomeðŸ˜Š to the first week assignment, click on next ðŸ‘‰ðŸ�½ to take the test.<BR>" + 
 				"<BR>" + 
 				"Thank you in advance!<BR>" + 
 				"<BR>" + 
@@ -1087,14 +1087,14 @@ public class StimulatedPlanningFactory {
 				"",
 				false, true, true);
 
-		info.setContent("You have been selected among the participants of this course to join our clan 😊<BR>" + 
+		info.setContent("You have been selected among the participants of this course to join our clan ðŸ˜Š<BR>" + 
 				"You will decide to which degree you would like to be involved.<BR>" + 
 				"<BR>" + 
 				"At the moment we do not have a name and neither a logo that define who we are. It is our task this week to agree on these and define as well as our rules.<BR>" + 
 				"<BR>" + 
 				"Be aware that there will be another clan, they will act against us, we need to act together for defeating them. <BR>" + 
 				"<BR>" + 
-				"Are you ready? Let’s do this 💪🏽<BR>" + 
+				"Are you ready? Letâ€™s do this ðŸ’ªðŸ�½<BR>" + 
 				"<BR>" + 
 				"The OUNL Team<BR>" + 
 				"(Alessandra, Hugo and Roland)<BR>" + 
@@ -1229,7 +1229,7 @@ public class StimulatedPlanningFactory {
 				"You are the energiser of the group, you keep all engaged.",
 				"You take care that the communication within the clan flows and go smooth without conflicts.",
 				"Do you need help in understanding or find something in the course? I am your guy, we can do together.",
-				"You don’t have any active role but this will not stop you in participating."
+				"You donâ€™t have any active role but this will not stop you in participating."
 			};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
@@ -1309,7 +1309,7 @@ public class StimulatedPlanningFactory {
 			};
 		
 		String[] clanDescriptions = {
-				"We are the guardians of the Internet users’ data. We act anonymously to secure them.",
+				"We are the guardians of the Internet usersâ€™ data. We act anonymously to secure them.",
 				"We act together to prevent malicious code attacks",
 				"Our community aims to protect the secrets of the Internet users, independently from their aim (good of bad).",
 				"Our group patrol the Internet, making sure that information is transferred encrypted ",
@@ -1344,7 +1344,7 @@ public class StimulatedPlanningFactory {
 		String[] clanTitles = {
 				"Our mission is to make the Internet a secure place for everyone (bad and good guys).", 
 				"We defend all secrets shared on the Internet, whether good or bad.",
-				"Our common purpose is to to defend users’ information independently from their nature.",
+				"Our common purpose is to to defend usersâ€™ information independently from their nature.",
 				"We act in solo missions pursuing the common purpose.",
 				"Our common purpose is to present hackers to harm people or create damage in general.",
 				"We work together as a group.", 
@@ -1355,7 +1355,7 @@ public class StimulatedPlanningFactory {
 		String[] clanDescriptions = {
 				"Our mission is to make the Internet a secure place for everyone (bad and good guys).", 
 				"We defend all secrets shared on the Internet, whether good or bad.",
-				"Our common purpose is to to defend users’ information independently from their nature.",
+				"Our common purpose is to to defend usersâ€™ information independently from their nature.",
 				"We act in solo missions pursuing the common purpose.",
 				"Our common purpose is to present hackers to harm people or create damage in general.",
 				"We work together as a group.", 
@@ -1386,7 +1386,7 @@ public class StimulatedPlanningFactory {
 
 	protected static SelectionObject generateClanBRulesSelection() {
 		String[] clanTitles = {
-				"We are ethical hackers, we use our knowledge to disable the “real” hackers from harming people or creating damage, in general.", 
+				"We are ethical hackers, we use our knowledge to disable the â€œrealâ€� hackers from harming people or creating damage, in general.", 
 				"We want to do whatever we want on the Internet without caring of the ethical issues.", 
 				"We steal information from the bad guys to protect the good, like Robin Hood.", 
 				"Our identities are anonymous. ",
@@ -1397,7 +1397,7 @@ public class StimulatedPlanningFactory {
 			};
 		
 		String[] clanDescriptions = {
-				"We are ethical hackers, we use our knowledge to disable the “real” hackers from harming people or creating damage, in general.", 
+				"We are ethical hackers, we use our knowledge to disable the â€œrealâ€� hackers from harming people or creating damage, in general.", 
 				"We want to do whatever we want on the Internet without caring of the ethical issues.", 
 				"We steal information from the bad guys to protect the good, like Robin Hood.", 
 				"Our identities are anonymous. ",
@@ -1430,7 +1430,7 @@ public class StimulatedPlanningFactory {
 
 	protected static InformationObject generateTreatmentWeek1TestIntroduction() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"Let’s now challenge your ability to work together!", 
+				"Letâ€™s now challenge your ability to work together!", 
 				"Hello, there!", 
 				"",
 				false, true, true);
@@ -1455,7 +1455,7 @@ public class StimulatedPlanningFactory {
 				true, true, true);
 
 		info.setContent("Are you curious to know how did you perform?<BR> "
-				+ "If yes check out the “Result page week 1”  that will visible from next Monday morning.<BR> "
+				+ "If yes check out the â€œResult page week 1â€�  that will visible from next Monday morning.<BR> "
 				+ "<BR>"
 				+ "The OUNL team\n" + 
 				"");

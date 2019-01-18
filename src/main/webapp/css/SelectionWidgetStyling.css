@@ -41,6 +41,17 @@ div#RowOne form{
 	height: 98%;
 	}
 	
+	div#PercentBar{
+	background: #046cf7;
+    height: 100%;
+    position: absolute;
+    width: 20%;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    opacity: 0.5;
+    }
 div#RowOne form label{
 	display:inline-block;
 	margin: 0.1em;

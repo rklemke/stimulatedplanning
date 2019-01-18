@@ -106,8 +106,9 @@
     <div id="RowOneColumnOne">
     <% if (user.isTreatmentGroup()) { %>	
 	<img id="ClanLogo" src="<%= userClan.getClanLogo() %>"/>
-	
+	<span><%user.getClan().getTitle();%></span>
 	<img id="UserLogo" src="<%= user.getAvatarUrl() %>">
+	<span><%user.getName();%></span>
 	<% } %>	
     </div><!-- RowOneColumnOne -->
     
