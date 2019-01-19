@@ -188,9 +188,9 @@
 									Cipher.encode(encOptionText, 22)
 							};
 							encryption.getOptionList().get(0).setDescription(encryptedS[0]);
-							encryption.getOptionList().get(1).setDescription(encryptedS[0]);
-							encryption.getOptionList().get(2).setDescription(encryptedS[0]);
-							encryption.getOptionList().get(3).setDescription(encryptedS[0]);
+							encryption.getOptionList().get(1).setDescription(encryptedS[1]);
+							encryption.getOptionList().get(2).setDescription(encryptedS[2]);
+							encryption.getOptionList().get(3).setDescription(encryptedS[3]);
 							try {
 								PersistentStore.writeDescriptor(encryption.getOptionList().get(0));
 								PersistentStore.writeDescriptor(encryption.getOptionList().get(1));
