@@ -194,7 +194,7 @@ public class PersistentStore {
 	}
 
 	protected static Entity createInformationObjectEntity(InformationObject generic) {
-		//log.info("createGenericUserEntity: "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
+		//log.info("createInformationObjectEntity: "+generic.getClass().getName()+", "+generic.getId()+", "+generic.getTitle()+", content: "+generic.getContent());
 		Entity entity = null;
 
 		try {

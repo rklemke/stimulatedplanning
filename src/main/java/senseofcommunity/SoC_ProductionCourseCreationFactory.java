@@ -3,6 +3,7 @@ package senseofcommunity;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.ListIterator;
+import java.util.logging.Logger;
 
 import stimulatedplanning.ContentDescriptor;
 import stimulatedplanning.CourseDescriptor;
@@ -20,16 +21,18 @@ public class SoC_ProductionCourseCreationFactory {
 	public static Date week3deadline;
 	public static Date week4deadline;
 
+	private static final Logger log = Logger.getLogger(SoC_ProductionCourseCreationFactory.class.getName());   
+
 	public SoC_ProductionCourseCreationFactory() {
 		// TODO Auto-generated constructor stub
 	}
 
 	
 	public static CourseDescriptor generateProductionCourse() {
-		SoC_CourseCreationFactory.week1deadline = new GregorianCalendar(2019, 0, 27, 12, 0).getTime();
-		SoC_CourseCreationFactory.week2deadline = new GregorianCalendar(2019, 1, 3, 12, 0).getTime();
-		SoC_CourseCreationFactory.week3deadline = new GregorianCalendar(2019, 1, 10, 12, 0).getTime();
-		SoC_CourseCreationFactory.week4deadline = new GregorianCalendar(2019, 1, 17, 12, 0).getTime();
+		week1deadline = new GregorianCalendar(2019, 0, 27, 12, 0).getTime();
+		week2deadline = new GregorianCalendar(2019, 1, 3, 12, 0).getTime();
+		week3deadline = new GregorianCalendar(2019, 1, 10, 12, 0).getTime();
+		week4deadline = new GregorianCalendar(2019, 1, 17, 12, 0).getTime();
 		
 		// Course
 			
@@ -128,11 +131,11 @@ public class SoC_ProductionCourseCreationFactory {
 		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
-		sele = generateWeek1ClanLogoSelection();
+		sele = generateWeek1ClanIdentitySelection();
 		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
-		sele = generateWeek1ClanIdentitySelection();
+		sele = generateWeek1ClanLogoSelection();
 		sele.setDeadline(week1deadline);
 		content.addInformationObject(sele);
 		
@@ -292,7 +295,6 @@ public class SoC_ProductionCourseCreationFactory {
 		// Assignment content
 		info = generateWeek2TreatmentEncryptionIntroductionText();
 		content.addInformationObject(info);
-		info.setContent("");
 		
 		sele = generateWeek2EncryptedMessageSelection();
 		sele.setDeadline(week2deadline);
@@ -300,7 +302,6 @@ public class SoC_ProductionCourseCreationFactory {
 		
 		info = generateWeek2TreatmentEncryptionMethodIntroductionText();
 		content.addInformationObject(info);
-		info.setContent("");
 		
 		sele = generateWeek2EncryptionMethodSelectionClan1();
 		sele.setDeadline(week2deadline);
@@ -312,7 +313,6 @@ public class SoC_ProductionCourseCreationFactory {
 		
 		info = generateWeek2TreatmentEncryptedMessageReceivedIntroductionText();
 		content.addInformationObject(info);
-		info.setContent("");
 		
 		sele = generateWeek2DecryptionSelection();
 		sele.setDeadline(week2deadline);
@@ -320,15 +320,12 @@ public class SoC_ProductionCourseCreationFactory {
 		
 		info = generateWeek2TreatmentEncryptionChallengeConclusion();
 		content.addInformationObject(info);
-		info.setContent("");
 		
 		info = generateWeek2TreatmentTestIntroduction();
 		content.addInformationObject(info);
-		info.setContent("");
 		
 		info = generateWeek2ControlTestIntroduction();
 		content.addInformationObject(info);
-		info.setContent("");
 	
 		sele = generateWeek2KnowledgeTest1();
 		content.addInformationObject(sele);
@@ -372,7 +369,6 @@ public class SoC_ProductionCourseCreationFactory {
 				
 		info = generateWeek2TestConclusion();
 		content.addInformationObject(info);
-		info.setContent("");
 	
 		
 		// Assignment Results
@@ -439,17 +435,6 @@ public class SoC_ProductionCourseCreationFactory {
 		lesson.addContent(content);
 	
 		lesson = new LessonDescriptor(StimulatedPlanningFactory.getUUID() ,
-				"Diffie-Hellman",
-				"Diffie-Hellman","");
-		module.addLesson(lesson);	
-	
-		content = new ContentDescriptor("085e5e7bbd294467a5dfc7adee0dc8e7/4b198ca8530d488eadef85cf1af008f1/", 
-				"(Exponential) arithmetic with letters and Diffie-Hellman key exchange", 
-				"(Exponential) arithmetic with letters and Diffie-Hellman key exchange", 
-				prodCourseBaseURL+"085e5e7bbd294467a5dfc7adee0dc8e7/4b198ca8530d488eadef85cf1af008f1/");
-		lesson.addContent(content);
-	
-		lesson = new LessonDescriptor(StimulatedPlanningFactory.getUUID() ,
 				"RSA",
 				"RSA","");
 		module.addLesson(lesson);	
@@ -458,6 +443,17 @@ public class SoC_ProductionCourseCreationFactory {
 				"How to use it and proof of correctness", 
 				"How to use it and proof of correctness", 
 				prodCourseBaseURL+"085e5e7bbd294467a5dfc7adee0dc8e7/52dcb3e8bc3c4de1a3caa0873fa5e251/");
+		lesson.addContent(content);
+	
+		lesson = new LessonDescriptor(StimulatedPlanningFactory.getUUID() ,
+				"Diffie-Hellman",
+				"Diffie-Hellman","");
+		module.addLesson(lesson);	
+	
+		content = new ContentDescriptor("085e5e7bbd294467a5dfc7adee0dc8e7/4b198ca8530d488eadef85cf1af008f1/", 
+				"(Exponential) arithmetic with letters and Diffie-Hellman key exchange", 
+				"(Exponential) arithmetic with letters and Diffie-Hellman key exchange", 
+				prodCourseBaseURL+"085e5e7bbd294467a5dfc7adee0dc8e7/4b198ca8530d488eadef85cf1af008f1/");
 		lesson.addContent(content);
 	
 		lesson = new LessonDescriptor(StimulatedPlanningFactory.getUUID() ,
@@ -488,11 +484,9 @@ public class SoC_ProductionCourseCreationFactory {
 		// Assignment content
 		info = generateWeek3TreatmentTestIntroduction();
 		content.addInformationObject(info);
-		info.setContent("");
 		
 		info = generateWeek3ControlTestIntroduction();
 		content.addInformationObject(info);
-		info.setContent("");
 	
 		
 		sele = generateWeek3KnowledgeTest1();
@@ -521,7 +515,6 @@ public class SoC_ProductionCourseCreationFactory {
 				
 		info = generateWeek3TestConclusion();
 		content.addInformationObject(info);
-		info.setContent("");
 	
 		
 		// Assignment Results
@@ -652,15 +645,12 @@ public class SoC_ProductionCourseCreationFactory {
 				prodCourseBaseURL+"courseware/w4challenge/",
 				true, true, true);
 		content.addInformationObject(info);
-		info.setContent("");
 	
 		info = generateWeek4TreatmentTestIntroduction();
 		content.addInformationObject(info);
-		info.setContent("");
 		
 		info = generateWeek4ControlTestIntroduction();
 		content.addInformationObject(info);
-		info.setContent("");
 	
 		sele = generateWeek4KnowledgeTest1();
 		sele.setDeadline(week4deadline);
@@ -704,7 +694,6 @@ public class SoC_ProductionCourseCreationFactory {
 				
 		info = generateWeek4TestConclusion();
 		content.addInformationObject(info);
-		info.setContent("");
 	
 
 		// Assignment Results
@@ -1377,7 +1366,7 @@ public class SoC_ProductionCourseCreationFactory {
 				"",
 				false, true, true);
 	
-		info.setContent("<img style='height2em;width:2em;display:inline-block;'src='/img/group.png'/>"+
+		String content = "<img style='height2em;width:2em;display:inline-block;'src='/img/group.png'/>"+
 				"<span style='font-size:1.5em;'><strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
 				"<BR>" + 
 				"Let’s send a message to the other group and of course encrypted, let’s see how they perform.<BR>\n" + 
@@ -1387,7 +1376,8 @@ public class SoC_ProductionCourseCreationFactory {
 				"<BR>" + 
 				"The OUNL Team<BR>" + 
 				"(Alessandra, Hugo and Roland)<BR>" + 
-				"");
+				"";
+		info.setContent(content);
 		
 		return info;
 	}
