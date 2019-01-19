@@ -234,7 +234,9 @@ $(document).ready(function () {
 </div><!-- headerholder -->
 
 <div id="userName">
-<img id  = "ClanLogo" src="${pageContext.request.contextPath}/img/clan/DefaultClan.png"/> 
+<% if (user.isTreatmentGroup()) { %>
+<img id  = "ClanLogo" style="vertical-align: middle;width: 2em;height: 2em;" src="<%=user.getClan().getClanLogo()%>"/> 
+<% } %>	
 <span>Welcome, <i><%=(String)session.getAttribute("nickname")%> </i></span>
 </div><!-- userName -->
 

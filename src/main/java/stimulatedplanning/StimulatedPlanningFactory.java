@@ -342,6 +342,7 @@ public class StimulatedPlanningFactory {
 	// WEEK 2 interactive elements
 
 
+
 	/**
 	 * generate the structure for the course to be used according to Sandbox structure.
 	 * @return

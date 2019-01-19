@@ -22,11 +22,15 @@ modify these two fields before copying, then start copying from below here to th
 
 <input type="hidden" value="" id="contentId" name="contentId">
 <input type="hidden" value="" id="contentName" name="contentName">
+<!-- only for awarenesswidget pages -->
+<strong style="font-size: 20px;">Check out who is online</strong>
 
+<div id="WidgetContainer">
+<div class="row" id="RowOne"> 
+<iframe id="contentFrame"></iframe>
+</div><!-- RowOne -->
 
-<iframe id="contentFrame" style="width:860px; height:480px;"></iframe>
-
-<button id="chatOpener">Chat</button>
+<div class="row" id="RowTwo">
 <div id="chatDialog" title="chat tool">
 	<iframe 
 		id="chatFrame" 
@@ -37,6 +41,75 @@ modify these two fields before copying, then start copying from below here to th
 </div>
 
 <div id="SP_ajaxresult">Loading content.</div>
+  <button id="chatOpener"> <img style="width: 2em; height: 2em;vertical-align:middle;right:0.5px;" src="/static/groupChat.png"/>
+  <strong style="font-size: 1.5em;vertical-align:middle; left:0.5px;">Chat</strong>
+  </button>
+<div id="OUNL">Open University of Netherlands</div>
+
+</div><!-- RowTwo -->
+</div><!--Contatiner-->
+
+<style type="text/css">
+div#WidgetContainer {
+	position: relative;
+	width:100%; 
+	height:35em;
+	/*Awareness Widget*/
+	/*height:20em;*/
+	/*background-color: #666699;*/
+}
+
+div.row{
+	position: absolute;
+  float:left;
+}
+div#RowOne{
+	display:block;
+	Top: 0px;
+	width: 99%;
+	height: 32em;
+	/*background: #666666;*/
+}
+div#RowTwo{
+	display:inline-table;
+	align-items : center;
+	bottom:0px;
+	width: 99%;
+	height: 1.5em;
+	vertical-align:middle;
+	background: skyblue;
+	color: white;
+  margin-top: 0.5em;
+}
+
+iframe#contentFrame{
+width: 100%;
+height: 100%;
+/*background-color: skyblue;*/
+}
+
+div#SP_ajaxresult{
+display: inline-block;
+  font-size: 1.5em;
+  margin-right: 1em;
+  margin-left: 0.5em;
+}
+
+div#chatOpener{
+display: inline-block;
+  width: 15%;
+  font-size: 1.5em;
+}
+
+div#OUNL{
+display: inline-block;
+float: right;
+ font-size:1.5em;
+  margin-right: 0.5em;
+}
+
+
+</style>
 
 
 <script type="text/javascript">

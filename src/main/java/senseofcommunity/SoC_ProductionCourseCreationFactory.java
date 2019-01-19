@@ -949,8 +949,8 @@ public class SoC_ProductionCourseCreationFactory {
 		};
 		
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
-				"Clan vote", 
-				"Vote for your preferred clan logos", 
+				"Clan Poll", 
+				"Vote for your preferred clan logos. You may select more than one.", 
 				"",
 				false, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
@@ -992,8 +992,8 @@ public class SoC_ProductionCourseCreationFactory {
 			};
 		
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
-				"Clan vote", 
-				"Vote for your preferred clan names", 
+				"Clan Poll", 
+				"Vote for your preferred clan names. You may select more than one.",
 				"",
 				false, true, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
@@ -1035,8 +1035,8 @@ public class SoC_ProductionCourseCreationFactory {
 			};
 		
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
-				"Clan vote", 
-				"Vote for your preferred clan rules", 
+				"Clan Poll", 
+				"Vote for your preferred clan rules. You may select more than one.", 
 				"",
 				false, true, false);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
@@ -1078,8 +1078,8 @@ public class SoC_ProductionCourseCreationFactory {
 			};
 		
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
-				"Clan vote", 
-				"Vote for your preferred clan rules", 
+				"Clan Poll", 
+				"Vote for your preferred clan rules. You may select more than one.", 
 				"",
 				false, false, true);
 		sele.setType(SelectionObjectType.CLAN_SELECTION);
@@ -1104,13 +1104,13 @@ public class SoC_ProductionCourseCreationFactory {
 				"",
 				false, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'><strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
+		info.setContent("<img style='height2em;width:2em;display:inline-block;'src='/img/group.png'/>"+
+				"<span style='font-size:1.5em;'><strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
 				"<BR>" + 
 				"<span style='font-size:1.5em;'>Work well on this simple test because we are going to level up in the next one</span><BR>" + 
 				"<BR>"  +
 				"The OUNL team<BR>" + 
 				"");
-		
 		return info;
 	}
 
@@ -1133,35 +1133,35 @@ public class SoC_ProductionCourseCreationFactory {
 	public static SelectionObject generateWeek1KnowledgeTest1() {
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 				"Test", 
-				"What does cryptography mean?", 
+				"1. What does cryptography mean?", 
 				"",
 				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 		sele.setPurpose(SelectionObjectPurpose.TEST);
 		
 		SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"Hidden words", 
+				"a. Hidden words", 
 				"Hidden words", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"Hidden writing", 
+				"b. Hidden writing", 
 				"Hidden writing", 
 				"");
 		option.setCorrect(true);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"Hidden secret", 
+				"c. Hidden secret", 
 				"Hidden secret", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 	
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"Hidden letters", 
+				"d. Hidden letters", 
 				"Hidden letters", 
 				"");
 		option.setCorrect(false);
@@ -1173,35 +1173,35 @@ public class SoC_ProductionCourseCreationFactory {
 	public static SelectionObject generateWeek1KnowledgeTest2() {
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 				"Test", 
-				"Cryptography dates back to?", 
+				"2. Cryptography dates back to?", 
 				"",
 				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 		sele.setPurpose(SelectionObjectPurpose.TEST);
 		
 		SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"The Egyptian (Prior to 3100 BC)", 
+				"a. The Egyptian (Prior to 3100 BC)", 
 				"The Egyptian (Prior to 3100 BC)", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"Creation of the Internet  (1960)", 
+				"b. Creation of the Internet  (1960)", 
 				"Creation of the Internet  (1960)", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"The Greek (600 BC)", 
+				"c. The Greek (600 BC)", 
 				"The Greek (600 BC)", 
 				"");
 		option.setCorrect(true);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"The Roman (27 BC)", 
+				"d. The Roman (27 BC)", 
 				"The Roman (27 BC)", 
 				"");
 		option.setCorrect(false);
@@ -1213,35 +1213,35 @@ public class SoC_ProductionCourseCreationFactory {
 	public static SelectionObject generateWeek1KnowledgeTest3() {
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 				"Test", 
-				"Which of the following statements  is correct?", 
+				"3. Which of the following statements  is correct?", 
 				"",
 				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_MULTI_TEST);
 		sele.setPurpose(SelectionObjectPurpose.TEST);
 		
 		SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"The plaintext is the input for encryption.", 
+				"a. The plaintext is the input for encryption.", 
 				"The plaintext is the input for encryption.", 
 				"");
 		option.setCorrect(true);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"The ciphertext is the input for encryption.", 
+				"b. The ciphertext is the input for encryption.", 
 				"The ciphertext is the input for encryption.", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"Encrypting results in a key.", 
+				"c. Encrypting results in a key.", 
 				"Encrypting results in a key.", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 				
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"You cannot decrypt a ciphertext with the same key it was encrypted with.", 
+				"d. You cannot decrypt a ciphertext with the same key it was encrypted with.", 
 				"You cannot decrypt a ciphertext with the same key it was encrypted with.", 
 				"");
 		option.setCorrect(false);
@@ -1253,35 +1253,35 @@ public class SoC_ProductionCourseCreationFactory {
 	public static SelectionObject generateWeek1KnowledgeTest4() {
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 				"Test", 
-				"What is a cipher?", 
+				"4. What is a cipher?", 
 				"",
 				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 		sele.setPurpose(SelectionObjectPurpose.TEST);
 		
 		SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"the (unreadable) message of the sender", 
+				"a. The (unreadable) message of the sender", 
 				"the (unreadable) message of the sender", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"the (unreadable) message once decrypted", 
+				"b. The (unreadable) message once decrypted", 
 				"the (unreadable) message once decrypted", 
 				"");
 		option.setCorrect(true);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"the (unreadable) message of the cipher", 
+				"c. The (unreadable) message of the cipher", 
 				"the (unreadable) message of the cipher", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"the (unreadable) message once encrypted", 
+				"d. The (unreadable) message once encrypted", 
 				"the (unreadable) message once encrypted", 
 				"");
 		option.setCorrect(true);
@@ -1293,35 +1293,35 @@ public class SoC_ProductionCourseCreationFactory {
 	public static SelectionObject generateWeek1KnowledgeTest5() {
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 				"Test", 
-				"Which of the below describes a cipher?", 
+				"5. Which of the below describes a cipher?", 
 				"",
 				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 		sele.setPurpose(SelectionObjectPurpose.TEST);
 		
 		SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"The pictorial instructions on a washing label", 
+				"a. The pictorial instructions on a washing label", 
 				"The pictorial instructions on a washing label", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"The NATO phonetic alphabet (Alpha, Bravo, Charlie, Delta, Echo, …)", 
+				"b. The NATO phonetic alphabet (Alpha, Bravo, Charlie, Delta, Echo, …)", 
 				"The NATO phonetic alphabet (Alpha, Bravo, Charlie, Delta, Echo, …)", 
 				"");
 		option.setCorrect(true);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"Barcodes on supermarket items", 
+				"c. Barcodes on supermarket items", 
 				"Barcodes on supermarket items", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"Descriptions in a crossword puzzle", 
+				"d. Descriptions in a crossword puzzle", 
 				"Descriptions in a crossword puzzle", 
 				"");
 		option.setCorrect(false);
@@ -1333,35 +1333,35 @@ public class SoC_ProductionCourseCreationFactory {
 	protected static SelectionObject generateWeek1KnowledgeTest6() {
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 				"Test", 
-				"What is Kerckhoffs’ principle?", 
+				"6. What is Kerckhoffs’ principle?", 
 				"",
 				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 		sele.setPurpose(SelectionObjectPurpose.TEST);
 		
 		SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
+				"a. Something in French", 
 				"Something in French", 
-				"Something in French", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
+				"b. That you must keep the system secret from the adversary", 
 				"That you must keep the system secret from the adversary", 
-				"That you must keep the system secret from the adversary", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"That the key should be kept secret", 
+				"c. That the key should be kept secret", 
 				"That the key should be kept secret", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"That the system is secure if the enemy can’t decrypt without the key", 
+				"d. That the system is secure if the enemy can’t decrypt without the key", 
 				"That the system is secure if the enemy can’t decrypt without the key", 
 				"");
 		option.setCorrect(true);
@@ -1377,7 +1377,8 @@ public class SoC_ProductionCourseCreationFactory {
 				"",
 				false, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'>Hi guys, so we had the chance to learn how to encrypt messages, so here we are with the #cryptoCHALLENGE!<BR>\n" + 
+		info.setContent("<img style='height2em;width:2em;display:inline-block;'src='/img/group.png'/>"+
+				"<span style='font-size:1.5em;'><strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
 				"<BR>" + 
 				"Let’s send a message to the other group and of course encrypted, let’s see how they perform.<BR>\n" + 
 				"<BR>" + 
@@ -1646,29 +1647,29 @@ public class SoC_ProductionCourseCreationFactory {
 		public static SelectionObject generateWeek2KnowledgeTest1() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Which of the below statements is correct?", 
+					"1. Which of the below statements is correct?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"The text “MJQQT BTWQI” is a Caesar encryption of an English sentence.", "The text “MJQQT BTWQI” is a Caesar encryption of an English sentence.", "");
+					"a. The text “MJQQT BTWQI” is a Caesar encryption of an English sentence.", "The text “MJQQT BTWQI” is a Caesar encryption of an English sentence.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"There are 26 possible keys for Caesar.", "There are 26 possible keys for Caesar.", "");
+					"b. There are 26 possible keys for Caesar.", "There are 26 possible keys for Caesar.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"When using permutations, there are twice as many keys as in standard Caesar.", "When using permutations, there are twice as many keys as in standard Caesar.", "");
+					"c. When using permutations, there are twice as many keys as in standard Caesar.", "When using permutations, there are twice as many keys as in standard Caesar.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Caesar satisfies Kerckhoffs’ Principle.", "Caesar satisfies Kerckhoffs’ Principle.", "");
+					"d. Caesar satisfies Kerckhoffs’ Principle.", "Caesar satisfies Kerckhoffs’ Principle.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -1688,29 +1689,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek2KnowledgeTest2() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Which of the below statements is correct?", 
+					"2. Which of the below statements is correct?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"The e is the most frequent letter in a ciphertext.", "The e is the most frequent letter in a ciphertext.", "");
+					"a. The e is the most frequent letter in a ciphertext.", "The e is the most frequent letter in a ciphertext.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Caesar encryption hides the structure of the plaintext.", "Caesar encryption hides the structure of the plaintext.", "");
+					"b. Caesar encryption hides the structure of the plaintext.", "Caesar encryption hides the structure of the plaintext.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Caesar merely shifts the distribution of the frequency of letters.", "Caesar merely shifts the distribution of the frequency of letters.", "");
+					"c. Caesar merely shifts the distribution of the frequency of letters.", "Caesar merely shifts the distribution of the frequency of letters.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Frequency analysis does not work against Caesar when using permutation keys.", "Frequency analysis does not work against Caesar when using permutation keys.", "");
+					"d. Frequency analysis does not work against Caesar when using permutation keys.", "Frequency analysis does not work against Caesar when using permutation keys.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -1728,29 +1729,29 @@ public class SoC_ProductionCourseCreationFactory {
 		public static SelectionObject generateWeek2KnowledgeTest3() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"The plaintext “HELLO” is encrypted with Vigenère. Which of the following is not a possible ciphertext?", 
+					"3. The plaintext “HELLO” is encrypted with Vigenère. Which of the following is not a possible ciphertext?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"EARTH", "EARTH", "");
+					"a. EARTH", "EARTH", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"AAAAA", "AAAAA", "");
+					"b. AAAAA", "AAAAA", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"LLLLLL", "LLLLLL", "");
+					"c. LLLLLL", "LLLLLL", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"CLOWN", "CLOWN", "");
+					"d. CLOWN", "CLOWN", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -1769,29 +1770,29 @@ public class SoC_ProductionCourseCreationFactory {
 		public static SelectionObject generateWeek2KnowledgeTest4() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"What key should you use in Vigenère to encrypt “BAGEL” as “DONUT”?", 
+					"4. What key should you use in Vigenère to encrypt “BAGEL” as “DONUT”?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"COHQI", "COHQI", "");
+					"a. COHQI", "COHQI", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"EOTYE", "EOTYE", "");
+					"b. EOTYE", "EOTYE", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"MBLRT", "MBLRT", "");
+					"c. MBLRT", "MBLRT", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"FUCAK", "FUCAK", "");
+					"d. FUCAK", "FUCAK", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -1810,29 +1811,29 @@ public class SoC_ProductionCourseCreationFactory {
 		public static SelectionObject generateWeek2KnowledgeTest5() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Suppose you want to encrypt a plaintext with Vigenère, first with the key “YES” and then with the key “NO”. How could you do this?", 
+					"5. Suppose you want to encrypt a plaintext with Vigenère, first with the key “YES” and then with the key “NO”. How could you do this?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"The only option is to encrypt twice with Vigenère", "The only option is to encrypt twice with Vigenère", "");
+					"a. The only option is to encrypt twice with Vigenère", "The only option is to encrypt twice with Vigenère", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"You can encrypt in one go with the key “YESNO”", "You can encrypt in one go with the key “YESNO”", "");
+					"b. You can encrypt in one go with the key “YESNO”", "You can encrypt in one go with the key “YESNO”", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"You can encrypt in one go with the key “NOYES”", "You can encrypt in one go with the key “NOYES”", "");
+					"c. You can encrypt in one go with the key “NOYES”", "You can encrypt in one go with the key “NOYES”", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"You can encrypt in one go with the key “LSFMRG”", "You can encrypt in one go with the key “LSFMRG”", "");
+					"d. You can encrypt in one go with the key “LSFMRG”", "You can encrypt in one go with the key “LSFMRG”", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 					
@@ -1851,29 +1852,29 @@ public class SoC_ProductionCourseCreationFactory {
 		public static SelectionObject generateWeek2KnowledgeTest6() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Which of the following statements about Vigenère keys is correct?", 
+					"6. Which of the following statements about Vigenère keys is correct?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"A password is always long enough.", "A password is always long enough.", "");
+					"a. A password is always long enough.", "A password is always long enough.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"A book key is best done using an obscure, unknown book.", "A book key is best done using an obscure, unknown book.", "");
+					"b. A book key is best done using an obscure, unknown book.", "A book key is best done using an obscure, unknown book.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Autokey results in a key as long as the plaintext.", "Autokey results in a key as long as the plaintext.", "");
+					"c. Autokey results in a key as long as the plaintext.", "Autokey results in a key as long as the plaintext.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"When using autokey, you can decrypt the ciphertext with Caesar.", "When using autokey, you can decrypt the ciphertext with Caesar.", "");
+					"d. When using autokey, you can decrypt the ciphertext with Caesar.", "When using autokey, you can decrypt the ciphertext with Caesar.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -1893,29 +1894,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek2KnowledgeTest7() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Is frequency analysis useless against Vigenère?", 
+					"7. Is frequency analysis useless against Vigenère?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Yes.", "Yes.", "");
+					"a. Yes.", "Yes.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"No, you can easily spot the shift.", "No, you can easily spot the shift.", "");
+					"b. No, you can easily spot the shift.", "No, you can easily spot the shift.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"No, but you have to first determine the key length.", "No, but you have to first determine the key length.", "");
+					"c. No, but you have to first determine the key length.", "No, but you have to first determine the key length.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"No, but you first have to break the Caesar encryption.", "No, but you first have to break the Caesar encryption.", "");
+					"d. No, but you first have to break the Caesar encryption.", "No, but you first have to break the Caesar encryption.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -1934,29 +1935,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek2KnowledgeTest8() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Which of the below statements is correct?", 
+					"8. Which of the below statements is correct?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Caesar and Vigenère are both monoalphabetic ciphers.", "Caesar and Vigenère are both monoalphabetic ciphers.", "");
+					"a. Caesar and Vigenère are both monoalphabetic ciphers.", "Caesar and Vigenère are both monoalphabetic ciphers.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Vigenère and Playfair are both monoalphabetic ciphers.", "Vigenère and Playfair are both monoalphabetic ciphers.", "");
+					"b. Vigenère and Playfair are both monoalphabetic ciphers.", "Vigenère and Playfair are both monoalphabetic ciphers.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Caesar and Vigenère are both polyalphabetic ciphers.", "Caesar and Vigenère are both polyalphabetic ciphers.", "");
+					"c. Caesar and Vigenère are both polyalphabetic ciphers.", "Caesar and Vigenère are both polyalphabetic ciphers.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Vigenère and Playfair are both polyalphabetic ciphers.", "Vigenère and Playfair are both polyalphabetic ciphers.", "");
+					"d. Vigenère and Playfair are both polyalphabetic ciphers.", "Vigenère and Playfair are both polyalphabetic ciphers.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 					
@@ -1975,29 +1976,29 @@ public class SoC_ProductionCourseCreationFactory {
 		public static SelectionObject generateWeek2KnowledgeTest9() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"What is the Playfair encryption of the plaintext “TEST” with the key “hello”?", 
+					"9. What is the Playfair encryption of the plaintext “TEST” with the key “hello”?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"UDTU", "UDTU", "");
+					"a. UDTU", "UDTU", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"ROTU", "ROTU", "");
+					"b. ROTU", "ROTU", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"DUUT", "DUUT", "");
+					"c. DUUT", "DUUT", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"ORUT", "ORUT", "");
+					"d. ORUT", "ORUT", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2015,29 +2016,29 @@ public class SoC_ProductionCourseCreationFactory {
 		public static SelectionObject generateWeek2KnowledgeTest10() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Is the One Time Pad completely secure?", 
+					"10. Is the One Time Pad completely secure?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Yes, unless you have a really powerful computer.", "Yes, unless you have a really powerful computer.", "");
+					"a. Yes, unless you have a really powerful computer.", "Yes, unless you have a really powerful computer.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Yes, unless you are forced to reveal the plaintext.", "Yes, unless you are forced to reveal the plaintext.", "");
+					"b. Yes, unless you are forced to reveal the plaintext.", "Yes, unless you are forced to reveal the plaintext.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Yes, unless you re-use the key.", "Yes, unless you re-use the key.", "");
+					"c. Yes, unless you re-use the key.", "Yes, unless you re-use the key.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Yes, unless the key is completely random.", "Yes, unless the key is completely random.", "");
+					"d. Yes, unless the key is completely random.", "Yes, unless the key is completely random.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2067,7 +2068,8 @@ public class SoC_ProductionCourseCreationFactory {
 				"",
 				false, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'>Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
+		info.setContent("<img style='height2em;width:2em;display:inline-block;'src='/img/group.png'/>"+
+				"<span style='font-size:1.5em;'>Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
 				"<BR>" + 
 				"<span style='font-size:1.5em;'>Work well on this simple test because we are going to level up in the next one</span><BR>" + 
 				"<BR>" + 
@@ -2106,29 +2108,29 @@ public class SoC_ProductionCourseCreationFactory {
 		public static SelectionObject generateWeek3KnowledgeTest1() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"What is 5 * 17 mod 13?", 
+					"1. What is 5 * 17 mod 13? It is ...", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"5", "5", "");
+					"a. 5", "5", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"6", "6", "");
+					"b. 6", "6", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"7", "7", "");
+					"c. 7", "7", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"8", "8", "");
+					"d. 8", "8", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2145,29 +2147,29 @@ public class SoC_ProductionCourseCreationFactory {
 			protected static SelectionObject generateWeek3KnowledgeTest2() {
 				SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 						"Test", 
-						"What value of x makes this equation work? 5x = 1 mod 11", 
+						"2. What value of x makes this equation work? 5x = 1 mod 11", 
 						"",
 						true, true, true);
 				sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 				sele.setPurpose(SelectionObjectPurpose.TEST);
 				
 				SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-						"6", "6", "");
+						"a. 6", "6", "");
 				option.setCorrect(false);
 				sele.addOption(option);
 				
 				option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-						"7", "7", "");
+						"b. 7", "7", "");
 				option.setCorrect(false);
 				sele.addOption(option);
 				
 				option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-						"8", "8", "");
+						"c. 8", "8", "");
 				option.setCorrect(false);
 				sele.addOption(option);
 				
 				option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-						"9", "9", "");
+						"d. 9", "9", "");
 				option.setCorrect(true);
 				sele.addOption(option);
 						
@@ -2185,29 +2187,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek3KnowledgeTest3() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Can you set up RSA with p = 6 and q = 8?", 
+					"3. Can you set up RSA with p = 6 and q = 8?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Yes", "Yes", "");
+					"a. Yes", "Yes", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"No, because p and q cannot both be even.", "No, because p and q cannot both be even.", "");
+					"b. No, because p and q cannot both be even.", "No, because p and q cannot both be even.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"No, because q should be smaller than p.", "No, because q should be smaller than p.", "");
+					"c. No, because q should be smaller than p.", "No, because q should be smaller than p.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"No, because p and q should both be prime numbers.", "No, because p and q should both be prime numbers.", "");
+					"d. No, because p and q should both be prime numbers.", "No, because p and q should both be prime numbers.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 					
@@ -2226,29 +2228,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek3KnowledgeTest4() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Suppose we have RSA set up with e = 9 and n = 1189. What is the correct encryption of M = 19?", 
+					"4. Suppose we have RSA set up with e = 9 and n = 1189. What is the correct encryption of M = 19?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"517", "517", "");
+					"a. 517", "517", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"13", "13", "");
+					"b. 13", "13", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"719", "719", "");
+					"c. 719", "719", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"1113", "1113", "");
+					"d. 1113", "1113", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 					
@@ -2268,29 +2270,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek3KnowledgeTest5() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"In practice, how long should be an RSA key for decent security?", 
+					"5. In practice, how long should be an RSA key for decent security?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Slightly more than 1000 bits", "Slightly more than 1000 bits", "");
+					"a. Slightly more than 1000 bits", "Slightly more than 1000 bits", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Slightly more than 2000 bits", "Slightly more than 2000 bits", "");
+					"b. Slightly more than 2000 bits", "Slightly more than 2000 bits", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Slightly more than 3000 bits", "Slightly more than 3000 bits", "");
+					"c. Slightly more than 3000 bits", "Slightly more than 3000 bits", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Slightly more than 4000 bits", "Slightly more than 4000 bits", "");
+					"d. Slightly more than 4000 bits", "Slightly more than 4000 bits", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2308,29 +2310,29 @@ public class SoC_ProductionCourseCreationFactory {
 		public static SelectionObject generateWeek3KnowledgeTest6() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"What is the theoretical reason for RSA’s security?", 
+					"6. What is the theoretical reason for RSA’s security?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Padding with OAEP", "Padding with OAEP", "");
+					"a. Padding with OAEP", "Padding with OAEP", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Factoring is hard", "Factoring is hard", "");
+					"b. Factoring is hard", "Factoring is hard", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Discrete log is hard", "Discrete log is hard", "");
+					"c. Discrete log is hard", "Discrete log is hard", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Euler’s generalisation of Fermat’s little theorem", "Euler’s generalisation of Fermat’s little theorem", "");
+					"d. Euler’s generalisation of Fermat’s little theorem", "Euler’s generalisation of Fermat’s little theorem", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2360,7 +2362,8 @@ public class SoC_ProductionCourseCreationFactory {
 				"",
 				false, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'><strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
+		info.setContent("<img style='height2em;width:2em;display:inline-block;'src='/img/group.png'/>"+
+				"<span style='font-size:1.5em;'><strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
 				"<BR>" + 
 				"<span style='font-size:1.5em;'>Work well on this simple test because we are going to level up in the next one</span><BR>" + 
 				"<BR>" + 
@@ -2399,29 +2402,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek4KnowledgeTest1() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"When is authenticity satisfied?", 
+					"1. When is authenticity satisfied?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"If the used key(s) is/are kept secret.", "If the used key(s) is/are kept secret.", "");
+					"a. If the used key(s) is/are kept secret.", "If the used key(s) is/are kept secret.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"If no outsider learns the message.", "If no outsider learns the message.", "");
+					"b. If no outsider learns the message.", "If no outsider learns the message.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"If the message arrives as it was sent.", "If the message arrives as it was sent.", "");
+					"c. If the message arrives as it was sent.", "If the message arrives as it was sent.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"If the message was indeed sent by the apparent sender.", "If the message was indeed sent by the apparent sender.", "");
+					"d. If the message was indeed sent by the apparent sender.", "If the message was indeed sent by the apparent sender.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 					
@@ -2439,29 +2442,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek4KnowledgeTest2() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"How can you achieve confidentiality for messages sent over the Internet?", 
+					"2. How can you achieve confidentiality for messages sent over the Internet?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"You need encryption.", "You need encryption.", "");
+					"a. You need encryption.", "You need encryption.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"You need encryption and hash functions.", "You need encryption and hash functions.", "");
+					"b. You need encryption and hash functions.", "You need encryption and hash functions.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"You need encryption and digital signatures.", "You need encryption and digital signatures.", "");
+					"c. You need encryption and digital signatures.", "You need encryption and digital signatures.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"You need encryption, hash functions and digital signatures.", "You need encryption, hash functions and digital signatures.", "");
+					"d. You need encryption, hash functions and digital signatures.", "You need encryption, hash functions and digital signatures.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2479,29 +2482,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek4KnowledgeTest3() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Consider a function “length” that returns the length of the input string. Is this function suitable as a hash function?", 
+					"3. Consider a function “length” that returns the length of the input string. Is this function suitable as a hash function?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Yes.", "Yes.", "");
+					"a. Yes.", "Yes.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"No, it violates pre-image resistance.", "No, it violates pre-image resistance.", "");
+					"b. No, it violates pre-image resistance.", "No, it violates pre-image resistance.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"No, it violates collision resistance.", "No, it violates collision resistance.", "");
+					"c. No, it violates collision resistance.", "No, it violates collision resistance.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"No, it violates both pre-image resistance and collision resistance.", "No, it violates both pre-image resistance and collision resistance.", "");
+					"d. No, it violates both pre-image resistance and collision resistance.", "No, it violates both pre-image resistance and collision resistance.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2520,29 +2523,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek4KnowledgeTest4() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Suppose there is a blockchain, and an attacker makes a change to the 3-but-newest block. When would this be detected?", 
+					"4. Suppose there is a blockchain, and an attacker makes a change to the 3-but-newest block. When would this be detected?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"When a new block is created.", "When a new block is created.", "");
+					"a. When a new block is created.", "When a new block is created.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"When someone verifies correctness of the new block (and only the new block).", "When someone verifies correctness of the new block (and only the new block).", "");
+					"b. When someone verifies correctness of the new block (and only the new block).", "When someone verifies correctness of the new block (and only the new block).", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"When someone verifies correctness of the entire blockchain.", "When someone verifies correctness of the entire blockchain.", "");
+					"c. When someone verifies correctness of the entire blockchain.", "When someone verifies correctness of the entire blockchain.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"This is never discovered.", "This is never discovered.", "");
+					"d. This is never discovered.", "This is never discovered.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2560,29 +2563,29 @@ public class SoC_ProductionCourseCreationFactory {
 		public static SelectionObject generateWeek4KnowledgeTest5() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Suppose Bob receives an encrypted message, Encpk(bob)(m), and the hash of the message, hash(m). It seems to have come from Alice. What are all security guarantees that Bob has?", 
+					"5. Suppose Bob receives an encrypted message, Encpk(bob)(m), and the hash of the message, hash(m). It seems to have come from Alice. What are all security guarantees that Bob has?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Nothing, this may have been sent by an attacker", "Nothing, this may have been sent by an attacker", "");
+					"a. Nothing, this may have been sent by an attacker", "Nothing, this may have been sent by an attacker", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Confidentiality: no one but Alice and Bob know the message", "Confidentiality: no one but Alice and Bob know the message", "");
+					"b. Confidentiality: no one but Alice and Bob know the message", "Confidentiality: no one but Alice and Bob know the message", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Integrity: no one could have changed the message in transit", "Integrity: no one could have changed the message in transit", "");
+					"c. Integrity: no one could have changed the message in transit", "Integrity: no one could have changed the message in transit", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Authenticity: Alice is indeed the person who sent the message", "Authenticity: Alice is indeed the person who sent the message", "");
+					"d. Authenticity: Alice is indeed the person who sent the message", "Authenticity: Alice is indeed the person who sent the message", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2600,29 +2603,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek4KnowledgeTest6() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Suppose you visit a website “yahooogle.com” and it claims to be a company started by Google and Yahoo. What information in the certificate would make you trust the website’s security?", 
+					"6. Suppose you visit a website “yahooogle.com” and it claims to be a company started by Google and Yahoo. What information in the certificate would make you trust the website’s security?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"If the name in the certificate is “yahooogle.com”.", "If the name in the certificate is “yahooogle.com”.", "");
+					"a. If the name in the certificate is “yahooogle.com”.", "If the name in the certificate is “yahooogle.com”.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Answer a AND the certificate is valid.", "Answer a AND the certificate is valid.", "");
+					"b. Answer a AND the certificate is valid.", "Answer a AND the certificate is valid.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Answer b AND your browser trusts the certificate.", "Answer b AND your browser trusts the certificate.", "");
+					"c. Answer b AND your browser trusts the certificate.", "Answer b AND your browser trusts the certificate.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Answer b and yahooogle signed the certificate.", "Answer b and yahooogle signed the certificate.", "");
+					"d. Answer b and yahooogle signed the certificate.", "Answer b and yahooogle signed the certificate.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 	
@@ -2639,29 +2642,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek4KnowledgeTest7() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Which mixnets can straightforwardly be used for routing?", 
+					"7. Which mixnets can straightforwardly be used for routing?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Neither.", "Neither.", "");
+					"a. Neither.", "Neither.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Re-encryption mixnets", "Re-encryption mixnets", "");
+					"b. Re-encryption mixnets", "Re-encryption mixnets", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Decryption mixnets", "Decryption mixnets", "");
+					"c. Decryption mixnets", "Decryption mixnets", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Both.", "Both.", "");
+					"d. Both.", "Both.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2680,29 +2683,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek4KnowledgeTest8() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"How does TOR preserve anonymity of your traffic?", 
+					"8. How does TOR preserve anonymity of your traffic?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Entry nodes don’t know to which site the sender is talking.", "Entry nodes don’t know to which site the sender is talking.", "");
+					"a. Entry nodes don’t know to which site the sender is talking.", "Entry nodes don’t know to which site the sender is talking.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Exit nodes don’t know who is talking to the recipient site", "Exit nodes don’t know who is talking to the recipient site", "");
+					"b. Exit nodes don’t know who is talking to the recipient site", "Exit nodes don’t know who is talking to the recipient site", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Routing nodes don’t know who sender is, nor who recipient is.", "Routing nodes don’t know who sender is, nor who recipient is.", "");
+					"c. Routing nodes don’t know who sender is, nor who recipient is.", "Routing nodes don’t know who sender is, nor who recipient is.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"All of the above.", "All of the above.", "");
+					"d. All of the above.", "All of the above.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 					
@@ -2721,29 +2724,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek4KnowledgeTest9() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Which kinds of cryptography (of those treated in the course) can quantum computers break?", 
+					"9. Which kinds of cryptography (of those treated in the course) can quantum computers break?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"All cryptography", "All cryptography", "");
+					"a. All cryptography", "All cryptography", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Only cryptography that is not information-theoretically secure.", "Only cryptography that is not information-theoretically secure.", "");
+					"b. Only cryptography that is not information-theoretically secure.", "Only cryptography that is not information-theoretically secure.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Only cryptography that is not computationally secure.", "Only cryptography that is not computationally secure.", "");
+					"c. Only cryptography that is not computationally secure.", "Only cryptography that is not computationally secure.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Only cryptography that is symbolically secure.", "Only cryptography that is symbolically secure.", "");
+					"d. Only cryptography that is symbolically secure.", "Only cryptography that is symbolically secure.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2762,29 +2765,29 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek4KnowledgeTest10() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"Which of the below is true?", 
+					"10. Which of the below is true?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"If a cryptosystem satisfies IND-CPA, it will satisfy IND-CCA.", "If a cryptosystem satisfies IND-CPA, it will satisfy IND-CCA.", "");
+					"a. If a cryptosystem satisfies IND-CPA, it will satisfy IND-CCA.", "If a cryptosystem satisfies IND-CPA, it will satisfy IND-CCA.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"If a cryptosystem satisfies IND-CCA, it will be information-theoretically secure.", "If a cryptosystem satisfies IND-CCA, it will be information-theoretically secure.", "");
+					"b. If a cryptosystem satisfies IND-CCA, it will be information-theoretically secure.", "If a cryptosystem satisfies IND-CCA, it will be information-theoretically secure.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"The One Time Pad is computationally secure.", "The One Time Pad is computationally secure.", "");
+					"c. The One Time Pad is computationally secure.", "The One Time Pad is computationally secure.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"Computationally secure cryptosystems may be broken by advances in theory.", "Computationally secure cryptosystems may be broken by advances in theory.", "");
+					"d. Computationally secure cryptosystems may be broken by advances in theory.", "Computationally secure cryptosystems may be broken by advances in theory.", "");
 			option.setCorrect(true);
 			sele.addOption(option);
 					

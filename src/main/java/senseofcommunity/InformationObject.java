@@ -4,7 +4,7 @@ import stimulatedplanning.GenericDescriptor;
 
 public class InformationObject extends GenericDescriptor {
 	
-	private String content;
+	private String content = "";
 	public String getContent() {
 		return content;
 	}

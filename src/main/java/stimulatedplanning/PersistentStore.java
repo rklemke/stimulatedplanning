@@ -169,7 +169,7 @@ public class PersistentStore {
 
 		entity.setProperty("uid", generic.getId());
 		entity.setProperty("title", generic.getTitle());
-		entity.setProperty("description", generic.getDescription());
+		entity.setProperty("description", new Text(generic.getDescription()));
 		entity.setProperty("url", generic.getUrl());
 
 		return entity;
@@ -200,7 +200,7 @@ public class PersistentStore {
 		try {
 			entity = createGenericEntity(generic);
 
-			entity.setProperty("content", generic.getContent());
+			entity.setProperty("content", new Text(generic.getContent()));
 			entity.setProperty("sequence", generic.getSequence());
 			entity.setProperty("isControlGroupVisible", generic.isControlGroupVisible());
 			entity.setProperty("isClanAVisible", generic.isClanAVisible());
@@ -1288,7 +1288,7 @@ public class PersistentStore {
 		}
 		entity.setProperty("room", chatMessage.getRoom().getId());
 		entity.setProperty("roomList", chatMessage.getRoomList().getId());
-		entity.setProperty("message", chatMessage.getMessage());
+		entity.setProperty("message", new Text(chatMessage.getMessage()));
 		entity.setProperty("timestamp", chatMessage.getTimeStamp());
 		
 		try {

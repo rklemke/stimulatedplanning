@@ -85,11 +85,11 @@
   
 %>
 <% if (currentInformationObject != null) { %>	
-	<div style="display: inline-block; text-align: center; width: 100%; height: 3em">
+	<div style="display: block; text-align: center; width: 100%;">
 	<strong style=" font-size: 24px"><%= currentInformationObject.getTitle() %></strong>
 	</div>
 	
-	<div style="display:inline-block; width: 100%;">
+	<div style="display:block; width: 100%;">
 		<%= currentInformationObject.getDescription() %>
 		<%= currentInformationObject.getContent() %>
 	</div>
