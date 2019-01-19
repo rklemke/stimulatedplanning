@@ -223,19 +223,13 @@
         icon: false
   	    });
   	  
-//  	  if(<%=user.isTreatmentGroup()%> && <%=currentSelectionObject.isClan()%>){
-// 		  $("div#RowOne form label").css({
-//  			"display":"block",
-//  			"text-align":"left",
-//  			"vertical-align": "middle"
-//  		  });
-//  		  
-//  		  $("PercentBar").css({
-//  			  "width":"50%"  		  
-//  			  });
-//  		  
-//  		$(document).tooltip("disable");
-//  	  }
+  	  if(<%=user.isTreatmentGroup()%> && <%=currentSelectionObject.isClan()%>){
+		  $("div#RowOne form label").css({
+  			"display":"block",
+  			"text-align":"left",
+  			"vertical-align": "middle"
+  		  });
+  	  }
 	});
 	</script>
 	
@@ -247,7 +241,7 @@
 	<% } %>
 	<fieldset>
 	<legend> <%= currentSelectionObject.getTitle() %> </legend>
-	<div style="display:inline-block; width: 100%;">
+	<div style="display:inline-block; width: 100%;font-size:1.5em;">
 		<%= currentSelectionObject.getDescription()+"<BR>" %>
 		<%= currentSelectionObject.getContent() != null?currentSelectionObject.getContent()+"<BR>":"" %>
 	</div>
@@ -325,7 +319,7 @@
 				}
 	        } 
 		 } 
-		 %><div id="PercentBar"></div></label>
+		 %></label>
 	<% } %>
 	</form>
 	</fieldset><!--  -->

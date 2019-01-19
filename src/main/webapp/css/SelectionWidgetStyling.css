@@ -41,22 +41,12 @@ div#RowOne form{
 	height: 98%;
 	}
 	
-	div#PercentBar{
-	background: #046cf7;
-    height: 100%;
-    position: absolute;
-    width: 20%;
-    top: 0;
-    left: 0;
-    width: 0%;
-    height: 100%;
-    opacity: 0.5;
-    }
 div#RowOne form label{
 	display:inline-block;
 	margin: 0.1em;
-	line-height:2.5em;
+	line-height:2em;
 	overflow:hidden;
+	font-size: 1.2em;
 	}
 	
 	
@@ -67,4 +57,8 @@ div#RowOne form label{
 .ui-checkboxradio-label.ui-corner-all.ui-button.ui-widget.ui-checkboxradio-checked.ui-state-active{
 	background: skyblue;
 	border: 1px solid skyblue;
+}
+
+fieldset legend{
+	font-size: 1.5em;
 }
