@@ -90,7 +90,6 @@ public class StimulatedPlanningFactory {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public static boolean hasObject(String id) {
@@ -149,6 +148,7 @@ public class StimulatedPlanningFactory {
 	}
 	
 	public static String getUUID() {
+		
 		UUID uuid = UUID.randomUUID();
         return uuid.toString();
 	}
@@ -749,13 +749,13 @@ public class StimulatedPlanningFactory {
 		lesson.addContent(content);
 
 		lesson = new LessonDescriptor(getUUID() ,
-				"VigenÃ¨re and cryptanalysis",
-				"VigenÃ¨re and cryptanalysis","");
+				"Vigenère and cryptanalysis",
+				"Vigenère and cryptanalysis","");
 		module.addLesson(lesson);	
 
 		content = new ContentDescriptor("8e4e29d1f93b459bb40d11f93f77a85a/13925f19c0644d6a80ed77c74b2c7505/", 
-				"VigenÃ¨re Part 1 and 2", 
-				"VigenÃ¨re Part 1 and 2", 
+				"Vigenère Part 1 and 2", 
+				"Vigenère Part 1 and 2", 
 				accCourseBaseURL+"8e4e29d1f93b459bb40d11f93f77a85a/13925f19c0644d6a80ed77c74b2c7505/");
 		lesson.addContent(content);
 
@@ -1228,14 +1228,14 @@ public class StimulatedPlanningFactory {
 	
 	protected static InformationObject generateWeek1ControlIntroductionText() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"Test your knowledge!", 
-				"Hello, there!", 
+				"<span style='font-size:2em;'>Test your knowledge!</span><br>", 
+				"<br>", 
 				"",
 				true, false, false);
 
-		info.setContent("WelcomeðŸ˜Š to the first week assignment, click on next ðŸ‘‰ðŸ�½ to take the test.<BR>" + 
+		info.setContent("<span style='font-size:1.5em;'>Welcome 😊 to the first week assignment, click on next 👉🏽 to take the test. </span><BR>" + 
 				"<BR>" + 
-				"Thank you in advance!<BR>" + 
+				"<span style='font-size:1.5em;'>Thank you in advance!</span><BR>" + 
 				"<BR>" + 
 				"The OUNL Team<BR>" + 
 				"(Alessandra, Hugo and Roland)<BR>" + 
@@ -1244,22 +1244,22 @@ public class StimulatedPlanningFactory {
 		return info;
 	}
 	
-	
+	//Defender Welcome.
 	protected static InformationObject generateWeek1TreatmentIntroductionText() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"Explore your clan!", 
-				"Hello, there!", 
+				"<span style='font-size:2em;'>Welcome to your clan!</span><br>", 
+				"<br>", 
 				"",
 				false, true, true);
 
-		info.setContent("You have been selected among the participants of this course to join our clan ðŸ˜Š<BR>" + 
-				"You will decide to which degree you would like to be involved.<BR>" + 
+		info.setContent("<span style='font-size:1.5em;'>You have been selected among the participants of this course to join our clan 😊 </span><BR>" + 
+				"<span style='font-size:1.5em;'>You will decide to which degree you would like to be involved.</span><BR>" + 
 				"<BR>" + 
-				"At the moment we do not have a name and neither a logo that define who we are. It is our task this week to agree on these and define as well as our rules.<BR>" + 
+				"<span style='font-size:1.5em;'>At the moment we do not have a name and neither a logo that define who we are. It is our task this week to agree on these and define as well as our rules.</span><BR>" + 
 				"<BR>" + 
-				"Be aware that there will be another clan, they will act against us, we need to act together for defeating them. <BR>" + 
+				"<span style='font-size:1.5em;'>Be aware that there will be another clan, they will act against us, we need to act together for defeating them. </span><BR>" + 
 				"<BR>" + 
-				"Are you ready? Letâ€™s do this ðŸ’ªðŸ�½<BR>" + 
+				"<span style='font-size:1.5em;'>Are you ready? Let’s do this 💪🏽 </span><BR>" + 
 				"<BR>" + 
 				"The OUNL Team<BR>" + 
 				"(Alessandra, Hugo and Roland)<BR>" + 
@@ -1394,7 +1394,7 @@ public class StimulatedPlanningFactory {
 				"You are the energiser of the group, you keep all engaged.",
 				"You take care that the communication within the clan flows and go smooth without conflicts.",
 				"Do you need help in understanding or find something in the course? I am your guy, we can do together.",
-				"You donâ€™t have any active role but this will not stop you in participating."
+				"You don’t have any active role but this will not stop you in participating."
 			};
 		
 		SelectionObject sele = new SelectionObject(getUUID(), 
@@ -1474,7 +1474,7 @@ public class StimulatedPlanningFactory {
 			};
 		
 		String[] clanDescriptions = {
-				"We are the guardians of the Internet usersâ€™ data. We act anonymously to secure them.",
+				"We are the guardians of the Internet users’ data. We act anonymously to secure them.",
 				"We act together to prevent malicious code attacks",
 				"Our community aims to protect the secrets of the Internet users, independently from their aim (good of bad).",
 				"Our group patrol the Internet, making sure that information is transferred encrypted ",
@@ -1509,7 +1509,7 @@ public class StimulatedPlanningFactory {
 		String[] clanTitles = {
 				"Our mission is to make the Internet a secure place for everyone (bad and good guys).", 
 				"We defend all secrets shared on the Internet, whether good or bad.",
-				"Our common purpose is to to defend usersâ€™ information independently from their nature.",
+				"Our common purpose is to to defend users’ information independently from their nature.",
 				"We act in solo missions pursuing the common purpose.",
 				"Our common purpose is to present hackers to harm people or create damage in general.",
 				"We work together as a group.", 
@@ -1520,7 +1520,7 @@ public class StimulatedPlanningFactory {
 		String[] clanDescriptions = {
 				"Our mission is to make the Internet a secure place for everyone (bad and good guys).", 
 				"We defend all secrets shared on the Internet, whether good or bad.",
-				"Our common purpose is to to defend usersâ€™ information independently from their nature.",
+				"Our common purpose is to to defend users’ information independently from their nature.",
 				"We act in solo missions pursuing the common purpose.",
 				"Our common purpose is to present hackers to harm people or create damage in general.",
 				"We work together as a group.", 
@@ -1551,7 +1551,7 @@ public class StimulatedPlanningFactory {
 
 	protected static SelectionObject generateWeek1ClanBRulesSelection() {
 		String[] clanTitles = {
-				"We are ethical hackers, we use our knowledge to disable the â€œrealâ€� hackers from harming people or creating damage, in general.", 
+				"We are ethical hackers, we use our knowledge to disable the “real” hackers from harming people or creating damage, in general.", 
 				"We want to do whatever we want on the Internet without caring of the ethical issues.", 
 				"We steal information from the bad guys to protect the good, like Robin Hood.", 
 				"Our identities are anonymous. ",
@@ -1562,7 +1562,7 @@ public class StimulatedPlanningFactory {
 			};
 		
 		String[] clanDescriptions = {
-				"We are ethical hackers, we use our knowledge to disable the â€œrealâ€� hackers from harming people or creating damage, in general.", 
+				"We are ethical hackers, we use our knowledge to disable the “real” hackers from harming people or creating damage, in general.", 
 				"We want to do whatever we want on the Internet without caring of the ethical issues.", 
 				"We steal information from the bad guys to protect the good, like Robin Hood.", 
 				"Our identities are anonymous. ",
@@ -1595,15 +1595,15 @@ public class StimulatedPlanningFactory {
 
 	protected static InformationObject generateWeek1TreatmentTestIntroduction() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"Letâ€™s now challenge your ability to work together!", 
-				"Your mission is to solve the following knowledge test!<BR>", 
+				"<span style='font-size:2em;'>Let’s now challenge your ability to work together!</span> <BR> ", 
+				"<BR><span style='font-size:1.5em;'>Your mission is to solve the following knowledge test!</span><BR>", 
 				"",
 				false, true, true);
 
-		info.setContent("Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
+		info.setContent("<span style='font-size:1.5em;'><strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
 				"<BR>" + 
-				"Work well on this simple test because we are going to level up in the next one<BR>" + 
-				"<BR>" + 
+				"<span style='font-size:1.5em;'>Work well on this simple test because we are going to level up in the next one</span><BR>" + 
+				"<BR>"  +
 				"The OUNL team<BR>" + 
 				"");
 		
@@ -1613,13 +1613,13 @@ public class StimulatedPlanningFactory {
 	
 	protected static InformationObject generateWeek1TestConclusion() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"We have saved your answers!", 
-				"Hello, there!", 
+				"<span style='font-size:2em;'>We have saved your answers!</span><BR>", 
+				"<br>", 
 				"",
 				true, true, true);
 
-		info.setContent("Are you curious to know how did you perform?<BR> "
-				+ "If yes check out the â€œResult page week 1â€�  that will visible from next Monday morning.<BR> "
+		info.setContent("<span style='font-size:1.5em;'>Are you curious to know how did you perform?</span><BR> "
+				+ "<br><span style='font-size:1.5em;'>If yes check out the “Test's Results week-1” page that will be visible from next Monday morning.</span><BR> "
 				+ "<BR>"
 				+ "The OUNL team\n" + 
 				"");
@@ -2040,14 +2040,14 @@ public class StimulatedPlanningFactory {
 	
 	protected static InformationObject generateWeek2TreatmentTestIntroduction() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"Letâ€™s again challenge your ability to work together!", 
-				"Your mission is to solve the following knowledge test!<BR>", 
+				"<span style='font-size:2em;'>Let's again challenge your ability to work together!</span><br>", 
+				"<br>Your mission is to solve the following knowledge test!<BR>", 
 				"",
 				false, true, true);
 
-		info.setContent("Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
+		info.setContent("<span style='font-size:1.5em;'>Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
 				"<BR>" + 
-				"Work well on this simple test because we are going to level up in the next one<BR>" + 
+				"<span style='font-size:1.5em;'>Work well on this simple test because we are going to level up in the next one</span><BR>" + 
 				"<BR>" + 
 				"The OUNL team<BR>" + 
 				"");
@@ -2058,14 +2058,14 @@ public class StimulatedPlanningFactory {
 	
 	protected static InformationObject generateWeek2ControlTestIntroduction() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"Test your knowledge!", 
-				"Hello, there!", 
+				"<span style='font-size:2em;'>Test your knowledge!</span><br>", 
+				"<br>", 
 				"",
 				true, false, false);
 
-		info.setContent("WelcomeðŸ˜Š to the second week assignment, click on next ðŸ‘‰ðŸ�½ to take the test.<BR>" + 
+		info.setContent("<span style='font-size:1.5em;'>Welcome 😊 to the second week assignment, click on next 👉🏽 to take the test.</span><BR>" + 
 				"<BR>" + 
-				"Thank you in advance!<BR>" + 
+				"<span style='font-size:1.5em;'>Thank you in advance!</span><BR>" + 
 				"<BR>" + 
 				"The OUNL Team<BR>" + 
 				"(Alessandra, Hugo and Roland)<BR>" + 
@@ -2488,13 +2488,13 @@ Yes, unless the key is completely random.
 
 	protected static InformationObject generateWeek2TestConclusion() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"We have saved your answers!", 
-				"Hello, there!", 
+				"<span style='font-size:2em;'>We have saved your answers!</span><br>", 
+				"<br>", 
 				"",
 				true, true, true);
 
-		info.setContent("Are you curious to know how you performed?<BR> "
-				+ "If yes check out the â€œResult page week 2â€�  that will visible from next Monday morning.<BR> "
+		info.setContent("<span style='font-size:1.5em;'>Are you curious to know how you performed?</span><BR> "
+				+ "<span style='font-size:1.5em;'>If yes check out the Test's Results page week-2 that will be visible from next Monday morning.</span><BR> "
 				+ "<BR>"
 				+ "The OUNL team\n" + 
 				"");
@@ -2505,14 +2505,14 @@ Yes, unless the key is completely random.
 
 	protected static InformationObject generateWeek3TreatmentTestIntroduction() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"Letâ€™s again challenge your ability to work together!", 
-				"Your mission is to solve the following knowledge test!<BR>", 
+				"<span style='font-size:2em;'>Let's again challenge your ability to work together!</span><br>", 
+				"<br><span style='font-size:1.5em;'>Your mission is to solve the following knowledge test!</span><BR>", 
 				"",
 				false, true, true);
 
-		info.setContent("Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
+		info.setContent("<span style='font-size:1.5em;'>Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
 				"<BR>" + 
-				"Work well on this simple test because we are going to level up in the next one<BR>" + 
+				"<span style='font-size:1.5em;'>Work well on this simple test because we are going to level up in the next one</span><BR>" + 
 				"<BR>" + 
 				"The OUNL team<BR>" + 
 				"");
@@ -2523,14 +2523,14 @@ Yes, unless the key is completely random.
 	
 	protected static InformationObject generateWeek3ControlTestIntroduction() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"Test your knowledge!", 
-				"Hello, there!", 
+				"<span style='font-size:2em;'>Test your knowledge!</span><br>", 
+				"<br>", 
 				"",
 				true, false, false);
 
-		info.setContent("WelcomeðŸ˜Š to the third week assignment, click on next ðŸ‘‰ðŸ�½ to take the test.<BR>" + 
+		info.setContent("<span style='font-size:1.5em;'>Welcome 😊 to the third week assignment, click on next 👉🏽  to take the test.</span><BR>" + 
 				"<BR>" + 
-				"Thank you in advance!<BR>" + 
+				"<span style='font-size:1.5em;'>Thank you in advance!</span><BR>" + 
 				"<BR>" + 
 				"The OUNL Team<BR>" + 
 				"(Alessandra, Hugo and Roland)<BR>" + 
@@ -2785,13 +2785,13 @@ Euler’s generalisation of Fermat’s little theorem
 
 	protected static InformationObject generateWeek3TestConclusion() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"We have saved your answers!", 
-				"Hello, there!", 
+				"<span style='font-size:2em;'>We have saved your answers!</span><br>", 
+				"<br>", 
 				"",
 				true, true, true);
 
-		info.setContent("Are you curious to know how you performed?<BR> "
-				+ "If yes check out the â€œResult page week 3â€�  that will visible from next Monday morning.<BR> "
+		info.setContent("<span style='font-size:1.5em;'>Are you curious to know how you performed?</span><BR> "
+				+ "<span style='font-size:1.5em;'>If yes check out the Test's Results week-3 page that will be visible from next Monday morning.</span><BR> "
 				+ "<BR>"
 				+ "The OUNL team\n" + 
 				"");
@@ -2802,14 +2802,14 @@ Euler’s generalisation of Fermat’s little theorem
 
 	protected static InformationObject generateWeek4TreatmentTestIntroduction() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"Letâ€™s again challenge your ability to work together!", 
-				"Your mission is to solve the following knowledge test!<BR>", 
+				"<span style='font-size:2em;'>Let's again challenge your ability to work together!</span><br>", 
+				"<br><span style='font-size:1.5em;'>Your mission is to solve the following knowledge test!</span><BR>", 
 				"",
 				false, true, true);
 
-		info.setContent("Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
+		info.setContent("<span style='font-size:1.5em;'><strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
 				"<BR>" + 
-				"Work well on this simple test because we are going to level up in the next one<BR>" + 
+				"<span style='font-size:1.5em;'>Work well on this simple test because we are going to level up in the next one</span><BR>" + 
 				"<BR>" + 
 				"The OUNL team<BR>" + 
 				"");
@@ -2820,14 +2820,14 @@ Euler’s generalisation of Fermat’s little theorem
 	
 	protected static InformationObject generateWeek4ControlTestIntroduction() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"Test your knowledge!", 
-				"Hello, there!", 
+				"<span style='font-size:2em;'>Test your knowledge!</span><br>", 
+				"<br>", 
 				"",
 				true, false, false);
 
-		info.setContent("WelcomeðŸ˜Š to the fourth week assignment, click on next ðŸ‘‰ðŸ�½ to take the test.<BR>" + 
+		info.setContent("<span style='font-size:1.5em;'>Welcome 😊 to the fourth week assignment, click on next 👉🏽 to take the test.</span><BR>" + 
 				"<BR>" + 
-				"Thank you in advance!<BR>" + 
+				"<span style='font-size:1.5em;'>Thank you in advance!</span><BR>" + 
 				"<BR>" + 
 				"The OUNL Team<BR>" + 
 				"(Alessandra, Hugo and Roland)<BR>" + 
@@ -3243,13 +3243,13 @@ Computationally secure cryptosystems may be broken by advances in theory.
 
 	protected static InformationObject generateWeek4TestConclusion() {
 		InformationObject info = new InformationObject(getUUID(), 
-				"We have saved your answers!", 
-				"Hello, there!", 
+				"<span style='font-size:2em;'>We have saved your answers!</span><br>", 
+				"<br>", 
 				"",
 				true, true, true);
 
-		info.setContent("Are you curious to know how you performed?<BR> "
-				+ "If yes check out the â€œResult page week 4â€�  that will visible from next Monday morning.<BR> "
+		info.setContent("<span style='font-size:1.5em;'>Are you curious to know how you performed?</span><BR> "
+				+ "<span style='font-size:1.5em;'>If yes check out the Test's Results page week-4 that will be visible from next Sunday morning.</span><BR> "
 				+ "<BR>"
 				+ "The OUNL team\n" + 
 				"");
