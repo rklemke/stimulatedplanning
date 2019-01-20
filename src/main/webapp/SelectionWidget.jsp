@@ -210,15 +210,27 @@
 			StimulatedPlanningFactory.trackAndLogEvent(request, response, "view."+currentSelectionObject.getPurpose());
 
 %>
+<style>
+.ui-tooltip_custom{
+	padding: 8px;
+	position: absolute;
+	z-index: 9999;
+	max-width: 600px; !important;
+}
+</style>
     <script type="text/javascript">
 	$(document).ready(function () {
 		
-  	    $(document).tooltip({
+		$(document).tooltip({
 	    	content: function() {
 	    		return $(this).prop('title');
-	    	}
+	    	},
+  	    	classes: {
+  	    	    "ui-tooltip": "ui-tooltip_custom",
+  	    	  },  tooltipClass: "ui-tooltip_custom",  	    	
+  	    	  track: true
 	    });
-  	    
+		
   	  $("div#RowOne Input[type=<%= checkboxType %>]" ).checkboxradio({
         icon: false
   	    });
@@ -236,7 +248,7 @@
 	<div class="row" id="RowOne">
 	<% if (currentSelectionObject.hasDeadline()) { %>
 	<div id=headerHolder>
-	<strong>Voting is open only until <%= currentSelectionObject.getDeadline() %></strong>
+	<strong>You can submit your input here until <%= currentSelectionObject.getDeadline() %></strong>
 	</div>
 	<% } %>
 	<fieldset>
@@ -301,7 +313,9 @@
 	  	   ><% if (currentSelectionObject.isAvatarPurpose()) { %>
     	<img style="width:2em; height:2em; vertical-align:middle;" src="<%= option.getUrl() %>" >
     	<% } else { %>
+    		<% if (currentSelectionObject.isTest() && isExpired && option.isCorrect()) { %><strong>Correct: <% } %> 
 	  	<%= option.getTitle() %>
+    		<% if (currentSelectionObject.isTest() && isExpired && option.isCorrect()) { %></strong><% } %> 
 	  	<% } 
 		if (user.isTreatmentGroup() && currentSelectionObject.isClan()) {
 			int count = 0;

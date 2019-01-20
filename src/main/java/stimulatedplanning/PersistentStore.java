@@ -1498,8 +1498,8 @@ public class PersistentStore {
 				else if (target instanceof Clan) writeDescriptor((Clan)target);
 				else if (target instanceof UserOnlineStatus) writeDescriptor((UserOnlineStatus)target);
 				else if (target instanceof SelectionObject) writeDescriptor((SelectionObject)target);
-				else if (target instanceof InformationObject) writeDescriptor((InformationObject)target);
 				else if (target instanceof SelectionOption) writeDescriptor((SelectionOption)target);
+				else if (target instanceof InformationObject) writeDescriptor((InformationObject)target);
 				else if (target instanceof UserSelectedOption) writeDescriptor((UserSelectedOption)target);
 				else writeDescriptor(target);
 			}

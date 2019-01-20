@@ -18,7 +18,7 @@
   String color = request.getParameter("color");
   if (color == null) {
 	  if (status != null && status.isOnline()) color = "lawngreen";
-	  else if (status != null && status.isRecent()) color = "blue";
+	  else if (status != null && status.isRecent()) color = "orange";
 	  else color = "grey";
   }
 

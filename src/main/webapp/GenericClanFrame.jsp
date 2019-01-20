@@ -153,7 +153,8 @@
 		<%    } else  if (currentInformationObjectIdx < informationObjectList.size()-1
 				&& (currentInformationObject instanceof SelectionObject
 					&& (((SelectionObject)currentInformationObject).hasSelectionForUser(user) 
-						|| 	"true".equals(request.getAttribute("selectionSubmitForward"))))) { %>
+						|| 	"true".equals(request.getAttribute("selectionSubmitForward"))
+						|| (((SelectionObject)currentInformationObject).isExpired())))) { %>
 			<input type="submit" id="buttonNext" name="buttonNext" class="ui-button ui-widget ui-corner-all" value="Next"></input>
 		<%    } else {%>
 		<%	    if (currentInformationObjectIdx == informationObjectList.size()-1) { %>
@@ -168,7 +169,7 @@
 		<%    } %>
 		<% } %>
 	</form>
-	<%    if (currentInformationObject instanceof SelectionObject) { %>
+	<%    if (currentInformationObject instanceof SelectionObject && !(((SelectionObject)currentInformationObject).isExpired())) { %>
 		<button id="buttonSubmit" class="ui-button ui-widget ui-corner-all">Submit</button>
 	<%    } else {%>
 		<button id="buttonSubmit" class="ui-button ui-widget ui-corner-all ui-state-disabled" disabled>Submit</button>
