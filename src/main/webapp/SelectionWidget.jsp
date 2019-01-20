@@ -223,7 +223,7 @@
         icon: false
   	    });
   	  
-  	  if(<%=user.isTreatmentGroup()%> && <%=currentSelectionObject.isClan()%>){
+    	if((<%=user.isTreatmentGroup()%> && <%=currentSelectionObject.isClan()%>) || (<%=currentSelectionObject.isTest()%>)){
 		  $("div#RowOne form label").css({
   			"display":"block",
   			"text-align":"left",

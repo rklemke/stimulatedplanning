@@ -725,17 +725,17 @@ public class SoC_ProductionCourseCreationFactory {
 
 	public static InformationObject generateWeek1ControlIntroductionText() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Test your knowledge!</span><br>", 
+				"Test your knowledge!<br>", 
 				"<br>", 
 				"",
 				true, false, false);
 	
-		info.setContent("<span style='font-size:1.5em;'>Welcome 😊 to the first week assignment, click on next 👉🏽 to take the test. </span><BR>" + 
+		info.setContent("Welcome 😊 to the first week assignment, click on next 👉🏽 to take the test.<BR>" + 
 				"<BR>" + 
-				"<span style='font-size:1.5em;'>Thank you in advance!</span><BR>" + 
+				"Thank you in advance!<BR>" + 
 				"<BR>" + 
-				"The OUNL Team<BR>" + 
-				"(Alessandra, Hugo and Roland)<BR>" + 
+				"<span style='font-size:0.75em;'>The OUNL Team</span><BR>" + 
+				"<span style='font-size:0.75em;'>(Alessandra, Hugo and Roland)</span><BR>" + 
 				"");
 		
 		return info;
@@ -744,22 +744,22 @@ public class SoC_ProductionCourseCreationFactory {
 	//Defender Welcome.
 	protected static InformationObject generateWeek1TreatmentIntroductionText() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Welcome to your clan!</span><br>", 
+				"Welcome to your clan!<br>", 
 				"<br>", 
 				"",
 				false, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'>You have been selected among the participants of this course to join our clan 😊 </span><BR>" + 
-				"<span style='font-size:1.5em;'>You will decide to which degree you would like to be involved.</span><BR>" + 
+		info.setContent("You have been selected among the participants of this course to join our clan 😊 <BR>" + 
+				"You will decide to which degree you would like to be involved.<BR>" + 
 				"<BR>" + 
-				"<span style='font-size:1.5em;'>At the moment we do not have a name and neither a logo that define who we are. It is our task this week to agree on these and define as well as our rules.</span><BR>" + 
+				"At the moment we do not have a name and neither a logo that define who we are. It is our task this week to agree on these and define as well as our rules.<BR>" + 
 				"<BR>" + 
-				"<span style='font-size:1.5em;'>Be aware that there will be another clan, they will act against us, we need to act together for defeating them. </span><BR>" + 
+				"Be aware that there will be another clan, they will act against us, we need to act together for defeating them. <BR>" + 
 				"<BR>" + 
-				"<span style='font-size:1.5em;'>Are you ready? Let’s do this 💪🏽 </span><BR>" + 
+				"Are you ready? Let's do this 💪🏽 <BR>" + 
 				"<BR>" + 
-				"The OUNL Team<BR>" + 
-				"(Alessandra, Hugo and Roland)<BR>" + 
+				"<span style='font-size:0.75em;'>The OUNL Team</span><BR>" + 
+				"<span style='font-size:0.75em;'>(Alessandra, Hugo and Roland)</span><BR>" + 
 				"");
 		
 		return info;
@@ -890,7 +890,7 @@ public class SoC_ProductionCourseCreationFactory {
 				"You are the energiser of the group, you keep all engaged.",
 				"You take care that the communication within the clan flows and go smooth without conflicts.",
 				"Do you need help in understanding or find something in the course? I am your guy, we can do together.",
-				"You don’t have any active role but this will not stop you in participating."
+				"You don't have any active role but this will not stop you in participating."
 			};
 		
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
@@ -970,7 +970,7 @@ public class SoC_ProductionCourseCreationFactory {
 			};
 		
 		String[] clanDescriptions = {
-				"We are the guardians of the Internet users’ data. We act anonymously to secure them.",
+				"We are the guardians of the Internet users' data. We act anonymously to secure them.",
 				"We act together to prevent malicious code attacks",
 				"Our community aims to protect the secrets of the Internet users, independently from their aim (good of bad).",
 				"Our group patrol the Internet, making sure that information is transferred encrypted ",
@@ -1004,7 +1004,7 @@ public class SoC_ProductionCourseCreationFactory {
 		String[] clanTitles = {
 				"Our mission is to make the Internet a secure place for everyone (bad and good guys).", 
 				"We defend all secrets shared on the Internet, whether good or bad.",
-				"Our common purpose is to to defend users’ information independently from their nature.",
+				"Our common purpose is to to defend users' information independently from their nature.",
 				"We act in solo missions pursuing the common purpose.",
 				"Our common purpose is to present hackers to harm people or create damage in general.",
 				"We work together as a group.", 
@@ -1015,7 +1015,7 @@ public class SoC_ProductionCourseCreationFactory {
 		String[] clanDescriptions = {
 				"Our mission is to make the Internet a secure place for everyone (bad and good guys).", 
 				"We defend all secrets shared on the Internet, whether good or bad.",
-				"Our common purpose is to to defend users’ information independently from their nature.",
+				"Our common purpose is to to defend users' information independently from their nature.",
 				"We act in solo missions pursuing the common purpose.",
 				"Our common purpose is to present hackers to harm people or create damage in general.",
 				"We work together as a group.", 
@@ -1045,7 +1045,7 @@ public class SoC_ProductionCourseCreationFactory {
 
 	public static SelectionObject generateWeek1ClanBRulesSelection() {
 		String[] clanTitles = {
-				"We are ethical hackers, we use our knowledge to disable the “real” hackers from harming people or creating damage, in general.", 
+				"We are ethical hackers, we use our knowledge to disable the 'real' hackers from harming people or creating damage, in general.", 
 				"We want to do whatever we want on the Internet without caring of the ethical issues.", 
 				"We steal information from the bad guys to protect the good, like Robin Hood.", 
 				"Our identities are anonymous. ",
@@ -1056,7 +1056,7 @@ public class SoC_ProductionCourseCreationFactory {
 			};
 		
 		String[] clanDescriptions = {
-				"We are ethical hackers, we use our knowledge to disable the “real” hackers from harming people or creating damage, in general.", 
+				"We are ethical hackers, we use our knowledge to disable the 'real' hackers from harming people or creating damage, in general.", 
 				"We want to do whatever we want on the Internet without caring of the ethical issues.", 
 				"We steal information from the bad guys to protect the good, like Robin Hood.", 
 				"Our identities are anonymous. ",
@@ -1088,32 +1088,32 @@ public class SoC_ProductionCourseCreationFactory {
 
 	public static InformationObject generateWeek1TreatmentTestIntroduction() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Let’s now challenge your ability to work together!</span> <BR> ", 
-				"<BR><span style='font-size:1.5em;'>Your mission is to solve the following knowledge test!</span><BR>", 
+				"Let's now challenge your ability to work together! <BR> ", 
+				"<BR>Your mission is to solve the following knowledge test!<BR>", 
 				"",
 				false, true, true);
 	
 		info.setContent("<img style='height2em;width:2em;display:inline-block;'src='/img/group.png'/>"+
-				"<span style='font-size:1.5em;'><strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
+				"<strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
 				"<BR>" + 
-				"<span style='font-size:1.5em;'>Work well on this simple test because we are going to level up in the next one</span><BR>" + 
+				"Work well on this simple test because we are going to level up in the next one<BR>" + 
 				"<BR>"  +
-				"The OUNL team<BR>" + 
+				"<span style='font-size:0.75em;'>The OUNL team</span><BR>" + 
 				"");
 		return info;
 	}
 
 	public static InformationObject generateWeek1TestConclusion() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>We have saved your answers!</span><BR>", 
+				"We have saved your answers!<BR>", 
 				"<br>", 
 				"",
 				true, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'>Are you curious to know how did you perform?</span><BR> "
-				+ "<br><span style='font-size:1.5em;'>If yes check out the “Test's Results week-1” page that will be visible from next Monday morning.</span><BR> "
+		info.setContent("Are you curious to know how did you perform?<BR> "
+				+ "<br>If yes check out the “Test's Results week-1” page that will be visible from next Monday morning.<BR> "
 				+ "<BR>"
-				+ "The OUNL team\n" + 
+				+ "<span style='font-size:0.75em;'>The OUNL team</span><br>" + 
 				"");
 		
 		return info;
@@ -1322,7 +1322,7 @@ public class SoC_ProductionCourseCreationFactory {
 	protected static SelectionObject generateWeek1KnowledgeTest6() {
 		SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 				"Test", 
-				"6. What is Kerckhoffs’ principle?", 
+				"6. What is Kerckhoffs' principle?", 
 				"",
 				true, true, true);
 		sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
@@ -1350,8 +1350,8 @@ public class SoC_ProductionCourseCreationFactory {
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-				"d. That the system is secure if the enemy can’t decrypt without the key", 
-				"That the system is secure if the enemy can’t decrypt without the key", 
+				"d. That the system is secure if the enemy can't decrypt without the key", 
+				"That the system is secure if the enemy can't decrypt without the key", 
 				"");
 		option.setCorrect(true);
 		sele.addOption(option);
@@ -1361,23 +1361,23 @@ public class SoC_ProductionCourseCreationFactory {
 	
 	protected static InformationObject generateWeek2TreatmentEncryptionIntroductionText() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Crypto-Challenge</span><br>", 
+				"Crypto-Challenge<br>", 
 				"<br>", 
 				"",
 				false, true, true);
 	
-		String content = "<img style='height2em;width:2em;display:inline-block;'src='/img/group.png'/>"+
-				"<span style='font-size:1.5em;'><strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
+		info.setContent("<img style='height2em;width:2em;display:inline-block;'src='/img/group.png'/>"+
+				"<strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
 				"<BR>" + 
-				"Let’s send a message to the other group and of course encrypted, let’s see how they perform.<BR>\n" + 
+				"Let's send a message to the other group and of course encrypted, let's see how they perform.<BR>\n" + 
 				"<BR>" + 
 				"So, vote the plaintext you like the most or convince the others (by using the chat) that the option you take is the best!<BR>\n" + 
-				"</span><BR>" + 
+				"" + 
 				"<BR>" + 
-				"The OUNL Team<BR>" + 
-				"(Alessandra, Hugo and Roland)<BR>" + 
-				"";
-		info.setContent(content);
+				"<BR>" + 
+				"<span style='font-size:0.75em;'>The OUNL Team</span><BR>" + 
+				"<span style='font-size:0.75em;'>(Alessandra, Hugo and Roland)</span><BR>" + 
+				"");
 		
 		return info;
 	}
@@ -1410,7 +1410,7 @@ public class SoC_ProductionCourseCreationFactory {
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
 				"Give them a good advice...", 
 				"“Cybercriminals can use personal details, such as your favorite color, the last four digits of your credit card and your email addresses, to make educated guesses about your sign-in credentials. They might contact a service provider posing as a user, provide identifying details and gain even greater access to accounts. This is why it is so important to prevent your security credentials from becoming stagnant. Rotate your password every few months and consider using new security questions and answers, too.”"
-				+ "– Larry Alton", 
+					+ "― Larry Alton", 
 				"");
 		sele.addOption(option);
 		
@@ -1426,13 +1426,13 @@ public class SoC_ProductionCourseCreationFactory {
 
 	protected static InformationObject generateWeek2TreatmentEncryptionMethodIntroductionText() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Crypto-Challenge</span><br>", 
+				"Crypto-Challenge<br>", 
 				"<br>", 
 				"",
 				false, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'>Let’s challenge the other clan, decide of how many letters should we shift the letters in the english alphabet to encrypt the plaintext? Make your choice as a group.\n" + 
-				"</span><BR>" + 
+		info.setContent("Let's challenge the other clan, decide of how many letters should we shift the letters in the english alphabet to encrypt the plaintext? Make your choice as a group.\n" + 
+				"<BR>" + 
 				"");
 		
 		return info;
@@ -1520,14 +1520,14 @@ public class SoC_ProductionCourseCreationFactory {
 
 	protected static InformationObject generateWeek2TreatmentEncryptedMessageReceivedIntroductionText() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>You got a mail/ message</span><br>", 
+				"You got a mail/ message<br>", 
 				"<br>", 
 				"",
 				false, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'>You got a mail/ message from the other clan<BR>\n" + 
+		info.setContent("You got a mail/ message from the other clan<BR>\n" + 
 				"Are you curious to know what the other clan have to say then decrypt the following message:<BR>\n" + 
-				"“r jv wxc lxwerwlnm cqjc ujlt xo nwlahycrxw rb cqn yarvjah yaxkunv. cqn yaxkunv frcq cqn rwcnawnc rb cqjc rc rb vnjwc oxa lxvvdwrljcrxwb jvxwp wxw-oarnwmb”. fqrcornum mroorn</span><BR>" + 
+				"“r jv wxc lxwerwlnm cqjc ujlt xo nwlahycrxw rb cqn yarvjah yaxkunv. cqn yaxkunv frcq cqn rwcnawnc rb cqjc rc rb vnjwc oxa lxvvdwrljcrxwb jvxwp wxw-oarnwmb”. fqrcornum mroorn<BR>" + 
 				"");
 		
 		return info;
@@ -1561,14 +1561,14 @@ public class SoC_ProductionCourseCreationFactory {
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
 				"Option 3", 
-				"“I am not convinced that the encryption’s lack is the primary problem. The problem with Internet is that it is meant for communicating among non-friends”Whitfield Diffie", 
+				"“I am not convinced that the encryption's lack is the primary problem. The problem with Internet is that it is meant for communicating among non-friends”. Whitfield Diffie", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
 		
 		option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
 				"Option 4", 
-				"“I am convinced that the lack of encryption is not the primary problem. The problem with the Internet is that it has been created for communications among non-friends” Whitfield Diffie", 
+				"“I am convinced that the lack of encryption is not the primary problem. The problem with the Internet is that it has been created for communications among non-friends”. Whitfield Diffie", 
 				"");
 		option.setCorrect(false);
 		sele.addOption(option);
@@ -1578,30 +1578,30 @@ public class SoC_ProductionCourseCreationFactory {
 
 	public static InformationObject generateWeek2TreatmentEncryptionChallengeConclusion() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Crypto-Challenge Complete!</span><br>", 
+				"Crypto-Challenge Complete!<br>", 
 				"<br>Curious to know how your group perform?<BR>", 
 				"",
 				false, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'>We will announce the results on Monday afternoon!<BR>\n" + 
+		info.setContent("We will announce the results on Monday afternoon!<BR>\n" + 
 				"<BR>"
-				+ "The OUNL team<BR>");
+				+ "<span style='font-size:0.75em;'>The OUNL team</span><BR>");
 		
 		return info;
 	}
 
 	public static InformationObject generateWeek2TreatmentTestIntroduction() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Let's again challenge your ability to work together!</span><br>", 
+				"Let's again challenge your ability to work together!<br>", 
 				"<br>Your mission is to solve the following knowledge test!<BR>", 
 				"",
 				false, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'>Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
+		info.setContent("Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
 				"<BR>" + 
-				"<span style='font-size:1.5em;'>Work well on this simple test because we are going to level up in the next one</span><BR>" + 
+				"Work well on this simple test because we are going to level up in the next one<BR>" + 
 				"<BR>" + 
-				"The OUNL team<BR>" + 
+				"<span style='font-size:0.75em;'>The OUNL team</span><BR>" + 
 				"");
 		
 		return info;
@@ -1609,17 +1609,17 @@ public class SoC_ProductionCourseCreationFactory {
 
 	public static InformationObject generateWeek2ControlTestIntroduction() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Test your knowledge!</span><br>", 
+				"Test your knowledge!<br>", 
 				"<br>", 
 				"",
 				true, false, false);
 	
-		info.setContent("<span style='font-size:1.5em;'>Welcome 😊 to the second week assignment, click on next 👉🏽 to take the test.</span><BR>" + 
+		info.setContent("Welcome 😊 to the second week assignment, click on next 👉🏽 to take the test.<BR>" + 
 				"<BR>" + 
-				"<span style='font-size:1.5em;'>Thank you in advance!</span><BR>" + 
+				"Thank you in advance!<BR>" + 
 				"<BR>" + 
-				"The OUNL Team<BR>" + 
-				"(Alessandra, Hugo and Roland)<BR>" + 
+				"<span style='font-size:0.75em;'>The OUNL Team</span><BR>" + 
+				"<span style='font-size:0.75em;'>(Alessandra, Hugo and Roland)</span><BR>" + 
 				"");
 		
 		return info;
@@ -1628,10 +1628,10 @@ public class SoC_ProductionCourseCreationFactory {
 	/*
 	1. Which of the below statements is correct?
 	
-	The text “MJQQT BTWQI” is a Caesar encryption of an English sentence.
+	The text "MJQQT BTWQI" is a Caesar encryption of an English sentence.
 	There are 26 possible keys for Caesar.
 	When using permutations, there are twice as many keys as in standard Caesar.
-	Caesar satisfies Kerckhoffs’ Principle.
+	Caesar satisfies Kerckhoffs' Principle.
 	
 	 */
 		public static SelectionObject generateWeek2KnowledgeTest1() {
@@ -1659,7 +1659,7 @@ public class SoC_ProductionCourseCreationFactory {
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"d. Caesar satisfies Kerckhoffs’ Principle.", "Caesar satisfies Kerckhoffs’ Principle.", "");
+					"d. Caesar satisfies Kerckhoffs' Principle.", "Caesar satisfies Kerckhoffs' Principle.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -1749,7 +1749,7 @@ public class SoC_ProductionCourseCreationFactory {
 		}
 
 	/*
-	4. What key should you use in Vigenère to encrypt “BAGEL” as “DONUT”?
+	4. What key should you use in Vigenère to encrypt "BAGEL" as "DONUT"?
 	
 	COHQI
 	EOTYE
@@ -1790,12 +1790,12 @@ public class SoC_ProductionCourseCreationFactory {
 		}
 
 	/*
-	5. Suppose you want to encrypt a plaintext with Vigenère, first with the key “YES” and then with the key “NO”. How could you do this?
+	5. Suppose you want to encrypt a plaintext with Vigenère, first with the key "YES" and then with the key "NO". How could you do this?
 	
 	The only option is to encrypt twice with Vigenère
-	You can encrypt in one go with the key “YESNO”
-	You can encrypt in one go with the key “NOYES”
-	You can encrypt in one go with the key “LSFMRG”
+	You can encrypt in one go with the key "YESNO"
+	You can encrypt in one go with the key "NOYES"
+	You can encrypt in one go with the key "LSFMRG"
 		
 	 */
 		public static SelectionObject generateWeek2KnowledgeTest5() {
@@ -1966,7 +1966,7 @@ public class SoC_ProductionCourseCreationFactory {
 		public static SelectionObject generateWeek2KnowledgeTest9() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"9. What is the Playfair encryption of the plaintext “TEST” with the key “hello”?", 
+					"9. What is the Playfair encryption of the plaintext “TEST” with the key “HELLO”?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
@@ -2037,15 +2037,15 @@ public class SoC_ProductionCourseCreationFactory {
 
 	protected static InformationObject generateWeek2TestConclusion() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>We have saved your answers!</span><br>", 
+				"We have saved your answers!<br>", 
 				"<br>", 
 				"",
 				true, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'>Are you curious to know how you performed?</span><BR> "
-				+ "<span style='font-size:1.5em;'>If yes check out the Test's Results page week-2 that will be visible from next Monday morning.</span><BR> "
+		info.setContent("Are you curious to know how you performed?<BR> "
+				+ "If yes check out the Test's Results page week-2 that will be visible from next Monday morning.<BR> "
 				+ "<BR>"
-				+ "The OUNL team\n" + 
+				+ "<span style='font-size:0.75em;'>The OUNL team</span><br>" + 
 				"");
 		
 		return info;
@@ -2053,17 +2053,17 @@ public class SoC_ProductionCourseCreationFactory {
 
 	protected static InformationObject generateWeek3TreatmentTestIntroduction() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Let's again challenge your ability to work together!</span><br>", 
-				"<br><span style='font-size:1.5em;'>Your mission is to solve the following knowledge test!</span><BR>", 
+				"Let's again challenge your ability to work together!<br>", 
+				"<br>Your mission is to solve the following knowledge test!<BR>", 
 				"",
 				false, true, true);
 	
 		info.setContent("<img style='height2em;width:2em;display:inline-block;'src='/img/group.png'/>"+
-				"<span style='font-size:1.5em;'>Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
+				"Remember it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
 				"<BR>" + 
-				"<span style='font-size:1.5em;'>Work well on this simple test because we are going to level up in the next one</span><BR>" + 
+				"Work well on this simple test because we are going to level up in the next one<BR>" + 
 				"<BR>" + 
-				"The OUNL team<BR>" + 
+				"<span style='font-size:0.75em;'>The OUNL team</span><BR>" + 
 				"");
 		
 		return info;
@@ -2071,17 +2071,17 @@ public class SoC_ProductionCourseCreationFactory {
 
 	public static InformationObject generateWeek3ControlTestIntroduction() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Test your knowledge!</span><br>", 
+				"Test your knowledge!<br>", 
 				"<br>", 
 				"",
 				true, false, false);
 	
-		info.setContent("<span style='font-size:1.5em;'>Welcome 😊 to the third week assignment, click on next 👉🏽  to take the test.</span><BR>" + 
+		info.setContent("Welcome 😊 to the third week assignment, click on next 👉🏽  to take the test.<BR>" + 
 				"<BR>" + 
-				"<span style='font-size:1.5em;'>Thank you in advance!</span><BR>" + 
+				"Thank you in advance!<BR>" + 
 				"<BR>" + 
-				"The OUNL Team<BR>" + 
-				"(Alessandra, Hugo and Roland)<BR>" + 
+				"<span style='font-size:0.75em;'>The OUNL Team</span><BR>" + 
+				"<span style='font-size:0.75em;'>(Alessandra, Hugo and Roland)</span><BR>" + 
 				"");
 		
 		return info;
@@ -2290,17 +2290,17 @@ public class SoC_ProductionCourseCreationFactory {
 		}
 
 	/*
-	6. What is the theoretical reason for RSA’s security?
+	6. What is the theoretical reason for RSA's security?
 	
 	Padding with OAEP
 	Factoring is hard
 	Discrete log is hard
-	Euler’s generalisation of Fermat’s little theorem
+	Euler's generalisation of Fermat's little theorem
 	 */
 		public static SelectionObject generateWeek3KnowledgeTest6() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"6. What is the theoretical reason for RSA’s security?", 
+					"6. What is the theoretical reason for RSA's security?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
@@ -2322,7 +2322,7 @@ public class SoC_ProductionCourseCreationFactory {
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"d. Euler’s generalisation of Fermat’s little theorem", "Euler’s generalisation of Fermat’s little theorem", "");
+					"d. Euler's generalisation of Fermat's little theorem", "Euler's generalisation of Fermat's little theorem", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 					
@@ -2331,15 +2331,15 @@ public class SoC_ProductionCourseCreationFactory {
 
 	protected static InformationObject generateWeek3TestConclusion() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>We have saved your answers!</span><br>", 
+				"We have saved your answers!<br>", 
 				"<br>", 
 				"",
 				true, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'>Are you curious to know how you performed?</span><BR> "
-				+ "<span style='font-size:1.5em;'>If yes check out the Test's Results week-3 page that will be visible from next Monday morning.</span><BR> "
+		info.setContent("Are you curious to know how you performed?<BR> "
+				+ "If yes check out the Test's Results week-3 page that will be visible from next Monday morning.<BR> "
 				+ "<BR>"
-				+ "The OUNL team\n" + 
+				+ "<span style='font-size:0.75em;'>The OUNL team</span><br>" + 
 				"");
 		
 		return info;
@@ -2347,17 +2347,17 @@ public class SoC_ProductionCourseCreationFactory {
 
 	protected static InformationObject generateWeek4TreatmentTestIntroduction() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Let's again challenge your ability to work together!</span><br>", 
-				"<br><span style='font-size:1.5em;'>Your mission is to solve the following knowledge test!</span><BR>", 
+				"Let's again challenge your ability to work together!<br>", 
+				"<br>Your mission is to solve the following knowledge test!<BR>", 
 				"",
 				false, true, true);
 	
 		info.setContent("<img style='height2em;width:2em;display:inline-block;'src='/img/group.png'/>"+
-				"<span style='font-size:1.5em;'><strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!</span><BR>" + 
+				"<strong>Remember</strong> it is a group effort: only the most voted answer will count, be sure you all select the correct one!<BR>" + 
 				"<BR>" + 
-				"<span style='font-size:1.5em;'>Work well on this simple test because we are going to level up in the next one</span><BR>" + 
+				"Work well on this simple test because we are going to level up in the next one<BR>" + 
 				"<BR>" + 
-				"The OUNL team<BR>" + 
+				"<span style='font-size:0.75em;'>The OUNL team</span><BR>" + 
 				"");
 		
 		return info;
@@ -2365,17 +2365,17 @@ public class SoC_ProductionCourseCreationFactory {
 
 	protected static InformationObject generateWeek4ControlTestIntroduction() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>Test your knowledge!</span><br>", 
+				"Test your knowledge!><br>", 
 				"<br>", 
 				"",
 				true, false, false);
 	
-		info.setContent("<span style='font-size:1.5em;'>Welcome 😊 to the fourth week assignment, click on next 👉🏽 to take the test.</span><BR>" + 
+		info.setContent("Welcome 😊 to the fourth week assignment, click on next 👉🏽 to take the test.<BR>" + 
 				"<BR>" + 
-				"<span style='font-size:1.5em;'>Thank you in advance!</span><BR>" + 
+				"Thank you in advance!<BR>" + 
 				"<BR>" + 
-				"The OUNL Team<BR>" + 
-				"(Alessandra, Hugo and Roland)<BR>" + 
+				"<span style='font-size:0.75em;'>The OUNL Team</span><BR>" + 
+				"<span style='font-size:0.75em;'>(Alessandra, Hugo and Roland)</span><BR>" + 
 				"");
 		
 		return info;
@@ -2462,7 +2462,7 @@ public class SoC_ProductionCourseCreationFactory {
 		}
 
 	/*
-	3. Consider a function “length” that returns the length of the input string. Is this function suitable as a hash function?
+	3. Consider a function "length" that returns the length of the input string. Is this function suitable as a hash function?
 	
 	Yes.
 	No, it violates pre-image resistance.
@@ -2583,9 +2583,9 @@ public class SoC_ProductionCourseCreationFactory {
 		}
 
 	/*
-	6. Suppose you visit a website “yahooogle.com” and it claims to be a company started by Google and Yahoo. What information in the certificate would make you trust the website’s security?
+	6. Suppose you visit a website "yahooogle.com" and it claims to be a company started by Google and Yahoo. What information in the certificate would make you trust the website's security?
 	
-	If the name in the certificate is “yahooogle.com”.
+	If the name in the certificate is "yahooogle.com".
 	Answer a AND the certificate is valid.
 	Answer b AND your browser trusts the certificate.
 	Answer b and yahooogle signed the certificate.
@@ -2593,7 +2593,7 @@ public class SoC_ProductionCourseCreationFactory {
 		protected static SelectionObject generateWeek4KnowledgeTest6() {
 			SelectionObject sele = new SelectionObject(StimulatedPlanningFactory.getUUID(), 
 					"Test", 
-					"6. Suppose you visit a website “yahooogle.com” and it claims to be a company started by Google and Yahoo. What information in the certificate would make you trust the website’s security?", 
+					"6. Suppose you visit a website “yahooogle.com” and it claims to be a company started by Google and Yahoo. What information in the certificate would make you trust the website's security?", 
 					"",
 					true, true, true);
 			sele.setType(SelectionObjectType.CLAN_SINGLE_TEST);
@@ -2664,9 +2664,9 @@ public class SoC_ProductionCourseCreationFactory {
 	/*
 	8. How does TOR preserve anonymity of your traffic?
 	
-	Entry nodes don’t know to which site the sender is talking.
-	Exit nodes don’t know who is talking to the recipient site
-	Routing nodes don’t know who sender is, nor who recipient is.
+	Entry nodes don't know to which site the sender is talking.
+	Exit nodes don't know who is talking to the recipient site
+	Routing nodes don't know who sender is, nor who recipient is.
 	All of the above.
 	
 		 */
@@ -2680,17 +2680,17 @@ public class SoC_ProductionCourseCreationFactory {
 			sele.setPurpose(SelectionObjectPurpose.TEST);
 			
 			SelectionOption option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"a. Entry nodes don’t know to which site the sender is talking.", "Entry nodes don’t know to which site the sender is talking.", "");
+					"a. Entry nodes don't know to which site the sender is talking.", "Entry nodes don't know to which site the sender is talking.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"b. Exit nodes don’t know who is talking to the recipient site", "Exit nodes don’t know who is talking to the recipient site", "");
+					"b. Exit nodes don't know who is talking to the recipient site", "Exit nodes don't know who is talking to the recipient site", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
 			option = new SelectionOption(StimulatedPlanningFactory.getUUID(), 
-					"c. Routing nodes don’t know who sender is, nor who recipient is.", "Routing nodes don’t know who sender is, nor who recipient is.", "");
+					"c. Routing nodes don't know who sender is, nor who recipient is.", "Routing nodes don't know who sender is, nor who recipient is.", "");
 			option.setCorrect(false);
 			sele.addOption(option);
 			
@@ -2786,15 +2786,15 @@ public class SoC_ProductionCourseCreationFactory {
 
 	protected static InformationObject generateWeek4TestConclusion() {
 		InformationObject info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"<span style='font-size:2em;'>We have saved your answers!</span><br>", 
+				"We have saved your answers!<br>", 
 				"<br>", 
 				"",
 				true, true, true);
 	
-		info.setContent("<span style='font-size:1.5em;'>Are you curious to know how you performed?</span><BR> "
-				+ "<span style='font-size:1.5em;'>If yes check out the Test's Results page week-4 that will be visible from next Sunday morning.</span><BR> "
+		info.setContent("Are you curious to know how you performed?<BR> "
+				+ "If yes check out the Test's Results page week-4 that will be visible from next Sunday morning.<BR> "
 				+ "<BR>"
-				+ "The OUNL team\n" + 
+				+ "<span style='font-size:0.75em;'>The OUNL team</span><br>" + 
 				"");
 		
 		return info;
