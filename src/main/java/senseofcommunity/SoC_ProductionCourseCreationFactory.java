@@ -639,12 +639,12 @@ public class SoC_ProductionCourseCreationFactory {
 	
 	
 		// Assignment content
-		info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
-				"Discuss about cryptography", 
-				"Discuss about cryptography", 
-				prodCourseBaseURL+"courseware/w4challenge/",
-				true, true, true);
-		content.addInformationObject(info);
+//		info = new InformationObject(StimulatedPlanningFactory.getUUID(), 
+//				"Discuss about cryptography", 
+//				"Discuss about cryptography", 
+//				prodCourseBaseURL+"courseware/w4challenge/",
+//				true, true, true);
+//		content.addInformationObject(info);
 	
 		info = generateWeek4TreatmentTestIntroduction();
 		content.addInformationObject(info);
