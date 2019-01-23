@@ -70,6 +70,13 @@ div.container {
 	/*background-color: #666699;*/
 }
 
+div#RowOneColumnOneBig{
+	display:inline-block;
+	float:left;
+	top:0px;
+	width: 98%;
+	height:20em;
+}
 div#RowOneColumnOne{
 	display:inline-block;
 	float:left;
@@ -86,6 +93,24 @@ div#RowOneColumnTwo{
 	margin-right: 0.5em;
 }
 
+div#RowTwoColumnOneBig{
+	display:inline-block;
+	float:left;
+	margin-top:0.5em;
+	width:98%;
+	height:3em;
+	/*border: 2.5px Solid #808080;*/
+	}
+	
+div#RowTwoColumnOneBigger{
+	display:inline-block;
+	float:left;
+	margin-top:0.5em;
+	width:98%;
+	height:9em;
+	/*border: 2.5px Solid #808080;*/
+	}
+	
 div#RowTwoColumnOne{
 	display:inline-block;
 	float:left;
@@ -163,6 +188,14 @@ div#roomSelection label{
 	text-align: left;
 	}
 
+div#chattersBig{
+	display:inline-block;
+	width: 99%;
+	margin-top:0.5em;
+	max-height:99%;
+    overflow-y:scroll;
+}
+	
 div#chatters{
 	display:inline-block;
 	width: 99%;

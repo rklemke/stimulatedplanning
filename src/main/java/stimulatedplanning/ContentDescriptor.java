@@ -38,8 +38,16 @@ public class ContentDescriptor extends GenericDescriptor {
 		return informationObjects.listIterator();
 	}
 
+	public List<InformationObject> getInformationObjectList() {
+		return informationObjects.unmodifiableList();
+	}
+	
 	public ListIterator<SelectionObject> getSelectionObjects() {
 		return selectionObjects.listIterator();
+	}
+	
+	public List<SelectionObject> getSelectionObjectList() {
+		return selectionObjects.unmodifiableList();
 	}
 	
 	public List<InformationObject> getFilteredInformationObjectList(boolean control, boolean clanA, boolean clanB) {

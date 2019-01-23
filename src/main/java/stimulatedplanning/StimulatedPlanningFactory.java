@@ -1030,37 +1030,43 @@ public class StimulatedPlanningFactory {
 	
 	private HashMap<String, ChatRoomList> chatRoomListMap = new HashMap<>();
 	public static HashMap<String, ChatRoomList> getChatRoomLists() {
+		initialiseChatRooms();
 		return instance.chatRoomListMap;
 	}
-	public static ChatRoomList getChatRoomListForUser(User user) {
+	private static void initialiseChatRooms() {
+		String[] clanIds = {
+				Clan.CLAN_1_ID,
+				Clan.CLAN_2_ID,
+				"control"
+		};
+		
 		ChatRoomList list = null;
-		String clanId = null;
-		if (user != null && user.isTreatmentGroup()) {
-			clanId = user.getClan().getId();
+		for (String clanId: clanIds) {
 			list = instance.chatRoomListMap.get(clanId);
 			if (list == null) {
 				log.info("create new chat room list for: "+clanId);
 				list = new ChatRoomList(clanId);
 				list.addRoom(new ChatRoom("I need help", "Ask your peers for help."));
-				list.addRoom(new ChatRoom("I need a challenge", "Tackle challenges together"));
-				list.addRoom(new ChatRoom("I need a teacher", "Ask your teacher for support"));
-				list.addRoom(new ChatRoom("Just want to chat", "Open chat, but follow the rules"));
-				list.addRoom(new ChatRoom("StartUp", "Startup chat room. Chatter is added to this after he logs in."));
-				instance.chatRoomListMap.put(clanId, list);
-			}
-		} else {
-			clanId = "control";
-			list = instance.chatRoomListMap.get(clanId);
-			if (list == null) {
-				log.info("create new chat room list for: "+clanId);
-				list = new ChatRoomList(clanId);
-				list.addRoom(new ChatRoom("I need help", "Ask your peers for help."));
+				if (!"control".equals(clanId)) {
+					list.addRoom(new ChatRoom("I need a challenge", "Tackle challenges together"));
+				}
 				list.addRoom(new ChatRoom("I need a teacher", "Ask your teacher for support"));
 				list.addRoom(new ChatRoom("Just want to chat", "Open chat, but follow the rules"));
 				list.addRoom(new ChatRoom("StartUp", "Startup chat room. Chatter is added to this after he logs in."));
 				instance.chatRoomListMap.put(clanId, list);
 			}
 		}
+	}
+	public static ChatRoomList getChatRoomListForUser(User user) {
+		ChatRoomList list = null;
+		String clanId = null;
+		initialiseChatRooms();
+		if (user != null && user.isTreatmentGroup()) {
+			clanId = user.getClan().getId();
+		} else {
+			clanId = "control";
+		}
+		list = instance.chatRoomListMap.get(clanId);
 		return list;
 	}
 	

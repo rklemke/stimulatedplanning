@@ -271,6 +271,29 @@ public class PersistentStore {
 		return null;
 	}
 	
+	public static void writeAnyGenericDescriptor(GenericDescriptor generic) throws Exception {
+		if (generic != null) {
+			if (generic instanceof CourseDescriptor) writeDescriptor((CourseDescriptor)generic);
+			else if (generic instanceof ModuleDescriptor) writeDescriptor((ModuleDescriptor)generic);
+			else if (generic instanceof GoalDescriptor) writeDescriptor((GoalDescriptor)generic);
+			else if (generic instanceof LessonDescriptor) writeDescriptor((LessonDescriptor)generic);
+			else if (generic instanceof ContentDescriptor) writeDescriptor((ContentDescriptor)generic);
+			else if (generic instanceof UserPlan) writeDescriptor((UserPlan)generic);
+			else if (generic instanceof UserGoal) writeDescriptor((UserGoal)generic);
+			else if (generic instanceof UserLesson) writeDescriptor((UserLesson)generic);
+			else if (generic instanceof UserContent) writeDescriptor((UserContent)generic);
+			else if (generic instanceof PlanItem) writeDescriptor((PlanItem)generic);
+			else if (generic instanceof Clan) writeDescriptor((Clan)generic);
+			else if (generic instanceof UserOnlineStatus) writeDescriptor((UserOnlineStatus)generic);
+			else if (generic instanceof SelectionObject) writeDescriptor((SelectionObject)generic);
+			else if (generic instanceof SelectionOption) writeDescriptor((SelectionOption)generic);
+			else if (generic instanceof InformationObject) writeDescriptor((InformationObject)generic);
+			else if (generic instanceof UserSelectedOption) writeDescriptor((UserSelectedOption)generic);
+			else writeDescriptor(generic);
+		}
+	}
+	
+	
 	public static void writeDescriptor(GenericDescriptor generic) throws Exception {
 		//log.info("writeDescriptor (GenericDescriptor): "+generic.getTitle()+", "+generic.getClass().getName()+", "+generic.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -359,6 +382,16 @@ public class PersistentStore {
 			for (GenericDescriptor generic : relationList) {
 				module.addLesson((LessonDescriptor)generic);
 			}
+		}
+		return module;
+	}
+	
+	public static ModuleDescriptor readModuleDescriptorForRepair(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		ModuleDescriptor module = null;
+		try {
+			module = readModuleDescriptor(genericEntity, cache);
+		} catch (Exception exc) {
+			exc.printStackTrace();
 		}
 		return module;
 	}
@@ -1051,7 +1084,7 @@ public class PersistentStore {
 
 
 
-	protected static SelectionObject readSelectionObject(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+	public static SelectionObject readSelectionObject(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
 		SelectionObject selectionObject = null;
 		try {
 			selectionObject = (SelectionObject)cache.get(readStringProperty(genericEntity, "uid", null));
@@ -1123,7 +1156,7 @@ public class PersistentStore {
 
 	}
 
-	protected static SelectionOption readSelectionOption(Entity genericEntity, HashMap<String, Object> cache) {
+	public static SelectionOption readSelectionOption(Entity genericEntity, HashMap<String, Object> cache) {
 		SelectionOption selectionOption = null;
 		try {
 			selectionOption = (SelectionOption)cache.get(readStringProperty(genericEntity, "uid", null));
@@ -1332,6 +1365,39 @@ public class PersistentStore {
 	}
 	
 	
+	public static ArrayList<Message> readMessagesForTeacherChat() {
+		log.info("readMessagesForTeacherChat.");
+		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+		//Entity entity = null;
+		
+		ArrayList<Message> arrayList = new ArrayList<Message>();
+
+		Query q = new Query(Message.class.getName()).addSort("timestamp", SortDirection.DESCENDING);
+		PreparedQuery pq = datastore.prepare(q);
+		
+		HashMap<String, ChatRoomList> chatRoomListMap = StimulatedPlanningFactory.getChatRoomLists();
+		ChatRoomList roomlist = null;
+		ChatRoom room = null;
+		
+		for (Entity entity : pq.asIterable()) {
+			if (entity != null) {
+				roomlist = chatRoomListMap.get(entity.getProperty("roomList"));
+				if (roomlist != null) {
+					room = roomlist.getRoom((String)entity.getProperty("room"));
+					if (room != null) {
+						Message message = readMessage(entity, roomlist, room);
+						if (message != null) {
+							arrayList.add(message);
+						}
+					}
+				}
+			}
+		}
+
+		return arrayList;
+	}
+	
+	
 	public static Message readMessage(Entity msgEntity, ChatRoomList roomlist, ChatRoom room) {
 		String id = readStringProperty(msgEntity, "uid", null);
 		String userId = readStringProperty(msgEntity, "user", null);
@@ -1456,7 +1522,40 @@ public class PersistentStore {
 				deleteGenericEntity(content);
 			}
 			deleteToManyRelation(generic, "contents", UserContent.class.getName());
-		} 
+		} else if (generic instanceof CourseDescriptor) {
+			for (ModuleDescriptor module: ((CourseDescriptor)generic).modules) {
+				deleteGenericEntity(module);
+			}
+			deleteToManyRelation(generic, "modules", ModuleDescriptor.class.getName());
+			for (GoalDescriptor goal: ((CourseDescriptor)generic).goals) {
+				deleteGenericEntity(goal);
+			}
+			deleteToManyRelation(generic, "goals", GoalDescriptor.class.getName());
+		} else if (generic instanceof ModuleDescriptor) {
+			for (LessonDescriptor lesson: ((ModuleDescriptor)generic).lessons) {
+				deleteGenericEntity(lesson);
+			}
+			deleteToManyRelation(generic, "lessons", LessonDescriptor.class.getName());
+		} else if (generic instanceof LessonDescriptor) {
+			for (ContentDescriptor content: ((LessonDescriptor)generic).contents) {
+				deleteGenericEntity(content);
+			}
+			deleteToManyRelation(generic, "contents", ContentDescriptor.class.getName());
+		} else if (generic instanceof ContentDescriptor) {
+			for (InformationObject info: ((ContentDescriptor)generic).informationObjects) {
+				deleteGenericEntity(info);
+			}
+			deleteToManyRelation(generic, "informationObjects", InformationObject.class.getName());
+			for (SelectionObject sele: ((ContentDescriptor)generic).selectionObjects) {
+				deleteGenericEntity(sele);
+			}
+			deleteToManyRelation(generic, "selectionObjects", SelectionObject.class.getName());
+		} else if (generic instanceof SelectionObject) {
+			for (SelectionOption option: ((SelectionObject)generic).getOptionList()) {
+				deleteGenericEntity(option);
+			}
+			deleteToManyRelation(generic, "options", SelectionOption.class.getName());
+		}
 
 		try {
 			Key entityKey = KeyFactory.createKey(generic.getClass().getName(), generic.getId());
@@ -1598,34 +1697,46 @@ public class PersistentStore {
 			return;
 		}
 
-		Entity entity = null;
-		long l = 0;
-		long size = 1; // a relation must have at least one element, otherwise wouldn't have been written. If the first element is not found, an empty array will be returned
-		
-		while (l < size) {
-			String key = source.getClass().getName() + "_" + relation + "_" + targetClass;
-			String id = source.getId() + "_" + relation + "_" + l;
-			
-			Key relationKey = KeyFactory.createKey(key, id);
+		String key = source.getClass().getName() + "_" + relation + "_" + targetClass;
+		Filter sourceFilter = new FilterPredicate("source", FilterOperator.EQUAL, source.getId());
 
-			try {
-				entity = datastore.get(relationKey);
-			} catch (Exception e) {
-				//e.printStackTrace();
-				entity = null;
-			}
+		Query q = new Query(key).setFilter(sourceFilter).addSort("order", SortDirection.ASCENDING);
+		PreparedQuery pq = datastore.prepare(q);
+
+		for (Entity entity : pq.asIterable()) {
 			if (entity != null) {
-				long sizen = (long)entity.getProperty("size");
-				
-				if (size < sizen) {
-					size = sizen;
-				}
-				
-				datastore.delete(relationKey);
-				
+				datastore.delete(entity.getKey());
 			}
-			l++;		
 		}
+		
+//		Entity entity = null;
+//		long l = 0;
+//		long size = 1; // a relation must have at least one element, otherwise wouldn't have been written. If the first element is not found, an empty array will be returned
+//		
+//		while (l < size) {
+//			String key = source.getClass().getName() + "_" + relation + "_" + targetClass;
+//			String id = source.getId() + "_" + relation + "_" + l;
+//			
+//			Key relationKey = KeyFactory.createKey(key, id);
+//
+//			try {
+//				entity = datastore.get(relationKey);
+//			} catch (Exception e) {
+//				//e.printStackTrace();
+//				entity = null;
+//			}
+//			if (entity != null) {
+//				long sizen = (long)entity.getProperty("size");
+//				
+//				if (size < sizen) {
+//					size = sizen;
+//				}
+//				
+//				datastore.delete(relationKey);
+//				
+//			}
+//			l++;		
+//		}
 	}
 	
 	

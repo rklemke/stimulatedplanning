@@ -44,7 +44,7 @@ public class ChatRoom implements IObjectWithId, Serializable
 	/*
 	* Used to set the maximum no of messages
 	*/
-	private int messages_size = 25;
+	private int messages_size = 150;
 	/**
 	* This constructor takes a name and description
 	* to create a new ChatRoom
