@@ -2,11 +2,18 @@
 	language="java" 
 	contentType="text/html; charset=UTF-8" 
 	pageEncoding="UTF-8" 
-	import="stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*" 
-%><%
+	import="stimulatedplanning.*, stimulatedplanning.util.*, senseofcommunity.*, java.util.*, java.util.logging.Logger" 
+%><%! static Logger log = Logger.getLogger("UserIconDisplay_jsp"); %><%
   session = request.getSession();
   String userId = request.getParameter("userId");
+  //log.info("userId: "+userId);
   User user = (User)session.getAttribute(userId);
+  if (user==null) {
+	  userId = userId.substring(4);
+	  //user = (User)StimulatedPlanningFactory.getObject(User.class.getName(), userId);
+	  user = PersistentStore.getUser(userId, new HashMap<String,Object>());
+  }
+  //log.info("userId: "+userId+", user: "+user);
   UserOnlineStatus status = user.getOnlineStatus();
   String onlineStatus = "offline";
   if (status != null && status.isOnline()) {

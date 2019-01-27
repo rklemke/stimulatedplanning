@@ -49,7 +49,14 @@
 	String contentName = request.getParameter("contentName");
 	String pageurl = request.getParameter("pageurl");
 	if (contentId != null) {
-		contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
+		contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(ContentDescriptor.class.getName(), contentId);
+		if (contentDescriptor == null) {
+			try {
+				contentDescriptor = (ContentDescriptor)PersistentStore.readDescriptor(ContentDescriptor.class.getName(), contentId, new HashMap<String, Object>(), null);
+			} catch (Exception exc) {
+				exc.printStackTrace();
+			}
+		}
 	} 
 	if (contentDescriptor == null && pageurl != null) {
 		contentDescriptor = course.getContentByUrl(pageurl);
@@ -101,11 +108,12 @@
 			StimulatedPlanningFactory.trackAndLogEvent(request, response, "submit."+currentSelectionObject.getPurpose());
 			String[] selectedOptionIds = request.getParameterValues("selectionRadio");
 			for (SelectionOption option : currentSelectionObject.getOptionList()) {
-				UserSelectedOption userOption = PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
+				//UserSelectedOption userOption = PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
+				UserSelectedOption userOption = option.getUserSelectedOption(user, currentSelectionObject);  // PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
 				boolean foundId = false;
 				if (selectedOptionIds != null) {
 					for (String optionId: selectedOptionIds) {
-						log.info("option: "+option.getId()+", optionId: "+optionId);
+						//log.info("option: "+option.getId()+", optionId: "+optionId);
 						if (option.getId().equals(optionId)) {
 							foundId = true;
 							break;
@@ -116,8 +124,10 @@
 				// checking and storing the selection
 				if (!foundId && userOption != null) {
 					PersistentStore.deleteGenericEntity(userOption);
+					option.removeUserSelectedOption(userOption);
 				} else if (foundId && userOption == null) {
 					userOption = StimulatedPlanningFactory.createUserSelectedOption(user, currentSelectionObject, option);
+					option.addUserSelectedOption(userOption);
 					try {
 						PersistentStore.writeDescriptor(userOption);
 					} catch (Exception e) {
@@ -176,7 +186,14 @@
 				} else if (currentSelectionObject.isClanMessagePurpose()) {
 					if (user.isTreatmentGroup()) {
 						Clan clan = user.getClan();
-						SelectionObject encryption = (SelectionObject)StimulatedPlanningFactory.getObject("encryptionMethod-"+clan.getId());
+						SelectionObject encryption = (SelectionObject)StimulatedPlanningFactory.getObject(SelectionObject.class.getName(), "encryptionMethod-"+clan.getId());
+						if (encryption == null) {
+							try {
+								encryption = (SelectionObject)PersistentStore.readDescriptor(SelectionObject.class.getName(), "encryptionMethod-"+clan.getId(), new HashMap<String, Object>(), null);
+							} catch (Exception exc) {
+								exc.printStackTrace();
+							}
+						}
 						SelectionOption preferredOption = currentSelectionObject.getClanPreferredOption(clan);
 						if (preferredOption != null) {
 							log.info("clan encryption messages for clan "+clan.getTitle()+" will be updated to "+preferredOption.getTitle());
@@ -283,7 +300,8 @@
 	}
 	for (SelectionOption option : options) { 
 		ArrayList<UserSelectedOption> selectedOptions = new ArrayList<>();
-		UserSelectedOption userSelectedOption = PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
+		//UserSelectedOption userSelectedOption = PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
+		UserSelectedOption userSelectedOption = option.getUserSelectedOption(user, currentSelectionObject);  // PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
 		int optionCount = 0;
 		int clanSize = 1;
 		boolean isSelected = (userSelectedOption!=null);

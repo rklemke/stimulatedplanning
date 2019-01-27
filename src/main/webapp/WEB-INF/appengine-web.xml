@@ -8,8 +8,4 @@
     <include path="/**.cvs" />
   </resource-files>
   
-  <instance-class>B1</instance-class>
-  <manual-scaling>
-    <instances>1</instances>
-  </manual-scaling>
 </appengine-web-app>

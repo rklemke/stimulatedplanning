@@ -46,7 +46,14 @@
 	String contentName = request.getParameter("contentName");
 	String pageurl = request.getParameter("pageurl");
 	if (contentId != null) {
-		contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
+		contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(ContentDescriptor.class.getName(), contentId);
+		if (contentDescriptor == null) {
+			try {
+				contentDescriptor = (ContentDescriptor)PersistentStore.readDescriptor(ContentDescriptor.class.getName(), contentId, new HashMap<String, Object>(), null);
+			} catch (Exception exc) {
+				exc.printStackTrace();
+			}
+		}
 	} 
 	if (contentDescriptor == null && pageurl != null) {
 		contentDescriptor = course.getContentByUrl(pageurl);
@@ -85,7 +92,7 @@
     <link rel="stylesheet" href="css/WidgetStyling.css">
     <link rel="stylesheet" href="css/SelectionWidgetStyling.css">
     <link rel="stylesheet" href="css/ClanMembersStyling.css">
-    <link rel="stylesheet" href="css/jquery-ui.css">
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
@@ -94,9 +101,26 @@
     		<% if (informationObjectList != null) { %>
     		<%    if (currentInformationObject instanceof SelectionObject) { %>
 				$("#buttonSubmit").on("click", function() {
+					$('#savingDialog').dialog( "open" );
 					$("#Selection_frameHolder").contents().find('form').submit();
 				});
     		<%    } %>
+			$("#buttonPrev").on("click", function() {
+				$('#loadingDialog').dialog( "open" );
+			});
+			$("#buttonNext").on("click", function() {
+				$('#loadingDialog').dialog( "open" );
+			});
+    	    $( "#savingDialog" ).dialog({
+    			autoOpen: false,
+    			draggable: false,
+    			resizable: false
+    	    });
+    	    $( "#loadingDialog" ).dialog({
+    			autoOpen: false,
+    			draggable: false,
+    			resizable: false
+    	    });
     		<% } %>
     	    $(document).tooltip();
 		});
@@ -189,5 +213,13 @@
     
 	</div><!--container-->
 
+<div id="savingDialog" title="Saving ...">
+  <p>We are saving your selection. Please wait a moment ...</p>
+</div>
+ 
+<div id="loadingDialog" title="Loading ...">
+  <p>We are loading the page. Please wait a moment ...</p>
+</div>
+ 
 </body>
 </html>

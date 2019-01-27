@@ -131,7 +131,8 @@ public class SelectionObject extends InformationObject {
 		boolean hasOption = false;
 		UserSelectedOption selectedOption;
 		for (SelectionOption option : options) {
-			selectedOption = PersistentStore.readUserSelectionOption(user, this, option);
+			//selectedOption = PersistentStore.readUserSelectionOption(user, this, option);
+			selectedOption = option.getUserSelectedOption(user, this);
 			if (selectedOption != null) {
 				hasOption = true;
 			}
@@ -144,8 +145,10 @@ public class SelectionObject extends InformationObject {
 	public void clearSelectionForUser(User user) {
 		UserSelectedOption selectedOption;
 		for (SelectionOption option : options) {
-			selectedOption = PersistentStore.readUserSelectionOption(user, this, option);
+			//selectedOption = PersistentStore.readUserSelectionOption(user, this, option);
+			selectedOption = option.getUserSelectedOption(user, this);
 			PersistentStore.deleteGenericEntity(selectedOption);
+			option.removeUserSelectedOption(selectedOption);
 		}
 		
 	}
@@ -154,7 +157,8 @@ public class SelectionObject extends InformationObject {
 	public void setSelectionForUser(User user, ArrayList<SelectionOption> selection) {
 		clearSelectionForUser(user);
 		for (SelectionOption option : selection) {
-			StimulatedPlanningFactory.createUserSelectedOption(user, this, option);
+			UserSelectedOption selectedOption = StimulatedPlanningFactory.createUserSelectedOption(user, this, option);
+			option.addUserSelectedOption(selectedOption);
 		}
 	}
 	

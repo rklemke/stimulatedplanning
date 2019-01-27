@@ -1,6 +1,7 @@
 package stimulatedplanning;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 import senseofcommunity.Clan;
 import senseofcommunity.UserOnlineStatus;
@@ -8,6 +9,7 @@ import stimulatedplanning.util.IObjectWithId;
 
 public class User implements Serializable, IObjectWithId {
 
+	private static final Logger log = Logger.getLogger(User.class.getName());   
 	protected String name;
 	public String getName() {
 		return name;
@@ -44,6 +46,11 @@ public class User implements Serializable, IObjectWithId {
 	
 	protected UserOnlineStatus onlineStatus;
 	public UserOnlineStatus getOnlineStatus() {
+		if (onlineStatus == null) {
+			log.info("Warning: online status accessed but not initialised: "+getId());
+			new Exception().printStackTrace();
+			onlineStatus = PersistentStore.readUserOnlineStatus(this);
+		}
 		return onlineStatus;
 	}
 	public void setOnlineStatus(UserOnlineStatus onlineStatus) {

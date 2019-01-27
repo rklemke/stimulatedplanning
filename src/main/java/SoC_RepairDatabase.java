@@ -431,6 +431,12 @@ public class SoC_RepairDatabase extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		// security switch, if you need this tool again comment these lines prior to deploy.
+		if (true) {
+			response.getWriter().append("Forbidden.");
+			return;
+		}
+		
 		String commandType = request.getParameter("commandType");
 		isReporting = false;
 		isCleanup = false;

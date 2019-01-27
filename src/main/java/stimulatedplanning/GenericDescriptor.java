@@ -48,9 +48,9 @@ public class GenericDescriptor implements Serializable, IObjectWithId {
 		this.description = description;
 		this.url = url;
 		
-		if (!(this instanceof GenericUserObject)) {
-			StimulatedPlanningFactory.addObject(this);
-		}
+//		if (!(this instanceof GenericUserObject)) {
+//			StimulatedPlanningFactory.addObject(this);
+//		}
 	}
 	
 	

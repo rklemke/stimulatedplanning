@@ -17,7 +17,7 @@
 			setTimeout(clan_tickerRequest, clan_timeoutInterval);
 		});
 
-		var clan_timeoutInterval = 5000;
+		var clan_timeoutInterval = 30000;
 		
 		function clan_tickerRequest() {
 			$.ajax({

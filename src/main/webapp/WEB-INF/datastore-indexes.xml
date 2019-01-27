@@ -13,6 +13,10 @@
         <property name="source" direction="asc"/>
         <property name="order" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="stimulatedplanning.CourseDescriptor_goals_stimulatedplanning.GoalDescriptor" ancestor="false" source="manual">
+        <property name="source" direction="asc"/>
+        <property name="order" direction="asc"/>
+    </datastore-index>
     <datastore-index kind="stimulatedplanning.ModuleDescriptor_lessons_stimulatedplanning.LessonDescriptor" ancestor="false" source="manual">
         <property name="source" direction="asc"/>
         <property name="order" direction="asc"/>
@@ -30,6 +34,10 @@
         <property name="order" direction="asc"/>
     </datastore-index>
     <datastore-index kind="senseofcommunity.SelectionObject_options_senseofcommunity.SelectionOption" ancestor="false" source="manual">
+        <property name="source" direction="asc"/>
+        <property name="order" direction="asc"/>
+    </datastore-index>
+	<datastore-index kind="stimulatedplanning.GoalDescriptor_lessons_stimulatedplanning.LessonDescriptor" ancestor="false" source="manual">
         <property name="source" direction="asc"/>
         <property name="order" direction="asc"/>
     </datastore-index>

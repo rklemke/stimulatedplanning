@@ -25,7 +25,7 @@
   }
   
   boolean excludeSelf = true;
-  String excludeSelfS = request.getParameter("color");
+  String excludeSelfS = request.getParameter("excludeSelf");
   if (excludeSelfS != null) {
 	  excludeSelf = Boolean.valueOf(excludeSelfS);
   }

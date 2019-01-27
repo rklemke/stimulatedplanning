@@ -1,6 +1,7 @@
 
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Logger;
@@ -17,6 +18,7 @@ import senseofcommunity.Clan;
 import senseofcommunity.InformationObject;
 import stimulatedplanning.ContentDescriptor;
 import stimulatedplanning.CourseDescriptor;
+import stimulatedplanning.PersistentStore;
 import stimulatedplanning.StimulatedPlanningFactory;
 import stimulatedplanning.User;
 import stimulatedplanning.UserPlan;
@@ -59,9 +61,17 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 		String contentName = request.getParameter("contentName");
 		String pageurl = request.getParameter("pageurl");
 		log.info("contentId "+contentId+", contentName "+contentName+", pageurl "+pageurl);
+		//log.info("user "+user.getId());
 		ContentDescriptor contentDescriptor = null;
 		if (contentId != null) {
-			contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
+			contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(ContentDescriptor.class.getName(), contentId);
+			if (contentDescriptor == null) {
+				try {
+					contentDescriptor = (ContentDescriptor)PersistentStore.readDescriptor(ContentDescriptor.class.getName(), contentId, new HashMap<String, Object>(), null);
+				} catch (Exception exc) {
+					exc.printStackTrace();
+				}
+			}
 		} 
 		if (contentDescriptor == null && pageurl != null) {
 			contentDescriptor = course.getContentByUrl(pageurl);
@@ -143,7 +153,8 @@ public class GenericClanFrameServlet_SoC extends HttpServlet {
 //		} else if (request.getParameter("submitLearning") != null) {
 //			nextServlet = "/Test_LearningProgress.jsp";
 		}
-		
+
+		//log.info("GenericClanFrameServlet_SoC: nextServlet: "+nextServlet);
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextServlet);
 		dispatcher.forward(request,response);
 	}

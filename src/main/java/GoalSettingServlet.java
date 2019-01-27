@@ -1,6 +1,7 @@
 
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.logging.Logger;
 
@@ -108,7 +109,14 @@ public class GoalSettingServlet extends HttpServlet {
 						String[] selectedLessonIds = request.getParameterValues("goal" + goal.getId());
 						if (selectedLessonIds != null) {
 							for (String lessonId : selectedLessonIds) {
-								LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(lessonId);
+								LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(LessonDescriptor.class.getName(), lessonId);
+								if (lesson == null) {
+									try {
+										lesson = (LessonDescriptor)PersistentStore.readDescriptor(LessonDescriptor.class.getName(), lessonId, new HashMap<String, Object>(), null);
+									} catch (Exception exc) {
+										exc.printStackTrace();
+									}
+								}
 								if (lesson != null) {
 									selectedLessons.add(lesson);
 									UserLesson userLesson = StimulatedPlanningFactory.createUserLesson(userGoal, lesson);

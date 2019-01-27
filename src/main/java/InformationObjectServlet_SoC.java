@@ -1,6 +1,7 @@
 
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.logging.Logger;
@@ -57,7 +58,14 @@ public class InformationObjectServlet_SoC extends HttpServlet {
 		String contentName = request.getParameter("contentName");
 		String pageurl = request.getParameter("pageurl");
 		if (contentId != null) {
-			contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(contentId);
+			contentDescriptor = (ContentDescriptor)StimulatedPlanningFactory.getObject(ContentDescriptor.class.getName(), contentId);
+			if (contentDescriptor == null) {
+				try {
+					contentDescriptor = (ContentDescriptor)PersistentStore.readDescriptor(ContentDescriptor.class.getName(), contentId, new HashMap<String, Object>(), null);
+				} catch (Exception exc) {
+					exc.printStackTrace();
+				}
+			}
 		} 
 		if (contentDescriptor == null && pageurl != null) {
 			contentDescriptor = course.getContentByUrl(pageurl);
@@ -107,7 +115,8 @@ public class InformationObjectServlet_SoC extends HttpServlet {
 			SelectionObject currentSelectionObject = (SelectionObject)currentInformationObject;
 			String[] selectedOptionIds = request.getParameterValues("selectionRadio");
 			for (SelectionOption option : currentSelectionObject.getOptionList()) {
-				UserSelectedOption userOption = PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
+				//UserSelectedOption userOption = PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
+				UserSelectedOption userOption = option.getUserSelectedOption(user, currentSelectionObject);  //PersistentStore.readUserSelectionOption(user, currentSelectionObject, option);
 				boolean foundId = false;
 				if (selectedOptionIds != null) {
 					for (String optionId: selectedOptionIds) {

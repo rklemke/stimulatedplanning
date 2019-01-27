@@ -26,6 +26,7 @@ import senseofcommunity.SelectionOption;
 import senseofcommunity.UserOnlineStatus;
 import senseofcommunity.UserSelectedOption;
 import stimulatedplanning.util.HashArrayList;
+import stimulatedplanning.util.IObjectWithId;
 
 import com.google.appengine.api.datastore.Text;
 
@@ -76,13 +77,22 @@ public class PersistentStore {
 			userEntity.setProperty("avatarUrl", user.getAvatarUrl());
 
 			datastore.put(userEntity);
+			StimulatedPlanningFactory.addObject(user, userEntity);
 		}
 	}
 
 	public static User getUser(String userId, Entity userEntity, HashMap<String, Object> cache) throws Exception {
+		return getUser(userId, userEntity, cache, true);
+	}
+	public static User getUser(String userId, Entity userEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		User user = null;
 		try {
-			user = (User)cache.get(userId);
+			if (useCache) {
+				user = (User)StimulatedPlanningFactory.getObject(User.class.getName(), userId);
+			}
+			if (user == null) {
+				user = (User)cache.get(userId);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -101,15 +111,24 @@ public class PersistentStore {
 				if (!userEntity.hasProperty("treatmentGroup")) {
 					writeUser(user);
 				}
+				StimulatedPlanningFactory.addObject(user, userEntity);
 			}
 		}
 		return user;
 	}
 
 	public static User getUser(String userId, HashMap<String, Object> cache) throws Exception {
+		return getUser(userId, cache, true);
+	}
+	public static User getUser(String userId, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		User user = null;
 		try {
-			user = (User)cache.get(userId);
+			if (useCache) {
+				user = (User)StimulatedPlanningFactory.getObject(User.class.getName(), userId);
+			}
+			if (user == null) {
+				user = (User)cache.get(userId);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -118,7 +137,7 @@ public class PersistentStore {
 	
 			Entity userEntity = datastore.get(KeyFactory.createKey(User.class.getName(), userId));
 			if (userEntity != null) {
-				return getUser(userId, userEntity, cache);
+				return getUser(userId, userEntity, cache, useCache);
 			}
 		}
 		return user;
@@ -128,7 +147,7 @@ public class PersistentStore {
 		HashArrayList<User> users = new HashArrayList<User>();
 		User user = null;
 		try {
-			log.info("readAllControlUsers: start");
+			//log.info("readAllControlUsers: start");
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			Filter controlFilter = new FilterPredicate("treatmentGroup", FilterOperator.EQUAL, false);
 
@@ -138,7 +157,7 @@ public class PersistentStore {
 
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
-				log.info("readAllControlUsers: "+id);
+				//log.info("readAllControlUsers: "+id);
 				user = (User)getUser(id, result, new HashMap<String, Object>());
 				users.add(user);
 			}
@@ -158,7 +177,10 @@ public class PersistentStore {
 
 		Entity entity = null;
 		try {
-			entity = datastore.get(KeyFactory.createKey(generic.getClass().getName(), generic.getId()));
+			entity = StimulatedPlanningFactory.getEntity(generic.getClass().getName(), generic.getId());
+			if (entity == null) {
+				entity = datastore.get(KeyFactory.createKey(generic.getClass().getName(), generic.getId()));
+			}
 		} catch (Exception e) {
 			//e.printStackTrace();
 			entity = null;
@@ -171,6 +193,8 @@ public class PersistentStore {
 		entity.setProperty("title", generic.getTitle());
 		entity.setProperty("description", new Text(generic.getDescription()));
 		entity.setProperty("url", generic.getUrl());
+		
+		StimulatedPlanningFactory.addObject(generic, entity);
 
 		return entity;
 	}
@@ -214,16 +238,58 @@ public class PersistentStore {
 
 		return entity;
 	}
+	
+	
+	public static void updateCacheableObject(CacheableDatabaseObject cdo) {
+		Entity entity = cdo.getEntity();
+		IObjectWithId object = cdo.getObject();
+		String className = cdo.getObjectClass();
+		
+		if (User.class.getName().equals(className)) {
+			try {
+				User user = getUser(object.getId(), new HashMap<String, Object>(), false);
+				UserOnlineStatus status = readUserOnlineStatus(user);
+			} catch(Exception exc) {
+				exc.printStackTrace();
+			}
+		} else {
+			try {
+				readDescriptor(className, object.getId(), new HashMap<String, Object>(), null, false);
+			} catch(Exception exc) {
+				exc.printStackTrace();
+			}
+		}
+	}
 
-	protected static GenericDescriptor readDescriptor(String type, String id, HashMap<String, Object> cache, Entity retrievedEntity) throws Exception {
-		log.info("readDescriptor: "+type+", "+id);
+	public static GenericDescriptor readDescriptor(String type, String id, HashMap<String, Object> cache, Entity retrievedEntity) throws Exception {
+		return readDescriptor(type, id, cache, retrievedEntity, true);
+	}	
+	
+	public static GenericDescriptor readDescriptor(String type, String id, HashMap<String, Object> cache, Entity retrievedEntity, boolean useCache) throws Exception {
+		//log.info("readDescriptor: "+type+", "+id);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
+		GenericDescriptor genericDescriptor = null;
+		try {
+			if (useCache) {
+				genericDescriptor = (GenericDescriptor)StimulatedPlanningFactory.getObject(type, id);
+			}
+			if (genericDescriptor != null) {
+				return genericDescriptor;
+			}
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		
 		Entity genericEntity = retrievedEntity;
-
 		if (genericEntity == null) {
 			try {
-				genericEntity = datastore.get(KeyFactory.createKey(type, id));
+				if (useCache) {
+					genericEntity = StimulatedPlanningFactory.getEntity(type, id);
+				}
+				if (genericEntity == null) {
+					genericEntity = datastore.get(KeyFactory.createKey(type, id));
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				genericEntity = null;
@@ -232,42 +298,45 @@ public class PersistentStore {
 		
 		if (genericEntity != null) {
 			if (CourseDescriptor.class.getName().equals(type)) {
-				return readCourseDescriptor(genericEntity, cache);
+				genericDescriptor = readCourseDescriptor(genericEntity, cache, useCache);
 			} else if (ModuleDescriptor.class.getName().equals(type)) {
-				return readModuleDescriptor(genericEntity, cache);
+				genericDescriptor = readModuleDescriptor(genericEntity, cache, useCache);
 			} else if (GoalDescriptor.class.getName().equals(type)) {
-				return readGoalDescriptor(genericEntity, cache);
+				genericDescriptor = readGoalDescriptor(genericEntity, cache);
 			} else if (LessonDescriptor.class.getName().equals(type)) {
-				return readLessonDescriptor(genericEntity, cache);
+				genericDescriptor = readLessonDescriptor(genericEntity, cache, useCache);
 			} else if (ContentDescriptor.class.getName().equals(type)) {
-				return readContentDescriptor(genericEntity, cache);
+				genericDescriptor = readContentDescriptor(genericEntity, cache, useCache);
 			} else if (UserPlan.class.getName().equals(type)) {
-				return readUserPlan(genericEntity, cache);
+				genericDescriptor = readUserPlan(genericEntity, cache, useCache);
 			} else if (UserGoal.class.getName().equals(type)) {
-				return readUserGoal(genericEntity, cache);
+				genericDescriptor = readUserGoal(genericEntity, cache, useCache);
 			} else if (UserLesson.class.getName().equals(type)) {
-				return readUserLesson(genericEntity, cache);
+				genericDescriptor = readUserLesson(genericEntity, cache, useCache);
 			} else if (UserContent.class.getName().equals(type)) {
-				return readUserContent(genericEntity, cache);
+				genericDescriptor = readUserContent(genericEntity, cache, useCache);
 			} else if (PlanItem.class.getName().equals(type)) {
-				return readPlanItem(genericEntity, cache);
+				genericDescriptor = readPlanItem(genericEntity, cache, useCache);
 			} else if (UserProfile.class.getName().equals(type)) {
-				return readUserProfile(genericEntity, cache);
+				genericDescriptor = readUserProfile(genericEntity, cache, useCache);
 			} else if (UserOnlineStatus.class.getName().equals(type)) {
-				return readUserOnlineStatus(genericEntity, cache);
+				genericDescriptor = readUserOnlineStatus(genericEntity, cache, useCache);
 			} else if (Clan.class.getName().equals(type)) {
-				return readClan(genericEntity, cache);
+				genericDescriptor = readClan(genericEntity, cache, useCache);
 			} else if (InformationObject.class.getName().equals(type)) {
-				return readInformationObject(genericEntity, cache);
+				genericDescriptor = readInformationObject(genericEntity, cache, useCache);
 			} else if (SelectionObject.class.getName().equals(type)) {
-				return readSelectionObject(genericEntity, cache);
+				genericDescriptor = readSelectionObject(genericEntity, cache, useCache);
 			} else if (SelectionOption.class.getName().equals(type)) {
-				return readSelectionOption(genericEntity, cache);
+				genericDescriptor = readSelectionOption(genericEntity, cache, useCache);
 			} else if (UserSelectedOption.class.getName().equals(type)) {
-				return readUserSelectedOption(genericEntity, cache);
+				genericDescriptor = readUserSelectedOption(genericEntity, cache, useCache);
 			}
+			if (genericDescriptor != null) {
+				StimulatedPlanningFactory.addObject(genericDescriptor, genericEntity);
+			}
+			return genericDescriptor;
 		}
-
 		return null;
 	}
 	
@@ -311,9 +380,18 @@ public class PersistentStore {
 	}
 
 	protected static CourseDescriptor readCourseDescriptor(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readCourseDescriptor(genericEntity, cache, true);
+	}
+	protected static CourseDescriptor readCourseDescriptor(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		CourseDescriptor course = null;
 		try {
-			course = (CourseDescriptor)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				course = (CourseDescriptor)StimulatedPlanningFactory.getObject(CourseDescriptor.class.getName(), id);
+			}
+			if (course == null) {
+				course = (CourseDescriptor)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -323,11 +401,12 @@ public class PersistentStore {
 					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
 					readStringProperty(genericEntity, "url", null));
 			cache.put(course.getId(), course);
-			relationList = readToManyRelation(course, "modules", ModuleDescriptor.class.getName(), true, cache);
+			StimulatedPlanningFactory.addObject(course, genericEntity);
+			relationList = readToManyRelation(course, "modules", ModuleDescriptor.class.getName(), true, cache, useCache);
 			for (GenericDescriptor generic : relationList) {
 				course.addModule((ModuleDescriptor)generic);
 			}
-			relationList = readToManyRelation(course, "goals", GoalDescriptor.class.getName(), true, cache);
+			relationList = readToManyRelation(course, "goals", GoalDescriptor.class.getName(), true, cache, useCache);
 			for (GenericDescriptor generic : relationList) {
 				course.addGoal((GoalDescriptor)generic);
 			}
@@ -366,9 +445,18 @@ public class PersistentStore {
 	}
 
 	protected static ModuleDescriptor readModuleDescriptor(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readModuleDescriptor(genericEntity, cache, true);
+	}
+	protected static ModuleDescriptor readModuleDescriptor(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		ModuleDescriptor module = null;
 		try {
-			module = (ModuleDescriptor)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				module = (ModuleDescriptor)StimulatedPlanningFactory.getObject(ModuleDescriptor.class.getName(), id);
+			}
+			if (module == null) {
+				module = (ModuleDescriptor)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -378,7 +466,8 @@ public class PersistentStore {
 					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
 					readStringProperty(genericEntity, "url", null));
 			cache.put(module.getId(), module);
-			relationList = readToManyRelation(module, "lessons", LessonDescriptor.class.getName(), true, cache);
+			StimulatedPlanningFactory.addObject(module, genericEntity);
+			relationList = readToManyRelation(module, "lessons", LessonDescriptor.class.getName(), true, cache, useCache);
 			for (GenericDescriptor generic : relationList) {
 				module.addLesson((LessonDescriptor)generic);
 			}
@@ -415,9 +504,18 @@ public class PersistentStore {
 	}
 
 	protected static GoalDescriptor readGoalDescriptor(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readGoalDescriptor(genericEntity, cache, true);
+	}
+	protected static GoalDescriptor readGoalDescriptor(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		GoalDescriptor goal = null;
 		try {
-			goal = (GoalDescriptor)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				goal = (GoalDescriptor)StimulatedPlanningFactory.getObject(GoalDescriptor.class.getName(), id);
+			}
+			if (goal == null) {
+				goal = (GoalDescriptor)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -427,7 +525,8 @@ public class PersistentStore {
 					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
 					readStringProperty(genericEntity, "url", null));
 			cache.put(goal.getId(), goal);
-			relationList = readToManyRelation(goal, "lessons", LessonDescriptor.class.getName(), true, cache);
+			StimulatedPlanningFactory.addObject(goal, genericEntity);
+			relationList = readToManyRelation(goal, "lessons", LessonDescriptor.class.getName(), true, cache, useCache);
 			for (GenericDescriptor generic : relationList) {
 				goal.addLesson((LessonDescriptor)generic);
 			}
@@ -481,9 +580,18 @@ public class PersistentStore {
 	}
 
 	protected static LessonDescriptor readLessonDescriptor(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readLessonDescriptor(genericEntity, cache, true);
+	}
+	protected static LessonDescriptor readLessonDescriptor(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		LessonDescriptor lesson = null;
 		try {
-			lesson = (LessonDescriptor)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(LessonDescriptor.class.getName(), id);
+			}
+			if (lesson == null) {
+				lesson = (LessonDescriptor)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -493,7 +601,8 @@ public class PersistentStore {
 					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
 					readStringProperty(genericEntity, "url", null));
 			cache.put(lesson.getId(), lesson);
-			relationList = readToManyRelation(lesson, "contents", ContentDescriptor.class.getName(), true, cache);
+			StimulatedPlanningFactory.addObject(lesson, genericEntity);
+			relationList = readToManyRelation(lesson, "contents", ContentDescriptor.class.getName(), true, cache, useCache);
 			for (GenericDescriptor generic : relationList) {
 				lesson.addContent((ContentDescriptor)generic);
 			}
@@ -520,9 +629,18 @@ public class PersistentStore {
 	}
 
 	protected static ContentDescriptor readContentDescriptor(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readContentDescriptor(genericEntity, cache, true);
+	}
+	protected static ContentDescriptor readContentDescriptor(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		ContentDescriptor content = null;
 		try {
-			content = (ContentDescriptor)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				content = (ContentDescriptor)StimulatedPlanningFactory.getObject(ContentDescriptor.class.getName(), id);
+			}
+			if (content == null) {
+				content = (ContentDescriptor)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -533,10 +651,11 @@ public class PersistentStore {
 					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
 					readStringProperty(genericEntity, "url", null));
 			cache.put(content.getId(), content);
-			relationList1 = readToManyRelation(content, "informationObjects", InformationObject.class.getName(), true, cache);
-			log.info("informationObjects: "+relationList1.size());
-			relationList2 = readToManyRelation(content, "selectionObjects", SelectionObject.class.getName(), true, cache);
-			log.info("selectionObjects: "+relationList2.size());
+			StimulatedPlanningFactory.addObject(content, genericEntity);
+			relationList1 = readToManyRelation(content, "informationObjects", InformationObject.class.getName(), true, cache, useCache);
+			//log.info("informationObjects: "+relationList1.size());
+			relationList2 = readToManyRelation(content, "selectionObjects", SelectionObject.class.getName(), true, cache, useCache);
+			//log.info("selectionObjects: "+relationList2.size());
 			if (relationList1.size()>0 && relationList2.size()>0) {
 				relationList1.addAll(relationList2);
 			} else if (relationList2.size()>0) {
@@ -546,10 +665,10 @@ public class PersistentStore {
 			Collections.sort(relationListAll, new Comparator<InformationObject>( ) {
 				public int compare(InformationObject o1, InformationObject o2) {
 					if (o1 == null || o2 == null) {
-						log.info("compare (null): "+o1+", "+o2);
+						//log.info("compare (null): "+o1+", "+o2);
 						return 0;
 					}
-					log.info("compare: "+o1+", "+o2);
+					//log.info("compare: "+o1+", "+o2);
 					return o1.getSequence()-o2.getSequence();
 				}
 			});
@@ -584,18 +703,28 @@ public class PersistentStore {
 	}
 
 	protected static UserPlan readUserPlan(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readUserPlan(genericEntity, cache, true);
+	}
+	protected static UserPlan readUserPlan(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		UserPlan plan = null;
 		try {
-			plan = (UserPlan)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				plan = (UserPlan)StimulatedPlanningFactory.getObject(UserPlan.class.getName(), id);
+			}
+			if (plan == null) {
+				plan = (UserPlan)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
 		if (plan == null) {
 			ArrayList<GenericDescriptor> relationList = null;
 			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
-			CourseDescriptor course = (CourseDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "course", null));				
+			CourseDescriptor course = (CourseDescriptor)StimulatedPlanningFactory.getObject(CourseDescriptor.class.getName(), readStringProperty(genericEntity, "course", null));
 			plan = new UserPlan(readStringProperty(genericEntity, "uid", null), user);
 			cache.put(plan.getId(), plan);
+			StimulatedPlanningFactory.addObject(plan, genericEntity);
 			plan.setCourse(course);
 			plan.setPlannedTimePerWeek(readStringProperty(genericEntity, "plannedTimePerWeek", null));
 			plan.setAllCourseIntention(readBooleanProperty(genericEntity, "isAllCourseIntention", false));
@@ -603,11 +732,11 @@ public class PersistentStore {
 			plan.setObstacles(readStringProperty(genericEntity, "obstacles", null));
 			plan.setCopingPlan(readStringProperty(genericEntity, "copingPlan", null));
 	
-			relationList = readToManyRelation(plan, "userGoals", UserGoal.class.getName(), true, cache);
+			relationList = readToManyRelation(plan, "userGoals", UserGoal.class.getName(), true, cache, useCache);
 			for (GenericDescriptor generic : relationList) {
 				plan.addGoal((UserGoal)generic);
 			}
-			relationList = readToManyRelation(plan, "planItems", PlanItem.class.getName(), true, cache);
+			relationList = readToManyRelation(plan, "planItems", PlanItem.class.getName(), true, cache, useCache);
 			for (GenericDescriptor generic : relationList) {
 				plan.addPlanItem((PlanItem)generic);
 			}
@@ -635,7 +764,7 @@ public class PersistentStore {
 	public static UserPlan readUserPlan(User user, CourseDescriptor course) {
 		UserPlan plan = null;
 		try {
-			log.info("read userPlan for "+user.getName());
+			//log.info("read userPlan for "+user.getName());
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			Filter userFilter = new FilterPredicate("userid", FilterOperator.EQUAL, user.getId());
 			Filter courseFilter = new FilterPredicate("course", FilterOperator.EQUAL, course.getId());
@@ -646,7 +775,7 @@ public class PersistentStore {
 	
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
-				log.info("read userPlan for "+user.getName()+", "+id);
+				//log.info("read userPlan for "+user.getName()+", "+id);
 				plan = (UserPlan)readDescriptor(UserPlan.class.getName(), id, new HashMap<String, Object>(), result);
 			}
 			
@@ -700,21 +829,31 @@ public class PersistentStore {
 	}
 
 	protected static UserGoal readUserGoal(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readUserGoal(genericEntity, cache, true);
+	}
+	protected static UserGoal readUserGoal(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		UserGoal userGoal = null;
 		try {
-			userGoal = (UserGoal)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				userGoal = (UserGoal)StimulatedPlanningFactory.getObject(UserGoal.class.getName(), id);
+			}
+			if (userGoal == null) {
+				userGoal = (UserGoal)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
 		if (userGoal == null) {
 			ArrayList<GenericDescriptor> relationList = null;
 			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
-			GoalDescriptor goal = (GoalDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "goal", null));				
+			GoalDescriptor goal = (GoalDescriptor)StimulatedPlanningFactory.getObject(GoalDescriptor.class.getName(), readStringProperty(genericEntity, "goal", null));				
 			userGoal = new UserGoal(readStringProperty(genericEntity, "uid", null), user, goal);
 			cache.put(userGoal.getId(), userGoal);
+			StimulatedPlanningFactory.addObject(userGoal, genericEntity);
 			userGoal.setCompletionGoal(readStringProperty(genericEntity, "completionGoal", null));
 			userGoal.setStatus(readStatus(genericEntity));
-			relationList = readToManyRelation(userGoal, "lessons", UserLesson.class.getName(), true, cache);
+			relationList = readToManyRelation(userGoal, "lessons", UserLesson.class.getName(), true, cache, useCache);
 			for (GenericDescriptor generic : relationList) {
 				userGoal.addLesson((UserLesson)generic);
 			}
@@ -744,20 +883,30 @@ public class PersistentStore {
 	}
 
 	protected static UserLesson readUserLesson(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readUserLesson(genericEntity, cache, true);
+	}
+	protected static UserLesson readUserLesson(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		UserLesson userLesson = null;
 		try {
-			userLesson = (UserLesson)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				userLesson = (UserLesson)StimulatedPlanningFactory.getObject(UserLesson.class.getName(), id);
+			}
+			if (userLesson == null) {
+				userLesson = (UserLesson)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
 		if (userLesson == null) {
 			ArrayList<GenericDescriptor> relationList = null;
 			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
-			LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));				
+			LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(LessonDescriptor.class.getName(), readStringProperty(genericEntity, "lesson", null));				
 			userLesson = new UserLesson(readStringProperty(genericEntity, "uid", null), user, lesson);
 			cache.put(userLesson.getId(), userLesson);
+			StimulatedPlanningFactory.addObject(userLesson, genericEntity);
 			userLesson.setStatus(readStatus(genericEntity));
-			relationList = readToManyRelation(userLesson, "contents", UserContent.class.getName(), true, cache);
+			relationList = readToManyRelation(userLesson, "contents", UserContent.class.getName(), true, cache, useCache);
 			for (GenericDescriptor generic : relationList) {
 				userLesson.addContent((UserContent)generic);
 			}
@@ -786,17 +935,27 @@ public class PersistentStore {
 	}
 
 	protected static UserContent readUserContent(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readUserContent(genericEntity, cache, true);
+	}
+	protected static UserContent readUserContent(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		UserContent userContent = null;
 		try {
-			userContent = (UserContent)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				userContent = (UserContent)StimulatedPlanningFactory.getObject(UserContent.class.getName(), id);
+			}
+			if (userContent == null) {
+				userContent = (UserContent)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
 		if (userContent == null) {
 			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
-			ContentDescriptor content = (ContentDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "content", null));				
+			ContentDescriptor content = (ContentDescriptor)StimulatedPlanningFactory.getObject(ContentDescriptor.class.getName(), readStringProperty(genericEntity, "content", null));				
 			userContent = new UserContent(readStringProperty(genericEntity, "uid", null), user, content);
 			userContent.setStatus(readStatus(genericEntity));
+			StimulatedPlanningFactory.addObject(userContent, genericEntity);
 		}
 		return userContent;
 	}
@@ -820,18 +979,28 @@ public class PersistentStore {
 	}
 
 	protected static PlanItem readPlanItem(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readPlanItem(genericEntity, cache, true);
+	}
+	protected static PlanItem readPlanItem(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		PlanItem planItem = null;
 		try {
-			planItem = (PlanItem)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				planItem = (PlanItem)StimulatedPlanningFactory.getObject(PlanItem.class.getName(), id);
+			}
+			if (planItem == null) {
+				planItem = (PlanItem)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
 		if (planItem == null) {
 			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
-			LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "lesson", null));
+			LessonDescriptor lesson = (LessonDescriptor)StimulatedPlanningFactory.getObject(LessonDescriptor.class.getName(), readStringProperty(genericEntity, "lesson", null));
 			String jsonPlanItem = readStringProperty(genericEntity, "jsonPlanItem", null);
 			planItem = new PlanItem(readStringProperty(genericEntity, "uid", null), user, lesson, jsonPlanItem);
 			cache.put(planItem.getId(), planItem);
+			StimulatedPlanningFactory.addObject(planItem, genericEntity);
 			planItem.setStatus(readStatus(genericEntity));
 			planItem.setPlanStatus(readPlanStatus(genericEntity));
 			planItem.setPlanCompletionStatus(readPlanCompletionStatus(genericEntity));
@@ -866,9 +1035,18 @@ public class PersistentStore {
 	}
 
 	protected static UserProfile readUserProfile(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readUserProfile(genericEntity, cache, true);
+	}
+	protected static UserProfile readUserProfile(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		UserProfile userProfile = null;
 		try {
-			userProfile = (UserProfile)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				userProfile = (UserProfile)StimulatedPlanningFactory.getObject(UserProfile.class.getName(), id);
+			}
+			if (userProfile == null) {
+				userProfile = (UserProfile)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -877,6 +1055,7 @@ public class PersistentStore {
 			userProfile = new UserProfile(readStringProperty(genericEntity, "uid", null), user, readStringProperty(genericEntity, "email", null));
 			userProfile.setFullName(readStringProperty(genericEntity, "fullName", null));
 			cache.put(userProfile.getId(), userProfile);
+			StimulatedPlanningFactory.addObject(userProfile, genericEntity);
 		}
 		return userProfile;
 	}
@@ -922,9 +1101,18 @@ public class PersistentStore {
 	}
 
 	protected static UserOnlineStatus readUserOnlineStatus(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readUserOnlineStatus(genericEntity, cache, true);
+	}
+	protected static UserOnlineStatus readUserOnlineStatus(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		UserOnlineStatus onlineStatus = null;
 		try {
-			onlineStatus = (UserOnlineStatus)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				onlineStatus = (UserOnlineStatus)StimulatedPlanningFactory.getObject(UserOnlineStatus.class.getName(), id);
+			}
+			if (onlineStatus == null) {
+				onlineStatus = (UserOnlineStatus)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -933,8 +1121,12 @@ public class PersistentStore {
 			onlineStatus = new UserOnlineStatus(readStringProperty(genericEntity, "uid", null),
 					user);
 			cache.put(onlineStatus.getId(), onlineStatus);
+			StimulatedPlanningFactory.addObject(onlineStatus, genericEntity);
 			onlineStatus.setLastAccess(readDateProperty(genericEntity, "lastAccess", null));
 			onlineStatus.setLastUrl(readStringProperty(genericEntity, "lastUrl", null));
+			onlineStatus.setUrl(readStringProperty(genericEntity, "url", null));
+			onlineStatus.setTitle(readStringProperty(genericEntity, "title", null));
+			onlineStatus.setDescription(readStringProperty(genericEntity, "description", null));
 			user.setOnlineStatus(onlineStatus);
 		}
 		return onlineStatus;
@@ -943,7 +1135,10 @@ public class PersistentStore {
 	protected static UserOnlineStatus readUserOnlineStatus(String id, User user, HashMap<String, Object> cache) throws Exception {
 		UserOnlineStatus onlineStatus = null;
 		try {
-			onlineStatus = (UserOnlineStatus)cache.get(id);
+			onlineStatus = (UserOnlineStatus)StimulatedPlanningFactory.getObject(UserOnlineStatus.class.getName(), id);
+			if (onlineStatus == null) {
+				onlineStatus = (UserOnlineStatus)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -962,9 +1157,12 @@ public class PersistentStore {
 				onlineStatus = new UserOnlineStatus(readStringProperty(genericEntity, "uid", null),
 						user);
 				cache.put(onlineStatus.getId(), onlineStatus);
+				StimulatedPlanningFactory.addObject(onlineStatus, genericEntity);
 				user.setOnlineStatus(onlineStatus);
 				onlineStatus.setLastAccess(new Date(Long.parseLong(readStringProperty(genericEntity, "lastAccess", null))));
 				onlineStatus.setLastUrl(readStringProperty(genericEntity, "lastUrl", null));
+				onlineStatus.setTitle(readStringProperty(genericEntity, "title", null));
+				onlineStatus.setDescription(readStringProperty(genericEntity, "description", null));
 				return onlineStatus;
 			}
 		}
@@ -974,7 +1172,7 @@ public class PersistentStore {
 	public static UserOnlineStatus readUserOnlineStatus(User user) {
 		UserOnlineStatus onlineStatus = null;
 		try {
-			log.info("read userOnlineStatus for "+user.getName());
+			//.info("read userOnlineStatus for "+user.getName());
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 			Filter userFilter = new FilterPredicate("userid", FilterOperator.EQUAL, user.getId());
 			Query q = new Query(UserOnlineStatus.class.getName()).setFilter(userFilter);
@@ -983,7 +1181,7 @@ public class PersistentStore {
 	
 			for (Entity result : pq.asIterable()) {
 				String id = (String) result.getProperty("uid");
-				log.info("read userPlan for "+user.getName()+", "+id);
+				//log.info("read userPlan for "+user.getName()+", "+id);
 				onlineStatus = (UserOnlineStatus)readDescriptor(UserOnlineStatus.class.getName(), id, new HashMap<String, Object>(), result);
 			}
 			
@@ -1014,6 +1212,9 @@ public class PersistentStore {
 
 
 	protected static Clan readClan(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readClan(genericEntity, cache, true);
+	}
+	protected static Clan readClan(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		ArrayList<GenericDescriptor> relationList = null;
 		Clan clan = null;
 		if (StimulatedPlanningFactory.getNoOfClans() > 0) {
@@ -1021,7 +1222,13 @@ public class PersistentStore {
 		}
 		if (clan == null) {
 			try {
-				clan = (Clan)cache.get(readStringProperty(genericEntity, "uid", null));
+				String id = readStringProperty(genericEntity, "uid", null);
+				if (useCache) {
+					clan = (Clan)StimulatedPlanningFactory.getObject(Clan.class.getName(), id);
+				}
+				if (clan == null) {
+					clan = (Clan)cache.get(id);
+				}
 			} catch (Exception exc) {
 				exc.printStackTrace();
 			}
@@ -1085,9 +1292,18 @@ public class PersistentStore {
 
 
 	public static SelectionObject readSelectionObject(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readSelectionObject(genericEntity, cache, true);
+	}
+	public static SelectionObject readSelectionObject(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		SelectionObject selectionObject = null;
 		try {
-			selectionObject = (SelectionObject)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				selectionObject = (SelectionObject)StimulatedPlanningFactory.getObject(SelectionObject.class.getName(), id);
+			}
+			if (selectionObject == null) {
+				selectionObject = (SelectionObject)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -1102,12 +1318,13 @@ public class PersistentStore {
 					readBooleanProperty(genericEntity, "isClanBVisible", true)
 			);
 			cache.put(selectionObject.getId(), selectionObject);
+			StimulatedPlanningFactory.addObject(selectionObject, genericEntity);
 			selectionObject.setContent(readStringProperty(genericEntity, "content", null));
 			selectionObject.setSequence(Integer.valueOf(readStringProperty(genericEntity, "sequence", null)));
 			selectionObject.setType(readSelectionObjectType(genericEntity));
 			selectionObject.setPurpose(readSelectionObjectPurpose(genericEntity));
 			selectionObject.setDeadline(readDateProperty(genericEntity, "deadline", null));
-			relationList = readToManyRelation(selectionObject, "options", SelectionOption.class.getName(), true, cache);
+			relationList = readToManyRelation(selectionObject, "options", SelectionOption.class.getName(), true, cache, useCache);
 			for (GenericDescriptor generic : relationList) {
 				selectionObject.addOption((SelectionOption)generic);
 			}
@@ -1157,9 +1374,18 @@ public class PersistentStore {
 	}
 
 	public static SelectionOption readSelectionOption(Entity genericEntity, HashMap<String, Object> cache) {
+		return readSelectionOption(genericEntity, cache, true);
+	}
+	public static SelectionOption readSelectionOption(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) {
 		SelectionOption selectionOption = null;
 		try {
-			selectionOption = (SelectionOption)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				selectionOption = (SelectionOption)StimulatedPlanningFactory.getObject(SelectionOption.class.getName(), id);
+			}
+			if (selectionOption == null) {
+				selectionOption = (SelectionOption)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -1168,6 +1394,7 @@ public class PersistentStore {
 					readStringProperty(genericEntity, "title", null), readStringProperty(genericEntity, "description", null),
 					readStringProperty(genericEntity, "url", null));
 			cache.put(selectionOption.getId(), selectionOption);
+			StimulatedPlanningFactory.addObject(selectionOption, genericEntity);
 			selectionOption.setContent(readStringProperty(genericEntity, "content", null));
 			selectionOption.setCorrect(readBooleanProperty(genericEntity, "isCorrect", false));
 		}
@@ -1192,19 +1419,30 @@ public class PersistentStore {
 	}
 
 	protected static UserSelectedOption readUserSelectedOption(Entity genericEntity, HashMap<String, Object> cache) throws Exception {
+		return readUserSelectedOption(genericEntity, cache, true);
+	}
+	
+	protected static UserSelectedOption readUserSelectedOption(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) throws Exception {
 		UserSelectedOption userSelectedOption = null;
 		try {
-			userSelectedOption = (UserSelectedOption)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				userSelectedOption = (UserSelectedOption)StimulatedPlanningFactory.getObject(UserSelectedOption.class.getName(), id);
+			}
+			if (userSelectedOption == null) {
+				userSelectedOption = (UserSelectedOption)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
 		if (userSelectedOption == null) {
 			User user = getUser(readStringProperty(genericEntity, "userid", null), cache);
-			SelectionObject selectionObject = (SelectionObject)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "selectionObject", null));	
-			SelectionOption selectedOption = (SelectionOption)StimulatedPlanningFactory.getObject(readStringProperty(genericEntity, "selectedOption", null));	
+			SelectionObject selectionObject = (SelectionObject)StimulatedPlanningFactory.getObject(SelectionObject.class.getName(), readStringProperty(genericEntity, "selectionObject", null));	
+			SelectionOption selectedOption = (SelectionOption)StimulatedPlanningFactory.getObject(SelectionOption.class.getName(), readStringProperty(genericEntity, "selectedOption", null));	
 	
 			userSelectedOption = new UserSelectedOption(readStringProperty(genericEntity, "uid", null), user);
 			cache.put(userSelectedOption.getId(), userSelectedOption);
+			StimulatedPlanningFactory.addObject(userSelectedOption, genericEntity);
 			userSelectedOption.setLastAccess(new Date(Long.parseLong(readStringProperty(genericEntity, "lastAccess", null))));
 			userSelectedOption.setSelectionObject(selectionObject);
 			userSelectedOption.setSelectedOption(selectedOption);
@@ -1238,6 +1476,34 @@ public class PersistentStore {
 	}
 	
 	
+	public static HashMap<String, UserSelectedOption> readUserSelectionOptions(SelectionObject selectionObject, SelectionOption selectionOption) {
+		UserSelectedOption selectedOption = null;
+		HashMap<String, UserSelectedOption> optionMap = new HashMap<>();
+		try {
+			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+			Filter selectionObjectFilter = new FilterPredicate("selectionObject", FilterOperator.EQUAL, selectionObject.getId());
+			Filter selectionOptionFilter = new FilterPredicate("selectedOption", FilterOperator.EQUAL, selectionOption.getId());
+			CompositeFilter userSelectedFilter = CompositeFilterOperator.and(selectionObjectFilter, selectionOptionFilter);
+			Query q = new Query(UserSelectedOption.class.getName()).setFilter(userSelectedFilter);
+			
+			PreparedQuery pq = datastore.prepare(q);
+
+			for (Entity result : pq.asIterable()) {
+				String id = (String) result.getProperty("uid");
+				String userid = (String) result.getProperty("userid");
+				//log.info("read userPlan for "+user.getName()+", "+id);
+				selectedOption = (UserSelectedOption)readDescriptor(UserSelectedOption.class.getName(), id, new HashMap<String, Object>(), result);
+				optionMap.put(userid, selectedOption);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return optionMap;
+	}
+	
+	
 	public static void writeDescriptor(UserSelectedOption userSelectedOption) throws Exception {
 		//log.info("writeDescriptor (UserSelectedOption): "+userOnlineStatus.getUser().getName()+", "+userOnlineStatus.getClass().getName()+", "+userOnlineStatus.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -1260,9 +1526,18 @@ public class PersistentStore {
 	
 	
 	protected static InformationObject readInformationObject(Entity genericEntity, HashMap<String, Object> cache) {
+		return readInformationObject(genericEntity, cache, true);
+	}
+	protected static InformationObject readInformationObject(Entity genericEntity, HashMap<String, Object> cache, boolean useCache) {
 		InformationObject informationObject = null;
 		try {
-			informationObject = (InformationObject)cache.get(readStringProperty(genericEntity, "uid", null));
+			String id = readStringProperty(genericEntity, "uid", null);
+			if (useCache) {
+				informationObject = (InformationObject)StimulatedPlanningFactory.getObject(InformationObject.class.getName(), id);
+			}
+			if (informationObject == null) {
+				informationObject = (InformationObject)cache.get(id);
+			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
@@ -1275,6 +1550,8 @@ public class PersistentStore {
 					readBooleanProperty(genericEntity, "isClanAVisible", true),
 					readBooleanProperty(genericEntity, "isClanBVisible", true)
 			);
+			cache.put(informationObject.getId(), informationObject);
+			StimulatedPlanningFactory.addObject(informationObject, genericEntity);
 			informationObject.setContent(readStringProperty(genericEntity, "content", null));
 			informationObject.setSequence(Integer.valueOf(readStringProperty(genericEntity, "sequence", null)));
 		}
@@ -1335,7 +1612,7 @@ public class PersistentStore {
 	
 
 	public static ArrayList<Message> readMessagesForChat(ChatRoomList roomlist, ChatRoom room) {
-		log.info("readMessagesForChat: "+roomlist.getId()+", "+room.getId());
+		//log.info("readMessagesForChat: "+roomlist.getId()+", "+room.getId());
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		//Entity entity = null;
 		
@@ -1366,7 +1643,7 @@ public class PersistentStore {
 	
 	
 	public static ArrayList<Message> readMessagesForTeacherChat() {
-		log.info("readMessagesForTeacherChat.");
+		//log.info("readMessagesForTeacherChat.");
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		//Entity entity = null;
 		
@@ -1558,8 +1835,16 @@ public class PersistentStore {
 		}
 
 		try {
-			Key entityKey = KeyFactory.createKey(generic.getClass().getName(), generic.getId());
-			datastore.delete(entityKey);
+			Entity entity = StimulatedPlanningFactory.getEntity(generic.getClass().getName(), generic.getId());
+			if (entity != null) {
+				log.info("deleting generic object with entity: "+generic.getClass().getName()+", "+generic.getId());
+				datastore.delete(entity.getKey());
+				StimulatedPlanningFactory.removeObject(generic.getClass().getName(), generic.getId());
+			} else {
+				log.info("Warning: deleting generic object only from datastore, not from cache: "+generic.getClass().getName()+", "+generic.getId());
+				Key entityKey = KeyFactory.createKey(generic.getClass().getName(), generic.getId());
+				datastore.delete(entityKey);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1633,14 +1918,17 @@ public class PersistentStore {
 	}
 
 	public static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget, HashMap<String, Object> cache) throws Exception {
-		log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
+		return readToManyRelation(source, relation, targetClass, readTarget, cache, true);
+	}
+	public static ArrayList<GenericDescriptor> readToManyRelation(GenericDescriptor source, String relation, String targetClass, boolean readTarget, HashMap<String, Object> cache, boolean useCache) throws Exception {
+		//log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass);
 		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 		//Entity entity = null;
 		
 		ArrayList<GenericDescriptor> arrayList = new ArrayList<GenericDescriptor>();
 
 		if (source == null || relation == null) {
-			log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass+", size: "+arrayList.size());
+			//log.info("readToManyRelation: "+source.getClass().getName()+", "+relation+", "+targetClass+", size: "+arrayList.size());
 			return arrayList;
 		}
 		
@@ -1662,7 +1950,7 @@ public class PersistentStore {
 					size = sizen;
 				}
 				
-				GenericDescriptor generic = readDescriptor(targetClass, targetId, cache, null);
+				GenericDescriptor generic = readDescriptor(targetClass, targetId, cache, null, useCache);
 				if (generic != null) {
 					arrayList.add(generic);
 				} else {
@@ -1685,7 +1973,7 @@ public class PersistentStore {
 //			}
 //		}
 
-		log.info("readToManyRelation: "+source.getClass().getName()+" ["+source.getId()+"], "+relation+", "+targetClass+", size: "+arrayList.size());
+		//log.info("readToManyRelation: "+source.getClass().getName()+" ["+source.getId()+"], "+relation+", "+targetClass+", size: "+arrayList.size());
 		return arrayList;
 	}
 

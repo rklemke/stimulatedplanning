@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.appengine.api.datastore.Entity;
 import com.google.gson.Gson;
 
 import senseofcommunity.Clan;
@@ -26,6 +27,7 @@ import senseofcommunity.SoC_ProductionCourseCreationFactory;
 import senseofcommunity.UserOnlineStatus;
 import senseofcommunity.UserSelectedOption;
 import stimulatedplanning.util.HashArrayList;
+import stimulatedplanning.util.IObjectWithId;
 import stimulatedplanning.util.UserProfileCVS;
 
 import chat.*;
@@ -56,7 +58,8 @@ public class StimulatedPlanningFactory {
 	public static final String testCourseBaseURL = "https://ou.acc.edia.nl/courses/course-v1:OUNL+TCC01+2019_01/courseware/";
 
 	//public static final String applicationHome = "http://localhost:8080";
-	public static final String applicationHome = "https://senseofcommunity-225200.appspot.com";
+	//public static final String applicationHome = "https://senseofcommunity-225200.appspot.com";
+	public static final String applicationHome = "https://senseofcommunity-test.appspot.com";
 	
 	public static final String userUnknown = "unknown";
 	public static final String userGuest = "Guest";
@@ -64,8 +67,9 @@ public class StimulatedPlanningFactory {
 	public static final String ACTIVITY_TYPE_ACCESS = "access";
 	public static final String ACTIVITY_TYPE_COMPLETE = "complete";
 	
-	private HashMap<String, GenericDescriptor> courseObjects = new HashMap<>();
+	private HashMap<String, CacheableDatabaseObject> courseObjects = new HashMap<>();
 	private HashArrayList<Clan> clans = new HashArrayList<>();
+	private HashArrayList<User> controlUsers = new HashArrayList<>();
 	
 	private CourseDescriptor retrieveTestCourse() {
 		if (instance.testCourse != null) {
@@ -228,25 +232,64 @@ public class StimulatedPlanningFactory {
 		return course;
 	}
 
-	public static boolean hasObject(String id) {
-		return instance.courseObjects.containsKey(id);
+	public static boolean hasObject(String className, String id) {
+		return instance.courseObjects.containsKey(className+"_"+id);
 	}
 	
-	public static void addObject(GenericDescriptor object) {
-		if (!(object instanceof GenericUserObject)) {
-			instance.courseObjects.put(object.getId(), object);
-		} else {
-			log.info("trying to add GenericUserObject to courseObjects: "+object.getClass().getName()+", "+object.getId());
+	public static void addObject(IObjectWithId object, Entity entity) {
+		CacheableDatabaseObject cdo = null;
+		String key = object.getClass().getName()+"_"+object.getId();
+		if (instance.courseObjects.containsKey(key)) {
+			cdo = instance.courseObjects.get(key);
+		}
+		if (cdo == null || cdo.getObject() != object || cdo.getEntity() != entity || cdo.isExpired()) {
+			cdo = new CacheableDatabaseObject(entity, object);
+			if (object instanceof UserSelectedOption) {
+				cdo.setExpires(20);
+			} else if (object instanceof GenericUserObject) {
+				cdo.setExpires(60);
+			} else if (object instanceof User) {
+				cdo.setExpires(180);
+			}
+			instance.courseObjects.put(cdo.getCacheId(), cdo);
 		}
 	}
 	
-	public static GenericDescriptor getObject(String id) {
-		if (!instance.courseObjects.containsKey(id)) {
-			log.info("Warning: trying to retrieve object not in Map: "+id);
-			new Exception().printStackTrace();
+	public static void removeObject(String className, String id) {
+		String key = className+"_"+id;
+		if (instance.courseObjects.containsKey(key)) {
+			instance.courseObjects.remove(key);
+		}
+	}
+	
+	public static IObjectWithId getObject(String className, String id) {
+		String key = className+"_"+id;
+		if (!instance.courseObjects.containsKey(key)) {
+			log.info("Warning: trying to retrieve object not in Map: "+key);
+			//new Exception().printStackTrace();
 			return null;
 		}
-		return instance.courseObjects.get(id);
+		if (instance.courseObjects.get(key).isExpired()) {
+			log.info("trying to update object that is expired: "+key);
+			CacheableDatabaseObject cdo = instance.courseObjects.get(key);
+			instance.courseObjects.remove(key);
+			PersistentStore.updateCacheableObject(cdo);
+			if (!instance.courseObjects.containsKey(key)) {
+				log.info("updating cacheable object failed: "+key);
+				new Exception().printStackTrace();
+				return null;
+			}
+		}
+		return instance.courseObjects.get(key).getObject();
+	}
+	
+	public static Entity getEntity(String className, String id) {
+		String key = className+"_"+id;
+		if (!instance.courseObjects.containsKey(key)) {
+			log.info("Warning: trying to retrieve entity not in Map: "+key);
+			return null;
+		}
+		return instance.courseObjects.get(key).getEntity();
 	}
 	
 	public static void addClan(Clan clan) {
@@ -322,6 +365,18 @@ public class StimulatedPlanningFactory {
 			}
 		}
 		return instance.clans;
+	}
+
+	
+	private static HashArrayList<User> getOrGenerateControlUsers() {
+		if (instance.controlUsers.size() == 0) {
+			instance.controlUsers = PersistentStore.readAllControlUsers();
+		}
+		return instance.controlUsers;
+	}
+	
+	public static void addControlUser(User controlUser) {
+		instance.controlUsers.add(controlUser);
 	}
 
 	
@@ -804,6 +859,8 @@ public class StimulatedPlanningFactory {
 					}
 				}
 				// TODO: retrieve all clans and randomly assign to one
+			} else {
+				addControlUser(user);
 			}
 			if (!userGuest.equals(user.getName()) && !userUnknown.equals(userid)) {
 				try {
@@ -828,7 +885,8 @@ public class StimulatedPlanningFactory {
 	 * @return
 	 */
 	protected static HashArrayList<UserOnlineStatus> getControlUsersInTimeframe(int maxSecondsAgo, int minSecondsAgo) {
-		HashArrayList<User> users = PersistentStore.readAllControlUsers();
+		HashArrayList<User> users = getOrGenerateControlUsers();
+		//HashArrayList<User> users = PersistentStore.readAllControlUsers();
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
@@ -984,6 +1042,12 @@ public class StimulatedPlanningFactory {
 		log.info("create userOnlineStatus for "+user.getName());
 		UserOnlineStatus userOnlineStatus = new UserOnlineStatus(StimulatedPlanningFactory.getUUID(), user);
 		
+		try {
+			PersistentStore.writeDescriptor(userOnlineStatus);
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		
 		return userOnlineStatus;
 	}
 	
@@ -1003,19 +1067,22 @@ public class StimulatedPlanningFactory {
 		UserSelectedOption selectedOption = null;
 		try {
 			for (UserOnlineStatus status: clan.getOnlineUsers()) {
-				selectedOption = PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
+				//selectedOption = PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
+				selectedOption = selectionOption.getUserSelectedOption(status.getUser(), selectionObject);  //PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
 				if (selectedOption != null) {
 					selectedOptions.add(selectedOption);
 				}						
 			}
 			for (UserOnlineStatus status: clan.getRecentUsers()) {
-				selectedOption = PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
+				//selectedOption = PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
+				selectedOption = selectionOption.getUserSelectedOption(status.getUser(), selectionObject);  //PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
 				if (selectedOption != null) {
 					selectedOptions.add(selectedOption);
 				}						
 			}
 			for (UserOnlineStatus status: clan.getOfflineUsers()) {
-				selectedOption = PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
+				//selectedOption = PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
+				selectedOption = selectionOption.getUserSelectedOption(status.getUser(), selectionObject);  //PersistentStore.readUserSelectionOption(status.getUser(), selectionObject, selectionOption);
 				if (selectedOption != null) {
 					selectedOptions.add(selectedOption);
 				}						
@@ -1156,20 +1223,10 @@ public class StimulatedPlanningFactory {
 
 		HttpSession session = request.getSession();
 		
-		//Enumeration<String> valnames = session.getAttributeNames();
-		//if (valnames.hasMoreElements()) {
-		//	for (String valname = valnames.nextElement(); valnames.hasMoreElements(); valname = valnames.nextElement() ) {
-		//		log.info("session attribute: "+valname+", "+session.getAttribute(valname));
-		//	}
-		//}
-		
 		String loginData = "";
 		
 		String userNameR = request.getParameter("userName");
 		String useridR = request.getParameter("userid");
-		//if (useridR == null) {
-		//	useridR = request.getParameter("userId");
-		//}
 
 		//log.info("init session 1: userNameR: "+userNameR+", useridR: "+useridR);
 		if (userNameR == null || useridR == null) {
