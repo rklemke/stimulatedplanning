@@ -57,9 +57,9 @@ public class StimulatedPlanningFactory {
 	//public static final String testCourseBaseURL = "https://localhost/courses/course-v1:DelftX+Sandbox_Welten+2018/";
 	public static final String testCourseBaseURL = "https://ou.acc.edia.nl/courses/course-v1:OUNL+TCC01+2019_01/courseware/";
 
-	//public static final String applicationHome = "http://localhost:8080";
+	public static final String applicationHome = "http://localhost:8080";
 	//public static final String applicationHome = "https://senseofcommunity-225200.appspot.com";
-	public static final String applicationHome = "https://senseofcommunity-test.appspot.com";
+	//public static final String applicationHome = "https://senseofcommunity-test.appspot.com";
 	
 	public static final String userUnknown = "unknown";
 	public static final String userGuest = "Guest";
