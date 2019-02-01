@@ -41,5 +41,9 @@
         <property name="source" direction="asc"/>
         <property name="order" direction="asc"/>
     </datastore-index>
-        
+	<datastore-index kind="stimulatedplanning.UserPlan_userGoals_stimulatedplanning.UserGoal" ancestor="false" source="manual">
+        <property name="source" direction="asc"/>
+        <property name="order" direction="asc"/>
+    </datastore-index>
+            
 </datastore-indexes>
