@@ -14,7 +14,7 @@ public class ContentDescriptor extends GenericDescriptor {
 	protected HashArrayList<InformationObject> allInformationObjects;
 	protected HashArrayList<SelectionObject> selectionObjects;
 
-	public void addInformationObject(InformationObject informationObject) {
+	public InformationObject addInformationObject(InformationObject informationObject) {
 		if (informationObject.getSequence()==-1) {
 			informationObject.setSequence(informationObjects.size()+selectionObjects.size());
 		}
@@ -24,6 +24,7 @@ public class ContentDescriptor extends GenericDescriptor {
 			this.informationObjects.add(informationObject);
 		}
 		this.allInformationObjects.add(informationObject);
+		return informationObject;
 	}
 	
 	public ListIterator<InformationObject> getAllInformationObjects() {

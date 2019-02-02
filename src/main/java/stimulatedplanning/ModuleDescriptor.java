@@ -23,8 +23,9 @@ public class ModuleDescriptor extends GenericDescriptor {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void addLesson(LessonDescriptor lesson) {
+	public LessonDescriptor addLesson(LessonDescriptor lesson) {
 		this.lessons.add(lesson);
+		return lesson;
 	}
 	
 	public ListIterator<LessonDescriptor> getLessons() {

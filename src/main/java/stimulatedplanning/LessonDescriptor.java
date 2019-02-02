@@ -34,8 +34,9 @@ public class LessonDescriptor extends GenericDescriptor {
 		return "'"+getTitle()+"' contains "+contents.size()+" activit"+(contents.size()==1?"y":"ies")+" and takes "+lessonDuration.toMinutes()+" minutes to be completed.";
 	}
 
-	public void addContent(ContentDescriptor content) {
+	public ContentDescriptor addContent(ContentDescriptor content) {
 		this.contents.add(content);
+		return content;
 	}
 	
 	public ListIterator<ContentDescriptor> getContents() {

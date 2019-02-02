@@ -51,13 +51,18 @@ public class StimulatedPlanningFactory {
 	//private static final String testCourseId = "ICS18";
 	//public static final String testCourseId = "SBW18";
 	//public static final String testCourseId = "TCC01";
-	public static final String testCourseId = SoC_ProductionCourseCreationFactory.prodCourseId;
+	//public static final String testCourseId = SoC_ProductionCourseCreationFactory.prodCourseId;
+	public static final String testCourseId = SP_TLA_ProductionCourseCreationFactory.prodCourseId;
 	//private static final String testCourseBaseURL = "https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/";
 	//public static final String testCourseBaseURL = "https://edge.edx.org/courses/course-v1:DelftX+Sandbox_Welten+2018/";
 	//public static final String testCourseBaseURL = "https://localhost/courses/course-v1:DelftX+Sandbox_Welten+2018/";
-	public static final String testCourseBaseURL = "https://ou.acc.edia.nl/courses/course-v1:OUNL+TCC01+2019_01/courseware/";
+	//public static final String testCourseBaseURL = "https://ou.acc.edia.nl/courses/course-v1:OUNL+TCC01+2019_01/courseware/";
+	public static final String testCourseBaseURL = SP_TLA_ProductionCourseCreationFactory.prodCourseBaseURL;
+
+	public static final String testCourseEditURL = SP_TLA_ProductionCourseCreationFactory.prodCourseEditURL;
 
 	public static final String applicationHome = "http://localhost:8080";
+	//public static final String applicationHome = "https://stimulatedplanning-TLA.appspot.com";
 	//public static final String applicationHome = "https://senseofcommunity-225200.appspot.com";
 	//public static final String applicationHome = "https://senseofcommunity-test.appspot.com";
 	
@@ -98,14 +103,7 @@ public class StimulatedPlanningFactory {
 	 * @return
 	 */
 	public static CourseDescriptor generateProductionCourse() {
-		getOrGenerateClans();
-		CourseDescriptor course = instance.retrieveTestCourse();
-		if (course == null) {
-			// Course
-			course = SoC_ProductionCourseCreationFactory.generateProductionCourse();
-			instance.storeTestCourse(course);
-		}		
-		return course;
+		return SoC_ProductionCourseCreationFactory.generateProductionCourse();
 	}
 
 	/**
@@ -338,12 +336,20 @@ public class StimulatedPlanningFactory {
 	 * @return
 	 */
 	public static CourseDescriptor generateTestCourse() {
-		return generateProductionCourse();
-		//return StimulatedPlanningFactory.generateAccTestCourse();
-		//return generateDevTestCourse();
+		getOrGenerateClans();
+		CourseDescriptor course = instance.retrieveTestCourse();
+		if (course == null) {
+			// Course
+			course = SP_TLA_ProductionCourseCreationFactory.generateProductionCourse();
+			//course = generateProductionCourse();
+			//course = StimulatedPlanningFactory.generateAccTestCourse();
+			//course = generateDevTestCourse();
+			instance.storeTestCourse(course);
+		}		
+		return course;
 	}	
 
-	private static HashArrayList<Clan> getOrGenerateClans() {
+	protected static HashArrayList<Clan> getOrGenerateClans() {
 		if (instance.clans.size() == 0) {
 			instance.clans = PersistentStore.readAllClans();
 		}
@@ -834,7 +840,7 @@ public class StimulatedPlanningFactory {
 			user = new User(userName, userid);
 			UserOnlineStatus status = getUserOnlineStatus(user);
 			user.setOnlineStatus(status);
-			boolean treatment = random.nextFloat() > 0.4; // (60% treatment, 40% control)
+			boolean treatment = random.nextFloat() >= 0.47; // (53% treatment, 47% control)
 			user.setTreatmentGroup(treatment);
 			if (user.isTreatmentGroup()) {
 				if (instance.clans.size()==0) {

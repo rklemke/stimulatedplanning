@@ -24,8 +24,9 @@ public class SelectionObject extends InformationObject {
 	}
 	
 	protected HashArrayList<SelectionOption> options;
-	public void addOption(SelectionOption option) {
+	public SelectionOption addOption(SelectionOption option) {
 		this.options.add(option);
+		return option;
 	}
 	public ListIterator<SelectionOption> getOptions() {
 		return options.listIterator();

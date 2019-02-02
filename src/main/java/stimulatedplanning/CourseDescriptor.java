@@ -26,8 +26,9 @@ public class CourseDescriptor extends GenericDescriptor {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void addModule(ModuleDescriptor module) {
+	public ModuleDescriptor addModule(ModuleDescriptor module) {
 		this.modules.add(module);
+		return module;
 	}
 	
 	public ListIterator<ModuleDescriptor> getModules() {
@@ -38,8 +39,9 @@ public class CourseDescriptor extends GenericDescriptor {
 		return modules.unmodifiableList();
 	}
 	
-	public void addGoal(GoalDescriptor goal) {
+	public GoalDescriptor addGoal(GoalDescriptor goal) {
 		this.goals.add(goal);
+		return goal;
 	}
 	
 	public ListIterator<GoalDescriptor> getGoals() {
