@@ -61,8 +61,8 @@ public class StimulatedPlanningFactory {
 
 	public static final String testCourseEditURL = SP_TLA_ProductionCourseCreationFactory.prodCourseEditURL;
 
-	public static final String applicationHome = "http://localhost:8080";
-	//public static final String applicationHome = "https://stimulatedplanning-TLA.appspot.com";
+	//public static final String applicationHome = "http://localhost:8080";
+	public static final String applicationHome = "https://stimulatedplanning-tla.appspot.com";
 	//public static final String applicationHome = "https://senseofcommunity-225200.appspot.com";
 	//public static final String applicationHome = "https://senseofcommunity-test.appspot.com";
 	

@@ -109,8 +109,8 @@
     		defaultView: 'agendaWeek',
     		//defaultDate: $.fullCalendar.moment('2018-02-01'),
     	    validRange: {
-    	        start: '2018-02-19',
-    	        end: '2018-03-12'
+    	        start: '2019-02-18',
+    	        end: '2019-03-18'
     	    },
 			eventStartEditable: true,
 			eventDurationEditable: false,

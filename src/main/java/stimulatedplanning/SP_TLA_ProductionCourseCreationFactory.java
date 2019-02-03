@@ -16,7 +16,7 @@ public class SP_TLA_ProductionCourseCreationFactory {
 
 	public static final String prodCourseId = "TLA2019";
 	public static final String prodCourseBaseURL = "https://ou.edia.nl/courses/course-v1:OUNL+TLA2019+2019_1/courseware/";
-	public static final String prodCourseEditURL = "";
+	public static final String prodCourseEditURL = "439e1cfd6bbb4406bdd9f0b4ebf1794a/6f065bf11bac40ad8f01a677e8ddcca1/?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%406f065bf11bac40ad8f01a677e8ddcca1";
 
 	private static final Logger log = Logger.getLogger(SP_TLA_ProductionCourseCreationFactory.class.getName());   
 
@@ -26,11 +26,13 @@ public class SP_TLA_ProductionCourseCreationFactory {
 
 	
 	public static CourseDescriptor generateProductionCourse() {
+		log.info("generateProductionCourse: "+prodCourseId);
+		
 		// Course
 			
 		CourseDescriptor course = new CourseDescriptor(prodCourseId, 
-			"How Cryptography Keeps The Internet Secure", 
-			"How Cryptography Keeps The Internet Secure", 
+			"Trusted Learning Analytics", 
+			"Trusted Learning Analytics", 
 			prodCourseBaseURL);
 
 		//
@@ -101,6 +103,17 @@ public class SP_TLA_ProductionCourseCreationFactory {
 				"Video", 
 				prodCourseBaseURL+contentId)); // "439e1cfd6bbb4406bdd9f0b4ebf1794a/cf983613678b46d0b1a52e02915aaeb6/")); // ?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%40cf983613678b46d0b1a52e02915aaeb6
 
+		// https://ou.edia.nl/courses/course-v1:OUNL+TLA2019+2019_1/courseware/439e1cfd6bbb4406bdd9f0b4ebf1794a/6f065bf11bac40ad8f01a677e8ddcca1/?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%406f065bf11bac40ad8f01a677e8ddcca1
+		lesson = module.addLesson(new LessonDescriptor(module.getId()+"_l"+(l++), 
+				"Make your own plan",
+				"Make your own plan",""));	
+	
+		contentId = "439e1cfd6bbb4406bdd9f0b4ebf1794a/6f065bf11bac40ad8f01a677e8ddcca1/";
+		content = lesson.addContent(new ContentDescriptor(contentId, 
+				"Make your own plan", 
+				"Make your own plan", 
+				prodCourseBaseURL+contentId)); // "439e1cfd6bbb4406bdd9f0b4ebf1794a/6f065bf11bac40ad8f01a677e8ddcca1/")); // ?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%406f065bf11bac40ad8f01a677e8ddcca1
+
 		return module;
 	}
 
@@ -159,15 +172,15 @@ public class SP_TLA_ProductionCourseCreationFactory {
 				"Six Dimensions of Learning Analytics", 
 				prodCourseBaseURL+contentId)); // "22048851569a4ea1aa76cf167fdaa94f/ab4c0c6d41ed440a9b769b849e3ef47c/")); // ?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%40ab4c0c6d41ed440a9b769b849e3ef47c
 
-		lesson = module.addLesson(new LessonDescriptor(module.getId()+"_l"+(l++), 
-				"References",
-				"References",""));	
-	
-		contentId = "22048851569a4ea1aa76cf167fdaa94f/96a6f45c96694a93b29fc1fa6b9bd923/";
-		content = lesson.addContent(new ContentDescriptor(contentId, 
-				"References", 
-				"References", 
-				prodCourseBaseURL+contentId)); // "22048851569a4ea1aa76cf167fdaa94f/96a6f45c96694a93b29fc1fa6b9bd923/")); // ?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%4096a6f45c96694a93b29fc1fa6b9bd923
+//		lesson = module.addLesson(new LessonDescriptor(module.getId()+"_l"+(l++), 
+//				"References",
+//				"References",""));	
+//	
+//		contentId = "22048851569a4ea1aa76cf167fdaa94f/96a6f45c96694a93b29fc1fa6b9bd923/";
+//		content = lesson.addContent(new ContentDescriptor(contentId, 
+//				"References", 
+//				"References", 
+//				prodCourseBaseURL+contentId)); // "22048851569a4ea1aa76cf167fdaa94f/96a6f45c96694a93b29fc1fa6b9bd923/")); // ?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%4096a6f45c96694a93b29fc1fa6b9bd923
 
 		lesson = module.addLesson(new LessonDescriptor(module.getId()+"_l"+(l++), 
 				"Assignment: Getting Started with Learning Analytics",
@@ -293,15 +306,15 @@ public class SP_TLA_ProductionCourseCreationFactory {
 				"Evaluating Learning Analytics", 
 				prodCourseBaseURL+contentId)); // "d10190c443fa405a8455994650715c1d/edaec2f21f504375a4056438aef61685/")); // ?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%40edaec2f21f504375a4056438aef61685 
 
-		lesson = module.addLesson(new LessonDescriptor(module.getId()+"_l"+(l++), 
-				"References",
-				"References",""));	
-	
-		contentId = "d10190c443fa405a8455994650715c1d/eb84787514234adea7df36dcd9484325/";
-		content = lesson.addContent(new ContentDescriptor(contentId, 
-				"References", 
-				"References", 
-				prodCourseBaseURL+contentId)); // "d10190c443fa405a8455994650715c1d/eb84787514234adea7df36dcd9484325/")); // ?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%40eb84787514234adea7df36dcd9484325
+//		lesson = module.addLesson(new LessonDescriptor(module.getId()+"_l"+(l++), 
+//				"References",
+//				"References",""));	
+//	
+//		contentId = "d10190c443fa405a8455994650715c1d/eb84787514234adea7df36dcd9484325/";
+//		content = lesson.addContent(new ContentDescriptor(contentId, 
+//				"References", 
+//				"References", 
+//				prodCourseBaseURL+contentId)); // "d10190c443fa405a8455994650715c1d/eb84787514234adea7df36dcd9484325/")); // ?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%40eb84787514234adea7df36dcd9484325
 
 		lesson = module.addLesson(new LessonDescriptor(module.getId()+"_l"+(l++), 
 				"Assignment: Quiz",
@@ -447,15 +460,15 @@ public class SP_TLA_ProductionCourseCreationFactory {
 				"LA Case Studies: Macro Level (institution)", 
 				prodCourseBaseURL+contentId)); // "bc5f974bc18b4456863935e084b752b2/a310387c423b4be5ba7d665c12902093/")); // ?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%40a310387c423b4be5ba7d665c12902093
 
-		lesson = module.addLesson(new LessonDescriptor(module.getId()+"_l"+(l++), 
-				"References",
-				"References",""));	
-	
-		contentId = "bc5f974bc18b4456863935e084b752b2/e5a7b5ce1bdb4cfb89b834624342bf70/";
-		content = lesson.addContent(new ContentDescriptor(contentId, // "bc5f974bc18b4456863935e084b752b2/e5a7b5ce1bdb4cfb89b834624342bf70/", 
-				"References", 
-				"References", 
-				prodCourseBaseURL+contentId)); // "bc5f974bc18b4456863935e084b752b2/e5a7b5ce1bdb4cfb89b834624342bf70/")); // ?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%40e5a7b5ce1bdb4cfb89b834624342bf70
+//		lesson = module.addLesson(new LessonDescriptor(module.getId()+"_l"+(l++), 
+//				"References",
+//				"References",""));	
+//	
+//		contentId = "bc5f974bc18b4456863935e084b752b2/e5a7b5ce1bdb4cfb89b834624342bf70/";
+//		content = lesson.addContent(new ContentDescriptor(contentId, // "bc5f974bc18b4456863935e084b752b2/e5a7b5ce1bdb4cfb89b834624342bf70/", 
+//				"References", 
+//				"References", 
+//				prodCourseBaseURL+contentId)); // "bc5f974bc18b4456863935e084b752b2/e5a7b5ce1bdb4cfb89b834624342bf70/")); // ?activate_block_id=block-v1%3AOUNL%2BTLA2019%2B2019_1%2Btype%40sequential%2Bblock%40e5a7b5ce1bdb4cfb89b834624342bf70
 
 		lesson = module.addLesson(new LessonDescriptor(module.getId()+"_l"+(l++), 
 				"Assignment: Evaluate a Learning Analytics Dashboard",
