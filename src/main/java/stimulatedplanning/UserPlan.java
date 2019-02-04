@@ -141,11 +141,11 @@ public class UserPlan extends GenericUserObject {
 		return duration;
 	}
 
-	public boolean trackLearningProgress(String contentUrl, String activityType) {
+	public boolean trackLearningProgress(String contentUrl, String contentId, String activityType) {
 		boolean updated = false;
 
 		for (UserGoal goal: goals) {
-			if (goal.trackLearningProgress(this, contentUrl, activityType)) {
+			if (goal.trackLearningProgress(this, contentUrl, contentId, activityType)) {
 				updated = true;
 			}
 		}

@@ -1195,8 +1195,9 @@ public class StimulatedPlanningFactory {
 				activityType = StimulatedPlanningFactory.ACTIVITY_TYPE_ACCESS;
 			}
 			String page = request.getParameter("page");
+			String contentId = request.getParameter("contentId");
 			if (page != null) {
-				if ("track".equals(logType) && userPlan.trackLearningProgress(page, activityType)) {
+				if ("track".equals(logType) && userPlan.trackLearningProgress(page, contentId, activityType)) {
 					try {
 						PersistentStore.writeDescriptor(userPlan);
 					} catch (Exception e) {

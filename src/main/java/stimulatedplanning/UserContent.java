@@ -23,23 +23,33 @@ public class UserContent extends GenericUserObject {
 		this.status = status;
 	}
 
-	public boolean trackLearningProgress(UserPlan userPlan, String contentUrl, String activityType) {
+	public boolean trackLearningProgress(UserPlan userPlan, String contentUrl, String contentId, String activityType) {
 		boolean updated = false;
-		int iend = contentUrl.indexOf("?"); 
-		if (iend != -1) {
-			contentUrl = contentUrl.substring(0 , iend);
-		}
-		String thiscontent = this.getContent().getUrl();
-		if (thiscontent != null) {
-			int iend2 = thiscontent.indexOf("?");
-			if (iend2 != -1) {
-				thiscontent = thiscontent.substring(0 , iend2);
+		boolean match = false;
+		if (contentId != null && contentId.length()>0 && !"not_found".equals(contentId)) {
+			if (contentId.equals(this.id)) {
+				match = true;
 			}
-			if (thiscontent.endsWith("1") && iend2 > 0) {
-				thiscontent = thiscontent.substring(0 , iend2-1);
+		} else {
+			int iend = contentUrl.indexOf("?"); 
+			if (iend != -1) {
+				contentUrl = contentUrl.substring(0 , iend);
+			}
+			String thiscontent = this.getContent().getUrl();
+			if (thiscontent != null) {
+				int iend2 = thiscontent.indexOf("?");
+				if (iend2 != -1) {
+					thiscontent = thiscontent.substring(0 , iend2);
+				}
+				if (thiscontent.endsWith("1") && iend2 > 0) {
+					thiscontent = thiscontent.substring(0 , iend2-1);
+				}
+			}
+			if (contentUrl != null && contentUrl.equals(thiscontent)) {
+				match = true;
 			}
 		}
-		if (contentUrl != null && contentUrl.equals(thiscontent)) {
+		if (match) {
 			if (StimulatedPlanningFactory.ACTIVITY_TYPE_ACCESS.equals(activityType) && status == LessonStatus.INITIAL) {
 				status = LessonStatus.STARTED;
 				updated = true;

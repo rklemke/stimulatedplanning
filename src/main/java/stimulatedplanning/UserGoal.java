@@ -55,20 +55,20 @@ public class UserGoal extends GenericUserObject {
 		return duration;
 	}
 
-	public boolean trackLearningProgress(UserPlan userPlan, String contentUrl, String activityType) {
+	public boolean trackLearningProgress(UserPlan userPlan, String contentUrl, String contentId, String activityType) {
 		LessonStatus minStatus = LessonStatus.COMPLETED;
 		LessonStatus maxStatus = LessonStatus.INITIAL;
 		boolean updated = false;
 		
 		if (lessons.size()>0) {
 			for (UserLesson lesson : lessons) {
-				if (lesson.trackLearningProgress(userPlan, contentUrl, activityType)) {
+				if (lesson.trackLearningProgress(userPlan, contentUrl, contentId, activityType)) {
 					updated = true;
 				}
 				
 				if (userPlan.hasPlanItemForLesson(lesson.getLesson())) {
 					PlanItem item = userPlan.getPlanItemForLesson(lesson.getLesson());
-					if (item.trackLearningProgress(userPlan, lesson, contentUrl, activityType)) {
+					if (item.trackLearningProgress(userPlan, lesson, contentUrl, contentId, activityType)) {
 						updated = true;
 					}
 				}

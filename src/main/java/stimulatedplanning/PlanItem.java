@@ -94,7 +94,7 @@ public class PlanItem extends GenericUserObject {
 	public LocalDateTime getEndDate() {
 		return endDate;
 	}
-	public boolean trackLearningProgress(UserPlan userPlan, UserLesson userLesson, String contentUrl, String activityType) {
+	public boolean trackLearningProgress(UserPlan userPlan, UserLesson userLesson, String contentUrl, String contentId, String activityType) {
 		if (userLesson.getStatus().compareTo(this.getStatus()) > 0) {
 			this.setStatus(userLesson.getStatus());
 			trackPlanStatus();

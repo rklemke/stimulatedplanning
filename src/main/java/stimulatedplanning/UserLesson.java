@@ -35,13 +35,13 @@ public class UserLesson extends GenericUserObject {
 		this.contents.add(content);
 	}
 
-	public boolean trackLearningProgress(UserPlan userPlan, String contentUrl, String activityType) {
+	public boolean trackLearningProgress(UserPlan userPlan, String contentUrl, String contentId, String activityType) {
 		LessonStatus minStatus = LessonStatus.COMPLETED;
 		LessonStatus maxStatus = LessonStatus.INITIAL;
 		boolean updated = false;
 		
 		for (UserContent content : contents) {
-			if (content.trackLearningProgress(userPlan, contentUrl, activityType)) {
+			if (content.trackLearningProgress(userPlan, contentUrl, contentId, activityType)) {
 				updated = true;
 			}
 
@@ -63,7 +63,7 @@ public class UserLesson extends GenericUserObject {
 
 		if (userPlan.hasPlanItemForLesson(getLesson())) {
 			PlanItem planItem = userPlan.getPlanItemForLesson(getLesson());
-			if (planItem.trackLearningProgress(userPlan, this, contentUrl, activityType)) {
+			if (planItem.trackLearningProgress(userPlan, this, contentUrl, contentId, activityType)) {
 				updated = true;
 			}
 		}
