@@ -27,7 +27,9 @@ public class UserContent extends GenericUserObject {
 		boolean updated = false;
 		boolean match = false;
 		if (contentId != null && contentId.length()>0 && !"not_found".equals(contentId)) {
-			if (contentId.equals(this.id)) {
+			//log.info("trackLearningProgress: checking contentId: "+contentId+", "+this.getContent().getId());
+			if (contentId.equals(this.getContent().getId())) {
+				//log.info("trackLearningProgress: match via contentId: "+contentId);
 				match = true;
 			}
 		} else {
@@ -46,6 +48,7 @@ public class UserContent extends GenericUserObject {
 				}
 			}
 			if (contentUrl != null && contentUrl.equals(thiscontent)) {
+				//log.info("trackLearningProgress: match via contentUrl: "+contentUrl);
 				match = true;
 			}
 		}

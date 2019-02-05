@@ -36,10 +36,18 @@
   $( function() {
 	    var pageurl = $( '#pageurl' );
 	    var pagetitle = $( '#pagetitle' );
+  	    var contentId = $( "#contentId" );
+   
  
       $( '#contentSelect' ).selectmenu({
     	        change: function( event, data ) {
-    	        	pageurl.val(data.item.value);
+    	            var val = data.item.value;
+    	            var valId = val.substr(0, val.indexOf("|"));
+    	            var valUrl = val.substr(val.indexOf("|")+1);
+    	            contentId.val(valId);
+    	            pageurl.val(valUrl);
+    	            //contentName.val($( "#contentSelect option:selected" ).text());
+    	        	//pageurl.val(data.item.value);
     	        	pagetitle.val($( "#contentSelect option:selected" ).text());
     	        	$( '#trackerFrame' ).attr("src", $('#trackerFrame').attr("src"));
     	        	//alert("change! "+data.item.value);
@@ -55,9 +63,10 @@
 <input type=hidden id="userName" name="userName" value="<%= user.getName() %>">
 <input type=hidden id="userid" name="userid" value="<%= user.getId() %>">
 <input type=hidden id="pageurl" name="pageurl" value="">
+<input type=hidden id="contentId" name="contentId" value="">
 <input type=hidden id="pagetitle" name="pagetitle" value="">
 <select name="contentSelect" id="contentSelect">
-	<option value="not set">Select the content to learn</option>
+	<option value="not|set">Select the content to learn</option>
 <% 
 	for (ListIterator<GoalDescriptor> goalIter = course.getGoals(); goalIter.hasNext(); ) {
 		GoalDescriptor goal = goalIter.next();
@@ -66,7 +75,7 @@
 			for (ListIterator<ContentDescriptor> contentIter = lesson.getContents(); contentIter.hasNext(); ) {
 				ContentDescriptor content = contentIter.next();
 %>
-	<option value="<%= content.getUrl() %>"><%= lesson.getTitle()+": "+content.getTitle() %></option>
+	<option value="<%= content.getId() %>|<%= content.getUrl() %>"><%= lesson.getTitle()+": "+content.getTitle() %></option>
 <%				
 			}
 			
@@ -84,7 +93,7 @@
 <!-- <iframe width="1100" height="600" id="feedbackFrame" src=""></iframe> -->
 
 <script type="text/javascript">
-	var timeoutInterval = 30000;
+	var timeoutInterval = 5000;
 	var userNameDefault = "Guest";
 	var userIdDefault = "unknown";
 	var pageUrlDefault = window.location.href;
@@ -108,11 +117,21 @@
 		}
 		return tmpId;
 	}
+	function SP_getContentId() {
+		var contentId = $('#contentId').val();
+		if (!contentId) {
+			contentId = "not_found";
+		}
+		//alert("contentId: "+contentId);
+		return contentId;
+	}
+	
 	
 	function tickerRequest() {
 		  var userName = getUserName();
 		  var userId = getUserId(); 
 		  var pageUrl = getPageUrl();
+		  var contentId = SP_getContentId(); 
 		  $.ajax({
 		    dataType: 'jsonp',
 		    url: '/DataTrackerServlet',
@@ -120,6 +139,7 @@
 		    data: {
 			userName: userName,
 			userid: userId,
+			contentId: contentId,
 			page: pageUrl
 		    }, 
 		    success: function(data) {
@@ -137,7 +157,7 @@
 		    complete: function() {
 		      // Schedule the next request when the current one's complete
 		    	if (!$('#stimulatedPlanningFrame').length && !$('#feedbackFrame').length) {
-				      timeoutInterval += timeoutInterval; // get slower, when user just stays on page.
+				      //timeoutInterval += timeoutInterval; // get slower, when user just stays on page.
 				      setTimeout(tickerRequest, timeoutInterval);
 		    	}
 		    }

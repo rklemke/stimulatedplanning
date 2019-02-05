@@ -45,5 +45,17 @@
         <property name="source" direction="asc"/>
         <property name="order" direction="asc"/>
     </datastore-index>
+    <datastore-index kind="stimulatedplanning.UserGoal_lessons_stimulatedplanning.UserLesson" ancestor="false" source="manual">
+        <property name="source" direction="asc"/>
+        <property name="order" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="stimulatedplanning.UserLesson_contents_stimulatedplanning.UserContent" ancestor="false" source="manual">
+        <property name="source" direction="asc"/>
+        <property name="order" direction="asc"/>
+    </datastore-index>
+    <datastore-index kind="stimulatedplanning.UserPlan_planItems_stimulatedplanning.PlanItem" ancestor="false" source="manual">
+        <property name="source" direction="asc"/>
+        <property name="order" direction="asc"/>
+    </datastore-index>
             
 </datastore-indexes>
