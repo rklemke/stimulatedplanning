@@ -184,7 +184,7 @@
 	<input type="hidden" name="userid" id="userid" value="<%= user.getId() %>">
 
 	<h2>Make your Plan B</h2>
-	<p>Think about any inconvenience that could undermine your plan of completing the activities you selected within this course.</p>
+	<h3>Think about any inconvenience that could undermine your plan of completing the activities you selected within this course.</h3>
 	<div class="ui-widget ui-widget-content ui-wrapper">
 		<div style="width: 640px; float: left; overflow: auto;">
 			<div id="selectedGoal" style="margin-left: 10px;">
@@ -200,7 +200,7 @@
 				<% } else if (selectedGoals != null && selectedGoals.size() > 0) { 
 					ListIterator<UserGoal> userGoalIterator = userPlan.getGoals(); 
 					%>
-				<li>Your intentions:</li><ul> <% 
+				<li>You selected the following activities:</li><ul> <% 
 					while (userGoalIterator.hasNext()) {
 						UserGoal userGoal = userGoalIterator.next();
 					%><li><%= separator+userGoal.getGoalDescriptor().getTitle() %><%
@@ -218,7 +218,7 @@
 							
 						}
 					} %></ul><%
-				} %><li>Your estimated time per week: <%= userPlan.getPlannedTimePerWeekAsInt() %> hours.</li>
+				} %><li>You can dedicate to this course <b><%= userPlan.getPlannedTimePerWeekAsInt() %> hours</b> per week.</li>
 			</ul><%	} %>
 			</div>
 			<div>

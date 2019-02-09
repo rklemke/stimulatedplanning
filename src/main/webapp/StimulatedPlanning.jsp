@@ -17,7 +17,8 @@
 <script>
   $( function() {
     $( "#accordion" ).accordion({
-      heightStyle: "auto",
+      heightStyle: "fill",
+      //active: false,
       collapsible: true
     });
     $( document).tooltip({
@@ -77,6 +78,7 @@
 			// make the event draggable using jQuery UI
 			$(this).draggable({
 				zIndex: 999,
+				helper: "clone",
 				revert: true,      // will cause the event to go back to its
 				revertDuration: 0  //  original position after the drag
 			});
@@ -195,7 +197,7 @@
 	#accordion {
 		float: left;
 		width: 250px;
-		height: 360px;
+		height: 500px;
 		padding: 0 10px;
 		border: 1px solid #ccc;
 		background: #eee;
@@ -290,7 +292,6 @@
 
 <div id="leftbar">
 <!-- h4>Your Intention: <%= selectedGoalProfile %></h4 -->
-<p>Plan your activities by dragging them from the list below to the calendar.</p>
 <div id="accordion">
 <%
 	if (hasPlannableGoals) {
@@ -299,7 +300,7 @@
 			ListIterator<UserLesson> lessonIterator = goal.getLessons();
 			if (lessonIterator.hasNext()) {
 %>
-		  <h3 title="Click to open list of activities."><%= goal.getGoalDescriptor().getTitle() %></h3>
+		  <h3 title="Click to open list of activities. Plan your activities by dragging them from the list to the calendar."><%= goal.getGoalDescriptor().getTitle() %></h3>
 		  <div>
 				<div class="external-events">
 		<%

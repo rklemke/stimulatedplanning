@@ -131,7 +131,7 @@
 		  var userName = getUserName();
 		  var userId = getUserId(); 
 		  var pageUrl = getPageUrl();
-		  var contentId = SP_getContentId(); 
+		  //var contentId = SP_getContentId(); 
 		  $.ajax({
 		    dataType: 'jsonp',
 		    url: '/DataTrackerServlet',
@@ -139,7 +139,7 @@
 		    data: {
 			userName: userName,
 			userid: userId,
-			contentId: contentId,
+			//contentId: contentId,
 			page: pageUrl
 		    }, 
 		    success: function(data) {
@@ -157,7 +157,7 @@
 		    complete: function() {
 		      // Schedule the next request when the current one's complete
 		    	if (!$('#stimulatedPlanningFrame').length && !$('#feedbackFrame').length) {
-				      //timeoutInterval += timeoutInterval; // get slower, when user just stays on page.
+				      timeoutInterval += timeoutInterval; // get slower, when user just stays on page.
 				      setTimeout(tickerRequest, timeoutInterval);
 		    	}
 		    }

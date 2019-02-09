@@ -417,8 +417,8 @@ Create a CSS3 post-it note without images
 		<% if (userPlan.getPlanDuration().toHours() > 0) { %>
 		<p>Our learning effort estimation for you:</p>
 		<ul>
-		<li>To complete your intention you need a total learning time of: <%= userPlan.getPlanDuration().toHours() %> hours.</li>
-		<li>Your estimated time to goal achievement: <%= (int)Math.ceil((double)(userPlan.getPlanDuration().toHours())/userPlan.getPlannedTimePerWeekAsInt()) %> weeks</li>
+		<li>To complete your activities you need in total: <%= userPlan.getPlanDuration().toHours() %> hours.</li>
+		<li>To complete your plan, you need: <%= (int)Math.ceil((double)(userPlan.getPlanDuration().toHours())/userPlan.getPlannedTimePerWeekAsInt()) %> weeks</li>
 		</ul>
 		<%
 			}

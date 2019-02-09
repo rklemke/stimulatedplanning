@@ -52,21 +52,21 @@ public class StimulatedPlanningFactory {
 	//public static final String testCourseId = "SBW18";
 	//public static final String testCourseId = "TCC01";
 	//public static final String testCourseId = SoC_ProductionCourseCreationFactory.prodCourseId;
-	//public static final String testCourseId = SP_TLA_ProductionCourseCreationFactory.prodCourseId;
-	public static final String testCourseId = SP_CircularX_ProductionCourseCreationFactory.prodCourseId;
+	public static final String testCourseId = SP_TLA_ProductionCourseCreationFactory.prodCourseId;
+	//public static final String testCourseId = SP_CircularX_ProductionCourseCreationFactory.prodCourseId;
 	//private static final String testCourseBaseURL = "https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/";
 	//public static final String testCourseBaseURL = "https://edge.edx.org/courses/course-v1:DelftX+Sandbox_Welten+2018/";
 	//public static final String testCourseBaseURL = "https://localhost/courses/course-v1:DelftX+Sandbox_Welten+2018/";
 	//public static final String testCourseBaseURL = "https://ou.acc.edia.nl/courses/course-v1:OUNL+TCC01+2019_01/courseware/";
-	//public static final String testCourseBaseURL = SP_TLA_ProductionCourseCreationFactory.prodCourseBaseURL;
-	public static final String testCourseBaseURL = SP_CircularX_ProductionCourseCreationFactory.prodCourseBaseURL;
+	public static final String testCourseBaseURL = SP_TLA_ProductionCourseCreationFactory.prodCourseBaseURL;
+	//public static final String testCourseBaseURL = SP_CircularX_ProductionCourseCreationFactory.prodCourseBaseURL;
 
-	//public static final String testCourseEditURL = SP_TLA_ProductionCourseCreationFactory.prodCourseEditURL;
-	public static final String testCourseEditURL = SP_CircularX_ProductionCourseCreationFactory.prodCourseEditURL;
+	public static final String testCourseEditURL = SP_TLA_ProductionCourseCreationFactory.prodCourseEditURL;
+	//public static final String testCourseEditURL = SP_CircularX_ProductionCourseCreationFactory.prodCourseEditURL;
 
 	//public static final String applicationHome = "http://localhost:8080";
-	public static final String applicationHome = "https://stimulatedplanning-circularx.appspot.com";
-	//public static final String applicationHome = "https://stimulatedplanning-tla.appspot.com";
+	//public static final String applicationHome = "https://stimulatedplanning-circularx.appspot.com";
+	public static final String applicationHome = "https://stimulatedplanning-tla.appspot.com";
 	//public static final String applicationHome = "https://senseofcommunity-225200.appspot.com";
 	//public static final String applicationHome = "https://senseofcommunity-test.appspot.com";
 	
@@ -344,7 +344,8 @@ public class StimulatedPlanningFactory {
 		CourseDescriptor course = instance.retrieveTestCourse();
 		if (course == null) {
 			// Course
-			course = SP_CircularX_ProductionCourseCreationFactory.generateProductionCourse();
+			//course = SP_CircularX_ProductionCourseCreationFactory.generateProductionCourse();
+			course = SP_TLA_ProductionCourseCreationFactory.generateProductionCourse();
 			//course = generateProductionCourse();
 			//course = StimulatedPlanningFactory.generateAccTestCourse();
 			//course = generateDevTestCourse();
