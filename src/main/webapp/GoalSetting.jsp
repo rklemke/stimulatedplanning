@@ -256,6 +256,12 @@ Create a CSS3 post-it note without images
   -o-transform-origin: 50% 100%;
 }
 
+#selectedGoal {
+	height: 350px;
+	max-height: 350px;
+	overflow-y: scroll;
+}
+
   </style>
 </head>
 <body>

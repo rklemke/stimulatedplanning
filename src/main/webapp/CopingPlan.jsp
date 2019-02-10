@@ -186,8 +186,8 @@
 	<h2>Make your Plan B</h2>
 	<h3>Think about any inconvenience that could undermine your plan of completing the activities you selected within this course.</h3>
 	<div class="ui-widget ui-widget-content ui-wrapper">
-		<div style="width: 640px; float: left; overflow: auto;">
-			<div id="selectedGoal" style="margin-left: 10px;">
+		<div style="width: 640px; float: left; overflow: hidden;">
+			<div id="selectedGoal" style="margin-left: 10px; height: 150px; max-height: 150px; overflow-y:scroll; ">
 				<%			
 			if (selectedGoals != null) {
 				String separator = "";
