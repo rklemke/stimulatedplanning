@@ -43,18 +43,29 @@
     
     $( function() {
 
-    $( document).tooltip({
-    	track: true
-    });
-    $( "button" ).button();
-    $( 'input[type="button"]' ).button();
-    $( 'input[type="button"]' ).click(function(e) {
-    	addCopingPlan();
-	});
-	$( ".exampleItem" ).click(function(e) {
-		selectExample(this.id);
-	});
-	updatePlanForm();
+	    $( document).tooltip({
+	    	track: true
+	    });
+	    $( "button" ).button();
+	    $( 'input[type="button"]' ).button();
+	    $( 'input[type="button"]' ).click(function(e) {
+	    	addCopingPlan();
+		});
+	    $( "#memoPopup" ).dialog({
+			autoOpen: false,
+			draggable: false,
+			height:550,
+			width:600,
+			modal: true,
+			resizable: false
+	    })
+		$( "#memo" ).on( "click", function() {
+			$( "#memoPopup" ).dialog( "open" );
+		});
+		$( ".exampleItem" ).click(function(e) {
+			selectExample(this.id);
+		});
+		updatePlanForm();
 
   } );
   
@@ -175,6 +186,105 @@
 	textarea {
 	  resize: vertical; /* user can resize vertically, but width is fixed */
 	}
+	
+/*
+Code by Creative Punch
+ http://creative-punch.net/2014/02/create-css3-post-it-note/#comments
+Create a CSS3 post-it note without images
+*/
+
+.quote-container {
+  margin-top: 50px;
+  position: relative;
+}
+
+.note {
+  color: #333;
+  position: relative;
+  width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  /* Firefox */
+  -moz-box-shadow:5px 5px 7px rgba(33,33,33,1);
+  /* Safari+Chrome */
+  -webkit-box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+  /* Opera */
+  box-shadow: 5px 5px 7px rgba(33,33,33,.7);
+}
+
+.note .author {
+  display: block;
+  margin: 40px 0 0 0;
+  text-align: right;
+}
+
+.yellow {
+  background: #eae672;
+  -webkit-transform: rotate(2deg);
+  -moz-transform: rotate(2deg);
+  -o-transform: rotate(2deg);
+  -ms-transform: rotate(2deg);
+  transform: rotate(2deg);
+}
+
+.pin {
+  background-color: #aaa;
+  display: block;
+  height: 32px;
+  width: 2px;
+  position: absolute;
+  left: 50%;
+  top: -16px;
+  z-index: 1;
+}
+
+.pin:after {
+  background-color: #A31;
+  background-image: radial-gradient(25% 25%, circle, hsla(0,0%,100%,.3), hsla(0,0%,0%,.3));
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px hsla(0,0%,0%,.1),
+              inset 3px 3px 3px hsla(0,0%,100%,.2),
+              inset -3px -3px 3px hsla(0,0%,0%,.2),
+              23px 20px 3px hsla(0,0%,0%,.15);
+  content: '';
+  height: 12px;
+  left: -5px;
+  position: absolute;
+  top: -10px;
+  width: 12px;
+}
+
+.pin:before {
+  background-color: hsla(0,0%,0%,0.1);
+  box-shadow: 0 0 .25em hsla(0,0%,0%,.1);
+  content: '';
+  height: 24px;
+  width: 2px;
+  left: 0;
+  position: absolute;
+  top: 8px;
+  transform: rotate(57.5deg);
+  -moz-transform: rotate(57.5deg);
+  -webkit-transform: rotate(57.5deg);
+  -o-transform: rotate(57.5deg);
+  -ms-transform: rotate(57.5deg);
+  transform-origin: 50% 100%;
+  -moz-transform-origin: 50% 100%;
+  -webkit-transform-origin: 50% 100%;
+  -ms-transform-origin: 50% 100%;
+  -o-transform-origin: 50% 100%;
+}
+
+#selectedGoal {
+	height: 300px;
+	max-height: 300px;
+	overflow-y: scroll;
+}
+
+	
   </style>
 </head>
 <body>
@@ -187,7 +297,58 @@
 	<h3>Think about any inconvenience that could undermine your plan of completing the activities you selected within this course.</h3>
 	<div class="ui-widget ui-widget-content ui-wrapper">
 		<div style="width: 640px; float: left; overflow: hidden;">
-			<div id="selectedGoal" style="margin-left: 10px; height: 150px; max-height: 150px; overflow-y:scroll; ">
+			<div>
+			  <table id="copingPlan" class="ui-widget ui-widget-content">
+				<thead>
+				  <tr class="ui-widget-header ">
+					<th title="IF I meet one of the following situations - click on the examples on the right for inspiration."><b>IF</b></th>
+					<th title="THEN I will perform the following action - click on the examples on the right for inspiration."><b>THEN</b></th>
+					<th></th>
+				  </tr>
+				</thead>
+				<tbody>
+					<%= userPlan.getCopingPlan() %>
+				</tbody>
+				<thead>
+				  <tr>
+					<td><textarea style="width: 250px; height: 100px;" name="plan_if" id="plan_if"  title="Enter a situation or click on an example on the right." ></textarea></td>
+					<td><textarea style="width: 250px; height: 100px;" name="plan_then" id="plan_then"  title="Enter an action or click on an example on the right." ></textarea></td>
+					<td><input type="button" id="addCopingPlan" name="addCopingPlan" value="Add" title="Add the IF and THEN plan to the list." /></td>
+				  </tr>
+				</thead>
+			  </table><input type="hidden" name="plan_table" id="plan_table" value=""> 
+			</div>
+			<div style="margin-left: 10px;"><br><br><a id="memo">Your Memo</a></div>
+		</div>
+		<div style="float: left; width: 360px; margin-left: 10px; margin-top: 10px;">
+			<label title="Click on the examples to reuse them."><b>Examples</b></label>
+			<ul id="exampleList">
+				<li class="ui-widget"><span class="exampleItem" id="example-1" title="Click on the examples to reuse them."><b>IF</b> <span id="example-1-if">I realise that I need more time for an activity</span> <br>
+				<b>THEN</b> <span id="example-1-then">I'll not plan any activities immediately after the other to take all the time I need.</span></span></li>
+				<li><span class="exampleItem" id="example-2" title="Click on the examples to reuse them."><b>IF</b> <span id="example-2-if">the Internet connection will not work properly at home</span> <br>
+				<b>THEN</b> <span id="example-2-then">I'll use the mobile data of my telephone to follow the MOOC.</span></span></li>
+				<li><span class="exampleItem" id="example-3" title="Click on the examples to reuse them."><b>IF</b> <span id="example-3-if">the location I chose  (i.e. a café) is too busy to find concentration</span> <br>
+				<b>THEN</b> <span id="example-3-then">I'll change it (by going home).</span></span></li>
+				<li><span class="exampleItem" id="example-4" title="Click on the examples to reuse them."><b>IF</b> <span id="example-4-if">I come later home from work and I miss my planned course activity</span><br>
+				<b>THEN</b> <span id="example-4-then">I will re-plan my course activity to the next possible day.</span></span></li>
+				<li><span class="exampleItem" id="example-5" title="Click on the examples to reuse them."><b>IF</b> <span id="example-5-if">I am too tired to follow another course activity on the same day</span><br>
+				<b>THEN</b> <span id="example-5-then">I will re-plan my course activities to have less activities on the same day.</span></span></li>
+			</ul> 
+		</div>
+	</div>
+	<div class="confirm">
+		<!-- button type="submit" id="ok" name="submit" value="OK" >Save</button -->
+		<button type="submit" id="next" name="submit" value="Next" title="Click continue to go to the next page. Your selection will be saved automatically.">Continue</button>
+	</div>
+	
+</form>
+</div>
+<div id="memoPopup">
+	<div class="quote-container">
+		<i class="pin"></i>
+		<blockquote class="note yellow">
+			<p>Memo for <%= user.getName() %></p>
+			<div id="selectedGoal">
 				<%			
 			if (selectedGoals != null) {
 				String separator = "";
@@ -221,50 +382,8 @@
 				} %><li>You can dedicate to this course <b><%= userPlan.getPlannedTimePerWeekAsInt() %> hours</b> per week.</li>
 			</ul><%	} %>
 			</div>
-			<div>
-			  <table id="copingPlan" class="ui-widget ui-widget-content">
-				<thead>
-				  <tr class="ui-widget-header ">
-					<th title="IF I meet one of the following situations - click on the examples on the right for inspiration."><b>IF</b></th>
-					<th title="THEN I will perform the following action - click on the examples on the right for inspiration."><b>THEN</b></th>
-					<th></th>
-				  </tr>
-				</thead>
-				<tbody>
-					<%= userPlan.getCopingPlan() %>
-				</tbody>
-				<thead>
-				  <tr>
-					<td><textarea style="width: 250px; height: 100px;" name="plan_if" id="plan_if"  title="Enter a situation or click on an example on the right." ></textarea></td>
-					<td><textarea style="width: 250px; height: 100px;" name="plan_then" id="plan_then"  title="Enter an action or click on an example on the right." ></textarea></td>
-					<td><input type="button" id="addCopingPlan" name="addCopingPlan" value="Add" title="Add the IF and THEN plan to the list." /></td>
-				  </tr>
-				</thead>
-			  </table><input type="hidden" name="plan_table" id="plan_table" value=""> 
-			</div>
-		</div>
-		<div style="float: left; width: 360px; margin-left: 10px; margin-top: 10px;">
-			<label title="Click on the examples to reuse them."><b>Examples</b></label>
-			<ul id="exampleList">
-				<li class="ui-widget"><span class="exampleItem" id="example-1" title="Click on the examples to reuse them."><b>IF</b> <span id="example-1-if">I realise that I need more time for an activity</span> <br>
-				<b>THEN</b> <span id="example-1-then">I'll not plan any activities immediately after the other to take all the time I need.</span></span></li>
-				<li><span class="exampleItem" id="example-2" title="Click on the examples to reuse them."><b>IF</b> <span id="example-2-if">the Internet connection will not work properly at home</span> <br>
-				<b>THEN</b> <span id="example-2-then">I'll use the mobile data of my telephone to follow the MOOC.</span></span></li>
-				<li><span class="exampleItem" id="example-3" title="Click on the examples to reuse them."><b>IF</b> <span id="example-3-if">the location I chose  (i.e. a café) is too busy to find concentration</span> <br>
-				<b>THEN</b> <span id="example-3-then">I'll change it (by going home).</span></span></li>
-				<li><span class="exampleItem" id="example-4" title="Click on the examples to reuse them."><b>IF</b> <span id="example-4-if">I come later home from work and I miss my planned course activity</span><br>
-				<b>THEN</b> <span id="example-4-then">I will re-plan my course activity to the next possible day.</span></span></li>
-				<li><span class="exampleItem" id="example-5" title="Click on the examples to reuse them."><b>IF</b> <span id="example-5-if">I am too tired to follow another course activity on the same day</span><br>
-				<b>THEN</b> <span id="example-5-then">I will re-plan my course activities to have less activities on the same day.</span></span></li>
-			</ul> 
-		</div>
+		</blockquote>
 	</div>
-	<div class="confirm">
-		<!-- button type="submit" id="ok" name="submit" value="OK" >Save</button -->
-		<button type="submit" id="next" name="submit" value="Next" title="Click continue to go to the next page. Your selection will be saved automatically.">Continue</button>
-	</div>
-	
-</form>
 </div>
 
 </body>
