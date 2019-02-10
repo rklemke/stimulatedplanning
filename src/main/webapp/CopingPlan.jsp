@@ -318,7 +318,7 @@ Create a CSS3 post-it note without images
 				</thead>
 			  </table><input type="hidden" name="plan_table" id="plan_table" value=""> 
 			</div>
-			<div style="margin-left: 10px;"><br><br><a id="memo">Your Memo</a></div>
+			<div style="margin-left: 10px;"><br><br><a id="memo" title="click to see your memo"><img src="/img/memo.png" width="64"></a></div>
 		</div>
 		<div style="float: left; width: 360px; margin-left: 10px; margin-top: 10px;">
 			<label title="Click on the examples to reuse them."><b>Examples</b></label>
@@ -350,37 +350,56 @@ Create a CSS3 post-it note without images
 			<p>Memo for <%= user.getName() %></p>
 			<div id="selectedGoal">
 				<%			
-			if (selectedGoals != null) {
-				String separator = "";
+				if (selectedGoals != null) {
+					String separator = "";
 				%>
 				<p>Here we remind you what you selected:</p>
 				<ul>
 				<% 
 				if (userPlan.isAllCourseIntention()) {
-					%><li>Your intention is to complete all the course.</li>
-				<% } else if (selectedGoals != null && selectedGoals.size() > 0) { 
-					ListIterator<UserGoal> userGoalIterator = userPlan.getGoals(); 
 					%>
-				<li>You selected the following activities:</li><ul> <% 
-					while (userGoalIterator.hasNext()) {
-						UserGoal userGoal = userGoalIterator.next();
-					%><li><%= separator+userGoal.getGoalDescriptor().getTitle() %><%
-						//separator = ", ";
-						if (userGoal.getLessons().hasNext()) {
-							%> (<%
-							String separator2 = "";
-							ListIterator<UserLesson> lessonIterator = userGoal.getLessons();
-							while (lessonIterator.hasNext()) {
-								LessonDescriptor lesson = lessonIterator.next().getLesson();
-								%><%= separator2+lesson.getTitle() %><%
-								separator2 = ", ";
-							}
-							%>)</li><%
-							
-						}
-					} %></ul><%
-				} %><li>You can dedicate to this course <b><%= userPlan.getPlannedTimePerWeekAsInt() %> hours</b> per week.</li>
-			</ul><%	} %>
+					<li>Your intention is to complete all the course.</li>
+					<% } else if (selectedGoals != null && selectedGoals.size() > 0) { 
+							ListIterator<UserGoal> userGoalIterator = userPlan.getGoals(); 
+							%>
+						<li>Your intentions:</li><ul> <% 
+							while (userGoalIterator.hasNext()) {
+								UserGoal userGoal = userGoalIterator.next();
+							%><li><%= separator+userGoal.getGoalDescriptor().getTitle() %><%
+								//separator = ", ";
+								if (userGoal.getLessons().hasNext()) {
+									%> (<%
+									String separator2 = "";
+									ListIterator<UserLesson> lessonIterator = userGoal.getLessons();
+									while (lessonIterator.hasNext()) {
+										LessonDescriptor lesson = lessonIterator.next().getLesson();
+										%><%= separator2+lesson.getTitle() %><%
+										separator2 = ", ";
+									}
+									%>)</li><%
+									
+								}
+							} %></ul><%
+					} else {
+						%>
+						<li>You did not indicate any intention. <% if (!userPlan.isIntentionCompleted()) { %>You may consider to go back and select intentions.<% } %> </li>
+						<%				
+					} %><li>Your estimated time per week: <%= userPlan.getPlannedTimePerWeekAsInt() %> hours.</li>
+				</ul>
+				<% if (userPlan.getPlanDuration().toHours() > 0) { %>
+				<p>Our learning effort estimation for you:</p>
+				<ul>
+				<li>To complete your activities you need in total: <%= userPlan.getPlanDuration().toHours() %> hours.</li>
+				<li>To complete your plan, you need: <%= (int)Math.ceil((double)(userPlan.getPlanDuration().toHours())/userPlan.getPlannedTimePerWeekAsInt()) %> weeks</li>
+				</ul>
+				<%
+					}
+				} else {
+				%>
+				<p>No goal selected yet.</p>	
+				<%
+				}
+				%>	
 			</div>
 		</blockquote>
 	</div>
