@@ -393,11 +393,11 @@ Create a CSS3 post-it note without images
 		<% 
 		if (userPlan.isAllCourseIntention()) {
 			%>
-			<li>Your intention is to complete all the course.</li>
+			<li>You selected to complete all the course.</li>
 			<% } else if (selectedGoals != null && selectedGoals.size() > 0) { 
 					ListIterator<UserGoal> userGoalIterator = userPlan.getGoals(); 
 					%>
-				<li>Your intentions:</li><ul> <% 
+				<li>You selected the following activities:</li><ul> <% 
 					while (userGoalIterator.hasNext()) {
 						UserGoal userGoal = userGoalIterator.next();
 					%><li><%= separator+userGoal.getGoalDescriptor().getTitle() %><%
