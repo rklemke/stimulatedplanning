@@ -425,7 +425,10 @@ Create a CSS3 post-it note without images
 		<p>Our learning effort estimation for you:</p>
 		<ul>
 		<li>To complete your activities you need in total: <%= userPlan.getPlanDuration().toHours() %> hours.</li>
-		<li>To complete your plan, you need: <%= (int)Math.ceil((double)(userPlan.getPlanDuration().toHours())/userPlan.getPlannedTimePerWeekAsInt()) %> weeks</li>
+		<li>To complete your plan, you need: <%= (int)Math.ceil((double)(userPlan.getPlanDuration().toHours())/userPlan.getPlannedTimePerWeekAsInt()) %> weeks.
+		<% if (Math.ceil((double)(userPlan.getPlanDuration().toHours())/userPlan.getPlannedTimePerWeekAsInt()) > 4) { %>
+		Be aware, that the course duration is only four weeks, which is less than your estimation. You might want to change your selection before proceeding.
+		<% } %></li>
 		</ul>
 		<%
 			}
