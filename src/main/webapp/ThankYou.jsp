@@ -55,10 +55,17 @@
 <body>
 <div id="wrap" class="ui-frame"> 
 <form id="thankYouForm" method="POST" action="ThankYouServlet">
-	<h3 style="float: left;">Your data have been saved successfully. 
-	<br>Now you’re ready to start the course. 
-	<br><a href="<%= course.getUrl() %>" target="_parent">Click here to go to the course overview</a></h3>
-	<img style="float: left;" height="500" src="/img/tick-305245_640.png">
+<div style="width: 400px; float: left;">
+<% if (user.isTreatmentGroup()) { %>
+	<h3 style="float: left;">Your plan has been saved. To check it come back to this page of the course.
+ 
+	<br><br>Planning reminders will be sent via email and you can visualise your progress in each page of the course. 
+<% } else { %>
+	<h3 style="float: left;">Your selection has been saved. To check it come back to this page of the course. 
+<% } %>
+	<br><br><a href="<%= StimulatedPlanningFactory.platformHomeUrl %>course/" target="_parent">To go back to the course outline click here.</a></h3>
+</div>	
+<img style="float: left;" height="500" src="/img/tick-305245_640.png">
 </form>
 </div>
 

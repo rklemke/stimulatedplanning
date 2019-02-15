@@ -186,7 +186,7 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 	    bodyFooter += "The OUNL team\n";    
 	    try {
 	      Message msg = new MimeMessage(session);
-	      msg.setFrom(new InternetAddress("no-reply@stimulatedplanning.appspotmail.com", "TLA2019 - Trusted Learning Analytics - Open Universiteit"));
+	      msg.setFrom(new InternetAddress("no-reply@stimulatedplanning-tla.appspotmail.com", "TLA2019 - Trusted Learning Analytics - Open Universiteit"));
 	      msg.addRecipient(Message.RecipientType.TO,
 	                       new InternetAddress(toMail, toMail));
 	      msg.setSubject(subject + " - TLA2019 - Trusted Learning Analytics - Open Universiteit");
