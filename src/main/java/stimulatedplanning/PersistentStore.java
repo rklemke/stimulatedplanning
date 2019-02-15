@@ -1060,8 +1060,8 @@ public class PersistentStore {
 		return userProfile;
 	}
 	
-	public static ArrayList<UserProfile> getUserProfiles() {
-		ArrayList<UserProfile> profiles = new ArrayList<UserProfile>();
+	public static HashArrayList<UserProfile> getUserProfiles() {
+		HashArrayList<UserProfile> profiles = new HashArrayList<UserProfile>();
 		UserProfile profile = null;
 		try {
 			DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

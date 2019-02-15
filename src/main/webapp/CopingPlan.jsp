@@ -318,7 +318,7 @@ Create a CSS3 post-it note without images
 				</thead>
 			  </table><input type="hidden" name="plan_table" id="plan_table" value=""> 
 			</div>
-			<div style="margin-left: 10px;"><br><br><a id="memo" title="click to see your memo"><img src="/img/memo.png" width="64"></a></div>
+			<div style="margin-left: 10px;"><br><br><a id="memo" title="Click to see your memo."><img src="/img/memo.png" width="64"> Click to see your memo.</a></div>
 		</div>
 		<div style="float: left; width: 360px; margin-left: 10px; margin-top: 10px;">
 			<label title="Click on the examples to reuse them."><b>Examples</b></label>

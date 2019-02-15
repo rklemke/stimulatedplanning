@@ -31,7 +31,7 @@ public class LessonDescriptor extends GenericDescriptor {
 	}
 	
 	public String getLessonTooltip() {
-		return "'"+getTitle()+"' contains "+contents.size()+" activit"+(contents.size()==1?"y":"ies")+" and takes "+lessonDuration.toMinutes()+" minutes to be completed.";
+		return "Drag to the calendar to plan. \n'"+getTitle()+"' contains "+contents.size()+" activit"+(contents.size()==1?"y":"ies")+" and takes "+lessonDuration.toMinutes()+" minutes to be completed.";
 	}
 
 	public ContentDescriptor addContent(ContentDescriptor content) {
@@ -49,13 +49,13 @@ public class LessonDescriptor extends GenericDescriptor {
 	
 	public LessonDescriptor() {
 		super();
-		lessonDuration = Duration.ofMinutes(20); // default lesson duration is assumed to be twenty minutes
+		lessonDuration = Duration.ofMinutes(60); // default lesson duration is assumed to be twenty minutes
 		contents = new HashArrayList<ContentDescriptor>();
 	}
 
 	public LessonDescriptor(String id, String title, String description, String url) {
 		super(id, title, description, url);
-		lessonDuration = Duration.ofMinutes(20); // default lesson duration is assumed to be twenty minutes
+		lessonDuration = Duration.ofMinutes(60); // default lesson duration is assumed to be twenty minutes
 		contents = new HashArrayList<ContentDescriptor>();
 	}
 

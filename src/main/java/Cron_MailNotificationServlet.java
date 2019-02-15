@@ -70,7 +70,7 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 		// TODO: check delayed plan items
 		// TODO: if delayed plan items available: send report
 		
-		ArrayList<UserProfile> userProfiles = StimulatedPlanningFactory.getUserProfiles();
+		HashArrayList<UserProfile> userProfiles = StimulatedPlanningFactory.getUserProfiles();
 		log.info("Cron_MailNotificationServlet: found userProfiles: "+userProfiles.size());
 		CourseDescriptor course = StimulatedPlanningFactory.generateTestCourse();
 		
@@ -114,14 +114,16 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 						if (count > 0 ) {
 							sendMail = true;
 							message += "Your next planned activities:\n" + planItemsMsg;
-							message += "Show your plan in your calendar: https://goo.gl/T9CmTi \n\n";
+							message += "Show your plan in your calendar: https://bit.ly/2UYEIUv \n\n";
 						}
 					}
 					
 					if (planned < intended) {
 						sendMail = true;
-						message += "You have not yet planned "+(intended - planned)+" of your "+intended+" intended activities.\n";
-						message += "You can plan your activities in the calendar: https://goo.gl/T9CmTi \n\n";
+						//message += "You have not yet planned "+(intended - planned)+" of your "+intended+" intended activities.\n";
+						// you declared interest in 10 activities, but you have not planned the following 3
+						message += "You declared interest in "+intended+" activities, but you have not planned "+(intended - planned)+" of them.\n";
+						message += "You can plan your activities in the calendar: https://bit.ly/2UYEIUv \n\n";
 					}
 					
 					if (achievement > 0) {
@@ -135,22 +137,22 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 					
 					if (achievement < achievementTotal) {
 						sendMail = true;
-						message += "You have completed "+(achievementTotal - achievement)+" of your "+intended+" intended activities, which you didn’t plan.\n";
-						message += "Would you like to re-plan? If yes please follow this link: https://goo.gl/T9CmTi \n\n";
+						message += "You have completed "+(achievementTotal - achievement)+" of your "+intended+" selected activities, which you didn’t plan.\n";
+						message += "Would you like to re-plan? If yes please follow this link: https://bit.ly/2UYEIUv \n\n";
 					}
 
 					if (late > 0) {
 						sendMail = true;
 						message += "We have noticed that you are late on "+late+" of your "+planned+" planned activities.\n";
 						if ((plan.getObstacles() != null && !"".equals(plan.getObstacles())) || (plan.getCopingPlan() != null && !"".equals(plan.getCopingPlan())) ) {
-							message += "your plan b is: \n";
+							message += "maybe time for a plan b? here is yours: \n";
 							message += plan.getObstacles() + "\n";
 							message += plan.getCopingPlan() + "\n";
 						} else {
 							message += "your plan b is: empty. \n";
 						}
 						message += "Would you like to re-plan?\n";
-						message += "If yes, please follow this link: https://goo.gl/T9CmTi \n\n";
+						message += "If yes, please follow this link: https://bit.ly/2UYEIUv \n\n";
 					}
 					
 				}
@@ -178,20 +180,16 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 	    Session session = Session.getDefaultInstance(props, null);
 	    
 	    String bodyFooter = "\n";
-	    bodyFooter += "On behalf of the OUNL (Open University of the Netherlands) that provided this course we thank you for choosing us.\n";
-	    bodyFooter += "During the course some features will be tested. All the data is collected in anonymous form.\n";
-	    bodyFooter += "In case of any questions, please contact our support team (mailto:support.mooc@ou.nl).\n";
 	    bodyFooter += "To access to the course click on the following link "+StimulatedPlanningFactory.platformHomeUrl+"\n";
-	    bodyFooter += "If you want to sign-out please send an email to (mailto:support.mooc@ou.nl).\n";
-	    bodyFooter += "Enjoy the course.\n\n";
+	    bodyFooter += "Enjoy the course TLA2019.\n\n";
 	    bodyFooter += "Warm Regards,\n";
 	    bodyFooter += "The OUNL team\n";    
 	    try {
 	      Message msg = new MimeMessage(session);
-	      msg.setFrom(new InternetAddress("no-reply@stimulatedplanning.appspotmail.com", "ICS18 - Introduction to Computer Security - Open Universiteit"));
+	      msg.setFrom(new InternetAddress("no-reply@stimulatedplanning.appspotmail.com", "TLA2019 - Trusted Learning Analytics - Open Universiteit"));
 	      msg.addRecipient(Message.RecipientType.TO,
 	                       new InternetAddress(toMail, toMail));
-	      msg.setSubject(subject + " - ICS18 - Introduction to Computer Security - Open Universiteit");
+	      msg.setSubject(subject + " - TLA2019 - Trusted Learning Analytics - Open Universiteit");
 	      msg.setText(body + bodyFooter);
 	      log.info("sendMail: "+toMail+", "+subject+", "+body + bodyFooter);
 	      Transport.send(msg);

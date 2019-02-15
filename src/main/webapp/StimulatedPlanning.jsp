@@ -197,7 +197,7 @@
 	#accordion {
 		float: left;
 		width: 250px;
-		height: 500px;
+		height: 420px;
 		padding: 0 10px;
 		border: 1px solid #ccc;
 		background: #eee;
@@ -292,6 +292,7 @@
 
 <div id="leftbar">
 <!-- h4>Your Intention: <%= selectedGoalProfile %></h4 -->
+<p>Click to open list of activities. Plan your activities by dragging them from the list to the calendar.</p>
 <div id="accordion">
 <%
 	if (hasPlannableGoals) {

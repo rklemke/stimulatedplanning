@@ -46,8 +46,8 @@ public class StimulatedPlanningFactory {
 	//public static final String planningUrl = "https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/courseware/c440e614880f44cab61666f5783994c3/9c1b1985a20e4289b02f5e95c61e4485/?activate_block_id=block-v1%3AOUNL%2BICS18%2B2018_1%2Btype%40sequential%2Bblock%409c1b1985a20e4289b02f5e95c61e4485";
 	//public static final String platformHomeUrl = "https://edge.edx.org/";
 	//public static final String planningUrl = "https://edge.edx.org/courses/course-v1:DelftX+Sandbox_Welten+2018/courseware/ca508c0a998744d9baca503243547577/a42163024f11463eb492c34128bc859d/1?activate_block_id=block-v1%3ADelftX%2BSandbox_Welten%2B2018%2Btype%40vertical%2Bblock%4059532b2c3bf34650a960d73198deedb0";
-	public static final String platformHomeUrl = "https://localhost/";
-	public static final String planningUrl = "https://localhost/courses/course-v1:DelftX+Sandbox_Welten+2018/courseware/ca508c0a998744d9baca503243547577/a42163024f11463eb492c34128bc859d/1?activate_block_id=block-v1%3ADelftX%2BSandbox_Welten%2B2018%2Btype%40vertical%2Bblock%4059532b2c3bf34650a960d73198deedb0";
+	public static final String platformHomeUrl = SP_TLA_ProductionCourseCreationFactory.prodCourseHomeURL;
+	//public static final String platformHomeUrl = "https://localhost/";
 	//private static final String testCourseId = "ICS18";
 	//public static final String testCourseId = "SBW18";
 	//public static final String testCourseId = "TCC01";
@@ -63,6 +63,9 @@ public class StimulatedPlanningFactory {
 
 	public static final String testCourseEditURL = SP_TLA_ProductionCourseCreationFactory.prodCourseEditURL;
 	//public static final String testCourseEditURL = SP_CircularX_ProductionCourseCreationFactory.prodCourseEditURL;
+
+	//public static final String planningUrl = "https://localhost/courses/course-v1:DelftX+Sandbox_Welten+2018/courseware/ca508c0a998744d9baca503243547577/a42163024f11463eb492c34128bc859d/1?activate_block_id=block-v1%3ADelftX%2BSandbox_Welten%2B2018%2Btype%40vertical%2Bblock%4059532b2c3bf34650a960d73198deedb0";
+	public static final String planningUrl = testCourseBaseURL+testCourseEditURL;
 
 	//public static final String applicationHome = "http://localhost:8080";
 	//public static final String applicationHome = "https://stimulatedplanning-circularx.appspot.com";
@@ -956,15 +959,15 @@ public class StimulatedPlanningFactory {
 	
 	
 	
-	public static ArrayList<UserProfile> getUserProfiles() {
-		ArrayList<UserProfile> userProfiles = PersistentStore.getUserProfiles();
-		if (userProfiles == null || userProfiles.isEmpty()) {
-			userProfiles = new ArrayList<UserProfile>();
+	public static HashArrayList<UserProfile> getUserProfiles() {
+		HashArrayList<UserProfile> userProfiles = PersistentStore.getUserProfiles();
+		//if (userProfiles == null || userProfiles.isEmpty()) {
+			userProfiles = new HashArrayList<UserProfile>();
 			
-			for (String[] userProfileStrings : UserProfileCVS.getUserProfiles("WEB-INF/profileResources/OUNL_ICS18_2018_1_student_profile_info.csv")) {
+			for (String[] userProfileStrings : UserProfileCVS.getUserProfiles("WEB-INF/profileResources/OUNL_TLA2019_student_profile_info.csv")) {
 				User user = StimulatedPlanningFactory.getUser(userProfileStrings[1], userProfileStrings[1]);
 				UserProfile userProfile;
-				if (user != null) {
+				if (user != null && !userProfiles.containsKey(user.getId())) {
 					userProfile = StimulatedPlanningFactory.createUserProfile(user, userProfileStrings[3]);
 					userProfile.setFullName(userProfileStrings[2]);
 					userProfiles.add(userProfile);
@@ -976,7 +979,7 @@ public class StimulatedPlanningFactory {
 				}
 			}
 			
-		}
+		//}
 		
 		return userProfiles;
 
@@ -1034,7 +1037,7 @@ public class StimulatedPlanningFactory {
 	
 	
 	public static UserProfile createUserProfile(User user, String email) {
-		UserProfile userProfile = new UserProfile(getUUID(), user, email);
+		UserProfile userProfile = new UserProfile(user.getId(), user, email);
 		
 		return userProfile;
 	}

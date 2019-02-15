@@ -277,6 +277,7 @@ Create a CSS3 post-it note without images
 <!-- (<%= user.getName() %>) [<%= session.getAttribute("loginData") %>] -->
 <% if(!userPlan.isIntentionCompleted() && "intention.topic".equals(intentionStep)) { %>
 <p>Select your activities, <%= user.getName() %>.</p>
+<p><b>BE AWARE:</b> the selection you make here cannot be changed later. You can, however, always access all contents of the course independent of your selection here.</p>
 <div id="tabs">
   <ul>
     <li class="tabs-0" id="li-0">
