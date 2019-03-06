@@ -57,6 +57,15 @@ public class Cron_MailNotificationServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    
+    public static String cleanHTML(String html) {
+    	String strippedText = html;
+    	if (html != null) {
+        	strippedText = html.replaceAll("(?s)<[^>]*>(\\s*<[^>]*>)*", " ");
+    	}
+    	return strippedText;
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -146,8 +155,8 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 						message += "We have noticed that you are late on "+late+" of your "+planned+" planned activities.\n";
 						if ((plan.getObstacles() != null && !"".equals(plan.getObstacles())) || (plan.getCopingPlan() != null && !"".equals(plan.getCopingPlan())) ) {
 							message += "maybe time for a plan b? here is yours: \n";
-							message += plan.getObstacles() + "\n";
-							message += plan.getCopingPlan() + "\n";
+							message += cleanHTML(plan.getObstacles()) + "\n\n";
+							message += cleanHTML(plan.getCopingPlan()) + "\n\n";
 						} else {
 							message += "your plan b is: empty. \n";
 						}
