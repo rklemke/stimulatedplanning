@@ -155,7 +155,9 @@ public class Cron_MailNotificationServlet extends HttpServlet {
 						message += "We have noticed that you are late on "+late+" of your "+planned+" planned activities.\n";
 						if ((plan.getObstacles() != null && !"".equals(plan.getObstacles())) || (plan.getCopingPlan() != null && !"".equals(plan.getCopingPlan())) ) {
 							message += "maybe time for a plan b? here is yours: \n";
+							message += "IF:\n";
 							message += cleanHTML(plan.getObstacles()) + "\n\n";
+							message += "THEN:\n";
 							message += cleanHTML(plan.getCopingPlan()) + "\n\n";
 						} else {
 							message += "your plan b is: empty. \n";
