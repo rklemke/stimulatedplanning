@@ -1,13 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
-  <cron>
-    <url>/Cron_MailNotificationServlet</url>
-    <description>Progress Report</description>
-    <schedule>every monday 08:00</schedule>
-  </cron>
-  <cron>
-    <url>/Cron_MailNotificationServlet</url>
-    <description>Progress Report</description>
-    <schedule>every thursday 13:00</schedule>
-  </cron>
 </cronentries>
