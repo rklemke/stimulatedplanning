@@ -31,6 +31,7 @@ import stimulatedplanning.util.IObjectWithId;
 import stimulatedplanning.util.UserProfileCVS;
 
 import chat.*;
+import marinelitter.MLM_CourseCreationFactory;
 
 public class StimulatedPlanningFactory {
 	public static final StimulatedPlanningFactory instance = new StimulatedPlanningFactory();
@@ -52,13 +53,15 @@ public class StimulatedPlanningFactory {
 	//public static final String testCourseId = "SBW18";
 	//public static final String testCourseId = "TCC01";
 	//public static final String testCourseId = SoC_ProductionCourseCreationFactory.prodCourseId;
-	public static final String testCourseId = SP_TLA_ProductionCourseCreationFactory.prodCourseId;
+	//public static final String testCourseId = SP_TLA_ProductionCourseCreationFactory.prodCourseId;
+	public static final String testCourseId = MLM_CourseCreationFactory.prodCourseId;
 	//public static final String testCourseId = SP_CircularX_ProductionCourseCreationFactory.prodCourseId;
 	//private static final String testCourseBaseURL = "https://ou.edia.nl/courses/course-v1:OUNL+ICS18+2018_1/";
 	//public static final String testCourseBaseURL = "https://edge.edx.org/courses/course-v1:DelftX+Sandbox_Welten+2018/";
 	//public static final String testCourseBaseURL = "https://localhost/courses/course-v1:DelftX+Sandbox_Welten+2018/";
 	//public static final String testCourseBaseURL = "https://ou.acc.edia.nl/courses/course-v1:OUNL+TCC01+2019_01/courseware/";
-	public static final String testCourseBaseURL = SP_TLA_ProductionCourseCreationFactory.prodCourseBaseURL;
+	//public static final String testCourseBaseURL = SP_TLA_ProductionCourseCreationFactory.prodCourseBaseURL;
+	public static final String testCourseBaseURL = MLM_CourseCreationFactory.prodCourseBaseURL;
 	//public static final String testCourseBaseURL = SP_CircularX_ProductionCourseCreationFactory.prodCourseBaseURL;
 
 	public static final String testCourseEditURL = SP_TLA_ProductionCourseCreationFactory.prodCourseEditURL;
@@ -348,7 +351,8 @@ public class StimulatedPlanningFactory {
 		if (course == null) {
 			// Course
 			//course = SP_CircularX_ProductionCourseCreationFactory.generateProductionCourse();
-			course = SP_TLA_ProductionCourseCreationFactory.generateProductionCourse();
+			//course = SP_TLA_ProductionCourseCreationFactory.generateProductionCourse();
+			course = MLM_CourseCreationFactory.generateProductionCourse();
 			//course = generateProductionCourse();
 			//course = StimulatedPlanningFactory.generateAccTestCourse();
 			//course = generateDevTestCourse();

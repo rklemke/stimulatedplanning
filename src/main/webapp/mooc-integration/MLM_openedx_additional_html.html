@@ -1,0 +1,194 @@
+<!-- 
+Open EdX additional HTML content
+Login to Open EdX as author
+
+Preparation: for all pages, where you add the tracker tool you need to collect before changing the page:
+
+- the page url as visible to the end users of the course
+- the corresponding id and name of the content element
+
+Before pasting, you need to adapt for each page the values of the contentId and contentName 
+hidden input fields in the snippet below.
+
+To add the planning tool:
+On  the selected page, where the planning tool should be add one content block raw html:
+1. adapt the hidden input fields as described above
+2. paste the content of the section below
+3. save the content block
+
+
+modify these two fields before copying, then start copying from below here to the end of the document: 
+-->
+
+<input type="hidden" value="" id="contentId" name="contentId">
+<input type="hidden" value="" id="contentName" name="contentName">
+
+
+<div id="SP_ajaxresult">Loading content.</div>
+
+
+
+
+<script type="text/javascript">
+	var tag = document.createElement('script');
+	tag.id = 'iframe-demo';
+	tag.src = 'https://www.youtube.com/iframe_api';
+	var firstScriptTag = document.getElementsByTagName('script')[0];
+	firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	
+	
+	//Holds a reference to the YouTube player
+	var ik_player;
+
+
+	var SoC_baseUrl = "https://mlm-jk-en.appspot.com/";
+	var SP_timeoutInterval = 10000;
+	var SP_userNameDefault = "Guest";
+	var SP_userIdDefault = "unknown";
+	var SP_pageUrlDefault = window.location.href;
+
+	function SP_getUserName() {
+	  var tmpName = $('.label-username-long').html();
+	  if (tmpName == null) {
+	    tmpName = $('.username').html();;
+	  }
+	  if (tmpName == null) {
+	    tmpName = SP_userNameDefault;
+	  }
+	  return tmpName;
+	}
+
+	function SP_getUserId() {
+		  var tmpName = $('.label-username').html();
+		  if (tmpName == null) {
+		    tmpName = $('.username').html();;
+		  }
+		  if (tmpName == null) {
+		    tmpName = SP_userNameDefault;
+		  }
+		  return tmpName;
+	}
+
+	function SP_getPageUrl() {
+		var tmpId = $('#pageurl', window.parent.document).val();
+		if (tmpId == null) {
+		  tmpId = SP_pageUrlDefault;
+		}
+		return tmpId;
+	}
+
+	function videoTickerRequest(eventType) {
+		  var userName = getUserName();
+		  var userId = getUserId(); 
+		  var pageUrl = getPageUrl();
+		  //var contentId = SP_getContentId(); 
+		  $.ajax({
+		    dataType: 'jsonp',
+		    url: SoC_baseUrl+'/DataTrackerServlet',
+		    method: 'POST',
+		    data: {
+			userName: userName,
+			userid: userId,
+			logType: eventType,
+			//contentId: contentId,
+			page: pageUrl
+		    }, 
+		    success: function(data) {
+				var datatxt = data.feedbackFrame;
+				$( '#ajaxresult' ).html('Connected: '+userName+'. ');
+		    },
+		    complete: function() {
+		    }
+		  });
+		}
+	
+	
+	
+	
+	function SP_tickerRequest() {
+		  var userName = SP_getUserName();
+		  var userId = SP_getUserId(); 
+		  var pageUrl = SP_getPageUrl();
+		  if (userName != "Guest") {
+			  $.ajax({
+				    dataType: 'jsonp',
+				    url: SoC_baseUrl+'/DataTrackerServlet',
+				    method: 'POST',
+				    data: {
+					userName: userName,
+					userid: userId,
+					page: pageUrl,
+					logType: "track"
+				    }, 
+				    success: function(data) {
+						var datatxt = data.feedbackFrame;
+						$( '#ajaxresult' ).html('Connected. '+userName+'. '+eventType);
+				    },
+				    complete: function() {
+						// Schedule the next request when the current one's complete
+						SP_timeoutInterval += SP_timeoutInterval; // get slower, when user just stays on page.
+						setTimeout(SP_tickerRequest, SP_timeoutInterval);
+				    }
+			  });
+			}
+		}
+		
+
+    $( function() {
+		setTimeout(SP_tickerRequest, 2000);
+    } );
+    
+
+	//this function is called by the API
+	function onYouTubeIframeAPIReady() {
+	  //creates the player object
+	  ik_player = new YT.Player('ik_player_iframe');
+	       
+	  console.log('Video API is loaded');
+	       
+	  //subscribe to events
+	  ik_player.addEventListener("onReady",       "onYouTubePlayerReady");
+	  ik_player.addEventListener("onStateChange", "onYouTubePlayerStateChange");
+	}
+
+	function onYouTubePlayerReady() {
+	  console.log('Video is ready to play');
+	}
+
+
+	function onYouTubePlayerStateChange(event) {
+	  var eventType = 'unknown';
+	  switch (event.data) {
+	    case YT.PlayerState.UNSTARTED:
+	      console.log('unstarted');
+	      eventType = 'unstarted';
+	      break;
+	    case YT.PlayerState.ENDED:
+	      console.log('ended');
+	      eventType = 'ended';
+	      break;
+	    case YT.PlayerState.PLAYING:
+	      console.log('playing');
+	      eventType = 'playing';
+	      break;
+	    case YT.PlayerState.PAUSED:
+	      console.log('paused');
+	      eventType = 'paused';
+	      break;
+	    case YT.PlayerState.BUFFERING:
+	      console.log('buffering');
+	      eventType = 'buffering';
+	      break;
+	    case YT.PlayerState.CUED:
+	      console.log('video cued');
+	      eventType = 'video cued';
+	      break;
+	  }
+      videoTickerRequest(eventType);
+	}
+
+    
+    
+	</script>
+
+<!--  copy until here -->

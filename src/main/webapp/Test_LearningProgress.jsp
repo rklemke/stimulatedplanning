@@ -82,11 +82,22 @@
 		}
 	}
 %>
+	<option value="default|default">default: default</option>
 </select>
 
 
 </form>
 <p id="learningContent">Here goes the learning content!</p>
+
+<iframe 
+	id="ik_player_iframe" 
+	width="560" 
+	height="315" 
+	src="https://www.youtube.com/embed/MNjoXlVocGg?enablejsapi=1" 
+	frameborder="0" 
+	allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+	allowfullscreen
+></iframe>
 
 <!-- <iframe width="800" height="550" id="trackerFrame" src="./mooc-integration/appengine_additional_html.html"></iframe> -->
 <!-- <iframe width="800" height="600" id="trackerFrame" src="./mooc-integration/openedx_tracker.html"></iframe> -->
@@ -125,9 +136,35 @@
 		//alert("contentId: "+contentId);
 		return contentId;
 	}
+
+	function videoTickerRequest(eventType) {
+		  var userName = getUserName();
+		  var userId = getUserId(); 
+		  var pageUrl = getPageUrl();
+		  //var contentId = SP_getContentId(); 
+		  $.ajax({
+		    dataType: 'jsonp',
+		    url: '/DataTrackerServlet',
+		    method: 'POST',
+		    data: {
+			userName: userName,
+			userid: userId,
+			logType: eventType,
+			//contentId: contentId,
+			page: pageUrl
+		    }, 
+		    success: function(data) {
+				var datatxt = data.feedbackFrame;
+				$( '#ajaxresult' ).html('Connected. '+userName+'. '+eventType);
+		    },
+		    complete: function() {
+		    }
+		  });
+		}
 	
 	
 	function tickerRequest() {
+		  //console.log('Ticker.');
 		  var userName = getUserName();
 		  var userId = getUserId(); 
 		  var pageUrl = getPageUrl();
@@ -151,7 +188,8 @@
 					$( '#ajaxresult' ).html('Connected. '+userName);
 		    	} else {
 					var datatxt = data.feedbackFrame;
-					  $( '#ajaxresult' ).html(datatxt);
+					$( '#ajaxresult' ).html('Connected. '+userName);
+					//  $( '#ajaxresult' ).html(datatxt);
 		    	}
 		    },
 		    complete: function() {
@@ -172,6 +210,70 @@
 //			    $( "#stimulatedPlanningFrame" ).attr("src", "/GoalSettingServlet");
 //			}	  
 		});
+		
+		
+		  var tag = document.createElement('script');
+		  tag.id = 'iframe-demo';
+		  tag.src = 'https://www.youtube.com/iframe_api';
+		  var firstScriptTag = document.getElementsByTagName('script')[0];
+		  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+
+		//Holds a reference to the YouTube player
+		var ik_player;
+
+		//this function is called by the API
+		function onYouTubeIframeAPIReady() {
+		  console.log('Video API is loaded 0');
+		  //creates the player object
+		  ik_player = new YT.Player('ik_player_iframe');
+		       
+		  console.log('Video API is loaded');
+		       
+		  //subscribe to events
+		  ik_player.addEventListener("onReady",       "onYouTubePlayerReady");
+		  ik_player.addEventListener("onStateChange", "onYouTubePlayerStateChange");
+		}
+
+		function onYouTubePlayerReady() {
+		  console.log('Video is ready to play');
+		}
+
+		//function onYouTubePlayerStateChange(event) {
+		//  console.log('Video state changed');
+		//}
+
+
+		function onYouTubePlayerStateChange(event) {
+		  var eventType = 'unknown';
+		  switch (event.data) {
+		    case YT.PlayerState.UNSTARTED:
+		      console.log('unstarted');
+		      eventType = 'unstarted';
+		      break;
+		    case YT.PlayerState.ENDED:
+		      console.log('ended');
+		      eventType = 'ended';
+		      break;
+		    case YT.PlayerState.PLAYING:
+		      console.log('playing');
+		      eventType = 'playing';
+		      break;
+		    case YT.PlayerState.PAUSED:
+		      console.log('paused');
+		      eventType = 'paused';
+		      break;
+		    case YT.PlayerState.BUFFERING:
+		      console.log('buffering');
+		      eventType = 'buffering';
+		      break;
+		    case YT.PlayerState.CUED:
+		      console.log('video cued');
+		      eventType = 'video cued';
+		      break;
+		  }
+	      videoTickerRequest(eventType);
+		}
 
 </script>
 
